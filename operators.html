@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>명일방주 오퍼레이터 관리</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0e1116;color:#edf2f7;font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif}
+a{color:inherit;text-decoration:none}.wrap{max-width:1400px;margin:auto;padding:22px}.top{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+h1{margin:0;font-size:28px}.nav{display:flex;gap:8px}.nav a,.btn{border:1px solid #3a4556;background:#1d2430;color:#fff;border-radius:8px;padding:9px 12px;cursor:pointer}
+.panel{background:#171c24;border:1px solid #2b3441;border-radius:14px;padding:14px;margin-top:16px}.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+input,select{background:#10151c;color:#fff;border:1px solid #3a4556;border-radius:7px;padding:8px}
+input[type=number]{width:74px}.search{min-width:220px}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:10px}
+.stat{background:#10151c;border:1px solid #2c3542;border-radius:10px;padding:10px;text-align:center}.stat b{display:block;font-size:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px;margin-top:14px}
+.card{background:#151b23;border:2px solid #303a48;border-radius:12px;padding:10px}.r1{border-color:#7d8794}.r2{border-color:#9aa7b7}.r3{border-color:#58a9e6}.r4{border-color:#a878e8}.r5{border-color:#e5b84b}.r6{border-color:#e86f42}
+.head{display:flex;gap:10px;align-items:center}.avatar{width:64px;height:64px;border-radius:9px;background:#252d38;object-fit:cover}.name{font-weight:850}.stars{color:#f4c65a;font-size:12px}.owned{margin-left:auto}
+.fields{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}.field label{display:block;font-size:11px;color:#9eabba;margin-bottom:3px}.field select,.field input{width:100%}
+.masteries,.modules{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:7px}.muted{color:#9aa5b4}.hidden{display:none!important}
+.exportBox{position:absolute;left:-100000px;top:0;width:1400px;background:#0e1116;color:#eef;padding:24px}.exportGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.exportCard{background:#171c24;border:2px solid #334;padding:8px;border-radius:10px}.exportCard .nm{font-weight:800}.exportSmall{font-size:12px;color:#c7d0db;line-height:1.5}
+@media(max-width:700px){.grid{grid-template-columns:1fr}.fields,.masteries,.modules{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="top">
+<div><h1>오퍼레이터 관리</h1><div class="muted">보유 및 육성 현황은 이 브라우저에 자동 저장됩니다.</div></div>
+<div class="nav"><a href="index.html">공개모집</a><button class="btn" id="exportJson">백업</button><button class="btn" id="importJson">복원</button><button class="btn" id="exportPng">전체 PNG</button></div>
+</div>
+<div class="panel">
+<div class="controls">
+<input class="search" id="q" placeholder="오퍼레이터 검색">
+<select id="rarity"><option value="">전체 등급</option><option>6</option><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select>
+<select id="ownedFilter"><option value="">전체</option><option value="1">보유</option><option value="0">미보유</option></select>
+<button class="btn" id="ownedAll">현재 목록 모두 보유</button>
+</div>
+<div class="stats" id="stats"></div>
+</div>
+<div class="grid" id="grid"><div class="muted">오퍼레이터 데이터를 불러오는 중입니다.</div></div>
+</div>
+<input type="file" id="file" accept=".json,application/json" hidden>
+<div id="exportBox" class="exportBox"><h1>명일방주 오퍼레이터 육성 현황</h1><div id="exportSummary"></div><div class="exportGrid" id="exportGrid"></div></div>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+const DATA_URL='https://raw.githubusercontent.com/Dimbreath/ArknightsData/master/ko-KR/gamedata/excel/character_table.json';
+const SAVE_KEY='arknightsOperatorProgressV1';
+let chars=[], state={};
+try{state=JSON.parse(localStorage.getItem(SAVE_KEY)||'{}')}catch{state={}}
+const save=()=>localStorage.setItem(SAVE_KEY,JSON.stringify(state));
+const rarityNum=v=>+(String(v||'').match(/\d+/)||[0])[0];
+const maxFallback={0:50,1:80,2:90};
+const professionKo={PIONEER:'뱅가드',WARRIOR:'가드',TANK:'디펜더',SNIPER:'스나이퍼',CASTER:'캐스터',MEDIC:'메딕',SUPPORT:'서포터',SPECIAL:'스페셜리스트'};
+const esc=s=>String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+function def(){return{owned:false,elite:0,level:1,potential:1,trust:0,skill:1,m:[0,0,0],mods:{X:0,Y:0,D:0}}}
+function get(id){return state[id]||(state[id]=def())}
+function maxLv(c,e){return c.phases?.[e]?.maxLevel||maxFallback[e]||90}
+function avatar(id){return 'https://raw.githubusercontent.com/fexli/ArknightsResource/main/avatar/DEFAULT/'+id+'.png'}
+function setVal(id,k,v){let s=get(id); if(k.startsWith('m'))s.m[+k[1]]=+v; else if(k.startsWith('mod'))s.mods[k.slice(3)]=+v; else if(k==='owned')s.owned=v; else s[k]=+v; save(); updateStats()}
+function card(c){
+ const s=get(c.id),r=c.rarity,skills=Math.min(3,c.skills?.length||3),max=maxLv(c,s.elite);
+ if(s.level>max)s.level=max;
+ return `<div class="card r${r}" data-id="${c.id}" data-name="${esc(c.name.toLowerCase())}" data-r="${r}" data-owned="${s.owned?1:0}">
+ <div class="head"><img class="avatar" src="${avatar(c.id)}" onerror="this.style.visibility='hidden'"><div><div class="stars">${'★'.repeat(r)}</div><div class="name">${esc(c.name)}</div><div class="muted">${professionKo[c.profession]||c.profession||''}</div></div><label class="owned"><input type="checkbox" data-k="owned" ${s.owned?'checked':''}> 보유</label></div>
+ <div class="fields">
+ <div class="field"><label>정예화</label><select data-k="elite">${[0,1,2].map(x=>`<option value="${x}" ${s.elite===x?'selected':''}>E${x}</option>`).join('')}</select></div>
+ <div class="field"><label>레벨</label><input type="number" min="1" max="${max}" value="${s.level}" data-k="level"></div>
+ <div class="field"><label>잠재</label><select data-k="potential">${[1,2,3,4,5,6].map(x=>`<option ${s.potential===x?'selected':''}>${x}</option>`).join('')}</select></div>
+ <div class="field"><label>신뢰도 %</label><input type="number" min="0" max="200" value="${s.trust}" data-k="trust"></div>
+ <div class="field"><label>스킬 레벨</label><select data-k="skill">${[1,2,3,4,5,6,7].map(x=>`<option ${s.skill===x?'selected':''}>${x}</option>`).join('')}</select></div>
+ </div>
+ <div class="masteries">${[0,1,2].map(i=>`<div class="field"><label>S${i+1} 마스터리</label><select data-k="m${i}" ${i>=skills?'disabled':''}>${[0,1,2,3].map(x=>`<option value="${x}" ${s.m[i]===x?'selected':''}>M${x}</option>`).join('')}</select></div>`).join('')}</div>
+ <div class="modules">${[['X','X'],['Y','Y'],['D','Δ']].map(([k,n])=>`<div class="field"><label>모듈 ${n}</label><select data-k="mod${k}">${[0,1,2,3].map(x=>`<option value="${x}" ${s.mods[k]===x?'selected':''}>${x?'Stage '+x:'없음'}</option>`).join('')}</select></div>`).join('')}</div>
+ </div>`}
+}
+function bind(){
+ document.querySelectorAll('.card').forEach(el=>el.querySelectorAll('[data-k]').forEach(inp=>inp.onchange=()=>{
+   const id=el.dataset.id,k=inp.dataset.k,v=k==='owned'?inp.checked:inp.value;
+   setVal(id,k,v); if(k==='owned')el.dataset.owned=v?1:0;
+   if(k==='elite'){const c=chars.find(x=>x.id===id),s=get(id),m=maxLv(c,+v);const lv=el.querySelector('[data-k=level]');lv.max=m;if(+lv.value>m){lv.value=m;s.level=m;save()}}
+   applyFilter();
+ }))}
+function render(){document.getElementById('grid').innerHTML=chars.map(card).join('');bind();applyFilter();updateStats()}
+function applyFilter(){
+ const q=document.getElementById('q').value.trim().toLowerCase(),r=document.getElementById('rarity').value,o=document.getElementById('ownedFilter').value;
+ document.querySelectorAll('.card').forEach(c=>c.classList.toggle('hidden',!!((q&&!c.dataset.name.includes(q))||(r&&c.dataset.r!==r)||(o!==''&&c.dataset.owned!==o))))
+}
+function updateStats(){
+ const total=chars.length,owned=chars.filter(c=>get(c.id).owned).length,e2=chars.filter(c=>get(c.id).owned&&get(c.id).elite===2).length,m3=chars.filter(c=>get(c.id).owned&&get(c.id).m.some(x=>x===3)).length,mod3=chars.filter(c=>get(c.id).owned&&Object.values(get(c.id).mods).some(x=>x===3)).length;
+ document.getElementById('stats').innerHTML=[['전체',total],['보유',owned],['E2',e2],['M3 보유',m3],['모듈 3단계',mod3]].map(x=>`<div class="stat"><b>${x[1]}</b>${x[0]}</div>`).join('')
+}
+['q','rarity','ownedFilter'].forEach(id=>document.getElementById(id).addEventListener(id==='q'?'input':'change',applyFilter));
+document.getElementById('ownedAll').onclick=()=>{document.querySelectorAll('.card:not(.hidden)').forEach(c=>{get(c.dataset.id).owned=true});save();render()}
+document.getElementById('exportJson').onclick=()=>{const b=new Blob([JSON.stringify({version:1,savedAt:new Date().toISOString(),state},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='arknights-operator-backup.json';a.click();URL.revokeObjectURL(a.href)}
+document.getElementById('importJson').onclick=()=>document.getElementById('file').click();
+document.getElementById('file').onchange=async e=>{try{const j=JSON.parse(await e.target.files[0].text());state=j.state||j;save();render();alert('복원했습니다.')}catch{alert('올바른 백업 파일이 아닙니다.')}e.target.value=''}
+function exportCard(c){const s=get(c.id);return `<div class="exportCard r${c.rarity}"><div class="stars">${'★'.repeat(c.rarity)}</div><div class="nm">${esc(c.name)}</div><div class="exportSmall">${s.owned?'보유':'미보유'} · E${s.elite} Lv.${s.level}<br>잠재 ${s.potential} · 신뢰도 ${s.trust}% · Skill ${s.skill}<br>S1 M${s.m[0]} · S2 M${s.m[1]} · S3 M${s.m[2]}<br>Module X ${s.mods.X} / Y ${s.mods.Y} / Δ ${s.mods.D}</div></div>`}
+document.getElementById('exportPng').onclick=async()=>{if(!window.html2canvas)return alert('PNG 모듈을 불러오지 못했습니다.');const owned=chars.filter(c=>get(c.id).owned);document.getElementById('exportSummary').innerHTML=`<p>보유 ${owned.length} / 전체 ${chars.length}</p>`;document.getElementById('exportGrid').innerHTML=chars.map(exportCard).join('');const box=document.getElementById('exportBox');box.style.left='0';box.style.position='fixed';box.style.zIndex='9999';const canvas=await html2canvas(box,{backgroundColor:'#0e1116',scale:1});box.style.left='-100000px';box.style.position='absolute';const a=document.createElement('a');a.download='arknights-operator-progress.png';a.href=canvas.toDataURL('image/png');a.click()}
+fetch(DATA_URL).then(r=>r.json()).then(data=>{chars=Object.entries(data).map(([id,v])=>({id,...v,rarity:rarityNum(v.rarity)})).filter(c=>c.id.startsWith('char_')&&c.name&&c.rarity>=1&&c.rarity<=6&&c.profession&&!['TOKEN','TRAP'].includes(c.profession)&&c.phases?.length).sort((a,b)=>b.rarity-a.rarity||String(a.name).localeCompare(String(b.name),'ko'));render()}).catch(()=>document.getElementById('grid').innerHTML='<div class="muted">오퍼레이터 데이터를 불러오지 못했습니다. 인터넷 연결을 확인해주세요.</div>');
+</script>
+</body></html>
