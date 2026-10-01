@@ -25,6 +25,8 @@ jobs:
         uses: actions/checkout@v6
       - name: Validate bundled data
         run: python3 -m unittest discover -s tests -v
+      - name: Validate recruitment behavior
+        run: node tests/test_recruitment.cjs
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload site
