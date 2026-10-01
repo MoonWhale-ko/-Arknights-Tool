@@ -16,7 +16,7 @@ input[type=number]{width:74px}.search{min-width:220px}.stats{display:grid;grid-t
 .card{background:#151b23;border:2px solid #303a48;border-radius:12px;padding:10px}.r1{border-color:#7d8794}.r2{border-color:#9aa7b7}.r3{border-color:#58a9e6}.r4{border-color:#a878e8}.r5{border-color:#e5b84b}.r6{border-color:#e86f42}
 .head{display:flex;gap:10px;align-items:center}.avatar{width:64px;height:64px;border-radius:9px;background:#252d38;object-fit:cover}.name{font-weight:850}.stars{color:#f4c65a;font-size:12px}.owned{margin-left:auto}
 .fields{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}.field label{display:block;font-size:11px;color:#9eabba;margin-bottom:3px}.field select,.field input{width:100%}
-.masteries,.modules{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:7px}.muted{color:#9aa5b4}.hidden{display:none!important}
+.masteries,.modules{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:7px}.progress-body.is-disabled{opacity:.42;pointer-events:none}.muted{color:#9aa5b4}.hidden{display:none!important}
 .exportBox{position:absolute;left:-100000px;top:0;width:1400px;background:#0e1116;color:#eef;padding:24px}.exportGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.exportCard{background:#171c24;border:2px solid #334;padding:8px;border-radius:10px}.exportCard .nm{font-weight:800}.exportSmall{font-size:12px;color:#c7d0db;line-height:1.5}
 @media(max-width:700px){.grid{grid-template-columns:1fr}.fields,.masteries,.modules{grid-template-columns:repeat(2,1fr)}}
 </style>
@@ -61,7 +61,7 @@ function card(c){
  if(s.level>max)s.level=max;
  return `<div class="card r${r}" data-id="${c.id}" data-name="${esc(c.name.toLowerCase())}" data-r="${r}" data-owned="${s.owned?1:0}">
  <div class="head"><img class="avatar" src="${avatar(c.id)}" onerror="this.style.visibility='hidden'"><div><div class="stars">${'★'.repeat(r)}</div><div class="name">${esc(c.name)}</div><div class="muted">${professionKo[c.profession]||c.profession||''}</div></div><label class="owned"><input type="checkbox" data-k="owned" ${s.owned?'checked':''}> 보유</label></div>
- <div class="fields">
+ <div class="progress-body ${s.owned?'':'is-disabled'}"><div class="fields">
  <div class="field"><label>정예화</label><select data-k="elite">${[0,1,2].map(x=>`<option value="${x}" ${s.elite===x?'selected':''}>E${x}</option>`).join('')}</select></div>
  <div class="field"><label>레벨</label><input type="number" min="1" max="${max}" value="${s.level}" data-k="level"></div>
  <div class="field"><label>잠재</label><select data-k="potential">${[1,2,3,4,5,6].map(x=>`<option ${s.potential===x?'selected':''}>${x}</option>`).join('')}</select></div>
@@ -69,13 +69,18 @@ function card(c){
  <div class="field"><label>스킬 레벨</label><select data-k="skill">${[1,2,3,4,5,6,7].map(x=>`<option ${s.skill===x?'selected':''}>${x}</option>`).join('')}</select></div>
  </div>
  <div class="masteries">${[0,1,2].map(i=>`<div class="field"><label>S${i+1} 마스터리</label><select data-k="m${i}" ${i>=skills?'disabled':''}>${[0,1,2,3].map(x=>`<option value="${x}" ${s.m[i]===x?'selected':''}>M${x}</option>`).join('')}</select></div>`).join('')}</div>
- <div class="modules">${[['X','X'],['Y','Y'],['D','Δ']].map(([k,n])=>`<div class="field"><label>모듈 ${n}</label><select data-k="mod${k}">${[0,1,2,3].map(x=>`<option value="${x}" ${s.mods[k]===x?'selected':''}>${x?'Stage '+x:'없음'}</option>`).join('')}</select></div>`).join('')}</div>
+ <div class="modules">${[['X','X'],['Y','Y'],['D','Δ']].map(([k,n])=>`<div class="field"><label>모듈 ${n}</label><select data-k="mod${k}">${[0,1,2,3].map(x=>`<option value="${x}" ${s.mods[k]===x?'selected':''}>${x?'Stage '+x:'없음'}</option>`).join('')}</select></div>`).join('')}</div></div>
  </div>`}
+function syncCardOwned(el){
+ const owned=el.querySelector('[data-k="owned"]').checked;
+ el.dataset.owned=owned?1:0;
+ const body=el.querySelector('.progress-body');
+ if(body) body.classList.toggle('is-disabled',!owned);
 }
 function bind(){
  document.querySelectorAll('.card').forEach(el=>el.querySelectorAll('[data-k]').forEach(inp=>inp.onchange=()=>{
    const id=el.dataset.id,k=inp.dataset.k,v=k==='owned'?inp.checked:inp.value;
-   setVal(id,k,v); if(k==='owned')el.dataset.owned=v?1:0;
+   setVal(id,k,v); if(k==='owned')syncCardOwned(el);
    if(k==='elite'){const c=chars.find(x=>x.id===id),s=get(id),m=maxLv(c,+v);const lv=el.querySelector('[data-k=level]');lv.max=m;if(+lv.value>m){lv.value=m;s.level=m;save()}}
    applyFilter();
  }))}
