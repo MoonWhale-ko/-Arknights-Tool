@@ -14,7 +14,7 @@ input[type=number]{width:74px}.search{min-width:220px}.stats{display:grid;grid-t
 .stat{background:#10151c;border:1px solid #2c3542;border-radius:10px;padding:10px;text-align:center}.stat b{display:block;font-size:20px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px;margin-top:14px}
 .card{background:#151b23;border:2px solid #303a48;border-radius:12px;padding:10px}.r1{border-color:#7d8794}.r2{border-color:#9aa7b7}.r3{border-color:#58a9e6}.r4{border-color:#a878e8}.r5{border-color:#e5b84b}.r6{border-color:#e86f42}
-.head{display:flex;gap:10px;align-items:center}.avatar{width:64px;height:64px;border-radius:9px;background:#252d38;object-fit:cover}.name{font-weight:850}.stars{color:#f4c65a;font-size:12px}.owned{margin-left:auto}
+.head{display:flex;gap:10px;align-items:center}.avatar-wrap{width:64px;height:64px;position:relative;flex:none}.avatar{width:64px;height:64px;border-radius:9px;background:#252d38;object-fit:cover}.avatar-fallback{width:64px;height:64px;border-radius:9px;background:#252d38;place-items:center;font-weight:900;font-size:20px;color:#b9c4d2}.name{font-weight:850}.stars{color:#f4c65a;font-size:12px}.owned{margin-left:auto}
 .fields{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}.field label{display:block;font-size:11px;color:#9eabba;margin-bottom:3px}.field select,.field input{width:100%}
 .masteries,.modules{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:7px}.progress-body.is-disabled{opacity:.42;pointer-events:none}.muted{color:#9aa5b4}.hidden{display:none!important}
 .exportBox{position:absolute;left:-100000px;top:0;width:1400px;background:#0e1116;color:#eef;padding:24px}.exportGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.exportCard{background:#171c24;border:2px solid #334;padding:8px;border-radius:10px}.exportCard .nm{font-weight:800}.exportSmall{font-size:12px;color:#c7d0db;line-height:1.5}
@@ -54,13 +54,13 @@ const esc=s=>String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&g
 function def(){return{owned:false,elite:0,level:1,potential:1,trust:0,skill:1,m:[0,0,0],mods:{X:0,Y:0,D:0}}}
 function get(id){return state[id]||(state[id]=def())}
 function maxLv(c,e){return c.phases?.[e]?.maxLevel||maxFallback[e]||90}
-function avatar(id){return 'https://raw.githubusercontent.com/fexli/ArknightsResource/main/avatar/DEFAULT/'+id+'.png'}
+function avatar(id){return 'https://raw.githubusercontent.com/fexli/ArknightsResource/main/charpor/'+id+'_1.png'}
 function setVal(id,k,v){let s=get(id); if(k.startsWith('m'))s.m[+k[1]]=+v; else if(k.startsWith('mod'))s.mods[k.slice(3)]=+v; else if(k==='owned')s.owned=v; else s[k]=+v; save(); updateStats()}
 function card(c){
  const s=get(c.id),r=c.rarity,skills=Math.min(3,c.skills?.length||3),max=maxLv(c,s.elite);
  if(s.level>max)s.level=max;
  return `<div class="card r${r}" data-id="${c.id}" data-name="${esc(c.name.toLowerCase())}" data-r="${r}" data-owned="${s.owned?1:0}">
- <div class="head"><img class="avatar" src="${avatar(c.id)}" onerror="this.style.visibility='hidden'"><div><div class="stars">${'★'.repeat(r)}</div><div class="name">${esc(c.name)}</div><div class="muted">${professionKo[c.profession]||c.profession||''}</div></div><label class="owned"><input type="checkbox" data-k="owned" ${s.owned?'checked':''}> 보유</label></div>
+ <div class="head"><div class="avatar-wrap"><img class="avatar" src="${avatar(c.id)}" alt="${esc(c.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><div class="avatar-fallback" style="display:none">${esc(c.name.slice(0,1))}</div></div><div><div class="stars">${'★'.repeat(r)}</div><div class="name">${esc(c.name)}</div><div class="muted">${professionKo[c.profession]||c.profession||''}</div></div><label class="owned"><input type="checkbox" data-k="owned" ${s.owned?'checked':''}> 보유</label></div>
  <div class="progress-body ${s.owned?'':'is-disabled'}"><div class="fields">
  <div class="field"><label>정예화</label><select data-k="elite">${[0,1,2].map(x=>`<option value="${x}" ${s.elite===x?'selected':''}>E${x}</option>`).join('')}</select></div>
  <div class="field"><label>레벨</label><input type="number" min="1" max="${max}" value="${s.level}" data-k="level"></div>
