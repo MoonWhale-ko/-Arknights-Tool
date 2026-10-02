@@ -16,7 +16,7 @@ const run=s=>vm.runInContext(s,ctx),json=s=>JSON.parse(run(`JSON.stringify(${s})
  assert.equal(json('get("char_103_angel")').custom,'keep');
  assert.equal(run('chars.length'),410);
  const angel=run('card(chars.find(c=>c.id==="char_103_angel"))');
- assert.match(angel,/name">엑시아/);assert.match(angel,/potential-p4.png/);assert.match(angel,/mastery-m3.png/);
+ assert.match(angel,/name">엑시아/);assert.match(angel,/potential-p4.svg/);assert.match(angel,/mastery-m3.svg/);
  assert.match(angel,/<span class="rank">S3<\/span>/);assert.ok(!angel.includes('과부하 모드'));
  assert.match(angel,/Stage 2/);
  run('setVal("char_103_angel","mod:uniequip_002_angel",3)');
@@ -33,6 +33,6 @@ const run=s=>vm.runInContext(s,ctx),json=s=>JSON.parse(run(`JSON.stringify(${s})
  const robot=run('card(chars.find(c=>c.id==="char_285_medic2"))');assert.ok(!robot.includes('스킬 레벨'));
  assert.equal(json('get("char_124_kroos")').level,1);assert.equal(json('get("char_124_kroos")').elite,0);
  assert.ok(!html.includes('overflow:auto'));assert.ok(html.includes('height:auto;min-height:var(--card-height,402px)'));
- for(const name of ['elite-e0','elite-e1','elite-e2','potential-p1','potential-p6','mastery-m0','mastery-m3'])assert.ok(fs.existsSync(path.join(root,'assets/icons/progress',name+'.png')));
- console.log('Operator checks passed: saved progress, legacy modules, real skills/modules, limits, defaults, no inner scrolling, PNG assets.');
+ for(const name of ['elite-e0','elite-e1','elite-e2','potential-p1','potential-p2','potential-p3','potential-p4','potential-p5','potential-p6','mastery-m0','mastery-m1','mastery-m2','mastery-m3'])assert.ok(fs.existsSync(path.join(root,'assets/icons/progress',name+'.svg')));
+ console.log('Operator checks passed: saved progress, legacy modules, real skills/modules, limits, defaults, no inner scrolling, SVG assets.');
 })().catch(e=>{console.error(e);process.exitCode=1});

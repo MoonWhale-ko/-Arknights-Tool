@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 167" width="256" height="167"><defs>
+<polygon id="back" points="245 8 92 110 75 150 226 50 245 8" fill="#fff"/>
+<polygon id="front" points="12 8 165 110 182 150 31 50 12 8" fill="#fff"/>
+<clipPath id="back-clip" clipPathUnits="userSpaceOnUse"><use href="#back"/></clipPath>
+<filter id="shadow" filterUnits="userSpaceOnUse" x="0" y="0" width="256" height="167" color-interpolation-filters="sRGB">
+<feGaussianBlur in="SourceAlpha" stdDeviation="2.4" result="blur"/>
+<feOffset in="blur" dx="3" dy="5" result="offset"/>
+<feFlood flood-color="#000" flood-opacity="0.38" result="shade"/>
+<feComposite in="shade" in2="offset" operator="in"/>
+</filter></defs>
+<use href="#back"/>
+<g clip-path="url(#back-clip)"><use href="#front" filter="url(#shadow)"/></g>
+<use href="#front"/>
+</svg>

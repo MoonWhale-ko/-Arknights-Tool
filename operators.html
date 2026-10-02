@@ -30,7 +30,7 @@ input[type=number]{width:74px}.search{min-width:220px}.stats{display:grid;grid-t
 
 .card{padding:0}.settings{min-width:0}.home-button{display:grid;place-items:center;width:40px;height:40px;border:1px solid #3a4556}.home-button svg{width:24px;height:24px}.top{justify-content:flex-start}.nav{margin-left:auto;flex-wrap:wrap}.settings .name{font-size:24px;line-height:1.2;overflow-wrap:anywhere}.skill-empty{color:#7c8795;font-size:11px}.cycle:disabled{opacity:.35;cursor:default;filter:none}.progress-body.is-disabled{opacity:.42}.module-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.photo .avatar-fallback{position:absolute;inset:0;width:100%;height:100%}.cycle img{width:38px;height:38px}.cycle{flex-shrink:0}@media(max-width:700px){.wrap{padding:14px}.search{min-width:0;width:100%}}
 
-.section.modules{display:block}.cycle img{filter:invert(1)}.r1{--color:#7d8794}.r2{--color:#c2ef57}.r3{--color:#58a9e6}.r4{--color:#a878e8}.r5{--color:#e5b84b}.r6{--color:#e86f42}
+.section.modules{display:block}.cycle img{filter:none}.cycle[data-kind="potential"][data-value="6"]{position:relative}.cycle[data-kind="potential"][data-value="6"] img{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:55.1px;height:55.1px;max-width:none}.r1{--color:#7d8794}.r2{--color:#c2ef57}.r3{--color:#58a9e6}.r4{--color:#a878e8}.r5{--color:#e5b84b}.r6{--color:#e86f42}
 </style>
 </head>
 <body>
@@ -94,7 +94,7 @@ function setVal(id,k,v){
 }
 function iconButton(kind,key,value,label,disabled=false,bottom=''){
  const prefix={elite:'elite-e',potential:'potential-p',mastery:'mastery-m'}[kind];
- return `<button type="button" class="cycle" data-k="${key}" data-kind="${kind}" data-value="${value}" ${disabled?'disabled':''} aria-label="${esc(label)}" title="${esc(label)}"><img src="assets/icons/progress/${prefix}${value}.png" alt=""><span class="rank">${bottom}</span></button>`;
+ return `<button type="button" class="cycle" data-k="${key}" data-kind="${kind}" data-value="${value}" ${disabled?'disabled':''} aria-label="${esc(label)}" title="${esc(label)}"><img src="assets/icons/progress/${prefix}${value}.svg" alt=""><span class="rank">${bottom}</span></button>`;
 }
 function card(c){
  const s=get(c.id),r=c.rarity,e=clamp(s.elite,0,c.phases.length-1),max=maxLv(c,e);
