@@ -104,7 +104,10 @@ function bind(){document.querySelectorAll('.card').forEach(el=>{
  const id=el.dataset.id,c=chars.find(c=>c.id===id);
  el.querySelectorAll('[data-k]').forEach(inp=>{
   if(inp.tagName==='BUTTON')inp.onclick=()=>{const s=get(id),k=inp.dataset.k;const next=k==='elite'?(+s.elite+1)%c.phases.length:k==='potential'?(+s.potential%((c.maxPotentialLevel??5)+1))+1:((+s.m[+k[1]]||0)+1)%4;setVal(id,k,next);refreshCard(el,c)};
-  else inp.onchange=()=>{setVal(id,inp.dataset.k,inp.dataset.k==='owned'?inp.checked:inp.value);refreshCard(el,c)};
+  else {
+   inp.onchange=()=>{setVal(id,inp.dataset.k,inp.dataset.k==='owned'?inp.checked:inp.value);refreshCard(el,c)};
+   if(inp.type==='number')inp.oninput=()=>{setVal(id,inp.dataset.k,inp.value);const s=get(id);el.querySelectorAll('[data-k^="mod:"]').forEach(select=>{const m=c.modules.find(m=>'mod:'+m.id===select.dataset.k);select.disabled=!s.owned||!moduleUnlocked(c,s,m)})};
+  }
  });
 })}
 function refreshCard(el,c){el.outerHTML=card(c);bind();applyFilter();fitCards()}
