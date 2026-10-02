@@ -1,0 +1,38 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),path=require('node:path');
+const root=path.join(__dirname,'..'),html=fs.readFileSync(path.join(root,'operators.html'),'utf8');
+const source=html.split('<script>')[1].split('</script>')[0];
+const data=JSON.parse(fs.readFileSync(path.join(root,'data/operators.json'),'utf8'));
+const original={char_103_angel:{owned:true,elite:2,level:90,potential:4,trust:200,skill:7,m:[1,2,3],mods:{X:2,Y:1,D:0},custom:'keep'}};
+let saved=JSON.stringify(original),writes=0;
+const elements=new Map();
+function element(){return{value:'',innerHTML:'',style:{removeProperty(){},setProperty(){}},addEventListener(){},querySelectorAll(){return[]}}}
+const document={getElementById(id){if(!elements.has(id))elements.set(id,element());return elements.get(id)},querySelectorAll(){return[]},fonts:{ready:Promise.resolve()}};
+const ctx=vm.createContext({document,window:{addEventListener(){}},console,localStorage:{getItem(){return saved},setItem(k,v){assert.equal(k,'arknightsOperatorProgressV1');saved=v;writes++}},fetch:()=>Promise.resolve({json:()=>Promise.resolve(data)})});
+vm.runInContext(source,ctx);
+const run=s=>vm.runInContext(s,ctx),json=s=>JSON.parse(run(`JSON.stringify(${s})`));
+(async()=>{
+ await new Promise(r=>setImmediate(r));
+ assert.equal(writes,0);assert.deepEqual(JSON.parse(saved),original,'Opening page must preserve saved progress');
+ assert.equal(json('get("char_103_angel")').custom,'keep');
+ assert.equal(run('chars.length'),410);
+ const angel=run('card(chars.find(c=>c.id==="char_103_angel"))');
+ assert.match(angel,/name">엑시아/);assert.match(angel,/potential-p4.png/);assert.match(angel,/mastery-m3.png/);
+ assert.match(angel,/<span class="rank">S3<\/span>/);assert.ok(!angel.includes('과부하 모드'));
+ assert.match(angel,/Stage 2/);
+ run('setVal("char_103_angel","mod:uniequip_002_angel",3)');
+ assert.equal(json('get("char_103_angel")').mods.uniequip_002_angel,3,'Module IDs must not be parsed as mastery keys');
+ assert.equal(json('get("char_103_angel")').mods.Y,1,'Other legacy module data preserved');
+ run('setVal("char_103_angel","elite",0)');
+ assert.equal(json('get("char_103_angel")').level,50);assert.equal(json('get("char_103_angel")').skill,4);
+ assert.deepEqual(json('get("char_103_angel").m'),[0,0,0]);
+ run('setVal("char_103_angel","level",999)');assert.equal(json('get("char_103_angel")').level,50);
+ run('setVal("char_103_angel","trust",999)');assert.equal(json('get("char_103_angel")').trust,200);
+ run('setVal("char_103_angel","elite",2);setVal("char_103_angel","skill",7);setVal("char_103_angel","m2",3)');
+ assert.equal(json('get("char_103_angel")').m[2],3);
+ const kroos=run('card(chars.find(c=>c.id==="char_124_kroos"))');assert.ok(!kroos.includes('class="section modules"'));assert.ok(!kroos.includes('S2'));
+ const robot=run('card(chars.find(c=>c.id==="char_285_medic2"))');assert.ok(!robot.includes('스킬 레벨'));
+ assert.equal(json('get("char_124_kroos")').level,1);assert.equal(json('get("char_124_kroos")').elite,0);
+ assert.ok(!html.includes('overflow:auto'));assert.ok(html.includes('height:auto;min-height:var(--card-height,402px)'));
+ for(const name of ['elite-e0','elite-e1','elite-e2','potential-p1','potential-p6','mastery-m0','mastery-m3'])assert.ok(fs.existsSync(path.join(root,'assets/icons/progress',name+'.png')));
+ console.log('Operator checks passed: saved progress, legacy modules, real skills/modules, limits, defaults, no inner scrolling, PNG assets.');
+})().catch(e=>{console.error(e);process.exitCode=1});

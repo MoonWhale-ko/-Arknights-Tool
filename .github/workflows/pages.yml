@@ -27,6 +27,8 @@ jobs:
         run: python3 -m unittest discover -s tests -v
       - name: Validate recruitment behavior
         run: node tests/test_recruitment.cjs
+      - name: Validate operator progress
+        run: node tests/test_operators.cjs
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload site
