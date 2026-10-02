@@ -190,14 +190,15 @@ test("upstream failures disclose only safe stage and HTTP status", async () => {
   });
 });
 
-test("SDK probe sends no credentials and reports safe connectivity results", async () => {
+test("SDK probe uses an empty account and never follows redirects", async () => {
+  const calls=[];
   const result = await probeSdk(async (url, init) => {
-    assert.equal(url, "https://jp-sdk-api.yostarplat.com/");
-    assert.equal(init.method, "HEAD");
-    assert.equal(init.body, undefined);
-    assert.equal(init.headers.Authorization, undefined);
+    calls.push({url,init});
+    assert.equal(init.redirect, "manual");
+    if(init.method === "POST") assert.equal(JSON.parse(init.body).Account, "");
     return new Response(null, {status: 404});
   });
-  assert.deepEqual(result, {reachable:true, httpStatus:404});
+  assert.equal(calls.length,2);
+  assert.deepEqual(result, {reachable:true, httpStatus:404, postStatus:404});
   assert.deepEqual(await probeSdk(async () => {throw new DOMException("private", "TimeoutError")}), {reachable:false, reason:"timeout"});
 });

@@ -23,7 +23,13 @@ export async function probeSdk(fetcher = fetch) {
     const r = await fetcher(SDK + "/", {
       method: "HEAD", headers, redirect: "manual", signal: AbortSignal.timeout(15000),
     });
-    return { reachable: true, httpStatus: r.status };
+    const body = { Account: "", Randstr: "", Ticket: "" };
+    const post = await fetcher(SDK + "/yostar/send-code", {
+      method: "POST", headers: signedHeaders(JSON.stringify(body)),
+      body: JSON.stringify(body), redirect: "manual", signal: AbortSignal.timeout(15000),
+    });
+    // Empty account deliberately cannot address an email. Return no body or headers.
+    return { reachable: true, httpStatus: r.status, postStatus: post.status };
   } catch (e) {
     return { reachable: false, reason: e?.name === "TimeoutError" || e?.name === "AbortError" ? "timeout" : "network-error" };
   }
@@ -79,7 +85,7 @@ async function jsonRequest(url, body, extra = {}, fetcher = fetch) {
       headers: { ...headers, ...extra },
       ...(body === undefined ? {} : { body: JSON.stringify(body) }),
       signal: AbortSignal.timeout(15000),
-      redirect: "error",
+      redirect: "manual",
     });
   } catch {
     throw new AccountError("upstream-unavailable", 502, stage);
