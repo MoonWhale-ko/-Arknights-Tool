@@ -111,7 +111,7 @@ function bind(){document.querySelectorAll('.card').forEach(el=>{
  });
 })}
 function refreshCard(el,c){el.outerHTML=card(c);bind();applyFilter();fitCards()}
-function fitCards(){const grid=document.getElementById('grid');grid.style.removeProperty('--card-height');const panels=[...grid.querySelectorAll('.settings')];const height=Math.max(402,...panels.map(p=>Math.ceil(p.getBoundingClientRect().height)+4));grid.style.setProperty('--card-height',height+'px')}
+function fitCards(){const grid=document.getElementById('grid');grid.style.removeProperty('--card-height');const hidden=[...grid.querySelectorAll('.card.hidden')];hidden.forEach(c=>c.classList.remove('hidden'));const panels=[...grid.querySelectorAll('.settings')];const height=Math.max(402,...panels.map(p=>Math.ceil(p.getBoundingClientRect().height)+4));grid.style.setProperty('--card-height',height+'px');hidden.forEach(c=>c.classList.add('hidden'))}
 function render(){document.getElementById('grid').innerHTML=chars.map(card).join('');bind();fitCards();applyFilter();updateStats()}
 
 function applyFilter(){
