@@ -48,3 +48,12 @@ python -m http.server 8000
 ```
 
 브라우저에서 `/materials.html`의 검색, 정예화 용문폐, 스킬·모듈 비용, 네 페이지 이동을 확인합니다. Pages 워크플로도 배포 전에 데이터 검증을 실행합니다. 공개모집 계산기와 오퍼레이터 관리 페이지 코드는 이 데이터 갱신 작업에서 변경하지 않습니다.
+
+## 게임 계정 가져오기 (Cloudflare 연결 준비)
+
+`operators.html`에 한국 서버 요스타 이메일 인증 가져오기 UI를 추가했습니다.
+현재 Workers URL은 비어 있어 연결 안내만 표시합니다. Cloudflare 배포 후 URL을 설정해야 합니다.
+계정 조회 서버: `workers/account/`, 브라우저 코드: `assets/js/account-*.mjs`,
+신뢰도 변환표: `data/account-favor.json`.
+[Cloudflare 연결 절차와 검증 범위](docs/cloudflare-account-setup.md)를 참고하세요.
+실제 계정 조회는 배포 후 검증이 필요합니다. 현재→목표 재료 합산은 아직 포함되지 않습니다.

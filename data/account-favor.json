@@ -1,0 +1,815 @@
+{
+  "version": 1,
+  "source": {
+    "repository": "ArknightsAssets/ArknightsGamedata",
+    "locale": "kr",
+    "commit": "56aee3d6c5a29c3a0d192456d70d14252cbb0804",
+    "sha256": "a4a015e0166eff88497e5d2c94e6ef5def2ac16d5f5b970054356aac598a26ef"
+  },
+  "frames": [
+    {
+      "points": 0,
+      "percent": 0
+    },
+    {
+      "points": 8,
+      "percent": 1
+    },
+    {
+      "points": 16,
+      "percent": 2
+    },
+    {
+      "points": 28,
+      "percent": 3
+    },
+    {
+      "points": 40,
+      "percent": 4
+    },
+    {
+      "points": 56,
+      "percent": 5
+    },
+    {
+      "points": 72,
+      "percent": 6
+    },
+    {
+      "points": 92,
+      "percent": 7
+    },
+    {
+      "points": 112,
+      "percent": 8
+    },
+    {
+      "points": 137,
+      "percent": 9
+    },
+    {
+      "points": 162,
+      "percent": 10
+    },
+    {
+      "points": 192,
+      "percent": 11
+    },
+    {
+      "points": 222,
+      "percent": 12
+    },
+    {
+      "points": 255,
+      "percent": 13
+    },
+    {
+      "points": 288,
+      "percent": 14
+    },
+    {
+      "points": 325,
+      "percent": 15
+    },
+    {
+      "points": 362,
+      "percent": 16
+    },
+    {
+      "points": 404,
+      "percent": 17
+    },
+    {
+      "points": 446,
+      "percent": 18
+    },
+    {
+      "points": 491,
+      "percent": 19
+    },
+    {
+      "points": 536,
+      "percent": 20
+    },
+    {
+      "points": 586,
+      "percent": 21
+    },
+    {
+      "points": 636,
+      "percent": 22
+    },
+    {
+      "points": 691,
+      "percent": 23
+    },
+    {
+      "points": 746,
+      "percent": 24
+    },
+    {
+      "points": 804,
+      "percent": 25
+    },
+    {
+      "points": 862,
+      "percent": 26
+    },
+    {
+      "points": 924,
+      "percent": 27
+    },
+    {
+      "points": 986,
+      "percent": 28
+    },
+    {
+      "points": 1052,
+      "percent": 29
+    },
+    {
+      "points": 1118,
+      "percent": 30
+    },
+    {
+      "points": 1184,
+      "percent": 31
+    },
+    {
+      "points": 1250,
+      "percent": 32
+    },
+    {
+      "points": 1316,
+      "percent": 33
+    },
+    {
+      "points": 1382,
+      "percent": 34
+    },
+    {
+      "points": 1457,
+      "percent": 35
+    },
+    {
+      "points": 1532,
+      "percent": 36
+    },
+    {
+      "points": 1607,
+      "percent": 37
+    },
+    {
+      "points": 1682,
+      "percent": 38
+    },
+    {
+      "points": 1757,
+      "percent": 39
+    },
+    {
+      "points": 1832,
+      "percent": 40
+    },
+    {
+      "points": 1917,
+      "percent": 41
+    },
+    {
+      "points": 2002,
+      "percent": 42
+    },
+    {
+      "points": 2087,
+      "percent": 43
+    },
+    {
+      "points": 2172,
+      "percent": 44
+    },
+    {
+      "points": 2257,
+      "percent": 45
+    },
+    {
+      "points": 2352,
+      "percent": 46
+    },
+    {
+      "points": 2447,
+      "percent": 47
+    },
+    {
+      "points": 2542,
+      "percent": 48
+    },
+    {
+      "points": 2637,
+      "percent": 49
+    },
+    {
+      "points": 2732,
+      "percent": 50
+    },
+    {
+      "points": 2840,
+      "percent": 51
+    },
+    {
+      "points": 2960,
+      "percent": 52
+    },
+    {
+      "points": 3080,
+      "percent": 53
+    },
+    {
+      "points": 3200,
+      "percent": 54
+    },
+    {
+      "points": 3320,
+      "percent": 55
+    },
+    {
+      "points": 3450,
+      "percent": 56
+    },
+    {
+      "points": 3580,
+      "percent": 57
+    },
+    {
+      "points": 3710,
+      "percent": 58
+    },
+    {
+      "points": 3840,
+      "percent": 59
+    },
+    {
+      "points": 3970,
+      "percent": 60
+    },
+    {
+      "points": 4110,
+      "percent": 61
+    },
+    {
+      "points": 4250,
+      "percent": 62
+    },
+    {
+      "points": 4390,
+      "percent": 63
+    },
+    {
+      "points": 4530,
+      "percent": 64
+    },
+    {
+      "points": 4670,
+      "percent": 65
+    },
+    {
+      "points": 4820,
+      "percent": 66
+    },
+    {
+      "points": 4970,
+      "percent": 67
+    },
+    {
+      "points": 5120,
+      "percent": 68
+    },
+    {
+      "points": 5270,
+      "percent": 69
+    },
+    {
+      "points": 5420,
+      "percent": 70
+    },
+    {
+      "points": 5575,
+      "percent": 71
+    },
+    {
+      "points": 5730,
+      "percent": 72
+    },
+    {
+      "points": 5885,
+      "percent": 73
+    },
+    {
+      "points": 6040,
+      "percent": 74
+    },
+    {
+      "points": 6195,
+      "percent": 75
+    },
+    {
+      "points": 6350,
+      "percent": 76
+    },
+    {
+      "points": 6505,
+      "percent": 77
+    },
+    {
+      "points": 6660,
+      "percent": 78
+    },
+    {
+      "points": 6815,
+      "percent": 79
+    },
+    {
+      "points": 6970,
+      "percent": 80
+    },
+    {
+      "points": 7125,
+      "percent": 81
+    },
+    {
+      "points": 7280,
+      "percent": 82
+    },
+    {
+      "points": 7435,
+      "percent": 83
+    },
+    {
+      "points": 7590,
+      "percent": 84
+    },
+    {
+      "points": 7745,
+      "percent": 85
+    },
+    {
+      "points": 7900,
+      "percent": 86
+    },
+    {
+      "points": 8055,
+      "percent": 87
+    },
+    {
+      "points": 8210,
+      "percent": 88
+    },
+    {
+      "points": 8365,
+      "percent": 89
+    },
+    {
+      "points": 8520,
+      "percent": 90
+    },
+    {
+      "points": 8675,
+      "percent": 91
+    },
+    {
+      "points": 8830,
+      "percent": 92
+    },
+    {
+      "points": 8985,
+      "percent": 93
+    },
+    {
+      "points": 9140,
+      "percent": 94
+    },
+    {
+      "points": 9295,
+      "percent": 95
+    },
+    {
+      "points": 9450,
+      "percent": 96
+    },
+    {
+      "points": 9605,
+      "percent": 97
+    },
+    {
+      "points": 9760,
+      "percent": 98
+    },
+    {
+      "points": 9915,
+      "percent": 99
+    },
+    {
+      "points": 10070,
+      "percent": 100
+    },
+    {
+      "points": 10225,
+      "percent": 101
+    },
+    {
+      "points": 10380,
+      "percent": 102
+    },
+    {
+      "points": 10535,
+      "percent": 103
+    },
+    {
+      "points": 10690,
+      "percent": 104
+    },
+    {
+      "points": 10845,
+      "percent": 105
+    },
+    {
+      "points": 11000,
+      "percent": 106
+    },
+    {
+      "points": 11155,
+      "percent": 107
+    },
+    {
+      "points": 11310,
+      "percent": 108
+    },
+    {
+      "points": 11465,
+      "percent": 109
+    },
+    {
+      "points": 11620,
+      "percent": 110
+    },
+    {
+      "points": 11775,
+      "percent": 111
+    },
+    {
+      "points": 11930,
+      "percent": 112
+    },
+    {
+      "points": 12085,
+      "percent": 113
+    },
+    {
+      "points": 12240,
+      "percent": 114
+    },
+    {
+      "points": 12395,
+      "percent": 115
+    },
+    {
+      "points": 12550,
+      "percent": 116
+    },
+    {
+      "points": 12705,
+      "percent": 117
+    },
+    {
+      "points": 12860,
+      "percent": 118
+    },
+    {
+      "points": 13015,
+      "percent": 119
+    },
+    {
+      "points": 13170,
+      "percent": 120
+    },
+    {
+      "points": 13325,
+      "percent": 121
+    },
+    {
+      "points": 13480,
+      "percent": 122
+    },
+    {
+      "points": 13635,
+      "percent": 123
+    },
+    {
+      "points": 13790,
+      "percent": 124
+    },
+    {
+      "points": 13945,
+      "percent": 125
+    },
+    {
+      "points": 14100,
+      "percent": 126
+    },
+    {
+      "points": 14255,
+      "percent": 127
+    },
+    {
+      "points": 14410,
+      "percent": 128
+    },
+    {
+      "points": 14565,
+      "percent": 129
+    },
+    {
+      "points": 14720,
+      "percent": 130
+    },
+    {
+      "points": 14875,
+      "percent": 131
+    },
+    {
+      "points": 15030,
+      "percent": 132
+    },
+    {
+      "points": 15185,
+      "percent": 133
+    },
+    {
+      "points": 15340,
+      "percent": 134
+    },
+    {
+      "points": 15495,
+      "percent": 135
+    },
+    {
+      "points": 15650,
+      "percent": 136
+    },
+    {
+      "points": 15805,
+      "percent": 137
+    },
+    {
+      "points": 15960,
+      "percent": 138
+    },
+    {
+      "points": 16115,
+      "percent": 139
+    },
+    {
+      "points": 16270,
+      "percent": 140
+    },
+    {
+      "points": 16425,
+      "percent": 141
+    },
+    {
+      "points": 16580,
+      "percent": 142
+    },
+    {
+      "points": 16735,
+      "percent": 143
+    },
+    {
+      "points": 16890,
+      "percent": 144
+    },
+    {
+      "points": 17045,
+      "percent": 145
+    },
+    {
+      "points": 17200,
+      "percent": 146
+    },
+    {
+      "points": 17355,
+      "percent": 147
+    },
+    {
+      "points": 17510,
+      "percent": 148
+    },
+    {
+      "points": 17665,
+      "percent": 149
+    },
+    {
+      "points": 17820,
+      "percent": 150
+    },
+    {
+      "points": 17975,
+      "percent": 151
+    },
+    {
+      "points": 18130,
+      "percent": 152
+    },
+    {
+      "points": 18285,
+      "percent": 153
+    },
+    {
+      "points": 18440,
+      "percent": 154
+    },
+    {
+      "points": 18595,
+      "percent": 155
+    },
+    {
+      "points": 18750,
+      "percent": 156
+    },
+    {
+      "points": 18905,
+      "percent": 157
+    },
+    {
+      "points": 19060,
+      "percent": 158
+    },
+    {
+      "points": 19215,
+      "percent": 159
+    },
+    {
+      "points": 19370,
+      "percent": 160
+    },
+    {
+      "points": 19525,
+      "percent": 161
+    },
+    {
+      "points": 19680,
+      "percent": 162
+    },
+    {
+      "points": 19835,
+      "percent": 163
+    },
+    {
+      "points": 19990,
+      "percent": 164
+    },
+    {
+      "points": 20145,
+      "percent": 165
+    },
+    {
+      "points": 20300,
+      "percent": 166
+    },
+    {
+      "points": 20455,
+      "percent": 167
+    },
+    {
+      "points": 20610,
+      "percent": 168
+    },
+    {
+      "points": 20765,
+      "percent": 169
+    },
+    {
+      "points": 20920,
+      "percent": 170
+    },
+    {
+      "points": 21075,
+      "percent": 171
+    },
+    {
+      "points": 21230,
+      "percent": 172
+    },
+    {
+      "points": 21385,
+      "percent": 173
+    },
+    {
+      "points": 21540,
+      "percent": 174
+    },
+    {
+      "points": 21695,
+      "percent": 175
+    },
+    {
+      "points": 21850,
+      "percent": 176
+    },
+    {
+      "points": 22005,
+      "percent": 177
+    },
+    {
+      "points": 22160,
+      "percent": 178
+    },
+    {
+      "points": 22315,
+      "percent": 179
+    },
+    {
+      "points": 22470,
+      "percent": 180
+    },
+    {
+      "points": 22625,
+      "percent": 181
+    },
+    {
+      "points": 22780,
+      "percent": 182
+    },
+    {
+      "points": 22935,
+      "percent": 183
+    },
+    {
+      "points": 23090,
+      "percent": 184
+    },
+    {
+      "points": 23245,
+      "percent": 185
+    },
+    {
+      "points": 23400,
+      "percent": 186
+    },
+    {
+      "points": 23555,
+      "percent": 187
+    },
+    {
+      "points": 23710,
+      "percent": 188
+    },
+    {
+      "points": 23865,
+      "percent": 189
+    },
+    {
+      "points": 24020,
+      "percent": 190
+    },
+    {
+      "points": 24175,
+      "percent": 191
+    },
+    {
+      "points": 24330,
+      "percent": 192
+    },
+    {
+      "points": 24485,
+      "percent": 193
+    },
+    {
+      "points": 24640,
+      "percent": 194
+    },
+    {
+      "points": 24795,
+      "percent": 195
+    },
+    {
+      "points": 24950,
+      "percent": 196
+    },
+    {
+      "points": 25105,
+      "percent": 197
+    },
+    {
+      "points": 25260,
+      "percent": 198
+    },
+    {
+      "points": 25415,
+      "percent": 199
+    },
+    {
+      "points": 25570,
+      "percent": 200
+    }
+  ]
+}

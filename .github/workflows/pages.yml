@@ -29,6 +29,8 @@ jobs:
         run: node tests/test_recruitment.cjs
       - name: Validate operator progress
         run: node tests/test_operators.cjs
+      - name: Validate account import
+        run: node --test tests/test_account_import.mjs workers/account/test/*.test.mjs
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload site

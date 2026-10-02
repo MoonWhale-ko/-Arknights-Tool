@@ -21,6 +21,7 @@ input,select{background:#10151c;color:#fff;border:1px solid #3a4556;border-radiu
 <datalist id="operatorList"></datalist>
 <div class="source muted" id="sourceInfo"></div>
 </div>
+<div class="panel" id="accountInventory" hidden></div>
 <div id="content"><div class="status">저장된 육성 데이터를 불러오는 중입니다.</div></div>
 </div>
 
@@ -108,5 +109,6 @@ Promise.all([
  document.getElementById('content').innerHTML='<div class="status">저장된 육성 데이터 파일을 불러오지 못했습니다. 잠시 후 새로고침해 주세요.</div>';
 });
 </script>
+<script type="module" src="assets/js/account-inventory.mjs"></script>
 </body>
 </html>

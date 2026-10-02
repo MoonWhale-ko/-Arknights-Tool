@@ -33,13 +33,15 @@ input[type=number]{width:74px}.search{min-width:220px}.stats{display:grid;grid-t
 .section.modules{display:block}.cycle img{filter:none}.cycle[data-kind="potential"][data-value="6"]{position:relative}.cycle[data-kind="potential"][data-value="6"] img{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:55.1px;height:55.1px;max-width:none}.r1{--color:#7d8794}.r2{--color:#c2ef57}.r3{--color:#58a9e6}.r4{--color:#a878e8}.r5{--color:#e5b84b}.r6{--color:#e86f42}
 
 .settings .heading{height:58px;margin-bottom:0;align-items:flex-start}.settings .name{display:block;height:58px;min-width:0;flex:1;font-size:24px;line-height:1.2;word-break:keep-all;overflow-wrap:normal;text-wrap:wrap}.settings>.stars{height:16px;line-height:16px;margin:2px 0 10px;color:var(--color);font-size:12px;letter-spacing:0}.basic{align-items:center;grid-auto-rows:64px}.basic .cycle{width:64px;height:64px;min-height:64px;align-self:center}.basic .cycle img{width:57px;height:57px}.basic .cycle[data-kind="potential"][data-value="6"] img{width:82.65px;height:82.65px}
+
+.account-dialog{width:min(520px,calc(100% - 24px));max-height:calc(100dvh - 32px);overflow-y:auto;background:#171d26;color:#eef2f7;border:1px solid #657286;padding:20px;border-radius:0}.account-dialog::backdrop{background:#000a}.account-dialog label{display:block;margin:14px 0}.account-dialog input:not([type=checkbox]){width:100%;margin-top:6px}.account-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.account-dialog p{line-height:1.6}.account-dialog button:disabled{opacity:.4;cursor:default}.account-message{white-space:pre-line;line-height:1.6;margin-top:12px}
 </style>
 </head>
 <body>
 <div class="wrap">
 <div class="top">
 <a class="home-button" href="index.html" aria-label="홈"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 10 12 3l9 7v11h-6v-7H9v7H3Z"/></svg></a><div><h1>오퍼레이터 관리</h1><div class="muted">보유 및 육성 현황은 이 브라우저에 자동 저장됩니다.</div></div>
-<div class="nav"><button class="btn" id="exportJson">백업</button><button class="btn" id="importJson">복원</button><button class="btn" id="exportPng">전체 PNG</button></div>
+<div class="nav"><button class="btn" id="gameImport">게임 계정 가져오기</button><button class="btn" id="exportJson">백업</button><button class="btn" id="importJson">복원</button><button class="btn" id="exportPng">전체 PNG</button></div>
 </div>
 <div class="panel">
 <div class="controls">
@@ -54,6 +56,19 @@ input[type=number]{width:74px}.search{min-width:220px}.stats{display:grid;grid-t
 </div>
 <input type="file" id="file" accept=".json,application/json" hidden>
 <div id="exportBox" class="exportBox"><h1>명일방주 오퍼레이터 육성 현황</h1><div id="exportSummary"></div><div class="exportGrid" id="exportGrid"></div></div>
+<dialog id="accountDialog" class="account-dialog" aria-labelledby="accountTitle">
+<h2 id="accountTitle">게임 계정 가져오기</h2>
+<p class="muted">한국 서버 · 요스타 이메일 인증</p>
+<p>조회하면 현재 게임 접속이 종료될 수 있습니다. 이메일과 인증번호는 계정 조회에만 사용하며, 육성·재료 정보는 이 브라우저에 저장합니다.</p>
+<form id="accountForm">
+<label>요스타 연동 이메일<input id="accountEmail" type="email" autocomplete="off" maxlength="254" required></label>
+<button class="btn" id="accountSend" type="button">인증번호 받기</button>
+<label>인증번호<input id="accountCode" type="text" inputmode="numeric" autocomplete="off" pattern="[0-9]{6}" maxlength="6" required></label>
+<button class="btn" id="accountFetch" type="submit">현재 상태 조회</button>
+</form>
+<div id="accountMessage" class="account-message" role="status" aria-live="polite"></div>
+<div class="account-actions"><button class="btn" id="accountApply" disabled>조회 결과 적용</button><button class="btn" id="accountUndo">가져오기 전으로 복원</button><button class="btn" id="accountClose">닫기</button></div>
+</dialog>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script>
 const DATA_URL='data/operators.json';
@@ -133,6 +148,9 @@ document.getElementById('importJson').onclick=()=>document.getElementById('file'
 document.getElementById('file').onchange=async e=>{try{const j=JSON.parse(await e.target.files[0].text());state=j.state||j;save();render();alert('복원했습니다.')}catch{alert('올바른 백업 파일이 아닙니다.')}e.target.value=''}
 function exportCard(c){const s=get(c.id);return `<div class="exportCard r${c.rarity}"><div class="stars">${'★'.repeat(c.rarity)}</div><div class="nm">${esc(c.name)}</div><div class="exportSmall">${s.owned?'보유':'미보유'} · E${s.elite} Lv.${s.level}<br>잠재 ${s.potential} · 신뢰도 ${s.trust}% · Skill ${s.skill}<br>${c.skills.map((sk,i)=>`S${sk.index} M${s.m[i]||0}`).join(' · ')}<br>${c.modules.map(m=>`Module ${moduleType(m)} ${moduleStage(s,m)}`).join(' / ')}</div></div>`}
 document.getElementById('exportPng').onclick=async()=>{if(!window.html2canvas)return alert('PNG 모듈을 불러오지 못했습니다.');const owned=chars.filter(c=>get(c.id).owned);document.getElementById('exportSummary').innerHTML=`<p>보유 ${owned.length} / 전체 ${chars.length}</p>`;document.getElementById('exportGrid').innerHTML=chars.map(exportCard).join('');const box=document.getElementById('exportBox');box.style.left='0';box.style.position='fixed';box.style.zIndex='9999';const canvas=await html2canvas(box,{backgroundColor:'#0e1116',scale:1});box.style.left='-100000px';box.style.position='absolute';const a=document.createElement('a');a.download='arknights-operator-progress.png';a.href=canvas.toDataURL('image/png');a.click()}
+window.operatorAccount={get chars(){return chars},get state(){return state},key:SAVE_KEY,replace(next){state=next;render()}};
 fetch(DATA_URL).then(r=>r.json()).then(data=>{chars=(data.operators||[]).map(v=>({...v,rarity:+v.rarity})).filter(c=>c.id&&c.name&&c.rarity>=1&&c.rarity<=6&&c.profession&&c.phases?.length).sort((a,b)=>b.rarity-a.rarity||String(a.name).localeCompare(String(b.name),'ko'));render()}).catch(()=>document.getElementById('grid').innerHTML='<div class="muted">저장된 오퍼레이터 데이터 파일을 불러오지 못했습니다.</div>');
 </script>
+<script src="assets/js/account-config.js"></script>
+<script type="module" src="assets/js/account-import.mjs"></script>
 </body></html>
