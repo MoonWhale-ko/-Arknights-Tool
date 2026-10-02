@@ -7,6 +7,7 @@ import {
   normalizeAccount,
   u8Sign,
   trustedUrl,
+  probeSdk,
 } from "../src/game.mjs";
 const origin = "https://moonwhale-ko.github.io";
 const accept = { limit: async () => ({ success: true }) };
@@ -187,4 +188,16 @@ test("upstream failures disclose only safe stage and HTTP status", async () => {
     assert.equal(e.message, "upstream-unavailable");
     return true;
   });
+});
+
+test("SDK probe sends no credentials and reports safe connectivity results", async () => {
+  const result = await probeSdk(async (url, init) => {
+    assert.equal(url, "https://jp-sdk-api.yostarplat.com/");
+    assert.equal(init.method, "HEAD");
+    assert.equal(init.body, undefined);
+    assert.equal(init.headers.Authorization, undefined);
+    return new Response(null, {status: 404});
+  });
+  assert.deepEqual(result, {reachable:true, httpStatus:404});
+  assert.deepEqual(await probeSdk(async () => {throw new DOMException("private", "TimeoutError")}), {reachable:false, reason:"timeout"});
 });

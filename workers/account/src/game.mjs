@@ -17,6 +17,17 @@ const headers = {
   "User-Agent":
     "Dalvik/2.1.0 (Linux; U; Android 11; KB2000 Build/RP1A.201005.001)",
 };
+// A credential-free HEAD request checks Worker-to-SDK connectivity only.
+export async function probeSdk(fetcher = fetch) {
+  try {
+    const r = await fetcher(SDK + "/", {
+      method: "HEAD", headers, redirect: "manual", signal: AbortSignal.timeout(15000),
+    });
+    return { reachable: true, httpStatus: r.status };
+  } catch (e) {
+    return { reachable: false, reason: e?.name === "TimeoutError" || e?.name === "AbortError" ? "timeout" : "network-error" };
+  }
+}
 export function signedHeaders(body, deviceId = randomUUID()) {
   const Head = {
     PID: "KR-ARKNIGHTS",

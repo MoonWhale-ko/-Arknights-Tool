@@ -1,4 +1,4 @@
-import { AccountError, sendCode, getAccount } from "./game.mjs";
+import { AccountError, sendCode, getAccount, probeSdk } from "./game.mjs";
 async function readBody(request) {
   if (
     !request.headers
@@ -63,13 +63,21 @@ export default {
       return reply({ ok: false, error: "not-found" }, 404);
     if (request.method === "OPTIONS")
       return new Response(null, { status: 204, headers: cors });
-    if (path === "/health" && request.method === "GET")
+    if (path === "/health" && request.method === "GET") {
+      let sdk;
+      if (new URL(request.url).searchParams.get("upstream") === "1") {
+        if (!env.IP_LIMIT || !(await env.IP_LIMIT.limit({ key: request.headers.get("CF-Connecting-IP") || "unknown" })).success)
+          return reply({ ok: false, error: "too-many" }, 429);
+        sdk = await probeSdk();
+      }
       return reply({
         ok: true,
         service: "arknights-account-import",
         server: "kr",
-        version: 1,
+        version: 2,
+        ...(sdk ? { sdk } : {}),
       });
+    }
     if (request.method !== "POST" || path === "/health")
       return reply({ ok: false, error: "method-not-allowed" }, 405);
     try {
