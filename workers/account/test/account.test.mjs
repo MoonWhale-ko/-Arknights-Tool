@@ -6,6 +6,7 @@ import {
   sendCode,
   normalizeAccount,
   u8Sign,
+  trustedUrl,
 } from "../src/game.mjs";
 const origin = "https://moonwhale-ko.github.io";
 const accept = { limit: async () => ({ success: true }) };
@@ -127,7 +128,7 @@ test("full KR authentication sequence, signatures and session sequence", async (
             network: {
               gs: "https://gs.arknights.kr",
               u8: "https://as.arknights.kr/u8",
-              hv: "https://ak-conf.arknights.kr/{0}/version",
+              hv: "https://ark-kr-static-online-1300509597.yo-star.com/assetbundle/official/{0}/version",
             },
           },
         },
@@ -170,4 +171,20 @@ test("request size is bounded even without Content-Length", async () => {
     env,
   );
   assert.equal(r.status, 413);
+});
+
+test("official KR version CDN is allowed only for version lookup", () => {
+  const url = "https://ark-kr-static-online-1300509597.yo-star.com/assetbundle/official/Android/version";
+  assert.equal(trustedUrl(url, "version"), url);
+  assert.throws(() => trustedUrl(url));
+  assert.throws(() => trustedUrl("https://evil.yo-star.com/version", "version"));
+  assert.throws(() => trustedUrl("https://gs.arknights.kr:1234"));
+});
+test("upstream failures disclose only safe stage and HTTP status", async () => {
+  await assert.rejects(sendCode("test@example.kr", async () => new Response("private upstream body", {status: 403})), e => {
+    assert.equal(e.stage, "send-code");
+    assert.equal(e.upstreamStatus, 403);
+    assert.equal(e.message, "upstream-unavailable");
+    return true;
+  });
 });

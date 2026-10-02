@@ -27,6 +27,16 @@ const messages = {
   "upstream-format": "게임 서버 응답 형식이 변경되었습니다.",
   "invalid-code": "6자리 인증번호를 입력해 주세요.",
 };
+const stages = {
+  "send-code": "인증 메일 발송",
+  "email-auth": "이메일 인증",
+  "sdk-login": "요스타 로그인",
+  "network-config": "한국 서버 설정 조회",
+  "u8-token": "게임 계정 인증",
+  "game-version": "게임 버전 조회",
+  "game-login": "게임 로그인",
+  "sync-data": "육성 데이터 조회",
+};
 function api() {
   const value = window.ARKNIGHTS_ACCOUNT_API;
   if (!value) return null;
@@ -63,7 +73,10 @@ async function request(path, body) {
     });
     const j = await r.json();
     if (!r.ok || !j.ok)
-      throw new Error(messages[j.error] || "계정 서버 요청에 실패했습니다.");
+      throw new Error(
+        (messages[j.error] || "계정 서버 요청에 실패했습니다.") +
+        (stages[j.stage] ? ` [단계: ${stages[j.stage]}${Number.isInteger(j.upstreamStatus) ? ` · HTTP ${j.upstreamStatus}` : ""}]` : ""),
+      );
     return j;
   } catch (e) {
     if (e.name === "AbortError")

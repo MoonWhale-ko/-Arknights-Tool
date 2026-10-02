@@ -2,10 +2,12 @@
 // Only authentication and account/syncData; no game actions or retained sessions.
 import { createHash, createHmac, randomUUID } from "node:crypto";
 export class AccountError extends Error {
-  constructor(code, status = 502) {
+  constructor(code, status = 502, stage = undefined, upstreamStatus = undefined) {
     super(code);
     this.code = code;
     this.status = status;
+    this.stage = stage;
+    this.upstreamStatus = upstreamStatus;
   }
 }
 const SDK = "https://jp-sdk-api.yostarplat.com";
@@ -50,6 +52,15 @@ export function u8Sign(body) {
     .digest("hex");
 }
 async function jsonRequest(url, body, extra = {}, fetcher = fetch) {
+  const path = new URL(url).pathname;
+  const stage = path.endsWith("/send-code") ? "send-code"
+    : path.endsWith("/get-auth") ? "email-auth"
+    : path === "/user/login" ? "sdk-login"
+    : path.endsWith("/network_config") ? "network-config"
+    : path.endsWith("/getToken") ? "u8-token"
+    : path.endsWith("/version") ? "game-version"
+    : path.endsWith("/account/login") ? "game-login"
+    : path.endsWith("/syncData") ? "sync-data" : undefined;
   let response;
   try {
     response = await fetcher(url, {
@@ -60,17 +71,19 @@ async function jsonRequest(url, body, extra = {}, fetcher = fetch) {
       redirect: "error",
     });
   } catch {
-    throw new AccountError("upstream-unavailable");
+    throw new AccountError("upstream-unavailable", 502, stage);
   }
   if (!response.ok)
     throw new AccountError(
       response.status === 429 ? "too-many" : "upstream-unavailable",
       response.status === 429 ? 429 : 502,
+      stage,
+      response.status,
     );
   try {
     return await response.json();
   } catch {
-    throw new AccountError("upstream-format");
+    throw new AccountError("upstream-format", 502, stage);
   }
 }
 async function sdk(path, body, fetcher) {
@@ -101,7 +114,7 @@ export async function sendCode(email, fetcher) {
     fetcher,
   );
 }
-function trustedUrl(value) {
+export function trustedUrl(value, role = "game") {
   let u;
   try {
     u = new URL(value);
@@ -110,9 +123,11 @@ function trustedUrl(value) {
   }
   if (
     u.protocol !== "https:" ||
-    !(u.hostname === "arknights.kr" || u.hostname.endsWith(".arknights.kr")) ||
+    !(u.hostname === "arknights.kr" || u.hostname.endsWith(".arknights.kr") ||
+      (role === "version" && u.hostname === "ark-kr-static-online-1300509597.yo-star.com")) ||
     u.username ||
-    u.password
+    u.password ||
+    (u.port && u.port !== "443")
   )
     throw new AccountError("upstream-format");
   return value.replace(/\/$/, "");
@@ -161,7 +176,7 @@ export async function getAccount(email, code, fetcher) {
   }
   const gs = trustedUrl(network.gs),
     u8 = trustedUrl(network.u8),
-    hv = trustedUrl(network.hv.replace("{0}", "Android"));
+    hv = trustedUrl(network.hv.replace("{0}", "Android"), "version");
   const deviceId = randomUUID();
   const body = {
     appId: "1",

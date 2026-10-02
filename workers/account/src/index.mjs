@@ -112,6 +112,8 @@ export default {
         {
           ok: false,
           error: e instanceof AccountError ? e.code : "internal-error",
+          ...(e instanceof AccountError && e.stage ? { stage: e.stage } : {}),
+          ...(e instanceof AccountError && e.upstreamStatus ? { upstreamStatus: e.upstreamStatus } : {}),
         },
         e instanceof AccountError ? e.status : 500,
       );
