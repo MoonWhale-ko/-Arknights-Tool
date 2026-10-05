@@ -166,7 +166,7 @@ function syncRaritySelection(){
  const values=[6,5,4,3,2,1].filter(r=>selectedRarities.has(r));
  document.getElementById('rarity').value=values.length===6?'':values.length?values.join(','):'none';
  document.getElementById('rarityButton').textContent=(values.length===6?'전체 등급':values.length?values.join('·')+'성':'등급 선택')+' ▾';
- document.getElementById('rarityOptions').innerHTML=[6,5,4,3,2,1].map(r=>`<button type="button" class="rarity-toggle r${r}" data-rarity="${r}" aria-label="${r}성" aria-pressed="${selectedRarities.has(r)}">${r}성 ${'★'.repeat(r)}</button>`).join('');
+ document.getElementById('rarityOptions').innerHTML=[6,5,4,3,2,1].map(r=>`<button type="button" class="rarity-toggle r${r}" data-rarity="${r}" aria-label="${r}성" aria-pressed="${selectedRarities.has(r)}">${r}성</button>`).join('');
 }
 function toggleRarity(r){if(selectedRarities.has(r))selectedRarities.delete(r);else selectedRarities.add(r);syncRaritySelection();applyFilter()}
 function closeRarityMenu(){document.getElementById('rarityMenu').hidden=true;document.getElementById('rarityButton').setAttribute('aria-expanded','false')}
