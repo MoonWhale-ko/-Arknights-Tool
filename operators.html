@@ -41,6 +41,18 @@ input[type=number]{width:74px}.search{min-width:220px}.stats{display:grid;grid-t
 .profession-mark.branch{padding:2px}
 .class-glyph{display:block;width:var(--icon-size,40px);height:var(--icon-size,40px);background-image:url('assets/icons/classes/sprite.png');background-repeat:no-repeat;background-size:calc(var(--icon-size,40px)*8) calc(var(--icon-size,40px)*10);background-position:calc(var(--icon-size,40px)*var(--icon-x)) calc(var(--icon-size,40px)*var(--icon-y))}
 .profession-mark.branch .class-glyph{--icon-size:20px}
+/* Profession navigation and separate rarity rows. */
+.profession-picker{margin-top:14px;border-top:1px solid #303a48;padding-top:14px}
+.profession-tabs,.branch-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.profession-tabs{display:grid;grid-template-columns:repeat(9,minmax(0,1fr))}
+.class-tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:74px;padding:8px 4px;background:#10151c;border:1px solid #3a4556;font-size:12px;text-align:center}
+.class-tab .class-glyph{--icon-size:36px;pointer-events:none}
+.class-tab[aria-pressed="true"]{background:#344050;border-color:#edf2f7;color:white}
+.class-tab:focus-visible{outline:2px solid white;outline-offset:2px}
+.branch-tabs{margin-top:10px}.branch-tabs .class-tab{min-width:72px;min-height:66px;font-size:11px}.branch-tabs .class-glyph{--icon-size:28px}
+#grid{display:block}.rarity-group{margin-top:22px}.rarity-heading{color:var(--color);font-size:18px;letter-spacing:3px;margin:0 0 10px;border-bottom:1px solid var(--color);padding-bottom:8px}
+.rarity-grid{margin-top:0}.empty-list{margin-top:20px;padding:24px;text-align:center}
+@media(max-width:700px){.profession-tabs{grid-template-columns:repeat(9,minmax(0,1fr));gap:3px}.profession-tabs .class-tab{font-size:9px;min-height:58px;padding:6px 1px;overflow-wrap:anywhere}.profession-tabs .class-glyph{--icon-size:26px}.branch-tabs{gap:5px}.branch-tabs .class-tab{min-width:62px;min-height:62px}.rarity-heading{font-size:16px}}
 </style>
 </head>
 <body>
@@ -56,9 +68,10 @@ input[type=number]{width:74px}.search{min-width:220px}.stats{display:grid;grid-t
 <select id="ownedFilter"><option value="">전체</option><option value="1">보유</option><option value="0">미보유</option></select>
 <button class="btn" id="ownedAll">현재 목록 모두 보유</button>
 </div>
+<div class="profession-picker"><div id="professionTabs" class="profession-tabs" role="group" aria-label="기본 직군"></div><div id="branchTabs" class="branch-tabs" role="group" aria-label="세부 직군"></div></div>
 <div class="stats" id="stats"></div>
 </div>
-<div class="grid" id="grid"><div class="muted">오퍼레이터 데이터를 불러오는 중입니다.</div></div>
+<div id="grid"><div class="muted">오퍼레이터 데이터를 불러오는 중입니다.</div></div>
 </div>
 <input type="file" id="file" accept=".json,application/json" hidden>
 <div id="exportBox" class="exportBox"><h1>명일방주 오퍼레이터 육성 현황</h1><div id="exportSummary"></div><div class="exportGrid" id="exportGrid"></div></div>
@@ -79,7 +92,8 @@ input[type=number]{width:74px}.search{min-width:220px}.stats{display:grid;grid-t
 <script>
 const DATA_URL='data/operators.json';
 const SAVE_KEY='arknightsOperatorProgressV1';
-let chars=[], state={};
+let chars=[], state={},branchNames={};
+let selectedProfession='',selectedBranch='';
 try{state=JSON.parse(localStorage.getItem(SAVE_KEY)||'{}')}catch{state={}}
 const save=()=>localStorage.setItem(SAVE_KEY,JSON.stringify(state));
 const rarityNum=v=>+(String(v||'').match(/\d+/)||[0])[0];
@@ -120,13 +134,26 @@ function iconButton(kind,key,value,label,disabled=false,bottom=''){
  const prefix={elite:'elite-e',potential:'potential-p',mastery:'mastery-m'}[kind];
  return `<button type="button" class="cycle" data-k="${key}" data-kind="${kind}" data-value="${value}" ${disabled?'disabled':''} aria-label="${esc(label)}" title="${esc(label)}"><img src="assets/icons/progress/${prefix}${value}.svg" alt=""><span class="rank">${bottom}</span></button>`;
 }
+function classGlyph(key){const pos=CLASS_ICON_POS[key];return pos?`<span class="class-glyph" aria-hidden="true" style="--icon-x:${-pos[0]};--icon-y:${-pos[1]}"></span>`:''}
+function classificationButton(id,label,key,selected){return `<button type="button" class="class-tab" data-class="${esc(id)}" aria-pressed="${selected}" title="${esc(label)}">${classGlyph(key)}<span>${esc(label)}</span></button>`}
+function branchesFor(profession){
+ const order=profession==='PIONEER'?['pioneer','charger','bearer','tactician','agent','counsellor']:[];
+ return [...new Map(chars.filter(c=>c.profession===profession).map(c=>[c.subProfessionId,branchNames[c.subProfessionId]||c.subProfessionId])).entries()].sort((a,b)=>order.length?order.indexOf(a[0])-order.indexOf(b[0]):a[1].localeCompare(b[1],'ko'));
+}
+function renderClassification(){
+ document.getElementById('professionTabs').innerHTML=classificationButton('','전체','',selectedProfession==='')+Object.entries(professionKo).map(([id,label])=>classificationButton(id,label,'class_'+id,selectedProfession===id)).join('');
+ document.getElementById('branchTabs').innerHTML=selectedProfession?classificationButton('','전체','',selectedBranch==='')+branchesFor(selectedProfession).map(([id,label])=>classificationButton(id,label,'sub_'+id,selectedBranch===id)).join(''):'';
+ document.getElementById('branchTabs').hidden=!selectedProfession;
+}
+function matchesOperator(c,q,r,o){return !(q&&!c.name.toLowerCase().includes(q)||r&&String(c.rarity)!==r||o!==''&&String(+get(c.id).owned)!==o||selectedProfession&&c.profession!==selectedProfession||selectedBranch&&c.subProfessionId!==selectedBranch)}
+function groupedCards(){return [6,5,4,3,2,1].map(r=>{const list=chars.filter(c=>c.rarity===r);return list.length?`<section class="rarity-group r${r}" data-rarity="${r}" aria-label="${r}성"><h2 class="rarity-heading">${'★'.repeat(r)}</h2><div class="grid rarity-grid">${list.map(card).join('')}</div></section>`:''}).join('')+'<div id="emptyList" class="muted empty-list hidden" role="status">조건에 맞는 오퍼레이터가 없습니다.</div>'}
 function professionBadges(c){
- const icons=[['class_'+c.profession,professionKo[c.profession]||c.profession,''],['sub_'+c.subProfessionId,'세부 직군 '+c.subProfessionId,' branch']];
+ const icons=[['class_'+c.profession,professionKo[c.profession]||c.profession,''],['sub_'+c.subProfessionId,branchNames[c.subProfessionId]||'세부 직군 '+c.subProfessionId,' branch']];
  return `<div class="profession-badges">${icons.map(([key,label,kind])=>{const pos=CLASS_ICON_POS[key];return pos?`<span class="profession-mark${kind}" role="img" aria-label="${esc(label)}" title="${esc(label)}"><span class="class-glyph" style="--icon-x:${-pos[0]};--icon-y:${-pos[1]}"></span></span>`:''}).join('')}</div>`;
 }
 function card(c){
  const s=get(c.id),r=c.rarity,e=clamp(s.elite,0,c.phases.length-1),max=maxLv(c,e);
- return `<article class="card r${r}" data-id="${c.id}" data-name="${esc(c.name.toLowerCase())}" data-r="${r}" data-owned="${s.owned?1:0}"><div class="photo"><img src="${avatar(c.id)}" alt="${esc(c.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><div class="avatar-fallback" style="display:none">${esc(c.name.slice(0,1))}</div>${professionBadges(c)}</div><div class="settings"><div class="heading"><strong class="name">${esc(c.name)}</strong><label class="owned"><input type="checkbox" data-k="owned" ${s.owned?'checked':''}>보유</label></div><div class="stars">${'★'.repeat(r)}</div><div class="progress-body ${s.owned?'':'is-disabled'}"><div class="basic"><div class="field">${iconButton('elite','elite',e,`정예화 E${e} · 클릭하여 다음 단계`,c.phases.length===1||!s.owned)}</div><label class="field"><span>레벨</span><input type="number" min="1" max="${max}" value="${clamp(s.level,1,max)}" data-k="level" ${s.owned?'':'disabled'}></label><div class="field">${iconButton('potential','potential',clamp(s.potential,1,6),`잠재 ${s.potential} · 클릭하여 다음 단계`,!s.owned)}</div><label class="field"><span>신뢰도 %</span><input type="number" min="0" max="200" value="${s.trust}" data-k="trust" ${s.owned?'':'disabled'}></label></div>${c.skills.length?`<div class="section"><div class="skill-level"><span>스킬 레벨</span><select data-k="skill" aria-label="스킬 레벨" ${s.owned?'':'disabled'}>${Array.from({length:e?7:4},(_,i)=>i+1).map(v=>`<option value="${v}" ${s.skill===v?'selected':''}>Lv.${v}</option>`).join('')}</select></div><div class="slot-grid">${c.skills.map((sk,i)=>`<div>${sk.mastery.length?iconButton('mastery','m'+i,clamp(s.m[i]||0,0,3),`S${sk.index} 마스터리 M${s.m[i]||0}${masteryUnlocked(s)?' · 클릭하여 다음 단계':' · E2, 스킬 레벨 7 필요'}`,!s.owned||!masteryUnlocked(s),'S'+sk.index):`<div class="cycle skill-empty" title="마스터리가 없는 스킬"><span>—</span><span class="rank">S${sk.index}</span></div>`}</div>`).join('')}</div></div>`:''}${c.modules.length?`<div class="section modules"><div class="section-title">모듈</div><div class="module-grid">${c.modules.map(m=>`<label><span class="slot-title">${moduleType(m)}</span><select data-k="mod:${m.id}" aria-label="모듈 ${moduleType(m)} 스테이지" title="E2 Lv.${m.unlockLevel} 필요" ${s.owned&&moduleUnlocked(c,s,m)?'':'disabled'}>${[0,1,2,3].map(v=>`<option value="${v}" ${moduleStage(s,m)===v?'selected':''}>${v?'Stage '+v:'미해금'}</option>`).join('')}</select></label>`).join('')}</div></div>`:''}</div></div></article>`;
+ return `<article class="card r${r}" data-id="${c.id}" data-name="${esc(c.name.toLowerCase())}" data-r="${r}" data-owned="${s.owned?1:0}" data-profession="${c.profession}" data-branch="${c.subProfessionId}"><div class="photo"><img src="${avatar(c.id)}" alt="${esc(c.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><div class="avatar-fallback" style="display:none">${esc(c.name.slice(0,1))}</div>${professionBadges(c)}</div><div class="settings"><div class="heading"><strong class="name">${esc(c.name)}</strong><label class="owned"><input type="checkbox" data-k="owned" ${s.owned?'checked':''}>보유</label></div><div class="stars">${'★'.repeat(r)}</div><div class="progress-body ${s.owned?'':'is-disabled'}"><div class="basic"><div class="field">${iconButton('elite','elite',e,`정예화 E${e} · 클릭하여 다음 단계`,c.phases.length===1||!s.owned)}</div><label class="field"><span>레벨</span><input type="number" min="1" max="${max}" value="${clamp(s.level,1,max)}" data-k="level" ${s.owned?'':'disabled'}></label><div class="field">${iconButton('potential','potential',clamp(s.potential,1,6),`잠재 ${s.potential} · 클릭하여 다음 단계`,!s.owned)}</div><label class="field"><span>신뢰도 %</span><input type="number" min="0" max="200" value="${s.trust}" data-k="trust" ${s.owned?'':'disabled'}></label></div>${c.skills.length?`<div class="section"><div class="skill-level"><span>스킬 레벨</span><select data-k="skill" aria-label="스킬 레벨" ${s.owned?'':'disabled'}>${Array.from({length:e?7:4},(_,i)=>i+1).map(v=>`<option value="${v}" ${s.skill===v?'selected':''}>Lv.${v}</option>`).join('')}</select></div><div class="slot-grid">${c.skills.map((sk,i)=>`<div>${sk.mastery.length?iconButton('mastery','m'+i,clamp(s.m[i]||0,0,3),`S${sk.index} 마스터리 M${s.m[i]||0}${masteryUnlocked(s)?' · 클릭하여 다음 단계':' · E2, 스킬 레벨 7 필요'}`,!s.owned||!masteryUnlocked(s),'S'+sk.index):`<div class="cycle skill-empty" title="마스터리가 없는 스킬"><span>—</span><span class="rank">S${sk.index}</span></div>`}</div>`).join('')}</div></div>`:''}${c.modules.length?`<div class="section modules"><div class="section-title">모듈</div><div class="module-grid">${c.modules.map(m=>`<label><span class="slot-title">${moduleType(m)}</span><select data-k="mod:${m.id}" aria-label="모듈 ${moduleType(m)} 스테이지" title="E2 Lv.${m.unlockLevel} 필요" ${s.owned&&moduleUnlocked(c,s,m)?'':'disabled'}>${[0,1,2,3].map(v=>`<option value="${v}" ${moduleStage(s,m)===v?'selected':''}>${v?'Stage '+v:'미해금'}</option>`).join('')}</select></label>`).join('')}</div></div>`:''}</div></div></article>`;
 }
 function bind(){document.querySelectorAll('.card').forEach(el=>{
  const id=el.dataset.id,c=chars.find(c=>c.id===id);
@@ -140,18 +167,22 @@ function bind(){document.querySelectorAll('.card').forEach(el=>{
 })}
 function refreshCard(el,c){el.outerHTML=card(c);bind();applyFilter();fitCards()}
 function fitNames(){document.querySelectorAll('.settings .name').forEach(name=>{name.style.fontSize='24px';for(let size=23;(name.scrollHeight>name.clientHeight+1||name.scrollWidth>name.clientWidth+1)&&size>=10;size--)name.style.fontSize=size+'px'})}
-function fitCards(){const grid=document.getElementById('grid');grid.style.removeProperty('--card-height');const hidden=[...grid.querySelectorAll('.card.hidden')];hidden.forEach(c=>c.classList.remove('hidden'));fitNames();const panels=[...grid.querySelectorAll('.settings')];const height=Math.max(402,...panels.map(p=>Math.ceil(p.getBoundingClientRect().height)+4));grid.style.setProperty('--card-height',height+'px');hidden.forEach(c=>c.classList.add('hidden'))}
-function render(){document.getElementById('grid').innerHTML=chars.map(card).join('');bind();fitCards();applyFilter();updateStats()}
+function fitCards(){const grid=document.getElementById('grid');grid.style.removeProperty('--card-height');const hidden=[...grid.querySelectorAll('.card.hidden,.rarity-group.hidden')];hidden.forEach(c=>c.classList.remove('hidden'));fitNames();const panels=[...grid.querySelectorAll('.settings')];const height=Math.max(402,...panels.map(p=>Math.ceil(p.getBoundingClientRect().height)+4));grid.style.setProperty('--card-height',height+'px');hidden.forEach(c=>c.classList.add('hidden'))}
+function render(){document.getElementById('grid').innerHTML=groupedCards();renderClassification();bind();applyFilter();updateStats()}
 
 function applyFilter(){
  const q=document.getElementById('q').value.trim().toLowerCase(),r=document.getElementById('rarity').value,o=document.getElementById('ownedFilter').value;
- document.querySelectorAll('.card').forEach(c=>c.classList.toggle('hidden',!!((q&&!c.dataset.name.includes(q))||(r&&c.dataset.r!==r)||(o!==''&&c.dataset.owned!==o))));fitCards()
+ document.querySelectorAll('.card').forEach(el=>{const c=chars.find(c=>c.id===el.dataset.id);el.classList.toggle('hidden',!matchesOperator(c,q,r,o))});
+ document.querySelectorAll('.rarity-group').forEach(group=>group.classList.toggle('hidden',!group.querySelector('.card:not(.hidden)')));
+ document.getElementById('emptyList').classList.toggle('hidden',!!document.querySelector('.card:not(.hidden)'));fitCards()
 }
 function updateStats(){
  const total=chars.length,owned=chars.filter(c=>get(c.id).owned).length,e2=chars.filter(c=>get(c.id).owned&&get(c.id).elite===2).length,m3=chars.filter(c=>get(c.id).owned&&get(c.id).m.some(x=>x===3)).length,mod3=chars.filter(c=>get(c.id).owned&&Object.values(get(c.id).mods).some(x=>x===3)).length;
  document.getElementById('stats').innerHTML=[['전체',total],['보유',owned],['E2',e2],['M3 보유',m3],['모듈 3단계',mod3]].map(x=>`<div class="stat"><b>${x[1]}</b>${x[0]}</div>`).join('')
 }
 window.addEventListener('resize',fitCards);document.fonts?.ready.then(fitCards);
+document.getElementById('professionTabs').onclick=e=>{const button=e.target.closest('[data-class]');if(!button)return;selectedProfession=button.dataset.class;selectedBranch='';renderClassification();applyFilter()};
+document.getElementById('branchTabs').onclick=e=>{const button=e.target.closest('[data-class]');if(!button)return;selectedBranch=button.dataset.class;renderClassification();applyFilter()};
 ['q','rarity','ownedFilter'].forEach(id=>document.getElementById(id).addEventListener(id==='q'?'input':'change',applyFilter));
 document.getElementById('ownedAll').onclick=()=>{document.querySelectorAll('.card:not(.hidden)').forEach(c=>{get(c.dataset.id).owned=true});save();render()}
 document.getElementById('exportJson').onclick=()=>{const b=new Blob([JSON.stringify({version:1,savedAt:new Date().toISOString(),state},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='arknights-operator-backup.json';a.click();URL.revokeObjectURL(a.href)}
@@ -160,7 +191,7 @@ document.getElementById('file').onchange=async e=>{try{const j=JSON.parse(await 
 function exportCard(c){const s=get(c.id);return `<div class="exportCard r${c.rarity}"><div class="stars">${'★'.repeat(c.rarity)}</div><div class="nm">${esc(c.name)}</div><div class="exportSmall">${s.owned?'보유':'미보유'} · E${s.elite} Lv.${s.level}<br>잠재 ${s.potential} · 신뢰도 ${s.trust}% · Skill ${s.skill}<br>${c.skills.map((sk,i)=>`S${sk.index} M${s.m[i]||0}`).join(' · ')}<br>${c.modules.map(m=>`Module ${moduleType(m)} ${moduleStage(s,m)}`).join(' / ')}</div></div>`}
 document.getElementById('exportPng').onclick=async()=>{if(!window.html2canvas)return alert('PNG 모듈을 불러오지 못했습니다.');const owned=chars.filter(c=>get(c.id).owned);document.getElementById('exportSummary').innerHTML=`<p>보유 ${owned.length} / 전체 ${chars.length}</p>`;document.getElementById('exportGrid').innerHTML=chars.map(exportCard).join('');const box=document.getElementById('exportBox');box.style.left='0';box.style.position='fixed';box.style.zIndex='9999';const canvas=await html2canvas(box,{backgroundColor:'#0e1116',scale:1});box.style.left='-100000px';box.style.position='absolute';const a=document.createElement('a');a.download='arknights-operator-progress.png';a.href=canvas.toDataURL('image/png');a.click()}
 window.operatorAccount={get chars(){return chars},get state(){return state},key:SAVE_KEY,replace(next){state=next;render()}};
-fetch(DATA_URL).then(r=>r.json()).then(data=>{chars=(data.operators||[]).map(v=>({...v,rarity:+v.rarity})).filter(c=>c.id&&c.name&&c.rarity>=1&&c.rarity<=6&&c.profession&&c.phases?.length).sort((a,b)=>b.rarity-a.rarity||String(a.name).localeCompare(String(b.name),'ko'));render()}).catch(()=>document.getElementById('grid').innerHTML='<div class="muted">저장된 오퍼레이터 데이터 파일을 불러오지 못했습니다.</div>');
+Promise.all([fetch(DATA_URL).then(r=>r.json()),fetch('data/professions.json').then(r=>r.json())]).then(([data,classification])=>{branchNames=classification.professions||{};chars=(data.operators||[]).map(v=>({...v,rarity:+v.rarity})).filter(c=>c.id&&c.name&&c.rarity>=1&&c.rarity<=6&&c.profession&&c.phases?.length).sort((a,b)=>b.rarity-a.rarity||String(a.name).localeCompare(String(b.name),'ko'));render()}).catch(()=>document.getElementById('grid').innerHTML='<div class="muted">저장된 오퍼레이터 데이터 파일을 불러오지 못했습니다.</div>');
 </script>
 <script src="assets/js/account-config.js"></script>
 <script type="module" src="assets/js/account-import.mjs"></script>

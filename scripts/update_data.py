@@ -116,7 +116,9 @@ def main():
         'sha256': {n+'.json': hashlib.sha256(b).hexdigest() for n, b in blobs.items()}}}
     # Validate the entire snapshot before touching either output. No download at page runtime.
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    for name, payload in [('operators', ops), ('items', items)]:
+    branches = json.loads(blobs['uniequip_table'])['subProfDict']
+    professions = {o['subProfessionId']: branches[o['subProfessionId']]['subProfessionName'] for o in ops}
+    for name, payload in [('operators', ops), ('items', items), ('professions', professions)]:
         target = args.output_dir / (name+'.json')
         temp = target.with_suffix('.json.tmp')
         temp.write_text(json.dumps({**metadata, name: payload}, ensure_ascii=False,

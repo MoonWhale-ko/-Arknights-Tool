@@ -5,9 +5,9 @@ const data=JSON.parse(fs.readFileSync(path.join(root,'data/operators.json'),'utf
 const original={char_103_angel:{owned:true,elite:2,level:90,potential:4,trust:200,skill:7,m:[1,2,3],mods:{X:2,Y:1,D:0},custom:'keep'}};
 let saved=JSON.stringify(original),writes=0;
 const elements=new Map();
-function element(){return{value:'',innerHTML:'',style:{removeProperty(){},setProperty(){}},addEventListener(){},querySelectorAll(){return[]}}}
-const document={getElementById(id){if(!elements.has(id))elements.set(id,element());return elements.get(id)},querySelectorAll(){return[]},fonts:{ready:Promise.resolve()}};
-const ctx=vm.createContext({document,window:{addEventListener(){}},console,localStorage:{getItem(){return saved},setItem(k,v){assert.equal(k,'arknightsOperatorProgressV1');saved=v;writes++}},fetch:()=>Promise.resolve({json:()=>Promise.resolve(data)})});
+function element(){return{value:'',innerHTML:'',classList:{toggle(){}},style:{removeProperty(){},setProperty(){}},addEventListener(){},querySelectorAll(){return[]}}}
+const document={getElementById(id){if(!elements.has(id))elements.set(id,element());return elements.get(id)},querySelectorAll(){return[]},querySelector(){return null},fonts:{ready:Promise.resolve()}};
+const ctx=vm.createContext({document,window:{addEventListener(){}},console,localStorage:{getItem(){return saved},setItem(k,v){assert.equal(k,'arknightsOperatorProgressV1');saved=v;writes++}},fetch:url=>Promise.resolve({json:()=>Promise.resolve(url==='data/professions.json'?JSON.parse(fs.readFileSync(path.join(root,'data/professions.json'),'utf8')):data)})});
 vm.runInContext(source,ctx);
 const run=s=>vm.runInContext(s,ctx),json=s=>JSON.parse(run(`JSON.stringify(${s})`));
 (async()=>{
@@ -15,6 +15,25 @@ const run=s=>vm.runInContext(s,ctx),json=s=>JSON.parse(run(`JSON.stringify(${s})
  assert.equal(writes,0);assert.deepEqual(JSON.parse(saved),original,'Opening page must preserve saved progress');
  assert.equal(json('get("char_103_angel")').custom,'keep');
  assert.equal(run('chars.length'),410);
+ assert.match(elements.get('professionTabs').innerHTML,/스페셜리스트/);
+ assert.match(elements.get('grid').innerHTML,/rarity-group/);
+ const grouped=run('groupedCards()');
+ assert.equal((grouped.match(/class="rarity-group /g)||[]).length,6);
+ assert.equal((grouped.match(/<article /g)||[]).length,410);
+ const beforeFilter=saved, beforeWrites=writes;
+ run("selectedProfession='PIONEER';selectedBranch='charger'");
+ const filtered=json("chars.filter(c=>matchesOperator(c,'','','')).map(c=>({profession:c.profession,branch:c.subProfessionId}))");
+ assert.ok(filtered.length>0);assert.ok(filtered.every(c=>c.profession==='PIONEER'&&c.branch==='charger'));
+ assert.equal(run("chars.filter(c=>matchesOperator(c,'백파이프','6','0')).length"),1);
+ assert.equal(run("chars.filter(c=>matchesOperator(c,'엑시아','','')).length"),0);
+ for(const profession of Object.keys(json('professionKo'))){
+  run(`selectedProfession=${JSON.stringify(profession)};selectedBranch=''`);
+  const branches=json(`branchesFor(${JSON.stringify(profession)})`);
+  assert.ok(branches.length);assert.ok(branches.every(([id,name])=>name!==id));
+  assert.ok(json("chars.filter(c=>matchesOperator(c,'','',''))").every(c=>c.profession===profession));
+ }
+ run("selectedProfession='';selectedBranch=''");
+ assert.equal(saved,beforeFilter);assert.equal(writes,beforeWrites,'Filtering must not write to saved progress');
  const angel=run('card(chars.find(c=>c.id==="char_103_angel"))');
  assert.match(angel,/name">엑시아/);assert.match(angel,/potential-p4.svg/);assert.match(angel,/mastery-m3.svg/);
  assert.match(angel,/<span class="rank">S3<\/span>/);assert.ok(!angel.includes('과부하 모드'));
