@@ -24,11 +24,15 @@ const run=s=>vm.runInContext(s,ctx),json=s=>JSON.parse(run(`JSON.stringify(${s})
  document.getElementById('exportPng').onclick();assert.equal(elements.get('pngDialog').open,true);assert.match(elements.get('pngPreviewStage').innerHTML,/엑시아/);assert.ok(!elements.get('pngPreviewStage').innerHTML.includes('가비알'));
  assert.deepEqual(JSON.parse(storage.get('arknightsOperatorProgressV1')),progress);assert.ok(writes.every(k=>k==='arknightsPngSettingsV1'));
  run('state={};chars.forEach(c=>get(c.id).owned=true)');
- for(const columns of [4,6,8])for(const group of ['profession','rarity'])for(const split of ['single','profession']){
-  const pages=json(`pngPages(chars,normalizePngSettings({columns:${columns},group:'${group}',split:'${split}'}))`),ids=pages.flatMap(p=>p.sections.flatMap(s=>s.operators.map(c=>c.id)));
+ for(const columns of [4,6,8])for(const split of ['single','profession']){
+  const pages=json(`pngPages(chars,normalizePngSettings({columns:${columns},split:'${split}'}))`),ids=pages.flatMap(p=>p.sections.flatMap(s=>s.operators.map(c=>c.id)));
   assert.equal(ids.length,410);assert.equal(new Set(ids).size,410);
   for(const p of pages){const estimate=120+p.sections.reduce((sum,s)=>sum+52+Math.ceil(s.operators.length/columns)*348,0);assert.ok(estimate<=Math.min(8000,Math.floor(15000000/p.width)));if(split==='profession')assert.ok(p.sections.every(s=>s.operators.every(c=>c.profession===p.id)))}
  }
+ const order=json("pngSections([{id:'a',rarity:5,profession:'PIONEER',name:'가'},{id:'b',rarity:6,profession:'WARRIOR',name:'가'},{id:'c',rarity:6,profession:'PIONEER',name:'나'},{id:'d',rarity:6,profession:'PIONEER',name:'가'}]).flatMap(s=>s.operators.map(c=>c.id))");
+ assert.deepEqual(order,['d','c','b','a']);
+ assert.ok(!('group' in json("normalizePngSettings({group:'profession'})")),'Legacy grouping setting cannot change ordering');
+ assert.ok(!html.includes('id="png-group"'));
  assert.deepEqual(json('pngPages([],normalizePngSettings())'),[]);
- console.log('PNG checks passed: owned-only output, filter intersection, stored settings, field toggles, preview, unchanged progress, all 12 layouts, lossless bounded pagination.');
+ console.log('PNG checks passed: owned-only output, filter intersection, stored settings, field toggles, preview, unchanged progress, fixed rarity/profession/name order, all 6 layouts, lossless bounded pagination.');
 })().catch(e=>{console.error(e);process.exitCode=1});
