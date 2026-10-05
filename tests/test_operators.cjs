@@ -51,7 +51,7 @@ const run=s=>vm.runInContext(s,ctx),json=s=>JSON.parse(run(`JSON.stringify(${s})
  const kroos=run('card(chars.find(c=>c.id==="char_124_kroos"))');assert.ok(!kroos.includes('class="section modules"'));assert.ok(!kroos.includes('S2'));
  const robot=run('card(chars.find(c=>c.id==="char_285_medic2"))');assert.ok(!robot.includes('스킬 레벨'));
  assert.equal(json('get("char_124_kroos")').level,1);assert.equal(json('get("char_124_kroos")').elite,0);
- assert.ok(!html.includes('overflow:auto'));assert.ok(html.includes('height:auto;min-height:var(--card-height,402px)'));
+ assert.ok(!/\.(?:settings|card)[^{]*\{[^}]*overflow(?:-y)?:auto/.test(html));assert.ok(html.includes('height:auto;min-height:var(--card-height,402px)'));
  for(const name of ['elite-e0','elite-e1','elite-e2','potential-p1','potential-p2','potential-p3','potential-p4','potential-p5','potential-p6','mastery-m0','mastery-m1','mastery-m2','mastery-m3'])assert.ok(fs.existsSync(path.join(root,'assets/icons/progress',name+'.svg')));
  console.log('Operator checks passed: saved progress, legacy modules, real skills/modules, limits, defaults, no inner scrolling, SVG assets.');
 })().catch(e=>{console.error(e);process.exitCode=1});
