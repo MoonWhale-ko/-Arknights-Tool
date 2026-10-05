@@ -55,6 +55,8 @@ input[type=number]{width:74px}.search{min-width:220px}.stats{display:grid;grid-t
 @media(max-width:700px){.profession-tabs{grid-template-columns:repeat(9,minmax(0,1fr));gap:3px}.profession-tabs .class-tab{font-size:9px;min-height:58px;padding:6px 1px;overflow-wrap:anywhere}.profession-tabs .class-glyph{--icon-size:26px}.branch-tabs{gap:5px}.branch-tabs .class-tab{min-width:62px;min-height:62px}.rarity-heading{font-size:16px}}
 
 .png-dialog{width:min(1100px,calc(100% - 24px));max-height:calc(100dvh - 24px);overflow-y:auto;background:#171c24;color:#edf2f7;border:1px solid #657286;padding:20px}.png-dialog::backdrop{background:#000b}.png-dialog-heading,.png-dialog-footer{display:flex;justify-content:space-between;align-items:center;gap:12px}.png-dialog h2{font-size:20px;margin:0}.png-dialog fieldset{border:0;padding:0;margin:16px 0}.png-options-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.png-options-grid label{display:flex;flex-direction:column;gap:6px;font-size:12px}.png-field-options{display:flex;gap:14px;flex-wrap:wrap;margin-top:16px;font-size:13px}.png-field-options label{display:flex;align-items:center;gap:4px}.png-preview{width:100%;max-height:50dvh;overflow:auto;background:#0e1116;border:1px solid #303a48;padding:6px}.png-downloads{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.png-dialog-footer{margin-top:14px;font-size:13px}.png-sheet{padding:24px;background:#0e1116;color:#edf2f7;font-family:system-ui,-apple-system,sans-serif;transform-origin:top left}.png-header{display:flex;justify-content:space-between;align-items:center;margin:0 0 18px}.png-header h1{font-size:26px}.png-header p{font-size:14px;color:#b4c0d0;margin:8px 0 0}.png-header>span{font-size:15px;color:#b4c0d0}.png-section{margin:0 0 16px}.png-section:last-child{margin-bottom:0}.png-section h2{display:flex;align-items:center;gap:8px;margin:0 0 10px;padding:0 0 8px;border-bottom:1px solid #3a4556;font-size:18px;height:36px}.png-section h2 .class-glyph{--icon-size:26px}.png-cards{display:grid;grid-template-columns:repeat(var(--png-columns),minmax(0,1fr));gap:10px}.png-card{display:grid;grid-template-columns:32% minmax(0,1fr);background:#151b23;border:2px solid var(--color);overflow:hidden}.png-photo{position:relative;background:#252d38;overflow:hidden}.png-photo>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}.png-photo-fallback{position:absolute;inset:0;display:grid;place-items:center;font-size:30px;color:#aab4c4}.png-photo .profession-badges{z-index:2}.png-info{padding:10px;min-width:0}.png-name{display:block;height:44px;font-size:18px;line-height:22px;word-break:keep-all;overflow-wrap:normal}.png-stars{color:var(--color);font-size:12px;height:18px;margin-bottom:8px}.png-basic{display:flex;align-items:center;justify-content:space-around;height:68px;gap:4px}.png-stat{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:14px}.png-info small{font-size:10px;color:#b4c0d0}.png-progress{display:block;width:42px;height:42px;object-fit:contain}.png-skill{display:flex;justify-content:space-between;align-items:center;height:30px;font-size:12px}.png-masteries{display:grid;grid-template-columns:repeat(3,1fr);height:68px;align-items:center}.png-masteries>span{display:flex;flex-direction:column;align-items:center;gap:4px}.png-no-mastery{height:42px;display:grid;place-items:center;color:#8791a0}.png-modules{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;align-items:center;height:72px}.png-modules>span{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:10px}.png-capture{position:absolute;left:-100000px;top:0;pointer-events:none}@media(max-width:700px){.png-dialog{padding:14px}.png-options-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.png-dialog-footer{align-items:flex-start}}
+
+.rarity-picker{position:relative}.rarity-menu{position:absolute;left:0;top:calc(100% + 6px);width:244px;max-width:calc(100vw - 40px);padding:10px;background:#171c24;border:1px solid #657286;z-index:10;box-shadow:0 8px 20px #0008}.rarity-menu[hidden]{display:none}.rarity-actions{display:flex;gap:6px;margin-bottom:8px}.rarity-actions .btn{flex:1;font-size:12px;padding:7px}.rarity-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.rarity-toggle{border:1px solid #3a4556;background:#10151c;color:var(--color);padding:10px 6px;font-size:13px}.rarity-toggle[aria-pressed="true"]{border-color:var(--color);background:#344050;box-shadow:inset 3px 0 var(--color)}.rarity-toggle:focus-visible{outline:2px solid #fff;outline-offset:2px}
 </style>
 </head>
 <body>
@@ -66,7 +68,7 @@ input[type=number]{width:74px}.search{min-width:220px}.stats{display:grid;grid-t
 <div class="panel">
 <div class="controls">
 <input class="search" id="q" placeholder="오퍼레이터 검색">
-<select id="rarity"><option value="">전체 등급</option><option>6</option><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select>
+<div id="rarityPicker" class="rarity-picker"><button type="button" id="rarityButton" class="btn" aria-expanded="false" aria-controls="rarityMenu">전체 등급 ▾</button><input type="hidden" id="rarity" value=""><div id="rarityMenu" class="rarity-menu" role="group" aria-label="표시할 등급" hidden><div class="rarity-actions"><button type="button" class="btn" id="rarityAll">전체 선택</button><button type="button" class="btn" id="rarityNone">전체 해제</button></div><div id="rarityOptions" class="rarity-options"></div></div></div>
 <select id="ownedFilter"><option value="">전체</option><option value="1">보유</option><option value="0">미보유</option></select>
 <button class="btn" id="ownedAll">현재 목록 모두 보유</button>
 </div>
@@ -108,6 +110,7 @@ const DATA_URL='data/operators.json';
 const SAVE_KEY='arknightsOperatorProgressV1';
 let chars=[], state={},branchNames={};
 let selectedProfession='',selectedBranch='';
+let selectedRarities=new Set([6,5,4,3,2,1]);
 try{state=JSON.parse(localStorage.getItem(SAVE_KEY)||'{}')}catch{state={}}
 const save=()=>localStorage.setItem(SAVE_KEY,JSON.stringify(state));
 const rarityNum=v=>+(String(v||'').match(/\d+/)||[0])[0];
@@ -159,7 +162,15 @@ function renderClassification(){
  document.getElementById('branchTabs').innerHTML=selectedProfession?classificationButton('','전체','',selectedBranch==='')+branchesFor(selectedProfession).map(([id,label])=>classificationButton(id,label,'sub_'+id,selectedBranch===id)).join(''):'';
  document.getElementById('branchTabs').hidden=!selectedProfession;
 }
-function matchesOperator(c,q,r,o){return !(q&&!c.name.toLowerCase().includes(q)||r&&String(c.rarity)!==r||o!==''&&String(+get(c.id).owned)!==o||selectedProfession&&c.profession!==selectedProfession||selectedBranch&&c.subProfessionId!==selectedBranch)}
+function syncRaritySelection(){
+ const values=[6,5,4,3,2,1].filter(r=>selectedRarities.has(r));
+ document.getElementById('rarity').value=values.length===6?'':values.length?values.join(','):'none';
+ document.getElementById('rarityButton').textContent=(values.length===6?'전체 등급':values.length?values.join('·')+'성':'등급 선택')+' ▾';
+ document.getElementById('rarityOptions').innerHTML=[6,5,4,3,2,1].map(r=>`<button type="button" class="rarity-toggle r${r}" data-rarity="${r}" aria-label="${r}성" aria-pressed="${selectedRarities.has(r)}">${r}성 ${'★'.repeat(r)}</button>`).join('');
+}
+function toggleRarity(r){if(selectedRarities.has(r))selectedRarities.delete(r);else selectedRarities.add(r);syncRaritySelection();applyFilter()}
+function closeRarityMenu(){document.getElementById('rarityMenu').hidden=true;document.getElementById('rarityButton').setAttribute('aria-expanded','false')}
+function matchesOperator(c,q,r,o){return !(q&&!c.name.toLowerCase().includes(q)||r&&!r.split(',').includes(String(c.rarity))||o!==''&&String(+get(c.id).owned)!==o||selectedProfession&&c.profession!==selectedProfession||selectedBranch&&c.subProfessionId!==selectedBranch)}
 function groupedCards(){return [6,5,4,3,2,1].map(r=>{const list=chars.filter(c=>c.rarity===r);return list.length?`<section class="rarity-group r${r}" data-rarity="${r}" aria-label="${r}성"><h2 class="rarity-heading">${'★'.repeat(r)}</h2><div class="grid rarity-grid">${list.map(card).join('')}</div></section>`:''}).join('')+'<div id="emptyList" class="muted empty-list hidden" role="status">조건에 맞는 오퍼레이터가 없습니다.</div>'}
 function professionBadges(c){
  const icons=[['class_'+c.profession,professionKo[c.profession]||c.profession,''],['sub_'+c.subProfessionId,branchNames[c.subProfessionId]||'세부 직군 '+c.subProfessionId,' branch']];
@@ -197,7 +208,14 @@ function updateStats(){
 window.addEventListener('resize',fitCards);document.fonts?.ready.then(fitCards);
 document.getElementById('professionTabs').onclick=e=>{const button=e.target.closest('[data-class]');if(!button)return;selectedProfession=button.dataset.class;selectedBranch='';renderClassification();applyFilter()};
 document.getElementById('branchTabs').onclick=e=>{const button=e.target.closest('[data-class]');if(!button)return;selectedBranch=button.dataset.class;renderClassification();applyFilter()};
-['q','rarity','ownedFilter'].forEach(id=>document.getElementById(id).addEventListener(id==='q'?'input':'change',applyFilter));
+syncRaritySelection();
+document.getElementById('rarityButton').onclick=()=>{const menu=document.getElementById('rarityMenu');menu.hidden=!menu.hidden;document.getElementById('rarityButton').setAttribute('aria-expanded',String(!menu.hidden))};
+document.getElementById('rarityOptions').onclick=e=>{const button=e.target.closest('[data-rarity]');if(!button)return;const r=+button.dataset.rarity;toggleRarity(r);document.getElementById('rarityOptions').querySelector(`[data-rarity="${r}"]`)?.focus()};
+document.getElementById('rarityAll').onclick=()=>{selectedRarities=new Set([6,5,4,3,2,1]);syncRaritySelection();applyFilter()};
+document.getElementById('rarityNone').onclick=()=>{selectedRarities=new Set();syncRaritySelection();applyFilter()};
+window.addEventListener('click',e=>{if(!document.getElementById('rarityPicker').contains(e.target))closeRarityMenu()});
+document.getElementById('rarityPicker').addEventListener('keydown',e=>{if(e.key==='Escape'){closeRarityMenu();document.getElementById('rarityButton').focus()}});
+['q','ownedFilter'].forEach(id=>document.getElementById(id).addEventListener(id==='q'?'input':'change',applyFilter));
 document.getElementById('ownedAll').onclick=()=>{document.querySelectorAll('.card:not(.hidden)').forEach(c=>{get(c.dataset.id).owned=true});save();render()}
 document.getElementById('exportJson').onclick=()=>{const b=new Blob([JSON.stringify({version:1,savedAt:new Date().toISOString(),state},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='arknights-operator-backup.json';a.click();URL.revokeObjectURL(a.href)}
 document.getElementById('importJson').onclick=()=>document.getElementById('file').click();

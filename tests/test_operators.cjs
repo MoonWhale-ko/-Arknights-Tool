@@ -34,6 +34,13 @@ const run=s=>vm.runInContext(s,ctx),json=s=>JSON.parse(run(`JSON.stringify(${s})
  }
  run("selectedProfession='';selectedBranch=''");
  assert.equal(saved,beforeFilter);assert.equal(writes,beforeWrites,'Filtering must not write to saved progress');
+ run('selectedRarities=new Set([6,4]);syncRaritySelection()');
+ assert.equal(elements.get('rarity').value,'6,4');
+ assert.ok(json("chars.filter(c=>matchesOperator(c,'','6,4','')).map(c=>c.rarity)").every(r=>r===6||r===4));
+ assert.equal(run("chars.filter(c=>matchesOperator(c,'','none','')).length"),0);
+ run('toggleRarity(4)');assert.equal(elements.get('rarity').value,'6');
+ run('selectedRarities=new Set([6,5,4,3,2,1]);syncRaritySelection()');assert.equal(elements.get('rarity').value,'');
+ assert.equal(writes,beforeWrites);
  const angel=run('card(chars.find(c=>c.id==="char_103_angel"))');
  assert.match(angel,/name">엑시아/);assert.match(angel,/potential-p4.svg/);assert.match(angel,/mastery-m3.svg/);
  assert.match(angel,/<span class="rank">S3<\/span>/);assert.ok(!angel.includes('과부하 모드'));
