@@ -45,22 +45,26 @@ function updatePngPreview(){pngSettings=readPngForm();try{localStorage.setItem(P
  const list=pngOperators(pngSettings),pages=pngPages(list,pngSettings);document.getElementById('pngStatus').textContent=list.length?`${list.length}명 · ${pages.length}장${pages.length>1?' (긴 이미지는 자동 분할)':''}`:'출력할 보유 오퍼레이터가 없습니다.';
  document.getElementById('pngSave').disabled=!list.length;document.getElementById('pngPreviewStage').innerHTML=pages.length?pngSheet(pages[0],pngSettings,list.length,0,pages.length):'';document.getElementById('pngPreviewStage').querySelectorAll('.png-photo>img').forEach(img=>{img.onerror=()=>{img.style.display='none'}});scalePngPreview();
 }
+let pngBlobUrls=[];
+function clearPngDownloads(){pngBlobUrls.forEach(url=>URL.revokeObjectURL(url));pngBlobUrls=[];document.getElementById('pngDownloads').innerHTML=''}
 const pngDialog=document.getElementById('pngDialog');
 document.getElementById('exportPng').onclick=()=>{for(const k of ['target','group','columns','split'])document.getElementById('png-'+k).value=String(pngSettings[k]);for(const k of Object.keys(PNG_FIELDS))document.getElementById('png-field-'+k).checked=pngSettings.fields[k];pngDialog.showModal();updatePngPreview()};
 document.getElementById('pngOptions').onchange=updatePngPreview;
 document.getElementById('pngClose').onclick=()=>pngDialog.close();
+pngDialog.addEventListener('close',clearPngDownloads);
 window.addEventListener('resize',()=>{if(pngDialog.open)scalePngPreview()});
 function waitPngImages(root){return Promise.all([...root.querySelectorAll('img')].map(img=>new Promise(resolve=>{const finish=()=>{clearTimeout(timer);if(!img.naturalWidth){img.style.display='none';img.removeAttribute('src')}resolve()};const timer=setTimeout(finish,15000);if(img.complete)finish();else{img.onload=finish;img.onerror=finish}})))}
 async function saveOperatorPng(){
  if(!window.html2canvas){document.getElementById('pngStatus').textContent='PNG 출력 모듈을 불러오지 못했습니다. 새로고침 후 다시 시도해 주세요.';return}
  const settings=readPngForm(),list=pngOperators(settings),pages=pngPages(list,settings);if(!pages.length)return;
+ clearPngDownloads();
  const saveButton=document.getElementById('pngSave'),status=document.getElementById('pngStatus');saveButton.disabled=true;document.getElementById('pngOptions').disabled=true;const host=document.createElement('div');host.className='png-capture';document.body.append(host);
  try{await document.fonts?.ready;
   for(let i=0;i<pages.length;i++){status.textContent=`PNG 생성 중 · ${i+1} / ${pages.length}장`;host.innerHTML=pngSheet(pages[i],settings,list.length,i,pages.length);const sheet=host.firstElementChild;await waitPngImages(sheet);fitPngNames(sheet);
-   const canvas=await html2canvas(sheet,{backgroundColor:'#0e1116',scale:1,useCORS:true,allowTaint:false,logging:false,width:pages[i].width,height:sheet.offsetHeight,windowWidth:pages[i].width+48});
-   const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));if(!blob)throw new Error('이미지를 생성하지 못했습니다.');const url=URL.createObjectURL(blob),a=document.createElement('a');a.download=`arknights-operators-${pages[i].id}-${String(i+1).padStart(2,'0')}.png`;a.href=url;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);canvas.width=0;canvas.height=0;
+   const canvas=await html2canvas(sheet,{backgroundColor:'#0e1116',scale:1,useCORS:true,allowTaint:false,logging:false,imageTimeout:5000,width:pages[i].width,height:sheet.offsetHeight,windowWidth:pages[i].width+48});
+   const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));if(!blob)throw new Error('이미지를 생성하지 못했습니다.');const url=URL.createObjectURL(blob),a=document.createElement('a');a.download=`arknights-operators-${pages[i].id}-${String(i+1).padStart(2,'0')}.png`;a.href=url;a.className='btn';a.textContent=`PNG ${i+1} 다운로드`;document.getElementById('pngDownloads').append(a);pngBlobUrls.push(url);a.click();canvas.width=0;canvas.height=0;
   }
-  status.textContent=`${list.length}명 · PNG ${pages.length}장 저장 완료${pages.length>1?' (여러 파일 다운로드를 허용해 주세요)':''}`;
+  status.textContent=`${list.length}명 · PNG ${pages.length}장 생성 완료 · 다운로드되지 않았다면 위 버튼을 눌러 주세요`;
  }catch(e){status.textContent='PNG 저장에 실패했습니다. '+e.message}finally{host.remove();saveButton.disabled=false;document.getElementById('pngOptions').disabled=false}
 }
 document.getElementById('pngSave').onclick=saveOperatorPng;
