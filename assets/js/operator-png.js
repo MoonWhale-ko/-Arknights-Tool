@@ -54,13 +54,32 @@ document.getElementById('pngClose').onclick=()=>pngDialog.close();
 pngDialog.addEventListener('close',clearPngDownloads);
 window.addEventListener('resize',()=>{if(pngDialog.open)scalePngPreview()});
 function waitPngImages(root){return Promise.all([...root.querySelectorAll('img')].map(img=>new Promise(resolve=>{const finish=()=>{clearTimeout(timer);if(!img.naturalWidth){img.style.display='none';img.removeAttribute('src')}resolve()};const timer=setTimeout(finish,15000);if(img.complete)finish();else{img.onload=finish;img.onerror=finish}})))}
+// html2canvas 1.4 does not reproduce object-fit. Bake the displayed image rectangle first.
+function pngImagePlacement(sourceWidth,sourceHeight,width,height,fit){
+ if(fit==='cover'){
+  const scale=Math.max(width/sourceWidth,height/sourceHeight),sw=width/scale,sh=height/scale;
+  return [(sourceWidth-sw)/2,(sourceHeight-sh)/2,sw,sh,0,0,width,height];
+ }
+ const scale=Math.min(width/sourceWidth,height/sourceHeight),dw=sourceWidth*scale,dh=sourceHeight*scale;
+ return [0,0,sourceWidth,sourceHeight,(width-dw)/2,(height-dh)/2,dw,dh];
+}
+async function bakePngImages(root){
+ for(const img of root.querySelectorAll('.png-photo>img,.png-progress')){
+  if(!img.naturalWidth||!img.naturalHeight)continue;
+  const rect=img.getBoundingClientRect(),width=Math.max(1,Math.round(rect.width)),height=Math.max(1,Math.round(rect.height));
+  const bitmap=document.createElement('canvas');bitmap.width=width;bitmap.height=height;
+  const fit=img.classList.contains('png-progress')?'contain':'cover';
+  bitmap.getContext('2d').drawImage(img,...pngImagePlacement(img.naturalWidth,img.naturalHeight,width,height,fit));
+  img.src=bitmap.toDataURL('image/png');img.style.objectFit='fill';await img.decode();bitmap.width=0;bitmap.height=0;
+ }
+}
 async function saveOperatorPng(){
  if(!window.html2canvas){document.getElementById('pngStatus').textContent='PNG 출력 모듈을 불러오지 못했습니다. 새로고침 후 다시 시도해 주세요.';return}
  const settings=readPngForm(),list=pngOperators(settings),pages=pngPages(list,settings);if(!pages.length)return;
  clearPngDownloads();
  const saveButton=document.getElementById('pngSave'),status=document.getElementById('pngStatus');saveButton.disabled=true;document.getElementById('pngOptions').disabled=true;const host=document.createElement('div');host.className='png-capture';document.body.append(host);
  try{await document.fonts?.ready;
-  for(let i=0;i<pages.length;i++){status.textContent=`PNG 생성 중 · ${i+1} / ${pages.length}장`;host.innerHTML=pngSheet(pages[i],settings,list.length,i,pages.length);const sheet=host.firstElementChild;await waitPngImages(sheet);fitPngNames(sheet);
+  for(let i=0;i<pages.length;i++){status.textContent=`PNG 생성 중 · ${i+1} / ${pages.length}장`;host.innerHTML=pngSheet(pages[i],settings,list.length,i,pages.length);const sheet=host.firstElementChild;await waitPngImages(sheet);await bakePngImages(sheet);fitPngNames(sheet);
    const canvas=await html2canvas(sheet,{backgroundColor:'#0e1116',scale:1,useCORS:true,allowTaint:false,logging:false,imageTimeout:5000,width:pages[i].width,height:sheet.offsetHeight,windowWidth:pages[i].width+48});
    const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));if(!blob)throw new Error('이미지를 생성하지 못했습니다.');const url=URL.createObjectURL(blob),a=document.createElement('a');a.download=`arknights-operators-${pages[i].id}-${String(i+1).padStart(2,'0')}.png`;a.href=url;a.className='btn';a.textContent=`PNG ${i+1} 다운로드`;document.getElementById('pngDownloads').append(a);pngBlobUrls.push(url);a.click();canvas.width=0;canvas.height=0;
   }

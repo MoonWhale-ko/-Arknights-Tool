@@ -9,6 +9,11 @@ const ctx=vm.createContext({document,window:{addEventListener(){}},console,setTi
 vm.runInContext(html.split('<script>')[1].split('</script>')[0],ctx);vm.runInContext(fs.readFileSync(path.join(root,'assets/js/operator-png.js'),'utf8'),ctx);
 const run=s=>vm.runInContext(s,ctx),json=s=>JSON.parse(run(`JSON.stringify(${s})`));
 (async()=>{await new Promise(r=>setImmediate(r));
+ const portrait=json("pngImagePlacement(512,512,100,334,'cover')");
+ assert.equal(portrait[3],512);assert.ok(Math.abs(portrait[2]/portrait[3]-100/334)<1e-12);
+ assert.equal(portrait[1],0);assert.ok(portrait[0]>0);
+ const landscape=json("pngImagePlacement(100,300,200,100,'cover')");assert.equal(landscape[2],100);assert.ok(landscape[1]>0);
+ const icon=json("pngImagePlacement(256,233,42,42,'contain')");assert.equal(icon[6],42);assert.ok(icon[5]>0);assert.ok(Math.abs(icon[6]/icon[7]-256/233)<1e-12);
  assert.equal(run('pngSettings.columns'),8);assert.equal(run('pngSettings.fields.trust'),false);
  assert.equal(json('normalizePngSettings({columns:999})').columns,6);assert.equal(json('normalizePngSettings(null)').target,'all');
  assert.deepEqual(json('pngOperators(normalizePngSettings()).map(c=>c.id)'),['char_103_angel']);
