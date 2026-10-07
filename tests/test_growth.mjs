@@ -5,11 +5,22 @@ import {calculateGrowth,calculatePlans,ownedAmount,recipeCapacity} from '../asse
 const read=p=>JSON.parse(fs.readFileSync(new URL('../data/'+p,import.meta.url)));
 const operators=read('operators.json').operators,data=read('growth.json'),op=operators.find(o=>o.id==='char_377_gdglow');
 const base={owned:true,elite:0,level:1,skill:1,potential:1,m:[0,0,0],mods:{}};
-test('same state, untargeted operators and potential-only changes never charge materials',()=>{
+test('same state and untargeted operators never charge; potential upgrades cost specific tokens',()=>{
  assert.deepEqual(calculateGrowth(op,base,base,data).totals,{});
  assert.deepEqual(calculatePlans(operators,{[op.id]:base},{},data).totals,{});
- assert.deepEqual(calculateGrowth(op,base,{...base,potential:6},data).totals,{});
- assert.match(calculateGrowth(op,base,{...base,potential:6},data).notes.join(''),/추가 5단계/);
+ assert.deepEqual(calculateGrowth(op,base,{...base,potential:6},data).totals,{p_char_377_gdglow:5});
+ assert.deepEqual(calculateGrowth(op,{...base,potential:3},{...base,potential:6},data).totals,{p_char_377_gdglow:3});
+ assert.deepEqual(calculateGrowth(op,{...base,owned:false,potential:6},{...base,potential:6},data).totals,{p_char_377_gdglow:5});
+});
+test('general token substitution uses actual eligibility, class, rarity and the four-token rate',()=>{
+ for(const [rarity,label] of [[4,'레어'],[5,'에픽'],[6,'로열']]){
+  const c=operators.find(o=>o.rarity===rarity&&o.profession==='CASTER'&&data.potentials[o.id]?.alternatives.length),token=data.potentials[c.id];
+  assert.equal(token.alternatives[0].count,4);assert.equal(token.alternatives[0].id,`tier${rarity}_caster`);
+  assert.match(data.tokenItems[token.alternatives[0].id].name,new RegExp(label));
+ }
+ assert.deepEqual(data.potentials.char_002_amiya.alternatives,[],'Amiya cannot use general tokens');
+ for(const c of operators){const token=data.potentials[c.id];if(!token)continue;assert.ok(data.tokenItems[token.id].iconId);for(const a of token.alternatives)assert.ok(data.tokenItems[a.id].iconId)}
+ assert.equal(ownedAmount('p_char_377_gdglow',{items:{p_char_377_gdglow:2}},data),2);
 });
 test('level costs include each transition once and promotion resets to level one',()=>{
  assert.deepEqual(calculateGrowth(op,base,{...base,level:2},data).totals,{exp:100,'4001':30});

@@ -15,9 +15,9 @@ export function saveCount(storage,id,value){
  inventory.items={...inventory.items,[id]:count};inventory.updatedAt=new Date().toISOString();
  storage.setItem(INVENTORY_KEY,JSON.stringify(inventory));return inventory;
 }
-export function categoryOf(item){if(item.id==='4001')return 'currency';if(/^200[1-4]$/.test(item.id))return 'experience';if(item.id.startsWith('mod_'))return 'module';if(/^32\d\d$/.test(item.id))return 'chip';if(/^330\d$/.test(item.id))return 'skill';return 'material'}
-export function tierOf(item){if(categoryOf(item)==='material')return Math.min(5,Number(item.id.slice(-1))||1);if(categoryOf(item)==='chip')return Number(item.id.slice(-1))+2;if(categoryOf(item)==='module')return 5;return 3}
+export function categoryOf(item){if(item.id==='4001')return 'currency';if(item.id.startsWith('p_char_')||/^tier\d_/.test(item.id))return 'potential';if(/^200[1-4]$/.test(item.id))return 'experience';if(item.id.startsWith('mod_'))return 'module';if(/^32\d\d$/.test(item.id))return 'chip';if(/^330\d$/.test(item.id))return 'skill';return 'material'}
+export function tierOf(item){if(categoryOf(item)==='potential')return Math.min(5,item.rarity||Number(item.id.match(/^tier(\d)_/)?.[1])||3);if(categoryOf(item)==='material')return Math.min(5,Number(item.id.slice(-1))||1);if(categoryOf(item)==='chip')return Number(item.id.slice(-1))+2;if(categoryOf(item)==='module')return 5;return 3}
 
-const CATEGORY_ORDER=['material','experience','chip','skill','module','currency'];
+const CATEGORY_ORDER=['material','experience','chip','skill','module','potential','currency'];
 export function familyOf(item){const category=categoryOf(item);if(category==='material')return item.id.startsWith('301')?'301':item.id.slice(0,4);if(category==='chip')return item.id.slice(0,3);return category}
 export function compareItems(a,b){return tierOf(b)-tierOf(a)||CATEGORY_ORDER.indexOf(categoryOf(a))-CATEGORY_ORDER.indexOf(categoryOf(b))||familyOf(a).localeCompare(familyOf(b),'en',{numeric:true})||a.id.localeCompare(b.id,'en',{numeric:true})}

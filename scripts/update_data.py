@@ -160,9 +160,28 @@ def extract_growth(raw, site_items):
     compact = {key: {'id': key, 'name': source_items[key]['name'],
                     'iconId': source_items[key]['iconId']} for key in sorted(needed)}
     const = raw['gamedata_const']
+    potentials, token_items = {}, {}
+    for cid, c in raw['character_table'].items():
+        if not cid.startswith('char_') or c['isNotObtainable']:
+            continue
+        token = c['potentialItemId']
+        if not token or token not in source_items:
+            continue
+        alternatives = []
+        if c['canUseGeneralPotentialItem']:
+            rarity = str(int(c['rarity'].split('_')[1])-1)
+            general = raw['item_table']['potentialItems'][rarity][c['profession']]
+            if general in source_items:
+                alternatives.append({'id': general, 'count': const['commonPotentialLvlUpCount']})
+        potentials[cid] = {'id': token, 'alternatives': alternatives}
+        for key in [token] + [a['id'] for a in alternatives]:
+            i = source_items[key]
+            token_items[key] = {'id': key, 'name': i['name'], 'iconId': i['iconId'],
+                                'rarity': int(i['rarity'].split('_')[1])}
     return {'levelExp': const['characterExpMap'], 'levelGold': const['characterUpgradeCostMap'],
         'expItems': {key: v['gainExp'] for key, v in raw['item_table']['expItems'].items()},
-        'items': compact, 'recipes': {key: list(v.values()) for key, v in recipes.items()}}
+        'items': compact, 'recipes': {key: list(v.values()) for key, v in recipes.items()},
+        'potentials': potentials, 'tokenItems': token_items}
 
 
 if __name__ == '__main__':
