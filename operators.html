@@ -49,7 +49,7 @@ input[type=number]{width:74px}.search{min-width:220px}
 .class-tab[aria-pressed="true"]{background:#344050;border-color:#edf2f7;color:white}
 .class-tab:focus-visible{outline:2px solid white;outline-offset:2px}
 .branch-tabs{margin-top:10px}.branch-tabs .class-tab{min-width:72px;min-height:66px;font-size:11px}.branch-tabs .class-glyph{--icon-size:28px}
-.materials-action{display:flex;margin-top:16px}#grid{display:block}.rarity-group{margin-top:22px}.rarity-heading{color:var(--color);font-size:18px;letter-spacing:3px;margin:0 0 10px;border-bottom:1px solid var(--color);padding-bottom:8px}
+.materials-action{display:flex;justify-content:flex-end;margin-top:14px}.materials-action .btn{background:#f1ca61;color:#10151c;border:2px solid #f1ca61;padding:12px 18px;font-size:16px;font-weight:800}.materials-action .btn:hover{background:#ffe39a;border-color:#ffe39a}.materials-action .btn:focus-visible{outline:2px solid #fff;outline-offset:3px}#grid{display:block}.rarity-group{margin-top:22px}.rarity-heading{color:var(--color);font-size:18px;letter-spacing:3px;margin:0 0 10px;border-bottom:1px solid var(--color);padding-bottom:8px}
 .rarity-grid{margin-top:0}.empty-list{margin-top:20px;padding:24px;text-align:center}
 @media(max-width:700px){.profession-tabs{grid-template-columns:repeat(9,minmax(0,1fr));gap:3px}.profession-tabs .class-tab{font-size:9px;min-height:58px;padding:6px 1px;overflow-wrap:anywhere}.profession-tabs .class-glyph{--icon-size:26px}.branch-tabs{gap:5px}.branch-tabs .class-tab{min-width:62px;min-height:62px}.rarity-heading{font-size:16px}}
 
@@ -69,10 +69,10 @@ input[type=number]{width:74px}.search{min-width:220px}
 <input class="search" id="q" placeholder="오퍼레이터 검색">
 <select id="ownedFilter"><option value="">전체</option><option value="1">보유</option><option value="0">미보유</option></select>
 </div>
+<div class="materials-action"><a class="btn" href="materials.html">육성 재료 확인</a></div>
 <input type="hidden" id="rarity" value=""><div id="rarityOptions" class="rarity-options" role="group" aria-label="표시할 등급"></div>
 <div class="profession-picker"><div id="professionTabs" class="profession-tabs" role="group" aria-label="기본 직군"></div><div id="branchTabs" class="branch-tabs" role="group" aria-label="세부 직군"></div></div>
 </div>
-<div class="materials-action"><a class="btn" href="materials.html">육성 재료 확인</a></div>
 <div id="grid"><div class="muted">오퍼레이터 데이터를 불러오는 중입니다.</div></div>
 </div>
 <dialog id="pngDialog" class="png-dialog" aria-labelledby="pngTitle">
