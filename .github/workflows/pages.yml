@@ -31,6 +31,8 @@ jobs:
         run: node tests/test_operators.cjs
       - name: Validate operator plans
         run: node tests/test_plans.cjs
+      - name: Validate growth costs and crafting
+        run: node --test tests/test_growth.mjs
       - name: Validate backpack inventory
         run: node --test tests/test_inventory.mjs
       - name: Validate account import

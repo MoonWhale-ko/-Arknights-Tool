@@ -1,0 +1,47 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {calculateGrowth,calculatePlans,ownedAmount,recipeCapacity} from '../assets/js/growth-costs.mjs';
+const read=p=>JSON.parse(fs.readFileSync(new URL('../data/'+p,import.meta.url)));
+const operators=read('operators.json').operators,data=read('growth.json'),op=operators.find(o=>o.id==='char_377_gdglow');
+const base={owned:true,elite:0,level:1,skill:1,potential:1,m:[0,0,0],mods:{}};
+test('same state, untargeted operators and potential-only changes never charge materials',()=>{
+ assert.deepEqual(calculateGrowth(op,base,base,data).totals,{});
+ assert.deepEqual(calculatePlans(operators,{[op.id]:base},{},data).totals,{});
+ assert.deepEqual(calculateGrowth(op,base,{...base,potential:6},data).totals,{});
+ assert.match(calculateGrowth(op,base,{...base,potential:6},data).notes.join(''),/추가 5단계/);
+});
+test('level costs include each transition once and promotion resets to level one',()=>{
+ assert.deepEqual(calculateGrowth(op,base,{...base,level:2},data).totals,{exp:100,'4001':30});
+ const r=calculateGrowth(op,{...base,level:50},{...base,elite:1,level:2},data);
+ assert.equal(r.totals.exp,120);assert.equal(r.totals['4001'],30048);
+ assert.deepEqual(r.steps.map(s=>s.label),['E1 정예화','E1 Lv.1 → 2']);
+});
+test('unowned stale values are ignored and full E0 to E2 preparation is charged',()=>{
+ const r=calculateGrowth(op,{...base,owned:false,elite:2,level:90},{...base,elite:2,level:1},data);
+ assert.equal(r.totals.exp,24400+337000);assert.equal(r.totals['4001'],26719+353122+30000+180000);
+ assert.match(r.notes.join(''),/미보유/);
+});
+test('only remaining common skill, mastery and actual module stages are charged',()=>{
+ const m=op.modules[0],now={...base,elite:2,level:60,skill:7,m:[1,0,0],mods:{[m.id]:1}},goal={...now,m:[3,0,0],mods:{[m.id]:3}};
+ const r=calculateGrowth(op,now,goal,data),expected={};
+ for(const row of [...op.skills[0].mastery.slice(1),...m.costs.slice(1)])for(const x of row.cost)expected[x.id]=(expected[x.id]||0)+x.count;
+ assert.deepEqual(r.totals,expected);assert.equal(r.steps.length,4);
+ const skill=calculateGrowth(op,{...base,elite:1,skill:5},{...base,elite:1,skill:7},data);
+ assert.equal(skill.steps.length,2);
+ assert.deepEqual(calculateGrowth(op,goal,now,data).totals,{},'Stale goals never charge completed work');
+});
+test('all operators respect rarity limits, have consistent cost references and can be aggregated',()=>{
+ for(const o of operators){const current={...base,owned:false},goal={...base,elite:o.phases.length-1,level:o.phases.at(-1).maxLevel,skill:o.skills.length?7:1};const r=calculateGrowth(o,current,goal,data);for(const id of Object.keys(r.totals))assert.ok(id==='exp'||data.items[id],id)}
+ const second=operators.find(o=>o.id==='char_124_kroos'),all=calculatePlans([op,second],{}, {[op.id]:{...base,level:2},[second.id]:{...base,level:2}},data);
+ assert.equal(all.totals.exp,200);assert.equal(all.totals['4001'],60);
+});
+test('craft capacity reserves direct needs, includes LMD and output count, and inventory EXP combines records',()=>{
+ const r=data.recipes['30013'][0],inventory={items:{30012:12,4001:1000,2001:3,2004:2}};
+ assert.equal(recipeCapacity(r,inventory,{30012:2,4001:600},data),2);
+ assert.equal(recipeCapacity(r,inventory,{4001:900},data),0);
+ assert.equal(ownedAmount('exp',inventory,data),4600);
+ assert.equal(recipeCapacity({...r,count:2},inventory,{},data),4);
+ assert.ok(data.items['32001']);assert.ok(data.recipes['3233'].some(r=>r.room==='MANUFACTURE'));
+ for(const list of Object.values(data.recipes))for(const r of list){assert.ok(data.items[r.itemId]);for(const x of r.cost)assert.ok(data.items[x.id]);assert.ok(r.requirements.length)}
+});

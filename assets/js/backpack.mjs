@@ -1,6 +1,6 @@
-import {INVENTORY_KEY,readInventory,countOf,saveCount,categoryOf,tierOf,compareItems} from './inventory-state.mjs?v=3';
+import {INVENTORY_KEY,readInventory,countOf,saveCount,categoryOf,tierOf,compareItems} from './inventory-state.mjs?v=4';
 const $=id=>document.getElementById(id),esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const categories={all:'전체',material:'육성 재료',chip:'정예화 칩',skill:'스킬개론',module:'모듈 재료',currency:'재화'};
+const categories={all:'전체',material:'육성 재료',experience:'작전기록',chip:'정예화 칩',skill:'스킬개론',module:'모듈 재료',currency:'재화'};
 const colors=['','#969fa6','#9bba4f','#5aa3d1','#a889c3','#e5b956'];
 let items=[],images={},inventory,category='all',selected='',ownedOnly=false,storageError=false;
 function image(item){return `<img src="${esc(images[item.id]?.url||fallback(item))}" data-fallback="${esc(fallback(item))}" alt="${esc(item.name)}" loading="lazy">`}
@@ -23,4 +23,4 @@ $('categories').addEventListener('click',e=>{const b=e.target.closest('[data-cat
 $('items').addEventListener('click',e=>{const b=e.target.closest('[data-id]');if(b){selected=b.dataset.id;render();detail()}});
 $('search').addEventListener('input',render);$('ownedOnly').addEventListener('click',()=>{ownedOnly=!ownedOnly;$('ownedOnly').setAttribute('aria-pressed',String(ownedOnly));render()});
 window.addEventListener('storage',e=>{if(e.key===INVENTORY_KEY){try{inventory=readInventory(localStorage);storageError=false;render();detail();$('status').textContent='보유 재료 정보를 갱신했습니다.'}catch(error){storageError=true;$('status').textContent=error.message;detail()}}});
-try{const [data,map]=await Promise.all(['data/items.json','data/item-images.json'].map(url=>fetch(url).then(r=>{if(!r.ok)throw Error('가방 데이터를 불러오지 못했습니다.');return r.json()})));items=Object.values(data.items);images=map.items;try{inventory=readInventory(localStorage)}catch(error){inventory={items:{}};storageError=true;$('status').textContent=error.message+' 기존 데이터 보호를 위해 수량 저장을 중지했습니다.'}items.sort(compareItems);render()}catch(error){$('items').textContent=error.message}
+try{const [data,map,growth]=await Promise.all(['data/items.json','data/item-images.json','data/growth.json'].map(url=>fetch(url).then(r=>{if(!r.ok)throw Error('가방 데이터를 불러오지 못했습니다.');return r.json()})));items=Object.values({...growth.items,...data.items});images=map.items;try{inventory=readInventory(localStorage)}catch(error){inventory={items:{}};storageError=true;$('status').textContent=error.message+' 기존 데이터 보호를 위해 수량 저장을 중지했습니다.'}items.sort(compareItems);render()}catch(error){$('items').textContent=error.message}

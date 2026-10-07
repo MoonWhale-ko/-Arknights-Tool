@@ -9,7 +9,7 @@ import urllib.request
 
 REPOSITORY = 'ArknightsAssets/ArknightsGamedata'
 FILES = ('character_table', 'item_table', 'skill_table', 'uniequip_data',
-         'uniequip_table', 'gamedata_const')
+         'uniequip_table', 'gamedata_const', 'building_data')
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -111,6 +111,7 @@ def main():
         with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:
             blobs = dict(pool.map(get, FILES))
     ops, items = extract({n: json.loads(b) for n, b in blobs.items()})
+    growth = extract_growth({n: json.loads(b) for n, b in blobs.items()}, items)
     metadata = {'version': 2, 'source': {'repository': REPOSITORY, 'locale': 'kr',
         'commit': sha, 'updatedAt': date,
         'sha256': {n+'.json': hashlib.sha256(b).hexdigest() for n, b in blobs.items()}}}
@@ -124,7 +125,44 @@ def main():
         temp.write_text(json.dumps({**metadata, name: payload}, ensure_ascii=False,
                                    separators=(',', ':'))+'\n', encoding='utf-8')
         temp.replace(target)
+    target = args.output_dir / 'growth.json'
+    temp = target.with_suffix('.json.tmp')
+    temp.write_text(json.dumps({**metadata, **growth}, ensure_ascii=False,
+                              separators=(',', ':'))+'\n', encoding='utf-8')
+    temp.replace(target)
     print(f'{len(ops)} operators, {len(items)} items, {sum(len(o["modules"]) for o in ops)} modules; source {sha}')
+
+
+def extract_growth(raw, site_items):
+    """Level costs and relevant recipes, including their ingredient closure."""
+    building = raw['building_data']
+    source_items = raw['item_table']['items']
+    needed = set(site_items) | set(raw['item_table']['expItems'])
+    formulas = []
+    for key, room in [('workshopFormulas', 'WORKSHOP'), ('manufactFormulas', 'MANUFACTURE')]:
+        for f in building[key].values():
+            # Keep training-material recipes and chip conversions, excluding free production.
+            if not f['costs'] or f['formulaType'] not in ('F_EVOLVE', 'F_SKILL', 'F_ASC'):
+                continue
+            formulas.append({'id': room+':'+f['formulaId'], 'itemId': f['itemId'],
+                'count': f['count'], 'cost': f['costs'], 'goldCost': f.get('goldCost', 0),
+                'room': room, 'requirements': f['requireRooms'],
+                'stages': f['requireStages'] or []})
+    recipes = {}
+    while True:
+        before = len(needed)
+        for f in formulas:
+            if f['itemId'] in needed:
+                recipes.setdefault(f['itemId'], {})[f['id']] = f
+                needed.update(str(x['id']) for x in f['cost'])
+        if len(needed) == before:
+            break
+    compact = {key: {'id': key, 'name': source_items[key]['name'],
+                    'iconId': source_items[key]['iconId']} for key in sorted(needed)}
+    const = raw['gamedata_const']
+    return {'levelExp': const['characterExpMap'], 'levelGold': const['characterUpgradeCostMap'],
+        'expItems': {key: v['gainExp'] for key, v in raw['item_table']['expItems'].items()},
+        'items': compact, 'recipes': {key: list(v.values()) for key, v in recipes.items()}}
 
 
 if __name__ == '__main__':
