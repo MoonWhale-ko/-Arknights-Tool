@@ -93,7 +93,7 @@ const CLASS_ICON_POS={"class_PIONEER":[0,0],"class_WARRIOR":[1,0],"class_TANK":[
 const professionKo={PIONEER:'뱅가드',WARRIOR:'가드',TANK:'디펜더',SNIPER:'스나이퍼',CASTER:'캐스터',MEDIC:'메딕',SUPPORT:'서포터',SPECIAL:'스페셜리스트'};
 const esc=s=>String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
 function def(){return{owned:false,elite:0,level:1,potential:1,trust:0,skill:1,m:[0,0,0],mods:{X:0,Y:0,D:0}}}
-function current(id){const s=currentState[id]||{};return {...def(),...s,potential:clamp(s.potential??1,1,6),m:Array.isArray(s.m)?s.m.slice():[0,0,0],mods:{...def().mods,...s.mods}}}
+function current(id){const s=currentState[id]||{};if(!s.owned)return def();return {...def(),...s,potential:clamp(s.potential??1,1,6),m:Array.isArray(s.m)?s.m.slice():[0,0,0],mods:{...def().mods,...s.mods}}}
 function get(id){
  const now=current(id),existing=state[id],valid=existing&&typeof existing==='object'&&!Array.isArray(existing);
  const s=valid?{...def(),...existing,m:Array.isArray(existing.m)?existing.m.slice():[0,0,0],mods:{...def().mods,...existing.mods}}:{...now,m:now.m.slice(),mods:{...now.mods}};

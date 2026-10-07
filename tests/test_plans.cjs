@@ -12,4 +12,14 @@ let card=run('card(chars.find(c=>c.id==="char_103_angel"))');assert.match(card,/
 run('setVal("char_103_angel","elite",0);setVal("char_103_angel","level",1);setVal("char_103_angel","potential",1)');assert.equal(json('get("char_103_angel")').elite,2);assert.equal(json('get("char_103_angel")').level,70);assert.ok(!run('card(chars.find(c=>c.id==="char_103_angel"))').includes('future-change'),'Untouched card keeps original colors');assert.equal(json('get("char_103_angel")').potential,3);
 run('setVal("char_124_kroos","owned",true);setVal("char_124_kroos","elite",1);setVal("char_124_kroos","level",55)');card=run('card(chars.find(c=>c.id==="char_124_kroos"))');assert.match(card,/plan-acquire/);assert.match(card,/data-k="owned" checked[^>]*future-change/);assert.match(card,/value="55" data-k="level"/);
 assert.equal(json('get("char_124_kroos")').owned,true);assert.equal(json('get("char_285_medic2")').owned,false);assert.ok(!Object.hasOwn(JSON.parse(storage.get('arknightsOperatorPlansV1')),'char_285_medic2'),'Only edited operators are saved');run('setVal("char_103_angel","potential",5);setVal("char_103_angel","m2",3)');const icons=run('card(chars.find(c=>c.id==="char_103_angel"))');assert.match(icons,/potential-p5-from-p3.svg/);assert.match(icons,/mastery-m3-from-m0.svg/);run('currentState.char_124_kroos={owned:true,potential:0};state.char_124_kroos.potential=2');const legacyIcon=run('card(chars.find(c=>c.id==="char_124_kroos"))');assert.match(legacyIcon,/potential-p2-from-p1.svg/);assert.ok(!legacyIcon.includes('from-p0'));assert.equal(storage.get('arknightsOperatorProgressV1'),raw);assert.equal(current.char_103_angel.level,70);assert.ok(!html.includes('.plan-acquire{border-color:'));assert.ok(!html.includes('.plan-acquire .owned{'));assert.ok(!html.includes('account-import.mjs'));assert.ok(!html.includes('operator-png.js'));
+run('currentState.char_377_gdglow={owned:false,potential:6,elite:2,level:90,skill:7,m:[3,3,3]};delete state.char_377_gdglow');
+assert.equal(json('get("char_377_gdglow")').potential,1,'Unowned progress is not an acquisition baseline');
+for(let target=2;target<=6;target++){
+ run(`setVal("char_377_gdglow","owned",true);setVal("char_377_gdglow","potential",${target})`);
+ const acquisition=run('card(chars.find(c=>c.id==="char_377_gdglow"))');
+ assert.match(acquisition,/future-change cycle[^>]*data-k="potential"/);
+ assert.ok(acquisition.includes(target===6?'plans/potential-p6.svg':`plans/potential-p${target}-from-p1.svg`));
+}
+assert.equal(json('currentState.char_377_gdglow').potential,6,'Retained actual progress must not be modified');
+assert.equal(storage.get('arknightsOperatorProgressV1'),raw);
 console.log('Plan checks passed: independent targets, copied current state, acquisition/growth distinction, current-state floors, real operator controls.');})().catch(e=>{console.error(e);process.exitCode=1});
