@@ -15,7 +15,7 @@ export function saveCount(storage,id,value){
  inventory.items={...inventory.items,[id]:count};inventory.updatedAt=new Date().toISOString();
  storage.setItem(INVENTORY_KEY,JSON.stringify(inventory));return inventory;
 }
-export function categoryOf(item){if(item.id==='4001')return 'currency';if(item.id.startsWith('p_char_')||/^tier\d_/.test(item.id))return 'potential';if(/^200[1-4]$/.test(item.id))return 'experience';if(item.id.startsWith('mod_'))return 'module';if(/^32\d\d$/.test(item.id))return 'chip';if(/^330\d$/.test(item.id))return 'skill';return 'material'}
+export function categoryOf(item){if(item.id==='4001')return 'currency';if(item.category==='potential'||item.id.startsWith('p_char_')||/^tier\d_/.test(item.id))return 'potential';if(/^200[1-4]$/.test(item.id))return 'experience';if(item.id.startsWith('mod_'))return 'module';if(/^32\d\d$/.test(item.id))return 'chip';if(/^330\d$/.test(item.id))return 'skill';return 'material'}
 export function tierOf(item){if(categoryOf(item)==='potential')return Math.min(5,item.rarity||Number(item.id.match(/^tier(\d)_/)?.[1])||3);if(categoryOf(item)==='material')return Math.min(5,Number(item.id.slice(-1))||1);if(categoryOf(item)==='chip')return Number(item.id.slice(-1))+2;if(categoryOf(item)==='module')return 5;return 3}
 
 const CATEGORY_ORDER=['material','experience','chip','skill','module','potential','currency'];

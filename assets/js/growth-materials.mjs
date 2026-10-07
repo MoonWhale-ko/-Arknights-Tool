@@ -1,5 +1,5 @@
-import {calculatePlans,ownedAmount,recipeCapacity} from './growth-costs.mjs?v=2';
-import {readInventory,INVENTORY_KEY,compareItems} from './inventory-state.mjs?v=5';
+import {calculatePlans,ownedAmount,recipeCapacity} from './growth-costs.mjs?v=3';
+import {readInventory,INVENTORY_KEY,compareItems} from './inventory-state.mjs?v=6';
 const $=id=>document.getElementById(id),dialog=$('growthDialog');
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const number=v=>v.toLocaleString('ko-KR');

@@ -1,4 +1,4 @@
-import {INVENTORY_KEY,readInventory,countOf,saveCount,categoryOf,tierOf,compareItems} from './inventory-state.mjs?v=5';
+import {INVENTORY_KEY,readInventory,countOf,saveCount,categoryOf,tierOf,compareItems} from './inventory-state.mjs?v=6';
 const $=id=>document.getElementById(id),esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const categories={all:'전체',material:'육성 재료',experience:'작전기록',chip:'정예화 칩',skill:'스킬개론',module:'모듈 재료',potential:'증표',currency:'재화'};
 const colors=['','#969fa6','#9bba4f','#5aa3d1','#a889c3','#e5b956'];

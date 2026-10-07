@@ -33,10 +33,11 @@ export function calculateGrowth(operator,currentValue,targetValue,data){
   for(const s of m.costs)if(s.stage>before&&s.stage<=after)add(`모듈 ${m.type==='D'?'Δ':m.type} · Stage ${s.stage}`,s.cost);
   if(!before&&after){notes.push(`모듈 ${m.type==='D'?'Δ':m.type} 해금: E2 Lv.${m.unlockLevel}, 신뢰도 조건 및 해금 임무 완료 필요.`);for(const task of m.missions||[])notes.push(task.description)}
  }
- if(goal.potential>current.potential){
-  const count=goal.potential-current.potential,token=data.potentials[operator.id];
-  if(token)add(`잠재 ${current.potential} → ${goal.potential}`,[{id:token.id,count}]);
-  else notes.push(`잠재 ${current.potential} → ${goal.potential}: 추가 ${count}단계 · 전용 증표 정보가 없습니다.`);
+ const token=data.potentials[operator.id],potential=Math.max(0,goal.potential-current.potential);
+ const tokenCount=potential+(token?.activity&&!current.owned?1:0);
+ if(tokenCount){
+  if(token)add(`${token.activity&&!current.owned?'획득 및 ':''}잠재 ${current.potential} → ${goal.potential}`,[{id:token.id,count:tokenCount}]);
+  else notes.push(`잠재 ${current.potential} → ${goal.potential}: 추가 ${potential}단계 · 전용 증표 정보가 없습니다.`);
  }
  if(goal.trust>current.trust)notes.push(`신뢰도 ${current.trust}% → ${goal.trust}%: 전투·기지 활동으로 상승하며 재료 합계에는 포함하지 않습니다.`);
  const totals={};for(const step of steps)for(const x of step.cost)totals[x.id]=(totals[x.id]||0)+x.count;

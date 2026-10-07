@@ -19,6 +19,9 @@ test('general token substitution uses actual eligibility, class, rarity and the 
   assert.match(data.tokenItems[token.alternatives[0].id].name,new RegExp(label));
  }
  assert.deepEqual(data.potentials.char_002_amiya.alternatives,[],'Amiya cannot use general tokens');
+ const vigil=operators.find(o=>o.id==='char_427_vigil');
+ assert.equal(calculateGrowth(vigil,{...base,owned:false},{...base,potential:6},data).totals.voucher_vigil,6,'Activity voucher includes first acquisition');
+ assert.equal(calculateGrowth(vigil,base,{...base,potential:6},data).totals.voucher_vigil,5);
  for(const c of operators){const token=data.potentials[c.id];if(!token)continue;assert.ok(data.tokenItems[token.id].iconId);for(const a of token.alternatives)assert.ok(data.tokenItems[a.id].iconId)}
  assert.equal(ownedAmount('p_char_377_gdglow',{items:{p_char_377_gdglow:2}},data),2);
 });
@@ -43,7 +46,7 @@ test('only remaining common skill, mastery and actual module stages are charged'
  assert.deepEqual(calculateGrowth(op,goal,now,data).totals,{},'Stale goals never charge completed work');
 });
 test('all operators respect rarity limits, have consistent cost references and can be aggregated',()=>{
- for(const o of operators){const current={...base,owned:false},goal={...base,elite:o.phases.length-1,level:o.phases.at(-1).maxLevel,skill:o.skills.length?7:1};const r=calculateGrowth(o,current,goal,data);for(const id of Object.keys(r.totals))assert.ok(id==='exp'||data.items[id],id)}
+ for(const o of operators){const current={...base,owned:false},goal={...base,elite:o.phases.length-1,level:o.phases.at(-1).maxLevel,skill:o.skills.length?7:1};const r=calculateGrowth(o,current,goal,data);for(const id of Object.keys(r.totals))assert.ok(id==='exp'||data.items[id]||data.tokenItems[id],id)}
  const second=operators.find(o=>o.id==='char_124_kroos'),all=calculatePlans([op,second],{}, {[op.id]:{...base,level:2},[second.id]:{...base,level:2}},data);
  assert.equal(all.totals.exp,200);assert.equal(all.totals['4001'],60);
 });
