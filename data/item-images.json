@@ -3,437 +3,437 @@
   "items": {
     "30011": {
       "name": "원암",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_G1.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_G1.png",
       "referenceUrl": "https://i.namu.wiki/i/VQkGGTDtyg4rVn0VIR2Kcy7N_dI2d_w3JbMSfrouyDznY6ZMjZQ0dZfFo4cknMvNqxJIQ5s5bWZJQOCnA7tkLQ.webp"
     },
     "30012": {
       "name": "원암 큐브",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_G2.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_G2.png",
       "referenceUrl": "https://i.namu.wiki/i/-8R7C5-ZMC3Mcl8IoZT8covZ8hNly_m-OAKMikKUgiAxbwcXuafITVGccmYwPtInmQgjo4CG_jN2M0h9GDVMFw.webp"
     },
     "30013": {
       "name": "원암 큐브 번들",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_G3.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_G3.png",
       "referenceUrl": "https://i.namu.wiki/i/1Nrpc4l_C89DamTl8rKcCCFY1HqnOUOHG_shYvqT_HyJtWnoMl8DMYRs_d6VIprBLyZ7NHpuxyI8PmrHCe4DgQ.webp"
     },
     "30014": {
       "name": "정제 원암",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_G4.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_G4.png",
       "referenceUrl": "https://i.namu.wiki/i/osKLCWoWsLJzZSAecoirDInQdHdAGrD1DGMkPshwUIzuqvZh6EKzaHT4LsQ_403uoKTJKDyT03lgcHtYq1BHuQ.webp"
     },
     "30021": {
       "name": "대체당",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_STRG1.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_STRG1.png",
       "referenceUrl": "https://i.namu.wiki/i/CBriqSHZrmLbzGA9Q-5B45TK3XsGt8rWwD6Ssgjt5VVm71AWhHgSk4JWK04T6XIBt8i25AYNSODGvq3higaYjw.webp"
     },
     "30022": {
       "name": "포도당",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_STRG2.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_STRG2.png",
       "referenceUrl": "https://i.namu.wiki/i/8I8N3paeVOyZhAa49jCUb_imbNmu_D6X9RmVN1mPdy20dOzDUSjD-8UQeV4WKQ4q81qMV8XBHOzf_0By2gi3Iw.webp"
     },
     "30023": {
       "name": "포도당 번들",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_STRG3.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_STRG3.png",
       "referenceUrl": "https://i.namu.wiki/i/OYQHUxHt2HizkdaRyC7Jarv3vlCurDQYVyEAORZXE8sHyyqXp2SF-wvd-2QWGToYiQqsKu-SLWUwDd5VsODLnw.webp"
     },
     "30024": {
       "name": "포도당 팩",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_STRG4.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_STRG4.png",
       "referenceUrl": "https://i.namu.wiki/i/Ge89q7QgrHaA6Z3RQhlPp9qoTihe0NQgQpMq6pz9k1-2pcldfCWwi8EzO0AKz7JqPUeVX3efHRCo5MFjDNA1KA.webp"
     },
     "30031": {
       "name": "에스테르 원료",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_RUSH1.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_RUSH1.png",
       "referenceUrl": "https://i.namu.wiki/i/b5brxGQ26ZK6iGBXD7A24tScheYTr6mCmMUFfeIgHerdhSy9PYlee3lDRlZBGv7h7sz1HHQ7fAUSWBXpUQgMwA.webp"
     },
     "30032": {
       "name": "폴리에스테르",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_RUSH2.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_RUSH2.png",
       "referenceUrl": "https://i.namu.wiki/i/lL8UV5kshvoFcN0OalPeeMfTAgW315wxUJMsDoW5FsZIOQl06mE4t5htEj70dF5uamRzga0Vq90Zkd7sH-_zhA.webp"
     },
     "30033": {
       "name": "폴리에스테르 번들",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_RUSH3.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_RUSH3.png",
       "referenceUrl": "https://i.namu.wiki/i/2Wyv82SSPme4fVRQ0oHg529B1pp7GD2n-AHOwxjNJFZO1X_RTKxfmDQbX-H2j3RotQjIyAMXbkpMvaKNkaUBqA.webp"
     },
     "30034": {
       "name": "폴리에스테르 팩",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_RUSH4.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_RUSH4.png",
       "referenceUrl": "https://i.namu.wiki/i/lUQlff_lVl-0LGqMX60n907Izu1014tpn2u-v-oTxlNcg55ONrTrMJZ-EEUTeBwF4JaXcPV2MJ9B5aY4X-Q8RQ.webp"
     },
     "30041": {
       "name": "이철 조각",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_IRON1.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_IRON1.png",
       "referenceUrl": "https://i.namu.wiki/i/-HcKfFDQ8AQa5B25o4aOSLBn8rFtZW6NJhvG4LoLn_6qDoIkbayxNqUoie1iMZzOITsP6JHcMsgPq2lLP57jlg.webp"
     },
     "30042": {
       "name": "이철",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_IRON2.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_IRON2.png",
       "referenceUrl": "https://i.namu.wiki/i/JuWmCDqs1QN7g_MQjN4luqXxvbBJxshJREjV91col8uquCA4lZydGgpe0C8mZOTIx3Y0Ml33ejtfToOaf-5Xvw.webp"
     },
     "30043": {
       "name": "이철 번들",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_IRON3.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_IRON3.png",
       "referenceUrl": "https://i.namu.wiki/i/zeA3y37r1a4rUpmZsTq7BJ2SSPuNm6S1piUUizP7inpRqgQG9L4D4pDsmdZYRGqvHhG_Xf_PQi9y0vRoPNrwCw.webp"
     },
     "30044": {
       "name": "이철 팩",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_IRON4.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_IRON4.png",
       "referenceUrl": "https://i.namu.wiki/i/MWMOxgBQthI5WtjV0nQKWS2vRxLpX0qAAGZJ6fjoJhp3EtpYAaKwioKbD2gCpuEEmbyWyAFyvl0RI5qV56Rkdg.webp"
     },
     "30051": {
       "name": "디케톤",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_KETONE1.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_KETONE1.png",
       "referenceUrl": "https://i.namu.wiki/i/X0LEelijHVYiDhr9QZmtd6eGxf_w8Uw-oruLbhclcckr0IaCWqPiKiw7IFC0dEcvZ3BDsNm2L6yqvF_nvFUXgw.webp"
     },
     "30052": {
       "name": "아케톤 응집체",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_KETONE2.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_KETONE2.png",
       "referenceUrl": "https://i.namu.wiki/i/6UHeg74T0bucDzhxv6ybp6jh7Cz3MIrHczwNaZis4tmWmE6B8-dQqKfFI7GHvDqT1eyJ-57NduaYyouX_utBRg.webp"
     },
     "30053": {
       "name": "아케톤 응집체 번들",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_KETONE3.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_KETONE3.png",
       "referenceUrl": "https://i.namu.wiki/i/3dIx4f0yXr0qjIS0nO1O9wCOM333aO-tQr2i0a_VOcnjDwIre0FjVNiaXjJA9sOYB17kl9edFqDzifHuu4Y2cQ.webp"
     },
     "30054": {
       "name": "아케톤 팩",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_KETONE4.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_KETONE4.png",
       "referenceUrl": "https://i.namu.wiki/i/NNUPJGHK12hjl8xxA8RoiGxYo31GiOTWWTiqBxaZpWOn679CUYrnLml41_QE8Un3RvM9goURAGX4OnnFLMr-_w.webp"
     },
     "30061": {
       "name": "파손된 장치",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_BOSS1.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_BOSS1.png",
       "referenceUrl": "https://i.namu.wiki/i/B5TscwczLgpHxgI052zx2EXKlE_puEBZ4kTKj8C63SMhyTsiAfbpvArDzLSGJYzNbeWw0PK77vekYZcuPBahcQ.webp"
     },
     "30062": {
       "name": "장치",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_BOSS2.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_BOSS2.png",
       "referenceUrl": "https://i.namu.wiki/i/w3gt5ZG5odg1HF9XwYS5mYnFRJP5Ig30hhLRluQLVZv-HtJt-dH0zNULsXGHL1_fLn0OCYd-ePMKVLloMGMZAg.webp"
     },
     "30063": {
       "name": "리뉴얼 장치",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_BOSS3.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_BOSS3.png",
       "referenceUrl": "https://i.namu.wiki/i/IMtuPY7JrHbSWvZ565YfQqyn-xk-5ffLrYmEqWe_EiXPL75E2H6EwV_e2GCh6gPhPDwedLbIo5vQ_Ydjd5-Rlw.webp"
     },
     "30064": {
       "name": "개량 장치",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_BOSS4.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_BOSS4.png",
       "referenceUrl": "https://i.namu.wiki/i/OItlZOzKFkb7310MeWOHW63fjvS7N_8CYtiK3j9B_qKaergNuCFKejB8uGkDlf_LAI9XcBZLzdlLwE__v84_eA.webp"
     },
     "30073": {
       "name": "로식 콜",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_ALCOHOL1.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_ALCOHOL1.png",
       "referenceUrl": "https://i.namu.wiki/i/L4Xw617HwK3otEEOt6Y3vZjUt9d_sIbNq5iq-R8afsrquVwsRSwY3GCd7LkYjCpe8omKoBGzErY0aTyXuZABSw.webp"
     },
     "30074": {
       "name": "화이트 호스 콜",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_ALCOHOL2.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_ALCOHOL2.png",
       "referenceUrl": "https://i.namu.wiki/i/hTH8CN2MobRPQVd8fDdzEFRNZwUNlWAMEPwcgK7_tbK8SgmHEFkKvpJEENH20WdOvwHF-ox7ddx1efa2hjoxhw.webp"
     },
     "30083": {
       "name": "망간 광석",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_MANGANESE1.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_MANGANESE1.png",
       "referenceUrl": "https://i.namu.wiki/i/D1hnROw9i7zGGDriTG9bNt1strm2AzxJieueBevqii5-tzCuoJMzTKiZz5gKZQVavrCvjt7XhvXxm5OV9mJwnQ.webp"
     },
     "30084": {
       "name": "망간 중합체",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_MANGANESE2.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_MANGANESE2.png",
       "referenceUrl": "https://i.namu.wiki/i/v6i6tV8FraCjiGqvAXwfJDEZ-F3a4xK3XgV-X13lT-UHKReWGkN-E9gqbu9UCxxayqhsbLHEKjlzMOBfU23Ljg.webp"
     },
     "30093": {
       "name": "연마석",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_PG1.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_PG1.png",
       "referenceUrl": "https://i.namu.wiki/i/soM0B3bcPGUEkS8QSqEkUQwBwkuU3_aFc5-Tkhsoka_Y9apk8hY4zkALGGBwgryZJ3R_pmhBkYV5V-1R3wEMzw.webp"
     },
     "30094": {
       "name": "고급연마석",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_PG2.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_PG2.png",
       "referenceUrl": "https://i.namu.wiki/i/cyUVSGW0jxhWzaEeJHQbva3a2cNxmt4aVZNj8glGaLbHKptTrMVqTJg-xWKbeQyVHT9mg1xP9pGq92XUtuRNvA.webp"
     },
     "30103": {
       "name": "RMA70-12",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_RMA7012.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_RMA7012.png",
       "referenceUrl": "https://i.namu.wiki/i/GbLT6VrfccAZ8qb_FEpHVA2wwkdPe40Lmp5Vt382KKS6hzUnoght4EQIyyKU0uxjBFLoE6kM6wJsqosaThmImA.webp"
     },
     "30104": {
       "name": "RMA70-24",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_RMA7024.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_RMA7024.png",
       "referenceUrl": "https://i.namu.wiki/i/Sd9Mhpd9pvHRaovLIIMpnXdV5FQFfxYGHiicoebl5x5VJ2YuJN_QyvYkdhC52mh7epbQk3BeeA_tz9PUpA_iSQ.webp"
     },
     "30115": {
       "name": "중합제",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_PP.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_PP.png",
       "referenceUrl": "https://i.namu.wiki/i/FQFYSwn5wd_R-82Xzv__WcVBbRIkJUVfMk9RwSbgHjDbR47HaYoK9XNrQy2V3_UqvKLkZHobdhaQ1B09nP6qRA.webp"
     },
     "30125": {
       "name": "바이폴라 나노플레이크 칩",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_BN.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_BN.png",
       "referenceUrl": "https://i.namu.wiki/i/EeppruS7fgyVbJjvnJkGThRblIRNeqAV_1VIKa1lpKzhoqBPCbahTNMPp8Hxtp8WpPrhuK8ZcIv14pQeI-D2ZQ.webp"
     },
     "30135": {
       "name": "D32강",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_DS.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_DS.png",
       "referenceUrl": "https://i.namu.wiki/i/ekMPZNL8omge7ZH87QTJhn22aPPZMRhTxJ_2pwiuHZDRS4f2MeqMJfYCaxidNkB-g9xG8_KYM1ASTYy9k3SUfg.webp"
     },
     "30145": {
       "name": "결정 전자 장치",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_OEU.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_OEU.png",
       "referenceUrl": "https://i.namu.wiki/i/aXYwKT__cwx6AJoeV7RFkuojJvnp6zWhmrXTnOV3LQMzI2IUnC1COCxH_b61v6eTvx8-zDhF3MpTf3sr_WoAww.webp"
     },
     "30155": {
       "name": "핵결정체 소결물",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_SHJ.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_SHJ.png",
       "referenceUrl": "https://i.namu.wiki/i/xPdNa52oL857Nkocra63AT1BbWua06FGIAdry_ubnR-8Oi9Fz4b3o8nS6n1gPr44pk5A91spWU2I1fkLJuQxjw.webp"
     },
     "30165": {
       "name": "중위상 이성질체",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_DYT.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_DYT.png",
       "referenceUrl": "https://i.namu.wiki/i/n5RUuXy-i2u5WruD4sqAvIUU2ma8FZF-CCHYWa2S9ldPbWac8zu0YOOTkcDX5clr0hjEim2TUffXMylQKxLYJw.webp"
     },
     "31013": {
       "name": "젤",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_PGEL3.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_PGEL3.png",
       "referenceUrl": "https://i.namu.wiki/i/nWghjTARHMABxqn7mDx5ziI9y_bvnIDTA19U_7Nd_DHOnGWbzS3gKdTqhlrpJKES97AiWx5c6aFQbs2x37M_Ew.webp"
     },
     "31014": {
       "name": "중합젤",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_PGEL4.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_PGEL4.png",
       "referenceUrl": "https://i.namu.wiki/i/PjAqphz1e-0Lrfz1yRDuKLehdhIeAu_o711fSEpMLcKqL3dgEKJoOulR7HvOmLXZEwwveAgjQpNvW_4m61qtFw.webp"
     },
     "31023": {
       "name": "열합금",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_IAM3.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_IAM3.png",
       "referenceUrl": "https://i.namu.wiki/i/lcveS_t_QGCvupO2-M4Dp9yspuGpODYKSBpfe_mtLJj3SPBeQDNKvu4xdQ0pj2GmE1Jlm7t6U7Nt8a9ZhrB1JA.webp"
     },
     "31024": {
       "name": "열합금 팩",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_IAM4.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_IAM4.png",
       "referenceUrl": "https://i.namu.wiki/i/ULiiz2he8L2XBhF9i85TlwbhOkTdgiEne6z6R82JQfUDC_4l3emm0_CdJgJQ5mm_s5XZec_EpiFDTT6zBVfWfA.webp"
     },
     "31033": {
       "name": "결정 부품",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_OC3.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_OC3.png",
       "referenceUrl": "https://i.namu.wiki/i/8vTwC1VhnHsc3AcrfmWKooLnD3bNO3-s3tWBOkiHT2inOUwVUBeCUZ34ZpxWuEf4fMYP_B6YRK5jRWjUxeufdw.webp"
     },
     "31034": {
       "name": "결정 회로",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_OC4.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_OC4.png",
       "referenceUrl": "https://i.namu.wiki/i/2q7_JiJPxe1cP-gqiHftm6NSBORLh3hzDtgp08XflUUI53WDUB248A0FM6w40IDl6impnJS9DCA24mdF7XOggQ.webp"
     },
     "31043": {
       "name": "반합성 용제",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_SS.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_SS.png",
       "referenceUrl": "https://i.namu.wiki/i/EkguYTXxH9583NNEJNX7rAUG97olTbHpiTYXLKc1r6e4GDCbrL9rLbGHgtAGvIrEKsWWDRoQGm3CHf7ZvLtNOw.webp"
     },
     "31044": {
       "name": "정제된 용제",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_RS.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_RS.png",
       "referenceUrl": "https://i.namu.wiki/i/tl4396DzfObkYczP39qTdrK5Ml7ihZ5hY_fRB5VbLyACAGoFf3Hy9hnJi9WVzCr8XugETobX13ItnRRKw4neEQ.webp"
     },
     "31053": {
       "name": "중합 절삭유",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_CCF.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_CCF.png",
       "referenceUrl": "https://i.namu.wiki/i/Y9XkeBYC-UnEaJn2lYVCf6PFXfpNdkt4UO0JsyvZqZokE25lwHZkdkQPTLQzylcLBw95q3GypgfngFJQob92Gw.webp"
     },
     "31054": {
       "name": "절삭유 원액",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_PLCF.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_PLCF.png",
       "referenceUrl": "https://i.namu.wiki/i/e8VYwvx4V5hszqMGdgDQAlvtY7rTCB4YyfyyRGRqPOi-U2o4yJcDMwjlHfTuFpa1_K4X2cXQdvNAbsP_VkBpBg.webp"
     },
     "31063": {
       "name": "합성 소금 번들",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_ZY.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_ZY.png",
       "referenceUrl": "https://i.namu.wiki/i/sQZSqzJ5S1kWybvHxFM6JkBZPO2I6Rks_Tajy5OSxOlbKmIFOM8QTB3CaRjz1e4CGBG2AatCUFfJNB48a0sO-g.webp"
     },
     "31064": {
       "name": "합성 소금 팩",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_ZYK.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_ZYK.png",
       "referenceUrl": "https://i.namu.wiki/i/qOJ03e9mPeF3Junn8IOrXjKUNCASoKvt2JI-ZLeCuKY7u2dLZD4ZUt-Xw1APs62X1Gs7JwnRyiDjOUV5y45JsA.webp"
     },
     "31073": {
       "name": "퓨신 섬유",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_XW.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_XW.png",
       "referenceUrl": "https://i.namu.wiki/i/uUsu1kqDkFeUOat_EHS_W99FjzI7R3-6vqSF986jRduN650AONw47sbo2y5UXSzJGvAm39CRrTCyacvvufNKsQ.webp"
     },
     "31074": {
       "name": "경화 섬유판",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_XWB.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_XWB.png",
       "referenceUrl": "https://i.namu.wiki/i/jIVJiww4R1z7TI036jJnLlrkqY-T5NkXb9HHNP2E1YFFQN_XN6paSaoqlDEHITJNJo_Zmhhg7CTViOu4GxyS6Q.webp"
     },
     "31083": {
       "name": "고리탄화수소 응집질",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_HT.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_HT.png",
       "referenceUrl": "https://i.namu.wiki/i/ZKfIc6WjARRvg9WFj3600XhgyHzRxDiRDFvNs-NNTgBEK9CaAPvfnUj1J1FhkQVMcpzvk69VDO8M8VvSK4zM6g.webp"
     },
     "31084": {
       "name": "고리탄화수소 프리폼",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_HTT.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_HTT.png",
       "referenceUrl": "https://i.namu.wiki/i/zBb-a65J6GkV4LB3km3RWWyP3-1Vmzv6zt5T3Ehw5JDsqqJAkSy-WfAi5396BebIwJ3s7RRGdDHMvY6scKTP7Q.webp"
     },
     "31093": {
       "name": "유사 응결핵",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_JH.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_JH.png",
       "referenceUrl": "https://i.namu.wiki/i/IkrAyIKPZLlLFsTRWDxRE6awadJyW5AnuJ1MdETpCkWoJaoEuKXuzU5s8WqQ56hmNKDVHFw2y_xlgDnhBY9GyA.webp"
     },
     "31094": {
       "name": "카이랄 굴광체",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SL_QGT.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SL_QGT.png",
       "referenceUrl": "https://i.namu.wiki/i/wwCZfK5raISJBzHKBzr2KIooJNkdfgVej10dJ0WqczMIpzIV-sl_mrjN9EMJREx8pDogt8UewzqbXm9BfiOMfw.webp"
     },
     "3211": {
       "name": "뱅가드 칩",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_ASC_PIO1.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_ASC_PIO1.png",
       "referenceUrl": "https://i.namu.wiki/i/kGtgV41KsnLSdnNv7M-JWD-WMgHCm7WCCL9BANENFUWI--UyhzkoOmPMc45YQ3klv2RTSZT7-bFu2M-LyYntYQ.webp"
     },
     "3212": {
       "name": "뱅가드 칩셋",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_ASC_PIO2.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_ASC_PIO2.png",
       "referenceUrl": "https://i.namu.wiki/i/B3XHlu676AzVbiYNLU-lERqWITT3NzryvnhR8K7vLPizHghgd5gZWLNGQ_QPaqLfFYPsoyYDjIm1UEF7w1_cVw.webp"
     },
     "3213": {
       "name": "뱅가드 듀얼 칩",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_ASC_PIO3.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_ASC_PIO3.png",
       "referenceUrl": "https://i.namu.wiki/i/x-GMHD1l2CRLMKbOkB9I3Blewk8m8HyhglyIao75ZVCsMW1cehTyKqYbpYmqt1LRABcKUbms2bincqvmbUY3XA.webp"
     },
     "3221": {
       "name": "가드 칩",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_ASC_GRD1.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_ASC_GRD1.png",
       "referenceUrl": "https://i.namu.wiki/i/F-dXDjxVLpNtWkT7fEOPvyJ4-QNkoRk7kaLRjmDY2CXYyC3LzfcwfSO4S8mwjgtSl6dujvGWVBEwq0nJHRBdXA.webp"
     },
     "3222": {
       "name": "가드 칩셋",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_ASC_GRD2.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_ASC_GRD2.png",
       "referenceUrl": "https://i.namu.wiki/i/fgK-Cc86lv9fYVZ3J5zpV2PL3F2vhh3eThxXqtdrsew3pJiq27abldyagWL-u_AVTCPbtOue33iWAN9nu5C3zg.webp"
     },
     "3223": {
       "name": "가드 듀얼 칩",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_ASC_GRD3.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_ASC_GRD3.png",
       "referenceUrl": "https://i.namu.wiki/i/4zIt_zrKWJqkrVXcbEve78zljT-1uPXgDB-MJQFynPvlav37N2Hy_chrSpLRTUd59dEWc1q7GoZtJ3qphusOaA.webp"
     },
     "3231": {
       "name": "디펜더 칩",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_ASC_TNK1.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_ASC_TNK1.png",
       "referenceUrl": "https://i.namu.wiki/i/Chf5x_kfShEdulRjGsyvMf-E6Vfb4zFwnP3xEjx5fcgXo5R0_wCWOUmj2CQmBpWsIncboFOfnEhwlPWfWimzYg.webp"
     },
     "3232": {
       "name": "디펜더 칩셋",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_ASC_TNK2.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_ASC_TNK2.png",
       "referenceUrl": "https://i.namu.wiki/i/aRGeOG5ydGoNkzjFaJ7xU4hv721LKaAKxyKxowzFqSN9zr_MUWo1lYuBWdTp5N9O-KntTFP0NaJy7lUUg9fqXQ.webp"
     },
     "3233": {
       "name": "디펜더 듀얼 칩",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_ASC_TNK3.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_ASC_TNK3.png",
       "referenceUrl": "https://i.namu.wiki/i/8JkoeJSMytMZb8jz46EhHvyEB1HJx6KkIJVmXz-s-cOEK3oD3PGXmsuN-XbbvVF3-9h0tEhuq9m-9Pe5DrGxvw.webp"
     },
     "3241": {
       "name": "스나이퍼 칩",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_ASC_SNP1.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_ASC_SNP1.png",
       "referenceUrl": "https://i.namu.wiki/i/VirJg9pDxGA9qMA92q1_fE9P3DplH2_izqQKy1CEzkw8DXkZzUGlJgYjUNOuC1QJVY1rJCtniJE-yKLwDG4LlA.webp"
     },
     "3242": {
       "name": "스나이퍼 칩셋",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_ASC_SNP2.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_ASC_SNP2.png",
       "referenceUrl": "https://i.namu.wiki/i/-9l1Zksf_yw2eCPJxuEcMBYPwZ_nD19zyJvb42JnZO0BkMzjLrCvrFaG2llJCEMzoVmEHhy0slI8i7ihkRSWKA.webp"
     },
     "3243": {
       "name": "스나이퍼 듀얼 칩",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_ASC_SNP3.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_ASC_SNP3.png",
       "referenceUrl": "https://i.namu.wiki/i/6Lp0GzV7_EQZXdKAqFH7FJTHFNYlDq5eoxfWHxK5PMuf0whb0phfCX6oz5HXsD1nCtoSQ7vRnQLX_6yFKDn5aQ.webp"
     },
     "3251": {
       "name": "캐스터 칩",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_ASC_CST1.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_ASC_CST1.png",
       "referenceUrl": "https://i.namu.wiki/i/ls36LkgUMtyr6ikC_02X_nIPl6cc9YdtA5ek-1qiLZsyWgxkLN7IaBXAK_V3c2xYmB6loiJfH_mf-b8wH026SA.webp"
     },
     "3252": {
       "name": "캐스터 칩셋",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_ASC_CST2.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_ASC_CST2.png",
       "referenceUrl": "https://i.namu.wiki/i/8KKq2qk31rJY5hgUIxuwKzivvg0T8Xw0EvXQ2fE7YKTpqixPKnu11vvA_ehINrNO8cvZ8vptyBoQLU43v_54Qg.webp"
     },
     "3253": {
       "name": "캐스터 듀얼 칩",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_ASC_CST3.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_ASC_CST3.png",
       "referenceUrl": "https://i.namu.wiki/i/K17wBRfAwpIZesFo-IwAi6iobp2rmA6WLJjSz2ome9swyJ02wxzmtmrOaUv67LBVlitkKjGWQGJU6907V9wyAQ.webp"
     },
     "3261": {
       "name": "메딕 칩",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_ASC_MED1.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_ASC_MED1.png",
       "referenceUrl": "https://i.namu.wiki/i/EkJO3E8bKzRJxOBdA5Mq3NTavKBDKZiRZZY7V3BJNW0uZHvLFJiFvLxyN8_YmDPEzYAAu0olG4pG6LItyQ6-iw.webp"
     },
     "3262": {
       "name": "메딕 칩셋",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_ASC_MED2.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_ASC_MED2.png",
       "referenceUrl": "https://i.namu.wiki/i/Nhni64WN4LagP0_UO60DP8xRQjr1iXDRfvpRPVqMiU68kdQkxQm7zu9DjKvkM3w1DmIvKG545WuowjGaQ1W1Nw.webp"
     },
     "3263": {
       "name": "메딕 듀얼 칩",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_ASC_MED3.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_ASC_MED3.png",
       "referenceUrl": "https://i.namu.wiki/i/Y6L1OTWig5SfdhxIsy7uZ17-MpMhjsbktoJRhj9ahADRjcZjYyrTiWMOmD8mjBgnftThbNCGto0bwtyb8gNCYA.webp"
     },
     "3271": {
       "name": "서포터 칩",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_ASC_SUP1.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_ASC_SUP1.png",
       "referenceUrl": "https://i.namu.wiki/i/v5JmzsElHAL-eFDzVU6xMSmrtYjyHvHFVbJjC7WHF415esVM42XFnp8mgUGp8iZNtKwS6wOsvldwJQZCftf0aw.webp"
     },
     "3272": {
       "name": "서포터 칩셋",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_ASC_SUP2.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_ASC_SUP2.png",
       "referenceUrl": "https://i.namu.wiki/i/4GjrkzofW3S0itkoTSY2m9eqNPz-Y-Zkpce5bsXSar_SR2p0mNiyRCoY_c1wS9LnbeBW1GKv9jNb06VBj2BwOA.webp"
     },
     "3273": {
       "name": "서포터 듀얼 칩",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_ASC_SUP3.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_ASC_SUP3.png",
       "referenceUrl": "https://i.namu.wiki/i/zVXhJ0Ps6E_RZbI5Y5kBRBYX-o6aZByKFxzfMj2ZkHrCYpbxVi3S1gfnCmKlGjRHmWj3YXSd0PcA7YOgWQLc2Q.webp"
     },
     "3281": {
       "name": "스페셜리스트 칩",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_ASC_SPC1.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_ASC_SPC1.png",
       "referenceUrl": "https://i.namu.wiki/i/-yLQ_EFiHK7YcLw2UJ_fRspan81HtVY0ZRY3ekz8z9qPmexvUXvda6LrLNplHQYyFFJbG8y3XxEG8bJhcJAUJw.webp"
     },
     "3282": {
       "name": "스페셜리스트 칩셋",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_ASC_SPC2.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_ASC_SPC2.png",
       "referenceUrl": "https://i.namu.wiki/i/Z1QtVaMDilV_l6jc0YDkaY2kN9JhPBJ2NS22D2H2l2xouawMrpiVjljnbbqn1z7_IUuJrCJeWMh7JnjMYTrNKQ.webp"
     },
     "3283": {
       "name": "스페셜리스트 듀얼 칩",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_ASC_SPC3.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_ASC_SPC3.png",
       "referenceUrl": "https://i.namu.wiki/i/EnTnrqA1bbcezTui95Yfy6YXHvG9GoJFkA8uIZtgX-rYxBPsAH_sGklI5nLdT3omGtSMZAG_we28h6VLrGA4Dw.webp"
     },
     "3301": {
       "name": "스킬개론 제1권",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SKILL1.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SKILL1.png",
       "referenceUrl": "https://i.namu.wiki/i/4iJtXkJIkQguFFA02BxWleKJZMuSxw2dqsLgbS7E-NCF0lXEMEjl6xy8ZVffpJ8Uo8hJ6BANL4LNB0aaIJHTCQ.webp"
     },
     "3302": {
       "name": "스킬개론 제2권",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SKILL2.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SKILL2.png",
       "referenceUrl": "https://i.namu.wiki/i/UudhZN0ZxeZb4OrO_x7zqIXsMhe_9CAjOIPxuJyRkOoqnu-ha0M0YH4qSsfHpk0qt2ZsmwyTZuFnpDhYjEfZ-A.webp"
     },
     "3303": {
       "name": "스킬개론 제3권",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/MTL_SKILL3.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/MTL_SKILL3.png",
       "referenceUrl": "https://i.namu.wiki/i/4v7ywKveMHefQ5MNb8TYSOy1OWZhsd0jHhUF3G_VsspAcrhgtzArsF-Kjm8Nbu2-x-kK3YXapT28ZLcnY8GifQ.webp"
     },
     "4001": {
       "name": "용문폐",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/GOLD.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/GOLD.png",
       "referenceUrl": "https://i.namu.wiki/i/ZlKs_tfxcNKBRSkkD4e0J39kU7GvP3qwHYZDwTfuAN_WMnWIU0z_MBDj7m8MGl6lTNCMxQSuAxLDzVveIDbPSw.webp"
     },
     "mod_unlock_token": {
       "name": "모듈 데이터 칩",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/mod_unlock_token.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/mod_unlock_token.png",
       "referenceUrl": "https://i.namu.wiki/i/rG8Jysg09JT617jp7TTluuAyUhh3wlRV6XGSPcdjC2DCcAM-Uoj9JjQ90-yZO-6W2Og6euJnsYqZztvuzffIcQ.webp"
     },
     "mod_update_token_1": {
       "name": "데이터 메모리",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/mod_update_token_1.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/mod_update_token_1.png",
       "referenceUrl": "https://i.namu.wiki/i/B1VQwAYTsiihTJ5oFKZeybRgctJiuW2EZmPzTc1zajWS4hZS8BWKItvobPWmrdejNVYown0piR-0Nq_UvlvIUw.webp"
     },
     "mod_update_token_2": {
       "name": "데이터 리더기",
-      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/mod_update_token_2.png",
+      "url": "https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/mod_update_token_2.png",
       "referenceUrl": "https://i.namu.wiki/i/TZUddAD-QXJsVHp7ekH9YPibX87BCvy44pxJO7FdPfOLiSi1JY0yeVnqULACJPJQbfZeRPXvq3EsQrsfh783sg.webp"
     }
   },

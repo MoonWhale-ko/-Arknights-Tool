@@ -37,7 +37,7 @@ function itemObj(id){return items[String(id)]||{}}
 function itemName(id){return itemObj(id).name||String(id)}
 function itemIcon(id){
  const o=itemObj(id),icon=o.iconId;
- return icon ? ASSET+'item/'+icon+'.png' : '';
+ return icon ? ASSET+'items/'+icon+'.png' : '';
 }
 function costHtml(cost){
  const a=Array.isArray(cost)?cost:[];

@@ -4,7 +4,7 @@ const categories={all:'전체',material:'육성 재료',chip:'정예화 칩',ski
 const colors=['','#969fa6','#9bba4f','#5aa3d1','#a889c3','#e5b956'];
 let items=[],images={},inventory,category='all',selected='',ownedOnly=false,storageError=false;
 function image(item){return `<img src="${esc(images[item.id]?.url||fallback(item))}" data-fallback="${esc(fallback(item))}" alt="${esc(item.name)}" loading="lazy">`}
-function fallback(item){return 'https://raw.githubusercontent.com/fexli/ArknightsResource/main/item/'+encodeURIComponent(item.iconId)+'.png'}
+function fallback(item){return 'https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/'+encodeURIComponent(item.iconId)+'.png'}
 function bindImages(root){root.querySelectorAll('img').forEach(img=>img.addEventListener('error',()=>{if(img.dataset.fallback){img.src=img.dataset.fallback;delete img.dataset.fallback}else img.style.visibility='hidden'}))}
 function render(){
  $('categories').innerHTML=Object.entries(categories).map(([id,name])=>`<button type="button" data-category="${id}" aria-pressed="${id===category}">${name}</button>`).join('');
