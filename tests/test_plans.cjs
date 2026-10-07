@@ -1,0 +1,15 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),path=require('node:path');
+const root=path.join(__dirname,'..'),html=fs.readFileSync(path.join(root,'plans.html'),'utf8'),source=html.split('<script>')[1].split('</script>')[0],data=JSON.parse(fs.readFileSync(path.join(root,'data/operators.json'),'utf8'));
+const current={char_103_angel:{owned:true,elite:2,level:70,potential:3,trust:150,skill:7,m:[1,2,0],mods:{X:1}}},raw=JSON.stringify(current),storage=new Map([['arknightsOperatorProgressV1',raw]]),elements=new Map();
+const element=()=>({value:'',innerHTML:'',classList:{toggle(){}},style:{removeProperty(){},setProperty(){}},addEventListener(){},querySelectorAll(){return[]}});
+const document={getElementById(id){if(!elements.has(id))elements.set(id,element());return elements.get(id)},querySelectorAll(){return[]},querySelector(){return null},fonts:{ready:Promise.resolve()}};
+const context=vm.createContext({document,window:{addEventListener(){}},console,localStorage:{getItem:k=>storage.get(k)||null,setItem(k,v){assert.equal(k,'arknightsOperatorPlansV1');storage.set(k,v)}},fetch:url=>Promise.resolve({json:()=>Promise.resolve(url==='data/professions.json'?JSON.parse(fs.readFileSync(path.join(root,'data/professions.json'),'utf8')):data)})});
+vm.runInContext(source,context);const run=s=>vm.runInContext(s,context),json=s=>JSON.parse(run(`JSON.stringify(${s})`));
+(async()=>{await new Promise(r=>setImmediate(r));assert.equal(storage.size,1,'Opening plans must not save progress or plans');
+assert.equal(json('get("char_103_angel")').owned,false);assert.equal(json('get("char_103_angel")').level,70);
+run('setVal("char_103_angel","owned",true);setVal("char_103_angel","level",90);setVal("char_103_angel","m2",3)');
+let card=run('card(chars.find(c=>c.id==="char_103_angel"))');assert.match(card,/plan-growth/);assert.match(card,/현재: E2 Lv.70/);assert.match(card,/목표: E2 Lv.90/);assert.match(card,/S3 M0 → M3/);
+run('setVal("char_103_angel","elite",0);setVal("char_103_angel","level",1);setVal("char_103_angel","potential",1)');assert.equal(json('get("char_103_angel")').elite,2);assert.equal(json('get("char_103_angel")').level,70);assert.equal(json('get("char_103_angel")').potential,3);
+run('setVal("char_124_kroos","owned",true);setVal("char_124_kroos","elite",1);setVal("char_124_kroos","level",55)');card=run('card(chars.find(c=>c.id==="char_124_kroos"))');assert.match(card,/plan-acquire/);assert.match(card,/현재: 미보유/);assert.match(card,/목표: E1 Lv.55/);
+assert.equal(storage.get('arknightsOperatorProgressV1'),raw);assert.equal(current.char_103_angel.level,70);assert.ok(!html.includes('account-import.mjs'));assert.ok(!html.includes('operator-png.js'));
+console.log('Plan checks passed: independent targets, copied current state, acquisition/growth distinction, current-state floors, real operator controls.');})().catch(e=>{console.error(e);process.exitCode=1});
