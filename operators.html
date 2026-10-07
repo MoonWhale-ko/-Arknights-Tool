@@ -10,8 +10,7 @@ a{color:inherit;text-decoration:none}.wrap{max-width:1400px;margin:auto;padding:
 h1{margin:0;font-size:28px}.nav{display:flex;gap:8px}.nav a,.btn{border:1px solid #3a4556;background:#1d2430;color:#fff;border-radius:0;padding:9px 12px;cursor:pointer}
 .panel{background:#171c24;border:1px solid #2b3441;border-radius:0;padding:14px;margin-top:16px}.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 input,select{background:#10151c;color:#fff;border:1px solid #3a4556;border-radius:0;padding:8px}
-input[type=number]{width:74px}.search{min-width:220px}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:10px}
-.stat{background:#10151c;border:1px solid #2c3542;border-radius:0;padding:10px;text-align:center}.stat b{display:block;font-size:20px}
+input[type=number]{width:74px}.search{min-width:220px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px;margin-top:14px}
 .card{background:#151b23;border:2px solid #303a48;border-radius:0;padding:10px}.r1{border-color:#7d8794}.r2{border-color:#c2ef57}.r3{border-color:#58a9e6}.r4{border-color:#a878e8}.r5{border-color:#e5b84b}.r6{border-color:#e86f42}
 .head{display:flex;gap:10px;align-items:center}.avatar-wrap{width:64px;height:64px;position:relative;flex:none}.avatar{width:64px;height:64px;border-radius:0;background:#252d38;object-fit:cover}.avatar-fallback{width:64px;height:64px;border-radius:0;background:#252d38;place-items:center;font-weight:900;font-size:20px;color:#b9c4d2}.name{font-weight:850}.stars{color:#f4c65a;font-size:12px}.owned{margin-left:auto}
@@ -63,7 +62,7 @@ input[type=number]{width:74px}.search{min-width:220px}.stats{display:grid;grid-t
 <div class="wrap">
 <div class="top">
 <a class="home-button" href="index.html" aria-label="홈"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 10 12 3l9 7v11h-6v-7H9v7H3Z"/></svg></a><div><h1>오퍼레이터 관리</h1><div class="muted">보유 및 육성 현황은 이 브라우저에 자동 저장됩니다.</div></div>
-<div class="nav"><button class="btn" id="gameImport">게임 계정 가져오기</button><button class="btn" id="exportJson">백업</button><button class="btn" id="importJson">복원</button><button class="btn" id="exportPng">PNG 출력 설정</button></div>
+<div class="nav"><button class="btn" id="gameImport">게임 계정 가져오기</button><button class="btn" id="exportPng">PNG 출력 설정</button></div>
 </div>
 <div class="panel">
 <div class="controls">
@@ -73,11 +72,9 @@ input[type=number]{width:74px}.search{min-width:220px}.stats{display:grid;grid-t
 <button class="btn" id="ownedAll">현재 목록 모두 보유</button>
 </div>
 <div class="profession-picker"><div id="professionTabs" class="profession-tabs" role="group" aria-label="기본 직군"></div><div id="branchTabs" class="branch-tabs" role="group" aria-label="세부 직군"></div></div>
-<div class="stats" id="stats"></div>
 </div>
 <div id="grid"><div class="muted">오퍼레이터 데이터를 불러오는 중입니다.</div></div>
 </div>
-<input type="file" id="file" accept=".json,application/json" hidden>
 <dialog id="pngDialog" class="png-dialog" aria-labelledby="pngTitle">
 <div class="png-dialog-heading"><h2 id="pngTitle">PNG 출력 설정</h2><button type="button" class="btn" id="pngClose">닫기</button></div>
 <fieldset id="pngOptions"><div class="png-options-grid">
@@ -144,7 +141,7 @@ function setVal(id,k,v){
   if(!masteryUnlocked(s))s.m=s.m.map(()=>0);
   for(const m of c.modules)if(!moduleUnlocked(c,s,m)){s.mods[m.id]=0;s.mods[m.type]=0}
  }
- save();updateStats();
+ save();
 }
 function iconButton(kind,key,value,label,disabled=false,bottom=''){
  const prefix={elite:'elite-e',potential:'potential-p',mastery:'mastery-m'}[kind];
@@ -192,17 +189,13 @@ function bind(){document.querySelectorAll('.card').forEach(el=>{
 function refreshCard(el,c){el.outerHTML=card(c);bind();applyFilter();fitCards()}
 function fitNames(){document.querySelectorAll('.settings .name').forEach(name=>{name.style.fontSize='24px';for(let size=23;(name.scrollHeight>name.clientHeight+1||name.scrollWidth>name.clientWidth+1)&&size>=10;size--)name.style.fontSize=size+'px'})}
 function fitCards(){const grid=document.getElementById('grid');grid.style.removeProperty('--card-height');const hidden=[...grid.querySelectorAll('.card.hidden,.rarity-group.hidden')];hidden.forEach(c=>c.classList.remove('hidden'));fitNames();const panels=[...grid.querySelectorAll('.settings')];const height=Math.max(402,...panels.map(p=>Math.ceil(p.getBoundingClientRect().height)+4));grid.style.setProperty('--card-height',height+'px');hidden.forEach(c=>c.classList.add('hidden'))}
-function render(){document.getElementById('grid').innerHTML=groupedCards();renderClassification();bind();applyFilter();updateStats()}
+function render(){document.getElementById('grid').innerHTML=groupedCards();renderClassification();bind();applyFilter()}
 
 function applyFilter(){
  const q=document.getElementById('q').value.trim().toLowerCase(),r=document.getElementById('rarity').value,o=document.getElementById('ownedFilter').value;
  document.querySelectorAll('.card').forEach(el=>{const c=chars.find(c=>c.id===el.dataset.id);el.classList.toggle('hidden',!matchesOperator(c,q,r,o))});
  document.querySelectorAll('.rarity-group').forEach(group=>group.classList.toggle('hidden',!group.querySelector('.card:not(.hidden)')));
  document.getElementById('emptyList').classList.toggle('hidden',!!document.querySelector('.card:not(.hidden)'));fitCards()
-}
-function updateStats(){
- const total=chars.length,owned=chars.filter(c=>get(c.id).owned).length,e2=chars.filter(c=>get(c.id).owned&&get(c.id).elite===2).length,m3=chars.filter(c=>get(c.id).owned&&get(c.id).m.some(x=>x===3)).length,mod3=chars.filter(c=>get(c.id).owned&&Object.values(get(c.id).mods).some(x=>x===3)).length;
- document.getElementById('stats').innerHTML=[['전체',total],['보유',owned],['E2',e2],['M3 보유',m3],['모듈 3단계',mod3]].map(x=>`<div class="stat"><b>${x[1]}</b>${x[0]}</div>`).join('')
 }
 window.addEventListener('resize',fitCards);document.fonts?.ready.then(fitCards);
 document.getElementById('professionTabs').onclick=e=>{const button=e.target.closest('[data-class]');if(!button)return;selectedProfession=button.dataset.class;selectedBranch='';renderClassification();applyFilter()};
@@ -216,9 +209,6 @@ window.addEventListener('click',e=>{if(!document.getElementById('rarityPicker').
 document.getElementById('rarityPicker').addEventListener('keydown',e=>{if(e.key==='Escape'){closeRarityMenu();document.getElementById('rarityButton').focus()}});
 ['q','ownedFilter'].forEach(id=>document.getElementById(id).addEventListener(id==='q'?'input':'change',applyFilter));
 document.getElementById('ownedAll').onclick=()=>{document.querySelectorAll('.card:not(.hidden)').forEach(c=>{get(c.dataset.id).owned=true});save();render()}
-document.getElementById('exportJson').onclick=()=>{const b=new Blob([JSON.stringify({version:1,savedAt:new Date().toISOString(),state},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='arknights-operator-backup.json';a.click();URL.revokeObjectURL(a.href)}
-document.getElementById('importJson').onclick=()=>document.getElementById('file').click();
-document.getElementById('file').onchange=async e=>{try{const j=JSON.parse(await e.target.files[0].text());state=j.state||j;save();render();alert('복원했습니다.')}catch{alert('올바른 백업 파일이 아닙니다.')}e.target.value=''}
 window.operatorAccount={get chars(){return chars},get state(){return state},key:SAVE_KEY,replace(next){state=next;render()}};
 Promise.all([fetch(DATA_URL).then(r=>r.json()),fetch('data/professions.json').then(r=>r.json())]).then(([data,classification])=>{branchNames=classification.professions||{};chars=(data.operators||[]).map(v=>({...v,rarity:+v.rarity})).filter(c=>c.id&&c.name&&c.rarity>=1&&c.rarity<=6&&c.profession&&c.phases?.length).sort((a,b)=>b.rarity-a.rarity||String(a.name).localeCompare(String(b.name),'ko'));render()}).catch(()=>document.getElementById('grid').innerHTML='<div class="muted">저장된 오퍼레이터 데이터 파일을 불러오지 못했습니다.</div>');
 </script>
