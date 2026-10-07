@@ -1,4 +1,4 @@
-import {INVENTORY_KEY,readInventory,countOf,saveCount,categoryOf,tierOf} from './inventory-state.mjs';
+import {INVENTORY_KEY,readInventory,countOf,saveCount,categoryOf,tierOf,compareItems} from './inventory-state.mjs?v=2';
 const $=id=>document.getElementById(id),esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const categories={all:'전체',material:'육성 재료',chip:'정예화 칩',skill:'스킬개론',module:'모듈 재료',currency:'재화'};
 const colors=['','#969fa6','#9bba4f','#5aa3d1','#a889c3','#e5b956'];
@@ -10,7 +10,7 @@ function render(){
  $('categories').innerHTML=Object.entries(categories).map(([id,name])=>`<button type="button" data-category="${id}" aria-pressed="${id===category}">${name}</button>`).join('');
  const query=$('search').value.trim().toLowerCase(),list=items.filter(i=>(category==='all'||categoryOf(i)===category)&&(!ownedOnly||countOf(inventory,i.id)>0)&&i.name.toLowerCase().includes(query));
  $('itemTotal').textContent=list.length+'종';
- $('items').innerHTML=list.map(i=>`<button type="button" class="item ${countOf(inventory,i.id)?'':'zero'}" data-id="${i.id}" aria-pressed="${selected===i.id}" aria-label="${esc(i.name)} · 보유 ${countOf(inventory,i.id)}개" style="--tier:${colors[tierOf(i)]}"><span class="hex">${image(i)}<span class="quantity">${countOf(inventory,i.id).toLocaleString('ko-KR')}</span></span><span class="item-name">${esc(i.name)}</span></button>`).join('')||'<p class="no-items">조건에 맞는 아이템이 없습니다.</p>';
+ $('items').innerHTML=list.map((i,index)=>`${category==='all'&&(index===0||categoryOf(list[index-1])!==categoryOf(i))?'<h2 class="item-group-heading">'+categories[categoryOf(i)]+'</h2>':''}<button type="button" class="item ${countOf(inventory,i.id)?'':'zero'}" data-id="${i.id}" aria-pressed="${selected===i.id}" aria-label="${esc(i.name)} · 보유 ${countOf(inventory,i.id)}개" style="--tier:${colors[tierOf(i)]}"><span class="hex">${image(i)}<span class="quantity">${countOf(inventory,i.id).toLocaleString('ko-KR')}</span></span><span class="item-name">${esc(i.name)}</span></button>`).join('')||'<p class="no-items">조건에 맞는 아이템이 없습니다.</p>';
  const lmd=items.find(i=>i.id==='4001');$('wallet').innerHTML=lmd?image(lmd)+`<span>용문폐</span><strong>${countOf(inventory,'4001').toLocaleString('ko-KR')}</strong>`:'';
  bindImages($('items'));bindImages($('wallet'));
 }
@@ -23,4 +23,4 @@ $('categories').addEventListener('click',e=>{const b=e.target.closest('[data-cat
 $('items').addEventListener('click',e=>{const b=e.target.closest('[data-id]');if(b){selected=b.dataset.id;render();detail()}});
 $('search').addEventListener('input',render);$('ownedOnly').addEventListener('click',()=>{ownedOnly=!ownedOnly;$('ownedOnly').setAttribute('aria-pressed',String(ownedOnly));render()});
 window.addEventListener('storage',e=>{if(e.key===INVENTORY_KEY){try{inventory=readInventory(localStorage);storageError=false;render();detail();$('status').textContent='보유 재료 정보를 갱신했습니다.'}catch(error){storageError=true;$('status').textContent=error.message;detail()}}});
-try{const [data,map]=await Promise.all(['data/items.json','data/item-images.json'].map(url=>fetch(url).then(r=>{if(!r.ok)throw Error('배낭 데이터를 불러오지 못했습니다.');return r.json()})));items=Object.values(data.items);images=map.items;try{inventory=readInventory(localStorage)}catch(error){inventory={items:{}};storageError=true;$('status').textContent=error.message+' 기존 데이터 보호를 위해 수량 저장을 중지했습니다.'}items.sort((a,b)=>tierOf(b)-tierOf(a)||a.name.localeCompare(b.name,'ko'));render()}catch(error){$('items').textContent=error.message}
+try{const [data,map]=await Promise.all(['data/items.json','data/item-images.json'].map(url=>fetch(url).then(r=>{if(!r.ok)throw Error('배낭 데이터를 불러오지 못했습니다.');return r.json()})));items=Object.values(data.items);images=map.items;try{inventory=readInventory(localStorage)}catch(error){inventory={items:{}};storageError=true;$('status').textContent=error.message+' 기존 데이터 보호를 위해 수량 저장을 중지했습니다.'}items.sort(compareItems);render()}catch(error){$('items').textContent=error.message}
