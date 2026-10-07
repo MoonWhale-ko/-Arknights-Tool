@@ -20,4 +20,4 @@ export function tierOf(item){if(categoryOf(item)==='material')return Math.min(5,
 
 const CATEGORY_ORDER=['material','chip','skill','module','currency'];
 export function familyOf(item){const category=categoryOf(item);if(category==='material')return item.id.startsWith('301')?'301':item.id.slice(0,4);if(category==='chip')return item.id.slice(0,3);return category}
-export function compareItems(a,b){return CATEGORY_ORDER.indexOf(categoryOf(a))-CATEGORY_ORDER.indexOf(categoryOf(b))||familyOf(a).localeCompare(familyOf(b),'en',{numeric:true})||a.id.localeCompare(b.id,'en',{numeric:true})}
+export function compareItems(a,b){return tierOf(b)-tierOf(a)||CATEGORY_ORDER.indexOf(categoryOf(a))-CATEGORY_ORDER.indexOf(categoryOf(b))||familyOf(a).localeCompare(familyOf(b),'en',{numeric:true})||a.id.localeCompare(b.id,'en',{numeric:true})}

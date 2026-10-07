@@ -1,4 +1,4 @@
-import {INVENTORY_KEY,readInventory,countOf,saveCount,categoryOf,tierOf,compareItems} from './inventory-state.mjs?v=2';
+import {INVENTORY_KEY,readInventory,countOf,saveCount,categoryOf,tierOf,compareItems} from './inventory-state.mjs?v=3';
 const $=id=>document.getElementById(id),esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const categories={all:'전체',material:'육성 재료',chip:'정예화 칩',skill:'스킬개론',module:'모듈 재료',currency:'재화'};
 const colors=['','#969fa6','#9bba4f','#5aa3d1','#a889c3','#e5b956'];
@@ -10,7 +10,7 @@ function render(){
  $('categories').innerHTML=Object.entries(categories).map(([id,name])=>`<button type="button" data-category="${id}" aria-pressed="${id===category}">${name}</button>`).join('');
  const query=$('search').value.trim().toLowerCase(),list=items.filter(i=>(category==='all'||categoryOf(i)===category)&&(!ownedOnly||countOf(inventory,i.id)>0)&&i.name.toLowerCase().includes(query));
  $('itemTotal').textContent=list.length+'종';
- $('items').innerHTML=list.map((i,index)=>`${category==='all'&&(index===0||categoryOf(list[index-1])!==categoryOf(i))?'<h2 class="item-group-heading">'+categories[categoryOf(i)]+'</h2>':''}<button type="button" class="item ${countOf(inventory,i.id)?'':'zero'}" data-id="${i.id}" aria-pressed="${selected===i.id}" aria-label="${esc(i.name)} · 보유 ${countOf(inventory,i.id)}개" style="--tier:${colors[tierOf(i)]}"><span class="hex">${image(i)}<span class="quantity">${countOf(inventory,i.id).toLocaleString('ko-KR')}</span></span><span class="item-name">${esc(i.name)}</span></button>`).join('')||'<p class="no-items">조건에 맞는 아이템이 없습니다.</p>';
+ $('items').innerHTML=list.map(i=>`<button type="button" class="item ${countOf(inventory,i.id)?'':'zero'}" data-id="${i.id}" aria-pressed="${selected===i.id}" aria-label="${esc(i.name)} · 보유 ${countOf(inventory,i.id)}개" style="--tier:${colors[tierOf(i)]}"><span class="hex">${image(i)}<span class="quantity">${countOf(inventory,i.id).toLocaleString('ko-KR')}</span></span><span class="item-name">${esc(i.name)}</span></button>`).join('')||'<p class="no-items">조건에 맞는 아이템이 없습니다.</p>';
  const lmd=items.find(i=>i.id==='4001');$('wallet').innerHTML=lmd?image(lmd)+`<span>용문폐</span><strong>${countOf(inventory,'4001').toLocaleString('ko-KR')}</strong>`:'';
  bindImages($('items'));bindImages($('wallet'));
 }
