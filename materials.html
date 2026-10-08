@@ -10,6 +10,7 @@ a{color:inherit;text-decoration:none}.wrap{max-width:1180px;margin:auto;padding:
 input,select{background:#10151c;color:#fff;border:1px solid #3a4556;border-radius:0;padding:10px}.search{width:min(520px,100%)}.section{margin-top:16px}.section h2{font-size:18px;margin:0 0 10px}.costrow{display:flex;gap:8px;flex-wrap:wrap;padding:10px 0;border-top:1px solid #27303d}.costrow:first-child{border-top:0}.label{min-width:150px;font-weight:800}.items{display:flex;gap:7px;flex-wrap:wrap;flex:1}.item{display:flex;align-items:center;gap:6px;border:1px solid #354052;background:#111720;border-radius:0;padding:6px 8px}.icon{width:30px;height:30px;object-fit:contain}.count{font-weight:800;color:#f1ca61}.status{padding:30px;text-align:center;color:#9ca8b7}.ophead{display:flex;gap:12px;align-items:center}.portrait{width:86px;height:86px;object-fit:cover;border-radius:0;background:#252e3a}.stars{color:#f0c75d}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.module-title{display:flex;gap:8px;align-items:center;margin:16px 0 4px}.module-type{font-size:12px;font-weight:900;border:1px solid #59677a;border-radius:0;padding:3px 7px;color:#f1c85e}.source{font-size:12px;margin-top:10px}
 @media(max-width:760px){.grid2{grid-template-columns:1fr}.label{min-width:100%}}
 </style>
+<link rel="stylesheet" href="assets/css/future-operators.css?v=1">
 </head>
 <body>
 <div class="wrap">
@@ -37,7 +38,7 @@ function itemObj(id){return items[String(id)]||{}}
 function itemName(id){return itemObj(id).name||String(id)}
 function itemIcon(id){
  const o=itemObj(id),icon=o.iconId;
- return icon ? ASSET+'items/'+icon+'.png' : '';
+ return icon ? (o.nameLocale?'https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/dyn/arts/items/icons/'+icon.toLowerCase()+'.png':ASSET+'items/'+icon+'.png') : '';
 }
 function costHtml(cost){
  const a=Array.isArray(cost)?cost:[];
@@ -67,7 +68,7 @@ function renderById(id){
  (c.skills||[]).forEach(sk=>(sk.mastery||[]).forEach(m=>master.push({label:'S'+sk.index+' '+sk.name+' · M'+m.level,cost:m.cost||[]})));
  const modules=(c.modules||[]);
  document.getElementById('content').innerHTML=
- '<div class="panel"><div class="ophead"><img class="portrait" src="'+ASSET+'charpor/'+c.id+'_1.png" onerror="this.style.visibility=\'hidden\'"><div><div class="stars">'+('★'.repeat(c.rarity))+'</div><h2 style="margin:4px 0">'+esc(c.name)+'</h2><div class="muted">'+esc(professionKo[c.profession]||c.profession||'')+'</div></div></div></div>'+
+ '<div class="panel"><div class="ophead"><img class="portrait" src="'+ASSET+'charpor/'+c.id+'_1.png" onerror="this.style.visibility=\'hidden\'"><div><div class="stars">'+('★'.repeat(c.rarity))+'</div><h2 style="margin:4px 0">'+esc(c.name)+'</h2>'+(c.isFuture?'<div class="future-notice">미래시 · 한국 서버 미출시 · 중국 서버 육성 데이터 / 비공식 이름</div>':'')+'<div class="muted">'+esc(professionKo[c.profession]||c.profession||'')+'</div></div></div></div>'+
  '<div class="grid2">'+section('정예화 재료',promo)+section('스킬 레벨 재료',common)+'</div>'+
  section('마스터리 재료',master)+
  '<div class="panel section"><h2>모듈 재료</h2>'+(modules.length?modules.map(renderModule).join(''):'<div class="muted">현재 저장 데이터에 모듈이 없습니다.</div>')+'</div>';

@@ -34,13 +34,13 @@ function render(){
  try{
   const inventory=readInventory(localStorage),all=calculatePlans(operators,read('arknightsOperatorProgressV1'),read('arknightsOperatorPlansV1'),data);
   if(!all.results.some(r=>r.operator.id===selection))selection='';
-  $('growthOperator').innerHTML='<option value="">전체 계획 합산</option>'+all.results.map(r=>`<option value="${r.operator.id}" ${selection===r.operator.id?'selected':''}>${esc(r.operator.name)}</option>`).join('');
+  $('growthOperator').innerHTML='<option value="">전체 계획 합산</option>'+all.results.map(r=>`<option value="${r.operator.id}" ${selection===r.operator.id?'selected':''}>${esc(r.operator.name)}${r.operator.isFuture?' · 미래시':''}</option>`).join('');
   const results=selection?all.results.filter(r=>r.operator.id===selection):all.results,totals={};
   for(const r of results)for(const [id,count] of Object.entries(r.totals))totals[id]=(totals[id]||0)+count;
   $('growthSummary').textContent=`${results.length}명 계획 · 필요 재료 ${Object.keys(totals).length}종`;
   const ids=Object.keys(totals).sort((a,b)=>a==='exp'?-1:b==='exp'?1:compareItems(items[a]||{id:a},items[b]||{id:b}));
   $('growthContent').innerHTML=(ids.length?`<div class="growth-table-wrap"><table class="growth-table"><thead><tr><th>재료</th><th>추가 필요</th><th>가방 보유</th><th>부족</th><th>제작</th></tr></thead><tbody>${ids.map(id=>{const owned=ownedAmount(id,inventory,data),short=Math.max(0,totals[id]-owned);return `<tr data-material="${id}"><td>${materialHtml(id)}</td><td>${number(totals[id])}</td><td>${number(owned)}</td><td class="${short?'growth-short':'growth-ok'}">${number(short)}</td><td>${recipeHtml(id,inventory,totals)}</td></tr>`}).join('')}</tbody></table></div>`:'<p class="growth-empty">'+(results.length?'이 계획에는 일반 육성 재료가 필요하지 않습니다.':'육성 계획에서 보유를 체크하고 목표 상태를 변경해 주세요.')+'</p>')+
-   results.map(r=>`<details class="growth-breakdown"><summary>${esc(r.operator.name)} · 단계별 비용${!r.current.owned?' · 획득 예정':''}</summary>${r.steps.map(s=>`<div class="growth-step"><strong>${esc(s.label)}</strong><span>${costText(s.cost)}</span></div>`).join('')}${r.notes.length?'<ul class="growth-notes">'+r.notes.map(n=>`<li>${esc(n)}</li>`).join('')+'</ul>':''}</details>`).join('');
+   results.map(r=>`<details class="growth-breakdown"><summary>${esc(r.operator.name)}${r.operator.isFuture?' · 미래시 (중국 서버 기준)':''} · 단계별 비용${!r.current.owned?' · 획득 예정':''}</summary>${r.steps.map(s=>`<div class="growth-step"><strong>${esc(s.label)}</strong><span>${costText(s.cost)}</span></div>`).join('')}${r.notes.length?'<ul class="growth-notes">'+r.notes.map(n=>`<li>${esc(n)}</li>`).join('')+'</ul>':''}</details>`).join('');
   bindImages($('growthContent'));
   $('growthContent').querySelectorAll('[data-token]').forEach(button=>{
    button.addEventListener('pointerenter',()=>showTooltip(button,inventory,totals));

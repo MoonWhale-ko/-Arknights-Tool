@@ -97,6 +97,7 @@ def main():
     parser.add_argument('--commit')
     parser.add_argument('--source-date')
     parser.add_argument('--output-dir', type=Path, default=ROOT / 'data')
+    parser.add_argument('--future-source-dir', type=Path, help='Optional pinned CN files with source.json')
     args = parser.parse_args()
     if args.source_dir:
         if not args.commit or not args.source_date:
@@ -131,6 +132,9 @@ def main():
                               separators=(',', ':'))+'\n', encoding='utf-8')
     temp.replace(target)
     print(f'{len(ops)} operators, {len(items)} items, {sum(len(o["modules"]) for o in ops)} modules; source {sha}')
+    if (ROOT / 'data/future-names.json').exists():
+        from update_future_data import update_future
+        update_future(args.output_dir, args.future_source_dir, args.ref)
 
 
 def extract_growth(raw, site_items):

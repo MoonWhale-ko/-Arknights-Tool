@@ -9,6 +9,7 @@ const ctx=vm.createContext({document,window:{addEventListener(){}},console,setTi
 vm.runInContext(html.split('<script>')[1].split('</script>')[0],ctx);vm.runInContext(fs.readFileSync(path.join(root,'assets/js/operator-png.js'),'utf8'),ctx);
 const run=s=>vm.runInContext(s,ctx),json=s=>JSON.parse(run(`JSON.stringify(${s})`));
 (async()=>{await new Promise(r=>setImmediate(r));
+ assert.match(run('pngCard(chars.find(c=>c.id==="char_4228_closur"),normalizePngSettings())'),/>미래시<\/span>/);
  // Canvas needs an explicit SVG viewport, rather than the browser's default
  // 300x150 intrinsic dimensions, for every stage of every progress icon.
  for(const file of fs.readdirSync(path.join(root,'assets/icons/progress')).filter(f=>f.endsWith('.svg'))){
@@ -44,7 +45,7 @@ const run=s=>vm.runInContext(s,ctx),json=s=>JSON.parse(run(`JSON.stringify(${s})
  run('state={};chars.forEach(c=>get(c.id).owned=true)');
  for(const columns of [4,6,8])for(const split of ['single','profession']){
   const pages=json(`pngPages(chars,normalizePngSettings({columns:${columns},split:'${split}'}))`),ids=pages.flatMap(p=>p.sections.flatMap(s=>s.operators.map(c=>c.id)));
-  assert.equal(ids.length,410);assert.equal(new Set(ids).size,410);
+  assert.equal(ids.length,data.operators.length);assert.equal(new Set(ids).size,data.operators.length);
   for(const p of pages){const estimate=120+p.sections.reduce((sum,s)=>sum+52+Math.ceil(s.operators.length/columns)*348,0);assert.ok(estimate<=Math.min(8000,Math.floor(15000000/p.width)));if(split==='profession')assert.ok(p.sections.every(s=>s.operators.every(c=>c.profession===p.id)))}
  }
  const order=json("pngSections([{id:'a',rarity:5,profession:'PIONEER',name:'가'},{id:'b',rarity:6,profession:'WARRIOR',name:'가'},{id:'c',rarity:6,profession:'PIONEER',name:'나'},{id:'d',rarity:6,profession:'PIONEER',name:'가'}]).flatMap(s=>s.operators.map(c=>c.id))");

@@ -14,12 +14,15 @@ const run=s=>vm.runInContext(s,ctx),json=s=>JSON.parse(run(`JSON.stringify(${s})
  await new Promise(r=>setImmediate(r));
  assert.equal(writes,0);assert.deepEqual(JSON.parse(saved),original,'Opening page must preserve saved progress');
  assert.equal(json('get("char_103_angel")').custom,'keep');
- assert.equal(run('chars.length'),410);
+ assert.equal(run('chars.length'),data.operators.length);
+ const future=run('card(chars.find(c=>c.id==="char_4228_closur"))');
+ assert.match(future,/class="future-badge"/);assert.match(future,/>미래시<\/span>/);
+ assert.ok(!run('card(chars.find(c=>c.id==="char_103_angel"))').includes('future-badge'));
  assert.match(elements.get('professionTabs').innerHTML,/스페셜리스트/);
  assert.match(elements.get('grid').innerHTML,/rarity-group/);
  const grouped=run('groupedCards()');
  assert.equal((grouped.match(/class="rarity-group /g)||[]).length,6);
- assert.equal((grouped.match(/<article /g)||[]).length,410);
+ assert.equal((grouped.match(/<article /g)||[]).length,data.operators.length);
  const beforeFilter=saved, beforeWrites=writes;
  run("selectedProfession='PIONEER';selectedBranch='charger'");
  const filtered=json("chars.filter(c=>matchesOperator(c,'','','')).map(c=>({profession:c.profession,branch:c.subProfessionId}))");

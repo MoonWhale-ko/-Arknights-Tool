@@ -1,0 +1,4 @@
+.future-badge{position:absolute;top:8px;left:8px;z-index:3;display:inline-block;padding:4px 7px;background:#10151ee6;border:1px solid #f1ca61;color:#f1ca61;font-size:12px;font-weight:800;line-height:1.2;white-space:nowrap}
+.png-photo .future-badge{font-size:12px}
+.future-notice{display:inline-block;margin:6px 0;color:#f1ca61;font-size:12px}
+.standalone-glyph{object-fit:contain;background:none}

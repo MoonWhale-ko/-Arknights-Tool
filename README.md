@@ -36,6 +36,12 @@ python -m unittest discover -s tests -v
 
 모든 비용은 해당 단계로 올라가는 **단계별 비용**입니다. 향후 현재 상태→목표 상태 계산에서는 사이 단계의 cost를 ID별로 합산합니다. 모듈은 타입 대신 모듈 ID로 연결해야 합니다. `materials.html?operator=<오퍼레이터 ID>`로 특정 오퍼레이터를 바로 조회할 수 있습니다. `plans.html`의 필요 재료 확인 기능에서 현재→목표의 비용을 자동 합산합니다.
 
+## 미래시 오퍼레이터
+
+확인한 19명을 기존 목록에 함께 표시하고 사진 위에 `미래시` 배지를 붙입니다. `isFuture: true`, `dataLocale: cn`, 비공식 한국어 이름은 `data/future-names.json`에서 관리합니다. 스킬·모듈 이름과 임무는 중국어 원문이며, 비용·실제 스킬/모듈 목록은 중국 서버 원본에서 추출합니다. 한국 서버에서 사용하는 기존 비용과 공식 이름은 덮어쓰지 않습니다. 추가 재료 4종은 나무위키의 비공식 한국어 표기를 사용합니다. 목록, 계획, 재료 조회, PNG에도 미래시 구분이 유지됩니다. 공개모집 대상에는 추가하지 않습니다.
+
+`update_data.py`는 한국 데이터 생성 후 미래시 데이터를 함께 갱신합니다. 두 원본은 `source`(KR)와 `futureSource`(CN)의 커밋·해시로 추적합니다. 미래시만 갱신할 때는 `python scripts/update_future_data.py --ref <CN 커밋>`을 실행합니다. 로컬 원본 재현은 `--source-dir <CN 파일 폴더>`를 사용하며 폴더의 `source.json`은 해당 GitHub 커밋 API 응답입니다. 전체 로컬 갱신에서는 `update_data.py --future-source-dir <CN 파일 폴더>`를 함께 지정합니다. 한국 데이터에 동일 ID가 등장하면 공식 데이터가 우선하며 미래시 배지를 자동 제거합니다. ID와 저장소 키는 유지하므로 기존 계획도 유지됩니다.
+
 ## 저장 데이터 호환성
 
 `operators.html`의 localStorage 키 `arknightsOperatorProgressV1`, 원본 오퍼레이터 ID 및 저장 형식을 유지합니다. 데이터 갱신은 사용자 저장소를 초기화하지 않습니다. 저장 내용은 기존과 같이 같은 브라우저·사이트 주소에서 유지됩니다.
