@@ -67,9 +67,14 @@ async function bakePngImages(root){
  for(const img of root.querySelectorAll('.png-photo>img,.png-progress')){
   if(!img.naturalWidth||!img.naturalHeight)continue;
   const rect=img.getBoundingClientRect(),width=Math.max(1,Math.round(rect.width)),height=Math.max(1,Math.round(rect.height));
+  // SVGs without explicit dimensions use the attached element's CSS viewport
+  // when drawn, although naturalWidth describes a different intrinsic viewport.
+  // Decode an unstyled image before using intrinsic source coordinates; otherwise
+  // the CSS-sized icon is scaled down a second time (42px -> roughly 6px).
+  const source=new Image();source.crossOrigin=img.crossOrigin;source.src=img.currentSrc||img.src;await source.decode();
   const bitmap=document.createElement('canvas');bitmap.width=width;bitmap.height=height;
   const fit=img.classList.contains('png-progress')?'contain':'cover';
-  bitmap.getContext('2d').drawImage(img,...pngImagePlacement(img.naturalWidth,img.naturalHeight,width,height,fit));
+  bitmap.getContext('2d').drawImage(source,...pngImagePlacement(source.naturalWidth,source.naturalHeight,width,height,fit));
   img.src=bitmap.toDataURL('image/png');img.style.objectFit='fill';await img.decode();bitmap.width=0;bitmap.height=0;
  }
 }

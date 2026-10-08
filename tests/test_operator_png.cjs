@@ -9,6 +9,16 @@ const ctx=vm.createContext({document,window:{addEventListener(){}},console,setTi
 vm.runInContext(html.split('<script>')[1].split('</script>')[0],ctx);vm.runInContext(fs.readFileSync(path.join(root,'assets/js/operator-png.js'),'utf8'),ctx);
 const run=s=>vm.runInContext(s,ctx),json=s=>JSON.parse(run(`JSON.stringify(${s})`));
 (async()=>{await new Promise(r=>setImmediate(r));
+ // Attached, dimensionless SVGs have a CSS viewport that differs from their
+ // intrinsic size. Rasterization must draw a separately decoded source.
+ const drawCalls=[];let decoded=0;
+ ctx.Image=class {constructor(){this.naturalWidth=300;this.naturalHeight=272}async decode(){decoded++}};
+ document.createElement=()=>({getContext:()=>({drawImage(...args){drawCalls.push(args)}}),toDataURL:()=> 'data:image/png;base64,test'});
+ const attached={naturalWidth:300,naturalHeight:272,currentSrc:'https://example.test/mastery-m3.svg',crossOrigin:null,classList:{contains:()=>true},style:{},getBoundingClientRect:()=>({width:42,height:42}),decode:async()=>{}};
+ ctx.bakeRoot={querySelectorAll:()=>[attached]};
+ await run('bakePngImages(bakeRoot)');
+ assert.equal(decoded,1);assert.notEqual(drawCalls[0][0],attached,'Do not draw the CSS-sized SVG as an intrinsic-size source');
+ assert.equal(drawCalls[0][0].src,attached.currentSrc);assert.ok(Math.abs(drawCalls[0][7]-42)<1e-10);assert.equal(attached.style.objectFit,'fill');
  const portrait=json("pngImagePlacement(512,512,100,334,'cover')");
  assert.equal(portrait[3],512);assert.ok(Math.abs(portrait[2]/portrait[3]-100/334)<1e-12);
  assert.equal(portrait[1],0);assert.ok(portrait[0]>0);
