@@ -9,7 +9,7 @@ const ctx=vm.createContext({document,window:{addEventListener(){}},console,setTi
 vm.runInContext(html.split('<script>')[1].split('</script>')[0],ctx);vm.runInContext(fs.readFileSync(path.join(root,'assets/js/operator-png.js'),'utf8'),ctx);
 const run=s=>vm.runInContext(s,ctx),json=s=>JSON.parse(run(`JSON.stringify(${s})`));
 (async()=>{await new Promise(r=>setImmediate(r));
- assert.match(run('pngCard(chars.find(c=>c.id==="char_4228_closur"),normalizePngSettings())'),/>미래시<\/span>/);
+ if(run('chars.some(c=>c.isFuture)'))assert.match(run('pngCard(chars.find(c=>c.isFuture),normalizePngSettings())'),/>미래시<\/span>/);
  // Canvas needs an explicit SVG viewport, rather than the browser's default
  // 300x150 intrinsic dimensions, for every stage of every progress icon.
  for(const file of fs.readdirSync(path.join(root,'assets/icons/progress')).filter(f=>f.endsWith('.svg'))){

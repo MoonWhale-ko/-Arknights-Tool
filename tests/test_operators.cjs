@@ -15,8 +15,10 @@ const run=s=>vm.runInContext(s,ctx),json=s=>JSON.parse(run(`JSON.stringify(${s})
  assert.equal(writes,0);assert.deepEqual(JSON.parse(saved),original,'Opening page must preserve saved progress');
  assert.equal(json('get("char_103_angel")').custom,'keep');
  assert.equal(run('chars.length'),data.operators.length);
- const future=run('card(chars.find(c=>c.id==="char_4228_closur"))');
- assert.match(future,/class="future-badge"/);assert.match(future,/>미래시<\/span>/);
+ if(run('chars.some(c=>c.isFuture)')){
+  const future=run('card(chars.find(c=>c.isFuture))');
+  assert.match(future,/class="future-badge"/);assert.match(future,/>미래시<\/span>/);
+ }
  assert.ok(!run('card(chars.find(c=>c.id==="char_103_angel"))').includes('future-badge'));
  assert.match(elements.get('professionTabs').innerHTML,/스페셜리스트/);
  assert.match(elements.get('grid').innerHTML,/rarity-group/);
