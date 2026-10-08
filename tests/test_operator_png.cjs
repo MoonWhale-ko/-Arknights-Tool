@@ -9,6 +9,14 @@ const ctx=vm.createContext({document,window:{addEventListener(){}},console,setTi
 vm.runInContext(html.split('<script>')[1].split('</script>')[0],ctx);vm.runInContext(fs.readFileSync(path.join(root,'assets/js/operator-png.js'),'utf8'),ctx);
 const run=s=>vm.runInContext(s,ctx),json=s=>JSON.parse(run(`JSON.stringify(${s})`));
 (async()=>{await new Promise(r=>setImmediate(r));
+ // Canvas needs an explicit SVG viewport, rather than the browser's default
+ // 300x150 intrinsic dimensions, for every stage of every progress icon.
+ for(const file of fs.readdirSync(path.join(root,'assets/icons/progress')).filter(f=>f.endsWith('.svg'))){
+  const svg=fs.readFileSync(path.join(root,'assets/icons/progress',file),'utf8').match(/<svg\b[^>]*>/)[0];
+  const view=svg.match(/viewBox="([^"]+)"/)[1].split(/\s+/).map(Number);
+  assert.equal(Number(svg.match(/\bwidth="([^"]+)"/)?.[1]),view[2],file+' intrinsic width');
+  assert.equal(Number(svg.match(/\bheight="([^"]+)"/)?.[1]),view[3],file+' intrinsic height');
+ }
  // Attached, dimensionless SVGs have a CSS viewport that differs from their
  // intrinsic size. Rasterization must draw a separately decoded source.
  const drawCalls=[];let decoded=0;
