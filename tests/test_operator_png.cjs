@@ -46,13 +46,13 @@ const run=s=>vm.runInContext(s,ctx),json=s=>JSON.parse(run(`JSON.stringify(${s})
  for(const columns of [4,6,8])for(const split of ['single','profession']){
   const pages=json(`pngPages(chars,normalizePngSettings({columns:${columns},split:'${split}'}))`),ids=pages.flatMap(p=>p.sections.flatMap(s=>s.operators.map(c=>c.id)));
   assert.equal(pages.length,1,'Always one image, including legacy profession split settings');assert.equal(ids.length,data.operators.length);assert.equal(new Set(ids).size,data.operators.length);
-  for(const p of pages){const estimate=120+p.sections.reduce((sum,s)=>sum+52+Math.ceil(s.operators.length/columns)*348,0),scale=run(`pngCaptureScale(${p.width},${estimate})`);assert.ok(p.width*scale<=16384);assert.ok(estimate*scale<=16384);assert.ok(p.width*estimate*scale*scale<=15000001);assert.ok(p.sections.every(s=>s.operators.every(c=>c.profession===s.profession&&c.rarity===s.rarity)),'Each row group has one rarity and profession')}
+  for(const p of pages){const estimate=120+p.sections.reduce((sum,s)=>sum+52+Math.ceil(s.operators.length/columns)*348,0),scale=run(`pngCaptureScale(${p.width},${estimate})`);assert.ok(p.width*scale<=16384);assert.ok(estimate*scale<=16384);assert.ok(p.width*estimate*scale*scale<=15000001);assert.ok(p.sections.every(s=>s.operators.every(c=>c.profession===s.profession)),'Each profession uses one continuous grid across rarities')}
  }
  const order=json("pngSections([{id:'a',rarity:5,profession:'PIONEER',name:'가'},{id:'b',rarity:6,profession:'WARRIOR',name:'가'},{id:'c',rarity:6,profession:'PIONEER',name:'나'},{id:'d',rarity:6,profession:'PIONEER',name:'가'}]).flatMap(s=>s.operators.map(c=>c.id))");
  assert.deepEqual(order,['d','c','a','b']);
  assert.deepEqual(json("[{id:'a',rarity:5,profession:'PIONEER',name:'가'},{id:'b',rarity:6,profession:'WARRIOR',name:'가'},{id:'c',rarity:6,profession:'PIONEER',name:'나'},{id:'d',rarity:6,profession:'PIONEER',name:'가'}].sort(pngSort).map(c=>c.id)"),order);
- const grouped=json('pngSections(chars)');assert.ok(grouped.every(s=>s.operators.every(c=>c.profession===s.profession&&c.rarity===s.rarity)));
- const sheet=run('pngSheet(pngPages(chars,normalizePngSettings())[0],normalizePngSettings(),chars.length,0,1)');assert.match(sheet,/png-group-rarity/);assert.match(sheet,/class-glyph/);assert.match(sheet,/뱅가드/);
+ const grouped=json('pngSections(chars)');assert.equal(new Set(grouped.map(s=>s.profession)).size,grouped.length);assert.ok(grouped.some(s=>new Set(s.operators.map(c=>c.rarity)).size>1));assert.ok(grouped.every(s=>s.operators.every(c=>c.profession===s.profession)));
+ const sheet=run('pngSheet(pngPages(chars,normalizePngSettings())[0],normalizePngSettings(),chars.length,0,1)');assert.ok(!sheet.includes('★'));assert.ok(!sheet.includes('png-stars'));assert.match(sheet,/png-card r6/);assert.match(sheet,/class-glyph/);assert.match(sheet,/뱅가드/);
  assert.ok(!('group' in json("normalizePngSettings({group:'profession'})")),'Legacy grouping setting cannot change ordering');
  assert.ok(!html.includes('id="png-group"'));assert.ok(!html.includes('id="png-split"'));assert.equal(run('pngCaptureScale(1000,1000)'),1);assert.ok(run('pngCaptureScale(2000,100000)')<1);
  assert.deepEqual(json('pngPages([],normalizePngSettings())'),[]);
