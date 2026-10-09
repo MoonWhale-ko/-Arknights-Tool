@@ -4,7 +4,7 @@ const PNG_FIELDS={elite:'정예화',level:'레벨',potential:'잠재',trust:'신
 function normalizePngSettings(raw={}){
  if(!raw||typeof raw!=='object')raw={};
  const defaults={target:'all',columns:6,split:'single',fields:Object.fromEntries(Object.keys(PNG_FIELDS).map(k=>[k,true]))};
- return {...defaults,target:raw.target==='filtered'?'filtered':'all',columns:[4,6,8].includes(+raw.columns)?+raw.columns:6,split:raw.split==='profession'?'profession':'single',fields:Object.fromEntries(Object.keys(PNG_FIELDS).map(k=>[k,typeof raw.fields?.[k]==='boolean'?raw.fields[k]:true]))};
+ return {...defaults,target:raw.target==='filtered'?'filtered':'all',columns:[4,6,8].includes(+raw.columns)?+raw.columns:6,split:'single',fields:Object.fromEntries(Object.keys(PNG_FIELDS).map(k=>[k,typeof raw.fields?.[k]==='boolean'?raw.fields[k]:true]))};
 }
 let pngSettings=normalizePngSettings();
 try{pngSettings=normalizePngSettings(JSON.parse(localStorage.getItem(PNG_KEY)||'{}'))}catch{}
@@ -19,37 +19,29 @@ function pngSections(list){
 }
 function pngCardHeight(settings){const f=settings.fields;return 100+(f.elite||f.level||f.potential||f.trust?68:0)+(f.skill?30:0)+(f.mastery?68:0)+(f.modules?72:0)}
 function pngPages(list,settings){
- const width=settings.columns*320+48,height=pngCardHeight(settings),maxHeight=Math.min(8000,Math.floor(15000000/width));
- const buckets=settings.split==='profession'?Object.entries(professionKo).map(([id,label])=>({id,label,list:list.filter(c=>c.profession===id)})).filter(b=>b.list.length):[{id:'all',label:'',list}];
- const pages=[];
- for(const bucket of buckets){let page={id:bucket.id,label:bucket.label,sections:[],count:0,width},used=120;
-  for(const section of pngSections(bucket.list,settings)){
-   for(let i=0;i<section.operators.length;){let room=Math.floor((maxHeight-used-52)/(height+10));
-    if(room<1){pages.push(page);page={id:bucket.id,label:bucket.label,sections:[],count:0,width};used=120;room=Math.floor((maxHeight-used-52)/(height+10))}
-    const part=section.operators.slice(i,i+room*settings.columns);page.sections.push({...section,operators:part});page.count+=part.length;used+=52+Math.ceil(part.length/settings.columns)*(height+10);i+=part.length;
-   }
-  }
-  if(page.count)pages.push(page);
- }
- return pages;
+ const sections=pngSections(list);
+ return list.length?[{id:'all',label:'',sections,count:list.length,width:settings.columns*320+48}]:[];
 }
+// Preserve the whole sheet and its aspect ratio within browser canvas limits.
+function pngCaptureScale(width,height){return Math.min(1,16384/width,16384/height,Math.sqrt(15000000/(width*height)))}
+
 function pngIcon(kind,value){const prefix={elite:'elite-e',potential:'potential-p',mastery:'mastery-m'}[kind];return `<img class="png-progress" src="assets/icons/progress/${prefix}${value}.svg?v=2" alt="">`}
 function pngCard(c,settings){const s=get(c.id),f=settings.fields;
  const basic=[f.elite?`<span class="png-stat">${pngIcon('elite',s.elite)}</span>`:'',f.level?`<span class="png-stat"><small>레벨</small><b>Lv.${s.level}</b></span>`:'',f.potential?`<span class="png-stat">${pngIcon('potential',s.potential)}</span>`:'',f.trust?`<span class="png-stat"><small>신뢰도</small><b>${s.trust}%</b></span>`:''].join('');
  return `<article class="png-card r${c.rarity}" style="height:${pngCardHeight(settings)}px"><div class="png-photo"><img crossorigin="anonymous" src="${avatar(c.id)}" alt="" loading="eager"><span class="png-photo-fallback">${esc(c.name.slice(0,1))}</span>${professionBadges(c)}${futureBadge(c)}</div><div class="png-info"><strong class="png-name">${esc(c.name)}</strong><div class="png-stars">${'★'.repeat(c.rarity)}</div>${basic?`<div class="png-basic">${basic}</div>`:''}${f.skill&&c.skills.length?`<div class="png-skill">스킬 레벨 <b>${s.skill}</b></div>`:''}${f.mastery?`<div class="png-masteries">${c.skills.map((sk,i)=>`<span>${sk.mastery.length?pngIcon('mastery',s.m[i]||0):'<span class="png-no-mastery">—</span>'}<small>S${sk.index}</small></span>`).join('')}</div>`:''}${f.modules?`<div class="png-modules">${c.modules.map(m=>`<span><small>${esc(moduleType(m))}</small><b>${moduleStage(s,m)?'Stage '+moduleStage(s,m):'미해금'}</b></span>`).join('')}</div>`:''}</div></article>`;
 }
 function pngSheet(page,settings,total,index,pages){return `<div class="png-sheet" style="width:${page.width}px;--png-columns:${settings.columns}"><header class="png-header"><div><h1>오퍼레이터 육성 현황${page.label?' · '+esc(page.label):''}</h1><p>출력 ${total}명 · ${index+1} / ${pages}장</p></div><span>Arknights Tool</span></header>${page.sections.map(g=>`<section class="png-section"><h2><span class="png-group-rarity">${'★'.repeat(g.rarity)}</span>${classGlyph('class_'+g.profession)}<span>${esc(g.name)}</span></h2><div class="png-cards">${g.operators.map(c=>pngCard(c,settings)).join('')}</div></section>`).join('')}</div>`}
-function readPngForm(){const raw={fields:{}};for(const k of ['target','columns','split'])raw[k]=document.getElementById('png-'+k).value;for(const k of Object.keys(PNG_FIELDS))raw.fields[k]=document.getElementById('png-field-'+k).checked;return normalizePngSettings(raw)}
+function readPngForm(){const raw={fields:{}};for(const k of ['target','columns'])raw[k]=document.getElementById('png-'+k).value;for(const k of Object.keys(PNG_FIELDS))raw.fields[k]=document.getElementById('png-field-'+k).checked;return normalizePngSettings(raw)}
 function fitPngNames(root){root.querySelectorAll('.png-name').forEach(name=>{for(let size=18;size>=10;size--){name.style.fontSize=size+'px';if(name.scrollHeight<=name.clientHeight+1&&name.scrollWidth<=name.clientWidth+1)break}})}
 function scalePngPreview(){const viewport=document.getElementById('pngPreview'),sheet=viewport.querySelector('.png-sheet'),stage=document.getElementById('pngPreviewStage');if(!sheet){stage.style.height='0px';return}fitPngNames(sheet);const scale=Math.min(1,(viewport.clientWidth-12)/sheet.offsetWidth);sheet.style.transform=`scale(${Math.max(.1,scale)})`;stage.style.height=sheet.offsetHeight*Math.max(.1,scale)+'px'}
 function updatePngPreview(){pngSettings=readPngForm();try{localStorage.setItem(PNG_KEY,JSON.stringify(pngSettings))}catch{}
- const list=pngOperators(pngSettings),pages=pngPages(list,pngSettings);document.getElementById('pngStatus').textContent=list.length?`${list.length}명 · ${pages.length}장${pages.length>1?' (긴 이미지는 자동 분할)':''}`:'출력할 보유 오퍼레이터가 없습니다.';
+ const list=pngOperators(pngSettings),pages=pngPages(list,pngSettings);document.getElementById('pngStatus').textContent=list.length?`${list.length}명 · PNG 1장`:'출력할 보유 오퍼레이터가 없습니다.';
  document.getElementById('pngSave').disabled=!list.length;document.getElementById('pngPreviewStage').innerHTML=pages.length?pngSheet(pages[0],pngSettings,list.length,0,pages.length):'';document.getElementById('pngPreviewStage').querySelectorAll('.png-photo>img').forEach(img=>{img.onerror=()=>{img.style.display='none'}});scalePngPreview();
 }
 let pngBlobUrls=[];
 function clearPngDownloads(){pngBlobUrls.forEach(url=>URL.revokeObjectURL(url));pngBlobUrls=[];document.getElementById('pngDownloads').innerHTML=''}
 const pngDialog=document.getElementById('pngDialog');
-document.getElementById('exportPng').onclick=()=>{for(const k of ['target','columns','split'])document.getElementById('png-'+k).value=String(pngSettings[k]);for(const k of Object.keys(PNG_FIELDS))document.getElementById('png-field-'+k).checked=pngSettings.fields[k];pngDialog.showModal();updatePngPreview()};
+document.getElementById('exportPng').onclick=()=>{for(const k of ['target','columns'])document.getElementById('png-'+k).value=String(pngSettings[k]);for(const k of Object.keys(PNG_FIELDS))document.getElementById('png-field-'+k).checked=pngSettings.fields[k];pngDialog.showModal();updatePngPreview()};
 document.getElementById('pngOptions').onchange=updatePngPreview;
 document.getElementById('pngClose').onclick=()=>pngDialog.close();
 pngDialog.addEventListener('close',clearPngDownloads);
@@ -86,7 +78,7 @@ async function saveOperatorPng(){
  const saveButton=document.getElementById('pngSave'),status=document.getElementById('pngStatus');saveButton.disabled=true;document.getElementById('pngOptions').disabled=true;const host=document.createElement('div');host.className='png-capture';document.body.append(host);
  try{await document.fonts?.ready;
   for(let i=0;i<pages.length;i++){status.textContent=`PNG 생성 중 · ${i+1} / ${pages.length}장`;host.innerHTML=pngSheet(pages[i],settings,list.length,i,pages.length);const sheet=host.firstElementChild;await waitPngImages(sheet);await bakePngImages(sheet);fitPngNames(sheet);
-   const canvas=await html2canvas(sheet,{backgroundColor:'#0e1116',scale:1,useCORS:true,allowTaint:false,logging:false,imageTimeout:5000,width:pages[i].width,height:sheet.offsetHeight,windowWidth:pages[i].width+48});
+   const canvas=await html2canvas(sheet,{backgroundColor:'#0e1116',scale:pngCaptureScale(pages[i].width,sheet.offsetHeight),useCORS:true,allowTaint:false,logging:false,imageTimeout:5000,width:pages[i].width,height:sheet.offsetHeight,windowWidth:pages[i].width+48});
    const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));if(!blob)throw new Error('이미지를 생성하지 못했습니다.');const url=URL.createObjectURL(blob),a=document.createElement('a');a.download=`arknights-operators-${pages[i].id}-${String(i+1).padStart(2,'0')}.png`;a.href=url;a.className='btn';a.textContent=`PNG ${i+1} 다운로드`;document.getElementById('pngDownloads').append(a);pngBlobUrls.push(url);a.click();canvas.width=0;canvas.height=0;
   }
   status.textContent=`${list.length}명 · PNG ${pages.length}장 생성 완료 · 다운로드되지 않았다면 위 버튼을 눌러 주세요`;

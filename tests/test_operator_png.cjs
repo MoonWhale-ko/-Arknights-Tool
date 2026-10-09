@@ -45,15 +45,15 @@ const run=s=>vm.runInContext(s,ctx),json=s=>JSON.parse(run(`JSON.stringify(${s})
  run('state={};chars.forEach(c=>get(c.id).owned=true)');
  for(const columns of [4,6,8])for(const split of ['single','profession']){
   const pages=json(`pngPages(chars,normalizePngSettings({columns:${columns},split:'${split}'}))`),ids=pages.flatMap(p=>p.sections.flatMap(s=>s.operators.map(c=>c.id)));
-  assert.equal(ids.length,data.operators.length);assert.equal(new Set(ids).size,data.operators.length);
-  for(const p of pages){const estimate=120+p.sections.reduce((sum,s)=>sum+52+Math.ceil(s.operators.length/columns)*348,0);assert.ok(estimate<=Math.min(8000,Math.floor(15000000/p.width)));assert.ok(p.sections.every(s=>s.operators.every(c=>c.profession===s.profession&&c.rarity===s.rarity)),'Each row group has one rarity and profession');if(split==='profession')assert.ok(p.sections.every(s=>s.operators.every(c=>c.profession===p.id)))}
+  assert.equal(pages.length,1,'Always one image, including legacy profession split settings');assert.equal(ids.length,data.operators.length);assert.equal(new Set(ids).size,data.operators.length);
+  for(const p of pages){const estimate=120+p.sections.reduce((sum,s)=>sum+52+Math.ceil(s.operators.length/columns)*348,0),scale=run(`pngCaptureScale(${p.width},${estimate})`);assert.ok(p.width*scale<=16384);assert.ok(estimate*scale<=16384);assert.ok(p.width*estimate*scale*scale<=15000001);assert.ok(p.sections.every(s=>s.operators.every(c=>c.profession===s.profession&&c.rarity===s.rarity)),'Each row group has one rarity and profession')}
  }
  const order=json("pngSections([{id:'a',rarity:5,profession:'PIONEER',name:'가'},{id:'b',rarity:6,profession:'WARRIOR',name:'가'},{id:'c',rarity:6,profession:'PIONEER',name:'나'},{id:'d',rarity:6,profession:'PIONEER',name:'가'}]).flatMap(s=>s.operators.map(c=>c.id))");
  assert.deepEqual(order,['d','c','b','a']);
  const grouped=json('pngSections(chars)');assert.ok(grouped.every(s=>s.operators.every(c=>c.profession===s.profession&&c.rarity===s.rarity)));
  const sheet=run('pngSheet(pngPages(chars,normalizePngSettings())[0],normalizePngSettings(),chars.length,0,1)');assert.match(sheet,/png-group-rarity/);assert.match(sheet,/class-glyph/);assert.match(sheet,/뱅가드/);
  assert.ok(!('group' in json("normalizePngSettings({group:'profession'})")),'Legacy grouping setting cannot change ordering');
- assert.ok(!html.includes('id="png-group"'));
+ assert.ok(!html.includes('id="png-group"'));assert.ok(!html.includes('id="png-split"'));assert.equal(run('pngCaptureScale(1000,1000)'),1);assert.ok(run('pngCaptureScale(2000,100000)')<1);
  assert.deepEqual(json('pngPages([],normalizePngSettings())'),[]);
- console.log('PNG checks passed: owned-only output, filter intersection, stored settings, field toggles, preview, unchanged progress, fixed rarity/profession/name order, all 6 layouts, lossless bounded pagination.');
+ console.log('PNG checks passed: owned-only output, filter intersection, stored settings, field toggles, preview, unchanged progress, fixed rarity/profession/name order, all 6 layouts, single-image output with proportional canvas sizing.');
 })().catch(e=>{console.error(e);process.exitCode=1});
