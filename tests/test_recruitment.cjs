@@ -6,7 +6,7 @@ const root=path.join(__dirname,'..');
 const html=fs.readFileSync(path.join(root,'recruitment.html'),'utf8');
 const source=html.split('<script>')[1].split('</script>')[0];
 const data=JSON.parse(fs.readFileSync(path.join(root,'data/operators.json'),'utf8'));
-function element(){return {innerHTML:'',textContent:'',checked:false,dataset:{},children:[],attrs:{},classList:{values:new Set(),toggle(k,on){if(on===undefined)on=!this.values.has(k);if(on)this.values.add(k);else this.values.delete(k);return on},contains(k){return this.values.has(k)},add(k){this.values.add(k)},remove(k){this.values.delete(k)}},setAttribute(k,v){this.attrs[k]=v},focus(){},appendChild(x){this.children.push(x)},insertAdjacentHTML(where,s){this.innerHTML+=s}}}
+function element(){return {value:'',hidden:false,innerHTML:'',textContent:'',checked:false,dataset:{},children:[],attrs:{},classList:{values:new Set(),toggle(k,on){if(on===undefined)on=!this.values.has(k);if(on)this.values.add(k);else this.values.delete(k);return on},contains(k){return this.values.has(k)},add(k){this.values.add(k)},remove(k){this.values.delete(k)}},setAttribute(k,v){this.attrs[k]=v},focus(){},appendChild(x){this.children.push(x)},insertAdjacentHTML(where,s){this.innerHTML+=s}}}
 const ids=new Map(),tags=[],rarities=[];
 const doc={getElementById(id){if(!ids.has(id))ids.set(id,element());return ids.get(id)},createElement(){return element()},querySelectorAll(sel){if(sel==='.tag'){
  if(!tags.length){const groups=JSON.parse(vm.runInContext('JSON.stringify(groups)',context));for(const tag of Object.values(groups).flat()){const e=element();e.dataset.tag=tag;tags.push(e)}}return tags;
@@ -18,6 +18,16 @@ vm.runInContext(source,context);
 (async()=>{
  await new Promise(resolve=>setImmediate(resolve));
  function choose(names){vm.runInContext(`selected.splice(0);selected.push(...${JSON.stringify(names)});render()`,context);return ids.get('results').innerHTML}
+ const matches=(tag,q)=>vm.runInContext(`matchesTag(${JSON.stringify(tag)},${JSON.stringify(q)})`,context);
+ assert.ok(matches('고급 특별 채용','고'));assert.ok(matches('고급 특별 채용','ㄱㄱ'));assert.ok(matches('고급 특별 채용','고ㄱㅌ'));
+ assert.ok(matches('코스트+','ㅋㅅ'));assert.ok(matches('근거리','ㄱㄱ'));assert.ok(!matches('원거리','거리'));assert.ok(!matches('가드','ㄱㄱ'));assert.ok(!matches('가드','가드더'));
+ assert.ok(matches('쾌속부활',' ㅋ ㅅ '));assert.ok(matches('가드',''));assert.ok(matches('캐스터','캐'.normalize('NFD')));
+ choose(['가드']);const before=JSON.stringify(storage);
+ ids.get('tagSearch').value='ㄱㄱ';ids.get('tagSearch').oninput();
+ assert.ok(!tags.find(t=>t.dataset.tag==='고급 특별 채용').hidden);assert.ok(!tags.find(t=>t.dataset.tag==='근거리').hidden);assert.ok(tags.find(t=>t.dataset.tag==='가드').hidden);
+ assert.equal(vm.runInContext('selected[0]',context),'가드');assert.equal(JSON.stringify(storage),before);
+ ids.get('tagSearch').value='없는태그';ids.get('tagSearch').oninput();assert.equal(ids.get('tagSearchEmpty').hidden,false);
+ ids.get('tagReset').onclick();assert.equal(ids.get('tagSearch').value,'');assert.ok(tags.every(t=>!t.hidden));assert.equal(ids.get('tagSearchEmpty').hidden,true);
  let result=choose(['로봇']);
  assert.match(result,/aria-label="Lancet-2 · 보유"/);
  assert.ok(!/class="op r1 unowned" data-id="char_285_medic2"/.test(result));
