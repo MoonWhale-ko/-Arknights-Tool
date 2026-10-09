@@ -3,7 +3,7 @@ const root=path.join(__dirname,'..'),html=fs.readFileSync(path.join(root,'plans.
 const current={char_103_angel:{owned:true,elite:2,level:70,potential:3,trust:150,skill:7,m:[1,2,0],mods:{X:1}}},raw=JSON.stringify(current),storage=new Map([['arknightsOperatorProgressV1',raw]]),elements=new Map();
 const element=()=>({value:'',innerHTML:'',classList:{toggle(){}},style:{removeProperty(){},setProperty(){}},setAttribute(k,v){this[k]=v},addEventListener(){},querySelectorAll(){return[]}});
 const document={getElementById(id){if(!elements.has(id))elements.set(id,element());return elements.get(id)},querySelectorAll(){return[]},querySelector(){return null},fonts:{ready:Promise.resolve()}};
-const context=vm.createContext({document,window:{addEventListener(){}},console,localStorage:{getItem:k=>storage.get(k)||null,setItem(k,v){assert.equal(k,'arknightsOperatorPlansV1');storage.set(k,v)}},fetch:url=>Promise.resolve({json:()=>Promise.resolve(url==='data/professions.json'?JSON.parse(fs.readFileSync(path.join(root,'data/professions.json'),'utf8')):data)})});
+const context=vm.createContext({document,window:{addEventListener(){}},console,localStorage:{getItem:k=>storage.get(k)||null,setItem(k,v){assert.equal(k,'arknightsOperatorPlansV1');storage.set(k,v)}},fetch:url=>Promise.resolve({json:()=>Promise.resolve(url==='data/operator-aliases.json'?JSON.parse(fs.readFileSync(path.join(root,'data/operator-aliases.json'),'utf8')):url==='data/professions.json'?JSON.parse(fs.readFileSync(path.join(root,'data/professions.json'),'utf8')):data)})});
 vm.runInContext(source,context);const run=s=>vm.runInContext(s,context),json=s=>JSON.parse(run(`JSON.stringify(${s})`));
 (async()=>{await new Promise(r=>setImmediate(r));const beforeFutureFilter=JSON.stringify(Array.from(storage));
  elements.get('futureOnly').onclick();
@@ -15,6 +15,11 @@ vm.runInContext(source,context);const run=s=>vm.runInContext(s,context),json=s=>
  assert.equal(elements.get('futureOnly')['aria-pressed'],'false');
  assert.equal(run("chars.filter(c=>matchesOperator(c,'','','')).length"),data.operators.length);
  assert.equal(JSON.stringify(Array.from(storage)),beforeFutureFilter,'Future filter preserves saved progress');
+ for(const [alias,id] of [['핑댕이','char_377_gdglow'],['은재','char_172_svrash'],['수첸','char_1013_chen2'],['특사스','char_1028_texas2']]){
+ const found=json(`chars.filter(c=>matchesOperator(c,${JSON.stringify(alias)},'','')).map(c=>c.id)`);assert.deepEqual(found,[id]);
+ }
+ assert.equal(run("chars.filter(c=>matchesOperator(c,'골든글로우','','')).length"),1);
+ assert.equal(run("chars.filter(c=>matchesOperator(c,'힐미야','','')).length"),0,'Medic Amiya alias must not match caster Amiya');
  assert.equal(storage.size,1,'Opening plans must not save progress or plans');
 assert.equal(json('get("char_103_angel")').owned,true);assert.equal(json('get("char_103_angel")').level,70);assert.ok(!run('card(chars.find(c=>c.id==="char_103_angel"))').includes('future-change'),'Untouched card keeps original colors');
 run('setVal("char_103_angel","owned",true);setVal("char_103_angel","level",90);setVal("char_103_angel","m2",3)');

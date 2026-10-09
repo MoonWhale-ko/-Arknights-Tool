@@ -7,7 +7,7 @@ let saved=JSON.stringify(original),writes=0;
 const elements=new Map();
 function element(){return{value:'',innerHTML:'',classList:{toggle(){}},style:{removeProperty(){},setProperty(){}},setAttribute(k,v){this[k]=v},addEventListener(){},querySelectorAll(){return[]}}}
 const document={getElementById(id){if(!elements.has(id))elements.set(id,element());return elements.get(id)},querySelectorAll(){return[]},querySelector(){return null},fonts:{ready:Promise.resolve()}};
-const ctx=vm.createContext({document,window:{addEventListener(){}},console,localStorage:{getItem(){return saved},setItem(k,v){assert.equal(k,'arknightsOperatorProgressV1');saved=v;writes++}},fetch:url=>Promise.resolve({json:()=>Promise.resolve(url==='data/professions.json'?JSON.parse(fs.readFileSync(path.join(root,'data/professions.json'),'utf8')):data)})});
+const ctx=vm.createContext({document,window:{addEventListener(){}},console,localStorage:{getItem(){return saved},setItem(k,v){assert.equal(k,'arknightsOperatorProgressV1');saved=v;writes++}},fetch:url=>Promise.resolve({json:()=>Promise.resolve(url==='data/operator-aliases.json'?JSON.parse(fs.readFileSync(path.join(root,'data/operator-aliases.json'),'utf8')):url==='data/professions.json'?JSON.parse(fs.readFileSync(path.join(root,'data/professions.json'),'utf8')):data)})});
 vm.runInContext(source,ctx);
 const run=s=>vm.runInContext(s,ctx),json=s=>JSON.parse(run(`JSON.stringify(${s})`));
 (async()=>{
@@ -22,6 +22,11 @@ const run=s=>vm.runInContext(s,ctx),json=s=>JSON.parse(run(`JSON.stringify(${s})
  assert.equal(elements.get('futureOnly')['aria-pressed'],'false');
  assert.equal(run("chars.filter(c=>matchesOperator(c,'','','')).length"),data.operators.length);
  assert.equal(JSON.stringify(saved),beforeFutureFilter,'Future filter preserves saved progress');
+ for(const [alias,id] of [['핑댕이','char_377_gdglow'],['은재','char_172_svrash'],['수첸','char_1013_chen2'],['특사스','char_1028_texas2']]){
+ const found=json(`chars.filter(c=>matchesOperator(c,${JSON.stringify(alias)},'','')).map(c=>c.id)`);assert.deepEqual(found,[id]);
+ }
+ assert.equal(run("chars.filter(c=>matchesOperator(c,'골든글로우','','')).length"),1);
+ assert.equal(run("chars.filter(c=>matchesOperator(c,'힐미야','','')).length"),0,'Medic Amiya alias must not match caster Amiya');
  assert.equal(writes,0);assert.deepEqual(JSON.parse(saved),original,'Opening page must preserve saved progress');
  assert.equal(json('get("char_103_angel")').custom,'keep');
  assert.equal(run('chars.length'),data.operators.length);
