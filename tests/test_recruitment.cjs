@@ -19,12 +19,12 @@ vm.runInContext(source,context);
  await new Promise(resolve=>setImmediate(resolve));
  function choose(names){vm.runInContext(`selected.splice(0);selected.push(...${JSON.stringify(names)});render()`,context);return ids.get('results').innerHTML}
  const matches=(tag,q)=>vm.runInContext(`matchesTag(${JSON.stringify(tag)},${JSON.stringify(q)})`,context);
- assert.ok(matches('고급 특별 채용','고'));assert.ok(matches('고급 특별 채용','ㄱㄱ'));assert.ok(matches('고급 특별 채용','고ㄱㅌ'));
- assert.ok(matches('코스트+','ㅋㅅ'));assert.ok(matches('근거리','ㄱㄱ'));assert.ok(!matches('원거리','거리'));assert.ok(!matches('가드','ㄱㄱ'));assert.ok(!matches('가드','가드더'));
- assert.ok(matches('쾌속부활',' ㅋ ㅅ '));assert.ok(matches('가드',''));assert.ok(matches('캐스터','캐'.normalize('NFD')));
+ assert.ok(matches('고급 특별 채용','고'));assert.ok(!matches('고급 특별 채용','ㄱㄱ'));assert.ok(!matches('고급 특별 채용','고ㄱㅌ'));assert.ok(matches('고급 특별 채용','고급 특'));
+ assert.ok(matches('코스트+','코'));assert.ok(matches('근거리','근'));assert.ok(!matches('근거리','ㄱㄱ'));assert.ok(!matches('원거리','거리'));assert.ok(!matches('가드','ㄱㄱ'));assert.ok(!matches('가드','가드더'));
+ assert.ok(matches('쾌속부활',' 쾌 속 '));assert.ok(matches('가드',''));assert.ok(matches('캐스터','캐'.normalize('NFD')));
  choose(['가드']);const before=JSON.stringify(storage);
- ids.get('tagSearch').value='ㄱㄱ';ids.get('tagSearch').oninput();
- assert.ok(!tags.find(t=>t.dataset.tag==='고급 특별 채용').hidden);assert.ok(!tags.find(t=>t.dataset.tag==='근거리').hidden);assert.ok(tags.find(t=>t.dataset.tag==='가드').hidden);
+ ids.get('tagSearch').value='고';ids.get('tagSearch').oninput();
+ assert.ok(!tags.find(t=>t.dataset.tag==='고급 특별 채용').hidden);assert.ok(tags.find(t=>t.dataset.tag==='근거리').hidden);assert.ok(tags.find(t=>t.dataset.tag==='가드').hidden);
  assert.equal(vm.runInContext('selected[0]',context),'가드');assert.equal(JSON.stringify(storage),before);
  ids.get('tagSearch').value='없는태그';ids.get('tagSearch').oninput();assert.equal(ids.get('tagSearchEmpty').hidden,false);
  ids.get('tagReset').onclick();assert.equal(ids.get('tagSearch').value,'');assert.ok(tags.every(t=>!t.hidden));assert.equal(ids.get('tagSearchEmpty').hidden,true);
