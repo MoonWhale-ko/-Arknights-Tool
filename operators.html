@@ -83,7 +83,7 @@ input[type=number]{width:74px}.search{min-width:220px}
 <label>출력 대상<select id="png-target"><option value="all">보유 전체</option><option value="filtered">현재 필터의 보유 오퍼레이터</option></select></label>
 <label>한 줄 카드 수<select id="png-columns"><option value="4">4개</option><option value="6">6개</option><option value="8">8개</option></select></label>
 
-</div><div class="png-field-options" aria-label="표시 정보"><label><input type="checkbox" id="png-field-elite" checked>정예화</label><label><input type="checkbox" id="png-field-level" checked>레벨</label><label><input type="checkbox" id="png-field-potential" checked>잠재</label><label><input type="checkbox" id="png-field-trust" checked>신뢰도</label><label><input type="checkbox" id="png-field-skill" checked>스킬 레벨</label><label><input type="checkbox" id="png-field-mastery" checked>마스터리</label><label><input type="checkbox" id="png-field-modules" checked>모듈</label></div></fieldset>
+</div><div class="rarity-options" role="group" aria-label="PNG 출력 등급"><button type="button" id="png-rarity-1" class="rarity-toggle" aria-pressed="true">1성</button><button type="button" id="png-rarity-2" class="rarity-toggle" aria-pressed="true">2성</button><button type="button" id="png-rarity-3" class="rarity-toggle" aria-pressed="true">3성</button><button type="button" id="png-rarity-4" class="rarity-toggle" aria-pressed="true">4성</button><button type="button" id="png-rarity-5" class="rarity-toggle" aria-pressed="true">5성</button><button type="button" id="png-rarity-6" class="rarity-toggle" aria-pressed="true">6성</button></div><div class="png-field-options" aria-label="표시 정보"><label><input type="checkbox" id="png-field-elite" checked>정예화</label><label><input type="checkbox" id="png-field-level" checked>레벨</label><label><input type="checkbox" id="png-field-potential" checked>잠재</label><label><input type="checkbox" id="png-field-trust" checked>신뢰도</label><label><input type="checkbox" id="png-field-skill" checked>스킬 레벨</label><label><input type="checkbox" id="png-field-mastery" checked>마스터리</label><label><input type="checkbox" id="png-field-modules" checked>모듈</label></div></fieldset>
 <p class="muted">보유한 오퍼레이터를 직군 · 등급(6성→1성) · 가나다순으로 출력합니다. 등급은 테두리 색으로 구분하며, 전체를 PNG 한 장으로 저장합니다. 긴 이미지는 비율을 유지하며 해상도를 조정합니다.</p>
 <div id="pngPreview" class="png-preview"><div id="pngPreviewStage"></div></div>
 <div id="pngDownloads" class="png-downloads"></div>
@@ -208,7 +208,7 @@ document.getElementById('futureOnly').onclick=()=>{futureOnly=!futureOnly;docume
 window.operatorAccount={get chars(){return chars},get state(){return state},key:SAVE_KEY,replace(next){state=next;render()}};
 Promise.all([fetch(DATA_URL,{cache:'no-cache'}).then(r=>r.json()),fetch('data/professions.json',{cache:'no-cache'}).then(r=>r.json()),fetch('data/operator-aliases.json',{cache:'no-cache'}).then(r=>r.json()).catch(()=>({aliases:{}}))]).then(([data,classification,nicknames])=>{branchNames=classification.professions||{};chars=(data.operators||[]).map(v=>({...v,rarity:+v.rarity,aliases:nicknames.aliases?.[v.name]||[]})).filter(c=>c.id&&c.name&&c.rarity>=1&&c.rarity<=6&&c.profession&&c.phases?.length).sort((a,b)=>b.rarity-a.rarity||String(a.name).localeCompare(String(b.name),'ko'));render()}).catch(()=>document.getElementById('grid').innerHTML='<div class="muted">저장된 오퍼레이터 데이터 파일을 불러오지 못했습니다.</div>');
 </script>
-<script src="assets/js/operator-png.js?v=11"></script>
+<script src="assets/js/operator-png.js?v=12"></script>
 <script src="assets/js/account-config.js"></script>
 <script type="module" src="assets/js/account-import.mjs"></script>
 </body></html>

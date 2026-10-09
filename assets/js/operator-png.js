@@ -4,13 +4,13 @@ const PNG_FIELDS={elite:'정예화',level:'레벨',potential:'잠재',trust:'신
 function normalizePngSettings(raw={}){
  if(!raw||typeof raw!=='object')raw={};
  const defaults={target:'all',columns:6,split:'single',fields:Object.fromEntries(Object.keys(PNG_FIELDS).map(k=>[k,true]))};
- return {...defaults,target:raw.target==='filtered'?'filtered':'all',columns:[4,6,8].includes(+raw.columns)?+raw.columns:6,split:'single',fields:Object.fromEntries(Object.keys(PNG_FIELDS).map(k=>[k,typeof raw.fields?.[k]==='boolean'?raw.fields[k]:true]))};
+ return {...defaults,target:raw.target==='filtered'?'filtered':'all',columns:[4,6,8].includes(+raw.columns)?+raw.columns:6,split:'single',rarities:Array.isArray(raw.rarities)?[1,2,3,4,5,6].filter(r=>raw.rarities.includes(r)):[1,2,3,4,5,6],fields:Object.fromEntries(Object.keys(PNG_FIELDS).map(k=>[k,typeof raw.fields?.[k]==='boolean'?raw.fields[k]:true]))};
 }
 let pngSettings=normalizePngSettings();
 try{pngSettings=normalizePngSettings(JSON.parse(localStorage.getItem(PNG_KEY)||'{}'))}catch{}
 function pngOperators(settings){
  const q=document.getElementById('q').value.trim().toLowerCase(),r=document.getElementById('rarity').value,o=document.getElementById('ownedFilter').value;
- return chars.filter(c=>get(c.id).owned&&(settings.target!=='filtered'||matchesOperator(c,q,r,o)));
+ return chars.filter(c=>get(c.id).owned&&settings.rarities.includes(c.rarity)&&(settings.target!=='filtered'||matchesOperator(c,q,r,o)));
 }
 function pngSort(a,b){const professions=Object.keys(professionKo);return professions.indexOf(a.profession)-professions.indexOf(b.profession)||b.rarity-a.rarity||a.name.localeCompare(b.name,'ko')||a.id.localeCompare(b.id)}
 function pngSections(list){
@@ -31,7 +31,7 @@ function pngCard(c,settings){const s=get(c.id),f=settings.fields;
  return `<article class="png-card r${c.rarity}" style="height:${pngCardHeight(settings)}px"><div class="png-photo"><img crossorigin="anonymous" src="${avatar(c.id)}" alt="" loading="eager"><span class="png-photo-fallback">${esc(c.name.slice(0,1))}</span>${professionBadges(c)}${futureBadge(c)}</div><div class="png-info"><strong class="png-name">${esc(c.name)}</strong><div class="png-name-gap" aria-hidden="true"></div>${basic?`<div class="png-basic">${basic}</div>`:''}${f.skill&&c.skills.length?`<div class="png-skill">스킬 레벨 <b>${s.skill}</b></div>`:''}${f.mastery?`<div class="png-masteries">${c.skills.map((sk,i)=>`<span>${sk.mastery.length?pngIcon('mastery',s.m[i]||0):'<span class="png-no-mastery">—</span>'}<small>S${sk.index}</small></span>`).join('')}</div>`:''}${f.modules?`<div class="png-modules">${c.modules.map(m=>`<span><small>${esc(moduleType(m))}</small><b>${moduleStage(s,m)?'Stage '+moduleStage(s,m):'미해금'}</b></span>`).join('')}</div>`:''}</div></article>`;
 }
 function pngSheet(page,settings,total,index,pages){return `<div class="png-sheet" style="width:${page.width}px;--png-columns:${settings.columns}"><header class="png-header"><div><h1>오퍼레이터 육성 현황${page.label?' · '+esc(page.label):''}</h1><p>출력 ${total}명 · ${index+1} / ${pages}장</p></div><span>Arknights Tool</span></header>${page.sections.map(g=>`<section class="png-section"><h2>${classGlyph('class_'+g.profession)}<span>${esc(g.name)}</span></h2><div class="png-cards">${g.operators.map(c=>pngCard(c,settings)).join('')}</div></section>`).join('')}</div>`}
-function readPngForm(){const raw={fields:{}};for(const k of ['target','columns'])raw[k]=document.getElementById('png-'+k).value;for(const k of Object.keys(PNG_FIELDS))raw.fields[k]=document.getElementById('png-field-'+k).checked;return normalizePngSettings(raw)}
+function readPngForm(){const raw={fields:{},rarities:[1,2,3,4,5,6].filter(r=>document.getElementById('png-rarity-'+r).getAttribute('aria-pressed')==='true')};for(const k of ['target','columns'])raw[k]=document.getElementById('png-'+k).value;for(const k of Object.keys(PNG_FIELDS))raw.fields[k]=document.getElementById('png-field-'+k).checked;return normalizePngSettings(raw)}
 function fitPngNames(root){root.querySelectorAll('.png-name').forEach(name=>{for(let size=18;size>=10;size--){name.style.fontSize=size+'px';if(name.scrollHeight<=name.clientHeight+1&&name.scrollWidth<=name.clientWidth+1)break}})}
 function scalePngPreview(){const viewport=document.getElementById('pngPreview'),sheet=viewport.querySelector('.png-sheet'),stage=document.getElementById('pngPreviewStage');if(!sheet){stage.style.height='0px';return}fitPngNames(sheet);const scale=Math.min(1,(viewport.clientWidth-12)/sheet.offsetWidth);sheet.style.transform=`scale(${Math.max(.1,scale)})`;stage.style.height=sheet.offsetHeight*Math.max(.1,scale)+'px'}
 function updatePngPreview(){pngSettings=readPngForm();try{localStorage.setItem(PNG_KEY,JSON.stringify(pngSettings))}catch{}
@@ -41,8 +41,9 @@ function updatePngPreview(){pngSettings=readPngForm();try{localStorage.setItem(P
 let pngBlobUrls=[];
 function clearPngDownloads(){pngBlobUrls.forEach(url=>URL.revokeObjectURL(url));pngBlobUrls=[];document.getElementById('pngDownloads').innerHTML=''}
 const pngDialog=document.getElementById('pngDialog');
-document.getElementById('exportPng').onclick=()=>{for(const k of ['target','columns'])document.getElementById('png-'+k).value=String(pngSettings[k]);for(const k of Object.keys(PNG_FIELDS))document.getElementById('png-field-'+k).checked=pngSettings.fields[k];pngDialog.showModal();updatePngPreview()};
+document.getElementById('exportPng').onclick=()=>{for(const k of ['target','columns'])document.getElementById('png-'+k).value=String(pngSettings[k]);for(const k of Object.keys(PNG_FIELDS))document.getElementById('png-field-'+k).checked=pngSettings.fields[k];for(const r of [1,2,3,4,5,6])document.getElementById('png-rarity-'+r).setAttribute('aria-pressed',String(pngSettings.rarities.includes(r)));pngDialog.showModal();updatePngPreview()};
 document.getElementById('pngOptions').onchange=updatePngPreview;
+for(const r of [1,2,3,4,5,6])document.getElementById('png-rarity-'+r).onclick=()=>{const button=document.getElementById('png-rarity-'+r);button.setAttribute('aria-pressed',String(button.getAttribute('aria-pressed')!=='true'));updatePngPreview()};
 document.getElementById('pngClose').onclick=()=>pngDialog.close();
 pngDialog.addEventListener('close',clearPngDownloads);
 window.addEventListener('resize',()=>{if(pngDialog.open)scalePngPreview()});
