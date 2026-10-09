@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {calculateGrowth,calculatePlans,ownedAmount,recipeCapacity} from '../assets/js/growth-costs.mjs';
+import {calculateGrowth,calculatePlans,ownedAmount,recipeCapacity,craftingPlan} from '../assets/js/growth-costs.mjs';
 const read=p=>JSON.parse(fs.readFileSync(new URL('../data/'+p,import.meta.url)));
 const operators=read('operators.json').operators,data=read('growth.json'),op=operators.find(o=>o.id==='char_377_gdglow');
 const base={owned:true,elite:0,level:1,skill:1,potential:1,m:[0,0,0],mods:{}};
@@ -58,4 +58,34 @@ test('craft capacity reserves direct needs, includes LMD and output count, and i
  assert.equal(recipeCapacity({...r,count:2},inventory,{},data),4);
  assert.ok(data.items['32001']);assert.ok(data.recipes['3233'].some(r=>r.room==='MANUFACTURE'));
  for(const list of Object.values(data.recipes))for(const r of list){assert.ok(data.items[r.itemId]);for(const x of r.cost)assert.ok(data.items[x.id]);assert.ok(r.requirements.length)}
+});
+
+test('multi-stage crafting uses low-tier stock, reserves growth costs and includes every LMD fee',()=>{
+ const recipe=data.recipes['30013'][0],inventory={items:{30011:30,4001:1400}},before=JSON.stringify(inventory);
+ const p=craftingPlan(recipe,2,inventory,{30013:2},data);
+ assert.equal(p.possible,true);assert.deepEqual(p.used,{'30011':30,'4001':1400});
+ assert.deepEqual(p.steps.map(s=>[s.recipe.itemId,s.runs,s.output]),[['30012',10,10],['30013',2,2]]);
+ assert.deepEqual(p.missing,{});assert.equal(JSON.stringify(inventory),before);
+ const reserved=craftingPlan(recipe,2,inventory,{30011:3,4001:100,30013:2},data);
+ assert.equal(reserved.possible,false);assert.deepEqual(reserved.missing,{'30011':3,'4001':100});
+ const mixed=craftingPlan(recipe,2,{items:{30012:3,30011:21,4001:1100}},{},data);
+ assert.equal(mixed.possible,true);assert.equal(mixed.steps[0].runs,7);
+});
+test('crafting shares ingredients between branches and keeps batch leftovers',()=>{
+ const r=(itemId,count,cost)=>({itemId,count,cost,goldCost:0});
+ const fixture={expItems:{},recipes:{A:[r('A',2,[{id:'raw',count:3}])],B:[r('B',1,[{id:'A',count:1}])]}};
+ const root=r('T',1,[{id:'B',count:1},{id:'A',count:1}]);
+ const p=craftingPlan(root,1,{items:{raw:3}},{},fixture);
+ assert.equal(p.possible,true);assert.deepEqual(p.used,{raw:3});assert.equal(p.steps.filter(s=>s.recipe.itemId==='A').length,1);
+ const shared={expItems:{},recipes:{A:[r('A',1,[{id:'raw',count:2}])],B:[r('B',1,[{id:'raw',count:2}])]}};
+ assert.deepEqual(craftingPlan(r('T',1,[{id:'A',count:1},{id:'B',count:1}]),1,{items:{raw:3}},{},shared).missing,{raw:1});
+});
+test('chip conversion stops cycles and supports manufacture output and rounding',()=>{
+ const r=data.recipes['3233'][0];
+ const p=craftingPlan(r,1,{items:{3262:3,32001:1}},{},data);
+ assert.equal(p.possible,true);assert.deepEqual(p.steps.map(s=>s.recipe.itemId),['3232','3233']);
+ const blocked=craftingPlan(r,1,{items:{32001:1}},{},data);
+ assert.equal(blocked.possible,false);assert.ok(Object.keys(blocked.missing).length);
+ const odd=craftingPlan(data.recipes['3232'][0],3,{items:{3262:6}},{},data);
+ assert.equal(odd.possible,true);assert.equal(odd.steps.at(-1).output,4);
 });

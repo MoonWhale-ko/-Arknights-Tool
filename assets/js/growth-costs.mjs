@@ -59,3 +59,34 @@ export function recipeCapacity(recipe,inventory,totals,data){
  const runs=Math.min(...Object.entries(cost).map(([id,n])=>Math.floor(Math.max(0,ownedAmount(id,inventory,data)-(totals[id]||0))/n)));
  return Math.max(0,Number.isFinite(runs)?runs:0)*recipe.count;
 }
+
+// Simulate one material's shortage independently; never mutate the saved bag.
+// Stock reserved for direct growth costs cannot also be consumed by crafting.
+export function craftingPlan(recipe,quantity,inventory,totals,data){
+ const stock=Object.fromEntries(Object.keys(inventory.items).map(id=>[id,Math.max(0,ownedAmount(id,inventory,data)-(totals[id]||0))]));
+ const bagStock={...stock},steps=[],missing={},used={};
+ const take=(id,count)=>{
+  const n=Math.min(stock[id]||0,count);stock[id]=(stock[id]||0)-n;
+  const fromBag=Math.min(bagStock[id]||0,n);
+  bagStock[id]=(bagStock[id]||0)-fromBag;
+  if(fromBag)used[id]=(used[id]||0)+fromBag;
+  return count-n;
+ };
+ const need=(id,count,path)=>{
+  const remaining=take(id,count);if(!remaining)return;
+  const next=(data.recipes[id]||[])[0];
+  if(!next||path.has(id)){missing[id]=(missing[id]||0)+remaining;return}
+  craft(next,remaining,new Set([...path,id]));
+ };
+ const craft=(r,count,path)=>{
+  const runs=Math.ceil(count/r.count),cost={};
+  for(const x of r.cost)cost[x.id]=(cost[x.id]||0)+x.count*runs;
+  if(r.goldCost)cost['4001']=(cost['4001']||0)+r.goldCost*runs;
+  for(const [id,n] of Object.entries(cost))need(id,n,path);
+  const output=r.count*runs;
+  stock[r.itemId]=(stock[r.itemId]||0)+output-count;
+  steps.push({recipe:r,runs,cost,output});
+ };
+ if(quantity>0)craft(recipe,quantity,new Set([recipe.itemId]));
+ return {steps,used,missing,possible:Object.keys(missing).length===0};
+}

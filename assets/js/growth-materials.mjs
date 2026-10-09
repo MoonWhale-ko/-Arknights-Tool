@@ -1,4 +1,4 @@
-import {calculatePlans,ownedAmount,recipeCapacity} from './growth-costs.mjs?v=3';
+import {calculatePlans,ownedAmount,recipeCapacity,craftingPlan} from './growth-costs.mjs?v=4';
 import {readInventory,INVENTORY_KEY,compareItems} from './inventory-state.mjs?v=6';
 const $=id=>document.getElementById(id),dialog=$('growthDialog');
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -26,7 +26,9 @@ function recipeHtml(id,inventory,totals){
  if(!recipes.length)return '<span class="muted">—</span>';
  return recipes.map(r=>{const available=recipeCapacity(r,inventory,totals,data),short=Math.max(0,(totals[id]||0)-ownedAmount(id,inventory,data));
   const room=r.room==='WORKSHOP'?'가공소':'제조소',level=Math.max(...r.requirements.map(x=>x.roomLevel));
-  return `<details class="growth-recipe"><summary>${room} 제작${short&&available>=short?' · 부족분 제작 가능':available?' · '+number(available)+'개 가능':''}</summary><p>${costText(r.cost)}${r.goldCost?' + 용문폐 ×'+number(r.goldCost):''}<br>→ ${esc(name(id))} ×${r.count}</p><p class="${available?'growth-ok':'muted'}">남는 보유 재료로 최대 ${number(available)}개${available?'':' · 제작 재료 부족'}</p><p class="muted">${room} Lv.${level} 필요${r.stages.length?' · 관련 스테이지 해금 필요':''}</p></details>`}).join('');
+  const plan=craftingPlan(r,short||r.count,inventory,totals,data);
+  const chain=`<details class="growth-chain"><summary>하위 재료 합성 포함 · ${short?'부족분 '+number(short)+'개':'제작식 1회분'}${plan.possible?' 제작 가능':' · 추가 재료 필요'}</summary><ol>${plan.steps.map(step=>{const x=step.recipe,facility=x.room==='WORKSHOP'?'가공소':'제조소';return `<li><strong>${esc(name(x.itemId))} ×${number(step.output)}</strong><br>${costText(Object.entries(step.cost).map(([id,count])=>({id,count})))}<br><small class="muted">${facility} Lv.${Math.max(...x.requirements.map(q=>q.roomLevel))} · ${number(step.runs)}회${x.stages.length?' · 관련 스테이지 해금 필요':''}</small></li>`}).join('')}</ol><p class="${plan.possible?'growth-ok':'growth-short'}">${plan.possible?'남는 가방 재료로 전체 합성 가능':'추가로 필요한 재료: '+costText(Object.entries(plan.missing).map(([id,count])=>({id,count})))}</p>${Object.keys(plan.used).length?'<p>사용할 가방 재료: '+costText(Object.entries(plan.used).map(([id,count])=>({id,count})))+'</p>':''}</details>`;
+  return `<details class="growth-recipe"><summary>${room} 제작${short&&plan.possible?' · 부족분 제작 가능'+(available<short?' (다단계 합성)':''):available?' · '+number(available)+'개 가능':''}</summary><p>${costText(r.cost)}${r.goldCost?' + 용문폐 ×'+number(r.goldCost):''}<br>→ ${esc(name(id))} ×${r.count}</p><p class="${available?'growth-ok':'muted'}">직접 재료만으로 최대 ${number(available)}개${available?'':' · 직접 재료 부족'}</p><p class="muted">${room} Lv.${level} 필요${r.stages.length?' · 관련 스테이지 해금 필요':''}</p>${chain}</details>`}).join('');
 }
 function render(){
  hideTooltip();
