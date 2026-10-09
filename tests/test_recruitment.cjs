@@ -30,6 +30,7 @@ vm.runInContext(source,context);
  typed('고');typed('스');assert.deepEqual(selection(),[],'Removed ambiguous choices are forgotten');
  typed('고 고 근');assert.deepEqual(selection(),['고급 특별 채용','근거리']);
  typed('고근힐딜신가');assert.equal(selection().length,5);assert.match(ids.get('tagSearchEmpty').textContent,/최대 5개/);
+ typed('고근힐딜신스');tags.find(b=>b.dataset.tag==='스나이퍼').onclick();assert.equal(selection().length,5);assert.ok(tags.find(b=>b.dataset.tag==='스나이퍼').classList.contains('ambiguous'));
  typed('ㄱ');assert.deepEqual(selection(),[]);assert.match(ids.get('tagSearchEmpty').textContent,/해당하는 태그가 없습니다/);
  typed('고');ids.get('tagSearch').value='고근';ids.get('tagSearch').oninput({isComposing:true});assert.deepEqual(selection(),['고급 특별 채용']);ids.get('tagSearch').oncompositionend();assert.deepEqual(selection(),['고급 특별 채용','근거리']);
  assert.equal(JSON.stringify(storage),before);
