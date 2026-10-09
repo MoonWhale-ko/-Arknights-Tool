@@ -90,3 +90,28 @@ export function craftingPlan(recipe,quantity,inventory,totals,data){
  if(quantity>0)craft(recipe,quantity,new Set([recipe.itemId]));
  return {steps,used,missing,possible:Object.keys(missing).length===0};
 }
+
+// Allocate shared bag stock once, reserving direct costs before expanding shortages.
+export function materialRequirements(totals,inventory,data){
+ const stock=Object.fromEntries(Object.keys(inventory.items).map(id=>[id,ownedAmount(id,inventory,data)]));
+ stock.exp=ownedAmount('exp',inventory,data);
+ const take=(id,count)=>{const used=Math.min(stock[id]||0,count);stock[id]=(stock[id]||0)-used;return used};
+ const roots=Object.entries(totals).filter(([,count])=>count>0).map(([id,count])=>({id,count,displayOwned:ownedAmount(id,inventory,data),owned:take(id,count),children:[]}));
+ const rows={};
+ const expand=(node,path)=>{
+  node.short=node.count-node.owned;
+  const row=rows[node.id]??={id:node.id,count:0,owned:0};row.count+=node.count;row.owned+=node.owned;
+  const recipe=(data.recipes[node.id]||[])[0];
+  if(!node.short||!recipe||path.has(node.id))return;
+  node.recipe=recipe;node.runs=Math.ceil(node.short/recipe.count);
+  const cost={};for(const x of recipe.cost)cost[x.id]=(cost[x.id]||0)+x.count*node.runs;
+  if(recipe.goldCost)cost['4001']=(cost['4001']||0)+recipe.goldCost*node.runs;
+  for(const [id,count] of Object.entries(cost)){
+   const child={id,count,owned:take(id,count),children:[]};node.children.push(child);expand(child,new Set([...path,node.id]));
+  }
+  stock[node.id]=(stock[node.id]||0)+recipe.count*node.runs-node.short;
+ };
+ for(const root of roots)expand(root,new Set());
+ const missing=Object.values(rows).filter(r=>!(data.recipes[r.id]||[]).length&&r.count>r.owned);
+ return {roots,rows:Object.values(rows),missing};
+}

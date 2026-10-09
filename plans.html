@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>명일방주 오퍼레이터 육성 계획</title>
-<link rel="stylesheet" href="assets/css/growth-materials.css?v=3">
+<link rel="stylesheet" href="assets/css/growth-materials.css?v=4">
 <style>
 *{box-sizing:border-box}body{margin:0;background:#0e1116;color:#edf2f7;font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif}
 a{color:inherit;text-decoration:none}.wrap{max-width:1400px;margin:auto;padding:22px}.top{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
@@ -83,7 +83,7 @@ input[type=number]{width:74px}.search{min-width:220px}
 <dialog id="growthDialog" class="growth-dialog" aria-labelledby="growthTitle">
 <div class="growth-heading"><h2 id="growthTitle">추가 육성에 필요한 재료</h2><button type="button" id="growthClose" aria-label="필요 재료 창 닫기">닫기</button></div>
 <div class="growth-options"><select id="growthOperator" aria-label="계산할 오퍼레이터"><option value="">전체 계획 합산</option></select><span id="growthSummary" class="muted" role="status"></span><a class="btn" href="backpack.html">가방 수량 수정</a></div>
-<p class="growth-help">현재 상태부터 목표까지 남은 비용입니다. 부족 수량은 가방 보유량을 뺀 값이며, 제작 항목을 펼치면 직접 제작법과 하위 재료부터 합성하는 순서를 확인할 수 있습니다.<br>제작 가능 수량과 다단계 합성은 육성에 직접 필요한 재료를 남겨둔 뒤 재료별로 계산합니다. 여러 제작식이 같은 재료를 사용할 수 있으며, 시설·스테이지 해금은 직접 확인해야 합니다.<br>레벨 내 누적 경험치·육성권·제작 부산물은 반영하지 않습니다. 경험치 보유량은 가방의 작전기록을 합산합니다.</p>
+<p class="growth-help">현재 상태부터 목표까지 필요한 재료입니다. 이미지에 마우스를 올리거나 누르면 이름과 직접 합성 재료를 확인할 수 있습니다. 부족한 재료는 하위 재료를 단계별로 펼쳐 보세요.<br>티어별 보기에는 부족분 제작에 필요한 하위 재료도 합산됩니다. 가방 재료는 계획 전체에서 한 번씩만 배분합니다. 시설·스테이지 해금은 직접 확인해 주세요.<br>레벨 내 누적 경험치·육성권·제작 부산물은 반영하지 않습니다.</p>
 <div id="growthContent" aria-live="polite"></div>
 <p class="growth-help">증표에 마우스를 올리거나 누르면 대체 증표를 확인할 수 있습니다. 대체 증표는 여러 오퍼레이터가 함께 쓰므로 부족량에서 자동 차감하지 않습니다.</p>
 <div id="potentialTooltip" class="potential-tooltip" role="tooltip" hidden></div>
@@ -216,5 +216,5 @@ Promise.all([fetch(DATA_URL,{cache:'no-cache'}).then(r=>r.json()),fetch('data/pr
 
 
 
-<script type="module" src="assets/js/growth-materials.mjs?v=5"></script>
+<script type="module" src="assets/js/growth-materials.mjs?v=6"></script>
 </body></html>

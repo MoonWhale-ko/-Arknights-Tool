@@ -1,34 +1,31 @@
-import {calculatePlans,ownedAmount,recipeCapacity,craftingPlan} from './growth-costs.mjs?v=4';
-import {readInventory,INVENTORY_KEY,compareItems} from './inventory-state.mjs?v=6';
+import {calculatePlans,ownedAmount,materialRequirements} from './growth-costs.mjs?v=5';
+import {readInventory,INVENTORY_KEY,compareItems,tierOf,categoryOf} from './inventory-state.mjs?v=6';
 const $=id=>document.getElementById(id),dialog=$('growthDialog');
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const number=v=>v.toLocaleString('ko-KR');
-let operators=[],data,items={},images={},loaded=false,selection='';
+let operators=[],data,items={},images={},loaded=false,selection='',tier='all';
 const read=key=>{const value=JSON.parse(localStorage.getItem(key)||'{}');if(!value||typeof value!=='object'||Array.isArray(value))throw Error('저장된 육성 정보의 형식을 확인할 수 없습니다.');return value};
 function name(id){return id==='exp'?'작전기록 경험치':items[id]?.name||id}
-function costText(cost){return cost.map(x=>`${esc(name(x.id))} ×${number(x.count)}`).join(' + ')}
-function itemImage(id){const icon=items[id]?.iconId;if(!icon)return '';const fallback='https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/'+encodeURIComponent(icon)+'.png';return `<img src="${esc(images[id]?.url||fallback)}" data-fallback="${esc(fallback)}" alt="" loading="lazy">`}
+function itemImage(id){if(id==='exp')id='2004';const icon=items[id]?.iconId;if(!icon)return '';const fallback='https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/'+encodeURIComponent(icon)+'.png';return `<img src="${esc(images[id]?.url||fallback)}" data-fallback="${esc(fallback)}" alt="" loading="lazy">`}
 function tokenInfo(id){return Object.values(data.potentials).find(t=>t.id===id)}
-function materialHtml(id){return tokenInfo(id)?`<button type="button" class="growth-item token-trigger" data-token="${esc(id)}" aria-describedby="potentialTooltip" aria-label="${esc(name(id))} · 대체 증표 확인">${itemImage(id)}<span>${esc(name(id))}<small>대체 증표 확인</small></span></button>`:`<div class="growth-item">${itemImage(id)}<span>${esc(name(id))}</span></div>`}
+function materialHtml(id){return `<button type="button" class="growth-image-button" data-material-tip="${esc(id)}" ${tokenInfo(id)?`data-token="${esc(id)}"`:''} aria-label="${esc(name(id))}" aria-describedby="potentialTooltip">${itemImage(id)||'<span class="growth-image-fallback">'+esc(name(id))+'</span>'}</button>`}
+function costImages(cost){return '<div class="growth-cost-images">'+cost.map(x=>`<span class="growth-cost-piece">${materialHtml(x.id)}<span>× ${number(x.count)}</span></span>`).join('<span class="growth-plus">+</span>')+'</div>'}
+function materialNode(node,nested=true){
+ const short=node.count>node.owned,owned=node.displayOwned??node.owned;
+ return `<article class="growth-material-card" data-material="${esc(node.id)}"><div class="growth-material-main">${materialHtml(node.id)}<span class="growth-ratio" aria-label="${esc(name(node.id))} · 보유 ${owned}, 필요 ${node.count}"><b class="${short?'growth-short':''}">${number(owned)}</b><span> / ${number(node.count)}</span></span>${node.recipe?'<small class="growth-craft-label">'+(canCraft(node)?'제작 가능':'하위 재료 부족')+'</small>':''}</div>${nested&&node.children?.length?`<details class="growth-children"><summary>하위 재료 보기</summary><p class="growth-facility">${node.recipe.room==='WORKSHOP'?'가공소':'제조소'} Lv.${Math.max(0,...node.recipe.requirements.map(x=>x.roomLevel))} · ${number(node.runs)}회${node.recipe.stages.length?' · 스테이지 해금 필요':''}</p><div class="growth-material-grid">${node.children.map(child=>materialNode(child)).join('')}</div></details>`:''}</article>`;
+}
+function canCraft(node){return node.children.every(child=>child.owned>=child.count||child.children.length&&canCraft(child))}
 function bindImages(root){root.querySelectorAll('img').forEach(img=>img.addEventListener('error',()=>{if(img.dataset.fallback){img.src=img.dataset.fallback;delete img.dataset.fallback}else img.style.display='none'}))}
 const tooltip=$('potentialTooltip');
 function hideTooltip(){tooltip.hidden=true}
 function showTooltip(button,inventory,totals){
- const id=button.dataset.token,token=tokenInfo(id),short=Math.max(0,totals[id]-ownedAmount(id,inventory,data));
- tooltip.innerHTML=`<strong>${esc(name(id))}</strong>`+(token.alternatives.length?token.alternatives.map(a=>`<div class="token-alternative">${itemImage(a.id)}<div><strong>${esc(name(a.id))}</strong><p>전용 증표 1개당 ${a.count}개로 대체 가능</p><p>부족분 ${short}개 대체에 ${number(short*a.count)}개 필요 · 가방 보유 ${number(ownedAmount(a.id,inventory,data))}개</p></div></div>`).join(''):'<p>이 오퍼레이터는 직군 공용 증표로 대체할 수 없습니다.</p>');
+ const id=button.dataset.materialTip||button.dataset.token,token=tokenInfo(id),short=Math.max(0,(totals[id]||0)-ownedAmount(id,inventory,data));
+ const recipe=(data.recipes[id]||[])[0];
+ tooltip.innerHTML=`<strong>${esc(name(id))}</strong>`+(recipe?costImages(recipe.cost)+(recipe.goldCost?'<p>용문폐 × '+number(recipe.goldCost)+'</p>':''):'')+(token?(token.alternatives.length?token.alternatives.map(a=>`<div class="token-alternative">${itemImage(a.id)}<div><strong>${esc(name(a.id))}</strong><p>전용 증표 1개당 ${a.count}개로 대체 가능</p><p>부족분 ${short}개 대체에 ${number(short*a.count)}개 필요 · 가방 보유 ${number(ownedAmount(a.id,inventory,data))}개</p></div></div>`).join(''):'<p>이 오퍼레이터는 직군 공용 증표로 대체할 수 없습니다.</p>'):'');
  tooltip.hidden=false;bindImages(tooltip);
  const rect=button.getBoundingClientRect(),box=tooltip.getBoundingClientRect(),bounds=dialog.getBoundingClientRect();
  tooltip.style.left=Math.max(bounds.left+8,Math.min(rect.left,bounds.right-box.width-8))+'px';
  tooltip.style.top=Math.max(bounds.top+8,rect.bottom+box.height+8<bounds.bottom?rect.bottom+6:rect.top-box.height-6)+'px';
-}
-function recipeHtml(id,inventory,totals){
- const recipes=data.recipes[id]||[];
- if(!recipes.length)return '<span class="muted">—</span>';
- return recipes.map(r=>{const available=recipeCapacity(r,inventory,totals,data),short=Math.max(0,(totals[id]||0)-ownedAmount(id,inventory,data));
-  const room=r.room==='WORKSHOP'?'가공소':'제조소',level=Math.max(...r.requirements.map(x=>x.roomLevel));
-  const plan=craftingPlan(r,short||r.count,inventory,totals,data);
-  const chain=`<details class="growth-chain"><summary>하위 재료 합성 포함 · ${short?'부족분 '+number(short)+'개':'제작식 1회분'}${plan.possible?' 제작 가능':' · 추가 재료 필요'}</summary><ol>${plan.steps.map(step=>{const x=step.recipe,facility=x.room==='WORKSHOP'?'가공소':'제조소';return `<li><strong>${esc(name(x.itemId))} ×${number(step.output)}</strong><br>${costText(Object.entries(step.cost).map(([id,count])=>({id,count})))}<br><small class="muted">${facility} Lv.${Math.max(...x.requirements.map(q=>q.roomLevel))} · ${number(step.runs)}회${x.stages.length?' · 관련 스테이지 해금 필요':''}</small></li>`}).join('')}</ol><p class="${plan.possible?'growth-ok':'growth-short'}">${plan.possible?'남는 가방 재료로 전체 합성 가능':'추가로 필요한 재료: '+costText(Object.entries(plan.missing).map(([id,count])=>({id,count})))}</p>${Object.keys(plan.used).length?'<p>사용할 가방 재료: '+costText(Object.entries(plan.used).map(([id,count])=>({id,count})))+'</p>':''}</details>`;
-  return `<details class="growth-recipe"><summary>${room} 제작${short&&plan.possible?' · 부족분 제작 가능'+(available<short?' (다단계 합성)':''):available?' · '+number(available)+'개 가능':''}</summary><p>${costText(r.cost)}${r.goldCost?' + 용문폐 ×'+number(r.goldCost):''}<br>→ ${esc(name(id))} ×${r.count}</p><p class="${available?'growth-ok':'muted'}">직접 재료만으로 최대 ${number(available)}개${available?'':' · 직접 재료 부족'}</p><p class="muted">${room} Lv.${level} 필요${r.stages.length?' · 관련 스테이지 해금 필요':''}</p>${chain}</details>`}).join('');
 }
 function render(){
  hideTooltip();
@@ -40,11 +37,13 @@ function render(){
   const results=selection?all.results.filter(r=>r.operator.id===selection):all.results,totals={};
   for(const r of results)for(const [id,count] of Object.entries(r.totals))totals[id]=(totals[id]||0)+count;
   $('growthSummary').textContent=`${results.length}명 계획 · 필요 재료 ${Object.keys(totals).length}종`;
-  const ids=Object.keys(totals).sort((a,b)=>a==='exp'?-1:b==='exp'?1:compareItems(items[a]||{id:a},items[b]||{id:b}));
-  $('growthContent').innerHTML=(ids.length?`<div class="growth-table-wrap"><table class="growth-table"><thead><tr><th>재료</th><th>추가 필요</th><th>가방 보유</th><th>부족</th><th>제작</th></tr></thead><tbody>${ids.map(id=>{const owned=ownedAmount(id,inventory,data),short=Math.max(0,totals[id]-owned);return `<tr data-material="${id}"><td>${materialHtml(id)}</td><td>${number(totals[id])}</td><td>${number(owned)}</td><td class="${short?'growth-short':'growth-ok'}">${number(short)}</td><td>${recipeHtml(id,inventory,totals)}</td></tr>`}).join('')}</tbody></table></div>`:'<p class="growth-empty">'+(results.length?'이 계획에는 일반 육성 재료가 필요하지 않습니다.':'육성 계획에서 보유를 체크하고 목표 상태를 변경해 주세요.')+'</p>')+
-   results.map(r=>`<details class="growth-breakdown"><summary>${esc(r.operator.name)}${r.operator.isFuture?' · 미래시 (중국 서버 기준)':''} · 단계별 비용${!r.current.owned?' · 획득 예정':''}</summary>${r.steps.map(s=>`<div class="growth-step"><strong>${esc(s.label)}</strong><span>${costText(s.cost)}</span></div>`).join('')}${r.notes.length?'<ul class="growth-notes">'+r.notes.map(n=>`<li>${esc(n)}</li>`).join('')+'</ul>':''}</details>`).join('');
+  const requirements=materialRequirements(totals,inventory,data),sort=(a,b)=>compareItems(items[a.id]||{id:a.id},items[b.id]||{id:b.id});
+  const selectedRows=tier==='all'?requirements.roots:requirements.rows.filter(row=>tier==='other'?(row.id==='exp'||categoryOf(items[row.id]||{id:row.id})!=='material'):row.id!=='exp'&&categoryOf(items[row.id]||{id:row.id})==='material'&&tierOf(items[row.id]||{id:row.id})===Number(tier));
+  $('growthContent').innerHTML=(Object.keys(totals).length?`<nav class="growth-tier-tabs" aria-label="재료 티어">${[['all','필요 재료'],...['5','4','3','2','1'].map(t=>[t,t+'T']),['other','재화·기타']].map(([value,label])=>`<button type="button" data-growth-tier="${value}" aria-pressed="${tier===value}">${label}</button>`).join('')}</nav><p class="growth-help">${tier==='all'?'보유량 / 필요량 · 빨간 숫자는 부족한 보유량입니다.':'직접 필요 재료와 부족분 제작에 들어가는 하위 재료를 합산했습니다. 보유량은 이 계획에 배분된 수량입니다.'}</p><div class="growth-material-grid">${selectedRows.sort(sort).map(node=>materialNode(node,tier==='all')).join('')||'<p class="muted">이 티어에 필요한 재료가 없습니다.</p>'}</div>`:'<p class="growth-empty">'+(results.length?'이 계획에는 일반 육성 재료가 필요하지 않습니다.':'육성 계획에서 보유를 체크하고 목표 상태를 변경해 주세요.')+'</p>')+
+   results.map(r=>`<details class="growth-breakdown"><summary>${esc(r.operator.name)}${r.operator.isFuture?' · 미래시 (중국 서버 기준)':''} · 단계별 비용${!r.current.owned?' · 획득 예정':''}</summary>${r.steps.map(s=>`<div class="growth-step"><strong>${esc(s.label)}</strong>${costImages(s.cost)}</div>`).join('')}${r.notes.length?'<ul class="growth-notes">'+r.notes.map(n=>`<li>${esc(n)}</li>`).join('')+'</ul>':''}</details>`).join('');
+  $('growthContent').querySelectorAll('[data-growth-tier]').forEach(button=>button.addEventListener('click',()=>{tier=button.dataset.growthTier;render()}));
   bindImages($('growthContent'));
-  $('growthContent').querySelectorAll('[data-token]').forEach(button=>{
+  $('growthContent').querySelectorAll('[data-material-tip]').forEach(button=>{
    button.addEventListener('pointerenter',()=>showTooltip(button,inventory,totals));
    button.addEventListener('pointerleave',hideTooltip);
    button.addEventListener('focus',()=>showTooltip(button,inventory,totals));

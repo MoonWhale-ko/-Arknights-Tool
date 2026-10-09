@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {calculateGrowth,calculatePlans,ownedAmount,recipeCapacity,craftingPlan} from '../assets/js/growth-costs.mjs';
+import {calculateGrowth,calculatePlans,ownedAmount,recipeCapacity,craftingPlan,materialRequirements} from '../assets/js/growth-costs.mjs';
 const read=p=>JSON.parse(fs.readFileSync(new URL('../data/'+p,import.meta.url)));
 const operators=read('operators.json').operators,data=read('growth.json'),op=operators.find(o=>o.id==='char_377_gdglow');
 const base={owned:true,elite:0,level:1,skill:1,potential:1,m:[0,0,0],mods:{}};
@@ -88,4 +88,22 @@ test('chip conversion stops cycles and supports manufacture output and rounding'
  assert.equal(blocked.possible,false);assert.ok(Object.keys(blocked.missing).length);
  const odd=craftingPlan(data.recipes['3232'][0],3,{items:{3262:6}},{},data);
  assert.equal(odd.possible,true);assert.equal(odd.steps.at(-1).output,4);
+});
+test('material tree expands only shortages and allocates shared stock once across roots',()=>{
+ const r=(itemId,cost,count=1)=>({itemId,count,cost:cost.map(([id,count])=>({id,count})),goldCost:0,requirements:[],stages:[]});
+ const model={recipes:{A:[r('A',[['C',2]])],B:[r('B',[['C',2]])],C:[r('C',[['D',3]])]},expItems:{}};
+ const inventory={items:{A:2,C:3,D:6}},before=JSON.stringify(inventory);
+ const report=materialRequirements({A:4,B:1,C:1},inventory,model);
+ assert.equal(report.roots[0].short,2);assert.equal(report.roots[0].children[0].count,4);
+ const rows=Object.fromEntries(report.rows.map(x=>[x.id,x]));
+ assert.deepEqual(rows.C,{id:'C',count:7,owned:3});assert.deepEqual(rows.D,{id:'D',count:12,owned:6});
+ assert.equal(JSON.stringify(inventory),before);
+ assert.equal(materialRequirements({A:2},inventory,model).roots[0].children.length,0);
+});
+test('material tree handles batch leftovers, gold fees, EXP and cyclic recipes',()=>{
+ const r=(itemId,cost,count=1,goldCost=0)=>({itemId,count,cost:cost.map(([id,count])=>({id,count})),goldCost});
+ const model={recipes:{A:[r('A',[['C',1]])],B:[r('B',[['C',1]])],C:[r('C',[['D',1]],2,10)],X:[r('X',[['Y',1]])],Y:[r('Y',[['X',1]])]},expItems:{'2001':200}};
+ const report=materialRequirements({A:1,B:1,exp:300},{items:{D:1,'4001':10,'2001':2}},model),rows=Object.fromEntries(report.rows.map(x=>[x.id,x]));
+ assert.equal(rows.D.count,1);assert.equal(rows['4001'].count,10);assert.equal(rows.exp.owned,300);assert.equal(report.roots[2].displayOwned,400);
+ assert.equal(materialRequirements({X:1},{items:{}},model).roots[0].children[0].children[0].children.length,0);
 });
