@@ -15,9 +15,10 @@ vm.runInContext(source,context);const run=s=>vm.runInContext(s,context),json=s=>
  assert.equal(elements.get('futureOnly')['aria-pressed'],'false');
  assert.equal(run("chars.filter(c=>matchesOperator(c,'','','')).length"),data.operators.length);
  assert.equal(JSON.stringify(Array.from(storage)),beforeFutureFilter,'Future filter preserves saved progress');
- for(const [alias,id] of [['핑댕이','char_377_gdglow'],['은재','char_172_svrash'],['수첸','char_1013_chen2'],['특사스','char_1028_texas2']]){
+ for(const [alias,id] of [['핑댕이','char_377_gdglow'],['수첸','char_1013_chen2'],['특사스','char_1028_texas2'],['뱅재','char_1045_svash2'],['날시','char_1052_kalts2'],['핑냥이','char_377_gdglow'],['오고곡','char_4027_heyak'],['몬삼이','char_4179_monstr']]){
  const found=json(`chars.filter(c=>matchesOperator(c,${JSON.stringify(alias)},'','')).map(c=>c.id)`);assert.deepEqual(found,[id]);
  }
+ assert.deepEqual(json("chars.filter(c=>matchesOperator(c,'은재','','')).map(c=>c.id).sort()"),['char_1045_svash2','char_172_svrash']);
  assert.equal(run("chars.filter(c=>matchesOperator(c,'골든글로우','','')).length"),1);
  assert.equal(run("chars.filter(c=>matchesOperator(c,'힐미야','','')).length"),0,'Medic Amiya alias must not match caster Amiya');
  assert.equal(storage.size,1,'Opening plans must not save progress or plans');
