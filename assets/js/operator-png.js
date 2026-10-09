@@ -12,10 +12,10 @@ function pngOperators(settings){
  const q=document.getElementById('q').value.trim().toLowerCase(),r=document.getElementById('rarity').value,o=document.getElementById('ownedFilter').value;
  return chars.filter(c=>get(c.id).owned&&(settings.target!=='filtered'||matchesOperator(c,q,r,o)));
 }
-function pngSort(a,b){const professions=Object.keys(professionKo);return b.rarity-a.rarity||professions.indexOf(a.profession)-professions.indexOf(b.profession)||a.name.localeCompare(b.name,'ko')||a.id.localeCompare(b.id)}
+function pngSort(a,b){const professions=Object.keys(professionKo);return professions.indexOf(a.profession)-professions.indexOf(b.profession)||b.rarity-a.rarity||a.name.localeCompare(b.name,'ko')||a.id.localeCompare(b.id)}
 function pngSections(list){
  const professions=[...Object.keys(professionKo),...new Set(list.map(c=>c.profession).filter(p=>!(p in professionKo)))];
- return [6,5,4,3,2,1].flatMap(r=>professions.map(profession=>({id:`${r}-${profession}`,rarity:r,profession,name:professionKo[profession]||profession,operators:list.filter(c=>c.rarity===r&&c.profession===profession).sort(pngSort)}))).filter(g=>g.operators.length);
+ return professions.flatMap(profession=>[6,5,4,3,2,1].map(r=>({id:`${r}-${profession}`,rarity:r,profession,name:professionKo[profession]||profession,operators:list.filter(c=>c.rarity===r&&c.profession===profession).sort(pngSort)}))).filter(g=>g.operators.length);
 }
 function pngCardHeight(settings){const f=settings.fields;return 100+(f.elite||f.level||f.potential||f.trust?68:0)+(f.skill?30:0)+(f.mastery?68:0)+(f.modules?72:0)}
 function pngPages(list,settings){
