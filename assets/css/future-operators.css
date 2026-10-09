@@ -2,3 +2,4 @@
 .png-photo .future-badge{font-size:12px}
 .future-notice{display:inline-block;margin:6px 0;color:#f1ca61;font-size:12px}
 .standalone-glyph{object-fit:contain;background:none}
+.future-toggle{padding:8px 12px;border:1px solid #f1ca61;color:#f1ca61;background:#10151c;font-weight:700}.future-toggle[aria-pressed="true"]{background:#f1ca61;color:#10151c}.future-toggle:focus-visible{outline:2px solid #fff;outline-offset:2px}

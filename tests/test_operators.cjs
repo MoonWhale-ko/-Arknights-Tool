@@ -5,13 +5,23 @@ const data=JSON.parse(fs.readFileSync(path.join(root,'data/operators.json'),'utf
 const original={char_103_angel:{owned:true,elite:2,level:90,potential:4,trust:200,skill:7,m:[1,2,3],mods:{X:2,Y:1,D:0},custom:'keep'}};
 let saved=JSON.stringify(original),writes=0;
 const elements=new Map();
-function element(){return{value:'',innerHTML:'',classList:{toggle(){}},style:{removeProperty(){},setProperty(){}},addEventListener(){},querySelectorAll(){return[]}}}
+function element(){return{value:'',innerHTML:'',classList:{toggle(){}},style:{removeProperty(){},setProperty(){}},setAttribute(k,v){this[k]=v},addEventListener(){},querySelectorAll(){return[]}}}
 const document={getElementById(id){if(!elements.has(id))elements.set(id,element());return elements.get(id)},querySelectorAll(){return[]},querySelector(){return null},fonts:{ready:Promise.resolve()}};
 const ctx=vm.createContext({document,window:{addEventListener(){}},console,localStorage:{getItem(){return saved},setItem(k,v){assert.equal(k,'arknightsOperatorProgressV1');saved=v;writes++}},fetch:url=>Promise.resolve({json:()=>Promise.resolve(url==='data/professions.json'?JSON.parse(fs.readFileSync(path.join(root,'data/professions.json'),'utf8')):data)})});
 vm.runInContext(source,ctx);
 const run=s=>vm.runInContext(s,ctx),json=s=>JSON.parse(run(`JSON.stringify(${s})`));
 (async()=>{
  await new Promise(r=>setImmediate(r));
+ const beforeFutureFilter=JSON.stringify(saved);
+ elements.get('futureOnly').onclick();
+ assert.equal(elements.get('futureOnly')['aria-pressed'],'true');
+ assert.equal(run("chars.filter(c=>matchesOperator(c,'','','')).length"),data.operators.filter(c=>c.isFuture).length);
+ assert.ok(json("chars.filter(c=>matchesOperator(c,'','6','')).map(c=>c.isFuture&&c.rarity===6)").every(Boolean));
+ assert.equal(run("chars.filter(c=>matchesOperator(c,'엑시아','','')).length"),0);
+ elements.get('futureOnly').onclick();
+ assert.equal(elements.get('futureOnly')['aria-pressed'],'false');
+ assert.equal(run("chars.filter(c=>matchesOperator(c,'','','')).length"),data.operators.length);
+ assert.equal(JSON.stringify(saved),beforeFutureFilter,'Future filter preserves saved progress');
  assert.equal(writes,0);assert.deepEqual(JSON.parse(saved),original,'Opening page must preserve saved progress');
  assert.equal(json('get("char_103_angel")').custom,'keep');
  assert.equal(run('chars.length'),data.operators.length);

@@ -57,7 +57,7 @@ input[type=number]{width:74px}.search{min-width:220px}
 
 .rarity-options{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin-top:12px}.rarity-toggle{border:1px solid #3a4556;background:#10151c;color:#9aa5b4;padding:10px 6px;font-size:13px}.rarity-toggle[aria-pressed="true"]{border-color:#edf2f7;background:#344050;color:#fff}.rarity-toggle:focus-visible{outline:2px solid #fff;outline-offset:2px}
 </style>
-<link rel="stylesheet" href="assets/css/future-operators.css?v=1">
+<link rel="stylesheet" href="assets/css/future-operators.css?v=2">
 </head>
 <body>
 <div class="wrap">
@@ -69,6 +69,7 @@ input[type=number]{width:74px}.search{min-width:220px}
 <div class="controls">
 <input class="search" id="q" placeholder="오퍼레이터 검색">
 <select id="ownedFilter"><option value="">전체</option><option value="1">보유</option><option value="0">미보유</option></select>
+<button type="button" id="futureOnly" class="future-toggle" aria-pressed="false">미래시만</button>
 </div>
 <div class="materials-action"><a class="btn" href="backpack.html">가방</a><a class="btn plan-link" href="plans.html">오퍼레이터 육성 계획</a></div>
 <input type="hidden" id="rarity" value=""><div id="rarityOptions" class="rarity-options" role="group" aria-label="표시할 등급"></div>
@@ -106,7 +107,7 @@ input[type=number]{width:74px}.search{min-width:220px}
 const DATA_URL='data/operators.json';
 const SAVE_KEY='arknightsOperatorProgressV1';
 let chars=[], state={},branchNames={};
-let selectedProfession='',selectedBranch='';
+let selectedProfession='',selectedBranch='',futureOnly=false;
 let selectedRarities=new Set([6,5,4,3,2,1]);
 try{state=JSON.parse(localStorage.getItem(SAVE_KEY)||'{}')}catch{state={}}
 const save=()=>localStorage.setItem(SAVE_KEY,JSON.stringify(state));
@@ -166,7 +167,7 @@ function syncRaritySelection(){
  document.getElementById('rarityOptions').innerHTML=[1,2,3,4,5,6].map(r=>`<button type="button" class="rarity-toggle" data-rarity="${r}" aria-label="${r}성" aria-pressed="${selectedRarities.has(r)}">${r}성</button>`).join('');
 }
 function toggleRarity(r){if(selectedRarities.has(r))selectedRarities.delete(r);else selectedRarities.add(r);syncRaritySelection();applyFilter()}
-function matchesOperator(c,q,r,o){return !(q&&!c.name.toLowerCase().includes(q)||r&&!r.split(',').includes(String(c.rarity))||o!==''&&String(+get(c.id).owned)!==o||selectedProfession&&c.profession!==selectedProfession||selectedBranch&&c.subProfessionId!==selectedBranch)}
+function matchesOperator(c,q,r,o){return !(futureOnly&&!c.isFuture||q&&!c.name.toLowerCase().includes(q)||r&&!r.split(',').includes(String(c.rarity))||o!==''&&String(+get(c.id).owned)!==o||selectedProfession&&c.profession!==selectedProfession||selectedBranch&&c.subProfessionId!==selectedBranch)}
 function groupedCards(){return [6,5,4,3,2,1].map(r=>{const list=chars.filter(c=>c.rarity===r);return list.length?`<section class="rarity-group r${r}" data-rarity="${r}" aria-label="${r}성"><h2 class="rarity-heading">${'★'.repeat(r)}</h2><div class="grid rarity-grid">${list.map(card).join('')}</div></section>`:''}).join('')+'<div id="emptyList" class="muted empty-list hidden" role="status">조건에 맞는 오퍼레이터가 없습니다.</div>'}
 function professionBadges(c){
  const icons=[['class_'+c.profession,professionKo[c.profession]||c.profession,''],['sub_'+c.subProfessionId,branchNames[c.subProfessionId]||'세부 직군 '+c.subProfessionId,' branch']];
@@ -202,6 +203,7 @@ document.getElementById('professionTabs').onclick=e=>{const button=e.target.clos
 document.getElementById('branchTabs').onclick=e=>{const button=e.target.closest('[data-class]');if(!button)return;selectedBranch=button.dataset.class;renderClassification();applyFilter()};
 syncRaritySelection();
 document.getElementById('rarityOptions').onclick=e=>{const button=e.target.closest('[data-rarity]');if(!button)return;const r=+button.dataset.rarity;toggleRarity(r);document.getElementById('rarityOptions').querySelector(`[data-rarity="${r}"]`)?.focus()};
+document.getElementById('futureOnly').onclick=()=>{futureOnly=!futureOnly;document.getElementById('futureOnly').setAttribute('aria-pressed',String(futureOnly));applyFilter()};
 ['q','ownedFilter'].forEach(id=>document.getElementById(id).addEventListener(id==='q'?'input':'change',applyFilter));
 window.operatorAccount={get chars(){return chars},get state(){return state},key:SAVE_KEY,replace(next){state=next;render()}};
 Promise.all([fetch(DATA_URL,{cache:'no-cache'}).then(r=>r.json()),fetch('data/professions.json',{cache:'no-cache'}).then(r=>r.json())]).then(([data,classification])=>{branchNames=classification.professions||{};chars=(data.operators||[]).map(v=>({...v,rarity:+v.rarity})).filter(c=>c.id&&c.name&&c.rarity>=1&&c.rarity<=6&&c.profession&&c.phases?.length).sort((a,b)=>b.rarity-a.rarity||String(a.name).localeCompare(String(b.name),'ko'));render()}).catch(()=>document.getElementById('grid').innerHTML='<div class="muted">저장된 오퍼레이터 데이터 파일을 불러오지 못했습니다.</div>');
