@@ -65,8 +65,9 @@ function applyTagShortcut(){
  for(const x of input){const tag=x.tags.length===1?x.tags[0]:shortcutChoices.get(x.letter);if(tag&&selected.length<5&&!selected.includes(tag))selected.push(tag)}
  updateShortcutWarning();render();
 }
-document.getElementById('tagSearch').oninput=e=>{if(!e?.isComposing)applyTagShortcut()};
+document.getElementById('tagSearch').oninput=applyTagShortcut;
 document.getElementById('tagSearch').oncompositionend=applyTagShortcut;
+document.getElementById('tagSearch').onchange=applyTagShortcut;
 function combo(arr,k){let out=[];function f(i,p){if(p.length===k){out.push([...p]);return}for(let j=i;j<arr.length;j++){p.push(arr[j]);f(j+1,p);p.pop()}}f(0,[]);return out}
 function eligible(o,tags){if(!allowed.has(o.rarity))return false;if(o.rarity===6&&!tags.includes('고급 특별 채용'))return false;return tags.every(t=>o.tags.includes(t))}
 function imgUrl(o){if(!o.charId)return '';return `https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/dyn/arts/charportraits/${o.charId}_1.png`}
