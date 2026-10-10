@@ -48,6 +48,10 @@ export function calculatePlans(operators,current,plans,data){
  const totals={};for(const r of results)for(const [id,count] of Object.entries(r.totals))totals[id]=(totals[id]||0)+count;
  return {results,totals};
 }
+// Counts reflect the selected operators' remaining direct growth costs.
+export function materialUsers(results,id){
+ return results.filter(r=>r.totals[id]>0).map(r=>({id:r.operator.id,name:r.operator.name,count:r.totals[id]})).sort((a,b)=>a.name.localeCompare(b.name,'ko'));
+}
 export function ownedAmount(id,inventory,data){
  const count=k=>Number.isSafeInteger(inventory.items[k])&&inventory.items[k]>=0?inventory.items[k]:0;
  return id==='exp'?Object.entries(data.expItems).reduce((sum,[key,exp])=>sum+count(key)*exp,0):count(id);

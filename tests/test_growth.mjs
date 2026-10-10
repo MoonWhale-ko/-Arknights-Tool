@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {calculateGrowth,calculatePlans,ownedAmount,recipeCapacity,craftingPlan,materialRequirements} from '../assets/js/growth-costs.mjs';
+import {calculateGrowth,calculatePlans,ownedAmount,recipeCapacity,craftingPlan,materialRequirements,materialUsers} from '../assets/js/growth-costs.mjs';
 const read=p=>JSON.parse(fs.readFileSync(new URL('../data/'+p,import.meta.url)));
 const operators=read('operators.json').operators,data=read('growth.json'),op=operators.find(o=>o.id==='char_377_gdglow');
 const base={owned:true,elite:0,level:1,skill:1,potential:1,m:[0,0,0],mods:{}};
@@ -106,4 +106,15 @@ test('material tree handles batch leftovers, gold fees, EXP and cyclic recipes',
  const report=materialRequirements({A:1,B:1,exp:300},{items:{D:1,'4001':10,'2001':2}},model),rows=Object.fromEntries(report.rows.map(x=>[x.id,x]));
  assert.equal(rows.D.count,1);assert.equal(rows['4001'].count,10);assert.equal(rows.exp.owned,300);assert.equal(report.roots[2].displayOwned,400);
  assert.equal(materialRequirements({X:1},{items:{}},model).roots[0].children[0].children[0].children.length,0);
+});
+
+test('material tooltip attributes remaining counts only to selected operators',()=>{
+ const other=operators.find(o=>o.id==='char_124_kroos');
+ const all=calculatePlans([op,other],{[op.id]:base},{[op.id]:{...base,level:3},[other.id]:{...base,level:2}},data);
+ const users=materialUsers(all.results,'exp');
+ assert.equal(users.reduce((n,u)=>n+u.count,0),all.totals.exp);
+ assert.equal(users.find(u=>u.id===other.id).count,100);
+ assert.equal(materialUsers(all.results.filter(r=>r.operator.id===op.id),'exp').length,1);
+ assert.deepEqual(materialUsers(all.results,'not-used'),[]);
+ assert.deepEqual(materialUsers([],'exp'),[]);
 });

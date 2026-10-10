@@ -1,4 +1,4 @@
-import {calculatePlans,ownedAmount,materialRequirements} from './growth-costs.mjs?v=5';
+import {calculatePlans,ownedAmount,materialRequirements,materialUsers} from './growth-costs.mjs?v=6';
 import {readInventory,INVENTORY_KEY,compareItems,tierOf,categoryOf} from './inventory-state.mjs?v=6';
 const $=id=>document.getElementById(id),dialog=$('growthDialog');
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -18,10 +18,11 @@ function canCraft(node){return node.children.every(child=>child.owned>=child.cou
 function bindImages(root){root.querySelectorAll('img').forEach(img=>img.addEventListener('error',()=>{if(img.dataset.fallback){img.src=img.dataset.fallback;delete img.dataset.fallback}else img.style.display='none'}))}
 const tooltip=$('potentialTooltip');
 function hideTooltip(){tooltip.hidden=true}
-function showTooltip(button,inventory,totals){
+function showTooltip(button,inventory,totals,results){
  const id=button.dataset.materialTip||button.dataset.token,token=tokenInfo(id),short=Math.max(0,(totals[id]||0)-ownedAmount(id,inventory,data));
- const recipe=(data.recipes[id]||[])[0];
- tooltip.innerHTML=`<strong>${esc(name(id))}</strong>`+(recipe?costImages(recipe.cost)+(recipe.goldCost?'<p>용문폐 × '+number(recipe.goldCost)+'</p>':''):'')+(token?(token.alternatives.length?token.alternatives.map(a=>`<div class="token-alternative">${itemImage(a.id)}<div><strong>${esc(name(a.id))}</strong><p>전용 증표 1개당 ${a.count}개로 대체 가능</p><p>부족분 ${short}개 대체에 ${number(short*a.count)}개 필요 · 가방 보유 ${number(ownedAmount(a.id,inventory,data))}개</p></div></div>`).join(''):'<p>이 오퍼레이터는 직군 공용 증표로 대체할 수 없습니다.</p>'):'');
+ const recipe=(data.recipes[id]||[])[0],users=materialUsers(results,id);
+ const usage=users.length?`<div class="growth-material-users"><strong>오퍼레이터별 필요량</strong>${users.map(u=>`<div class="growth-material-user"><span>${esc(u.name)}</span><b>${number(u.count)}${id==='exp'?' EXP':'개'}</b></div>`).join('')}</div>`:'<p class="growth-material-indirect">직접 육성 사용 없음 · 상위 재료 제작용</p>';
+ tooltip.innerHTML=`<strong>${esc(name(id))}</strong>`+usage+(recipe?costImages(recipe.cost)+(recipe.goldCost?'<p>용문폐 × '+number(recipe.goldCost)+'</p>':''):'')+(token?(token.alternatives.length?token.alternatives.map(a=>`<div class="token-alternative">${itemImage(a.id)}<div><strong>${esc(name(a.id))}</strong><p>전용 증표 1개당 ${a.count}개로 대체 가능</p><p>부족분 ${short}개 대체에 ${number(short*a.count)}개 필요 · 가방 보유 ${number(ownedAmount(a.id,inventory,data))}개</p></div></div>`).join(''):'<p>이 오퍼레이터는 직군 공용 증표로 대체할 수 없습니다.</p>'):'');
  tooltip.hidden=false;bindImages(tooltip);
  const rect=button.getBoundingClientRect(),box=tooltip.getBoundingClientRect(),bounds=dialog.getBoundingClientRect();
  tooltip.style.left=Math.max(bounds.left+8,Math.min(rect.left,bounds.right-box.width-8))+'px';
@@ -49,11 +50,11 @@ function render(){
   $('growthContent').querySelectorAll('[data-growth-tier]').forEach(button=>button.addEventListener('click',()=>{tier=button.dataset.growthTier;render()}));
   bindImages($('growthContent'));
   $('growthContent').querySelectorAll('[data-material-tip]').forEach(button=>{
-   button.addEventListener('pointerenter',()=>showTooltip(button,inventory,totals));
+   button.addEventListener('pointerenter',()=>showTooltip(button,inventory,totals,results));
    button.addEventListener('pointerleave',hideTooltip);
-   button.addEventListener('focus',()=>showTooltip(button,inventory,totals));
+   button.addEventListener('focus',()=>showTooltip(button,inventory,totals,results));
    button.addEventListener('blur',hideTooltip);
-   button.addEventListener('click',()=>showTooltip(button,inventory,totals));
+   button.addEventListener('click',()=>showTooltip(button,inventory,totals,results));
   });
  }catch(error){$('growthContent').textContent=error.message+' 기존 데이터는 변경하지 않았습니다.'}
 }
