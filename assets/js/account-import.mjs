@@ -3,7 +3,7 @@ import {
   commitImport,
   restoreImport,
   BACKUP_KEY,
-} from "./account-state.mjs";
+} from "./account-state.mjs?v=2";
 const $ = (id) => document.getElementById(id),
   dialog = $("accountDialog");
 let preview = null,
@@ -160,14 +160,16 @@ $("accountForm").onsubmit = (e) => {
     const adapter = window.operatorAccount;
     if (!adapter.chars.length)
       throw new Error("오퍼레이터 데이터를 먼저 불러와야 합니다.");
+    const names = await fetch("data/account-characters.json", {cache:"no-cache"}).then(r=>r.ok?r.json():null).catch(()=>null);
     preview = prepareImport(
       result.data,
       adapter.chars,
       adapter.state,
       favor.frames,
+      names?.characters || {},
     );
     status(
-      `보유 ${preview.owned}명 · 재료 ${Object.keys(preview.inventory.items).length}종 조회 완료${preview.skipped ? `\n사이트 미수록 ${preview.skipped}명 제외` : ""}\n적용하면 현재 보유·육성 상태와 재료가 갱신됩니다. 적용 전 상태는 자동 백업합니다.`,
+      `보유 ${preview.owned}명 · 재료 ${Object.keys(preview.inventory.items).length}종 조회 완료${preview.skipped ? `\n사이트 미수록 ${preview.skipped}명 제외\n${preview.skippedOperators.map(o=>`${o.name || "이름 확인 불가"} (${o.id})${o.obtainable===false?" · 일반 획득 불가 데이터":""}`).join("\n")}` : ""}\n적용하면 현재 보유·육성 상태와 재료가 갱신됩니다. 적용 전 상태는 자동 백업합니다.`,
     );
   });
 };
@@ -176,8 +178,9 @@ $("accountApply").onclick = () =>
     const adapter = window.operatorAccount;
     commitImport(localStorage, adapter.key, preview);
     adapter.replace(preview.state);
+    const excluded = preview.skippedOperators.map(o=>`${o.name || "이름 확인 불가"} (${o.id})`).join("\n");
     preview = null;
-    status("현재 육성 상태와 보유 재료를 적용했습니다.");
+    status("현재 육성 상태와 보유 재료를 적용했습니다."+(excluded?"\n사이트 미수록으로 제외된 항목:\n"+excluded:""));
   });
 $("accountUndo").onclick = () =>
   action(async () => {

@@ -8,7 +8,7 @@ export function trustPercent(points, frames) {
   const frame = frames.find((f) => f.points >= points);
   return frame?.percent ?? 200;
 }
-export function prepareImport(data, chars, previous, frames) {
+export function prepareImport(data, chars, previous, frames, characters = {}) {
   if (
     data?.version !== 1 ||
     data.server !== "kr" ||
@@ -21,6 +21,7 @@ export function prepareImport(data, chars, previous, frames) {
     next = structuredClone(previous),
     seen = new Set();
   let skipped = 0;
+  const skippedOperators = [];
   for (const op of data.operators) {
     if (!object(op) || typeof op.id !== "string" || seen.has(op.id))
       throw new Error("오퍼레이터 데이터가 중복되거나 잘못되었습니다.");
@@ -28,6 +29,8 @@ export function prepareImport(data, chars, previous, frames) {
     const c = byId.get(op.id);
     if (!c) {
       skipped++;
+      const info = Object.hasOwn(characters,op.id) ? characters[op.id] : null;
+      skippedOperators.push({id:op.id,name:typeof info?.name === "string" ? info.name : null,obtainable:typeof info?.obtainable === "boolean" ? info.obtainable : null});
       continue;
     }
     if (
@@ -88,6 +91,7 @@ export function prepareImport(data, chars, previous, frames) {
     inventory: { version: 1, server: "kr", importedAt: data.importedAt, items },
     owned: data.operators.length - skipped,
     skipped,
+    skippedOperators,
   };
 }
 export function commitImport(storage, progressKey, prepared) {

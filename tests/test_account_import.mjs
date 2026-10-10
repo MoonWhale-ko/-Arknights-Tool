@@ -106,3 +106,13 @@ test("trust boundaries follow favor frame lookup", () => {
   assert.equal(trustPercent(frames[100].points, frames), 100);
   assert.equal(trustPercent(frames.at(-1).points + 1, frames), 200);
 });
+
+test("excluded IDs retain KR in-game names and unknown IDs remain visible",()=>{
+ const names=JSON.parse(readFileSync(new URL("../data/account-characters.json",import.meta.url))).characters;
+ const missing={...data.operators[0],id:"char_508_aguard"},unknown={...missing,id:"char_new_unknown"};
+ const p=prepareImport({...data,operators:[...data.operators,missing,unknown]},chars,{},frames,names);
+ assert.equal(p.skipped,2);assert.equal(p.owned,1);
+ assert.deepEqual(p.skippedOperators,[{id:missing.id,name:"샤프",obtainable:false},{id:unknown.id,name:null,obtainable:null}]);
+ assert.equal(p.state[missing.id],undefined);
+ const fallback=prepareImport({...data,operators:[...data.operators,missing]},chars,{},frames);assert.equal(fallback.skippedOperators[0].id,missing.id);
+});

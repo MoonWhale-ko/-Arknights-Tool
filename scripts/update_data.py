@@ -120,6 +120,9 @@ def main():
     args.output_dir.mkdir(parents=True, exist_ok=True)
     branches = json.loads(blobs['uniequip_table'])['subProfDict']
     professions = {o['subProfessionId']: branches[o['subProfessionId']]['subProfessionName'] for o in ops}
+    characters = {cid: {'name': c['name'], 'obtainable': not c['isNotObtainable']} for cid, c in json.loads(blobs['character_table']).items() if cid.startswith('char_')}
+    target = args.output_dir / 'account-characters.json'
+    target.write_text(json.dumps({'version': 1, 'source': metadata['source'], 'characters': characters}, ensure_ascii=False, separators=(',', ':'))+'\n', encoding='utf-8')
     for name, payload in [('operators', ops), ('items', items), ('professions', professions)]:
         target = args.output_dir / (name+'.json')
         temp = target.with_suffix('.json.tmp')
