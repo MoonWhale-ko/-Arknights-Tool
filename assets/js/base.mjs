@@ -29,7 +29,7 @@ function privateRoom(slotId,name,saved){
   const details=document.createElement('div');const opName=document.createElement('strong');opName.textContent=characterNames[id]?.name??id;opName.title=opName.textContent;
   const trust=document.createElement('span');trust.className='private-trust';trust.textContent=Number.isInteger(saved.trust?.[id])?`신뢰도 ${saved.trust[id]}%`:'신뢰도 정보 없음';details.append(opName,trust);content.append(image,details);
  }else{const empty=document.createElement('span');empty.className='private-empty';empty.textContent=!settings.privateRoomsIncluded?'계정 재조회 필요':!level?'미건설':saved?.occupantsKnown===false?'다시 조회해 주세요':count?'캐릭터 정보 없음':'비어 있음';content.append(empty);}
- card.append(content);const occupancy=document.createElement('span');occupancy.className='room-occupancy';occupancy.textContent=saved?.occupantsKnown===false&&level?'인원 정보 없음':`${count} / ${level?1:0}`;card.append(occupancy);
+ card.append(content);const occupancy=document.createElement('span');occupancy.className='room-occupancy';occupancy.textContent=!settings.privateRoomsIncluded?'— / 1':saved?.occupantsKnown===false&&level?'인원 정보 없음':`${count} / ${level?1:0}`;card.append(occupancy);
  card.setAttribute('aria-label',`${name} · 레벨 ${level} · ${content.textContent}`);return card;
 }
 function render(){const counters={};const groups={production:document.getElementById('productionRooms'),living:document.getElementById('livingRooms'),support:document.getElementById('supportRooms'),private:document.getElementById('privateRooms')};Object.values(groups).forEach(el=>el.replaceChildren());
