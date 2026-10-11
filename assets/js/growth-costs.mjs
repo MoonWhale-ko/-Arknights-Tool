@@ -7,10 +7,10 @@ export function progress(operator,value={}){
   m:operator.skills.map((_,i)=>integer(value.m?.[i],0,3)),mods:{...value.mods}};
 }
 const stage=(s,m)=>integer(s.mods[m.id]??s.mods[m.type],0,3);
-export function calculateGrowth(operator,currentValue,targetValue,data){
+export function calculateGrowth(operator,currentValue,targetValue,data,includeShared=true){
  const current=currentValue?.owned?progress(operator,currentValue):progress(operator);
  const goal=progress(operator,targetValue),steps=[],notes=[];
- const add=(label,cost)=>{if(cost.length)steps.push({label,cost})};
+ const add=(label,cost,shared=true)=>{if(cost.length&&(!shared||includeShared))steps.push({label,cost})};
  if(!goal.owned)return {operator,current,goal,steps,notes,totals:{}};
  // A saved target can lag behind the user's actual progress. Never charge completed work.
  if(current.owned){goal.elite=Math.max(goal.elite,current.elite);if(goal.elite===current.elite)goal.level=Math.max(goal.level,current.level);goal.skill=Math.max(goal.skill,current.skill);}
@@ -27,10 +27,10 @@ export function calculateGrowth(operator,currentValue,targetValue,data){
   if(e<goal.elite)add(`E${e+1} 정예화`,operator.phases[e+1].evolveCost);
  }
  for(const s of operator.skillLevels)if(s.from>=current.skill&&s.to<=goal.skill)add(`스킬 Lv.${s.from} → ${s.to}`,s.cost);
- operator.skills.forEach((s,i)=>{if(goal.elite!==2||goal.skill<7)return;for(const m of s.mastery)if(m.level>current.m[i]&&m.level<=goal.m[i])add(`S${s.index} · M${m.level}`,m.cost)});
+ operator.skills.forEach((s,i)=>{if(goal.elite!==2||goal.skill<7)return;for(const m of s.mastery)if(m.level>current.m[i]&&m.level<=goal.m[i])add(`S${s.index} · M${m.level}`,m.cost,false)});
  for(const m of operator.modules){
   const before=stage(current,m),after=stage(goal,m);
-  for(const s of m.costs)if(s.stage>before&&s.stage<=after)add(`모듈 ${m.type==='D'?'Δ':m.type} · Stage ${s.stage}`,s.cost);
+  for(const s of m.costs)if(s.stage>before&&s.stage<=after)add(`모듈 ${m.type==='D'?'Δ':m.type} · Stage ${s.stage}`,s.cost,false);
   if(!before&&after){notes.push(`모듈 ${m.type==='D'?'Δ':m.type} 해금: E2 Lv.${m.unlockLevel}, 신뢰도 조건 및 해금 임무 완료 필요.`);for(const task of m.missions||[])notes.push(task.description)}
  }
  const token=data.potentials[operator.id],potential=Math.max(0,goal.potential-current.potential);
@@ -39,12 +39,29 @@ export function calculateGrowth(operator,currentValue,targetValue,data){
   if(token)add(`${token.activity&&!current.owned?'획득 및 ':''}잠재 ${current.potential} → ${goal.potential}`,[{id:token.id,count:tokenCount}]);
   else notes.push(`잠재 ${current.potential} → ${goal.potential}: 추가 ${potential}단계 · 전용 증표 정보가 없습니다.`);
  }
- if(goal.trust>current.trust)notes.push(`신뢰도 ${current.trust}% → ${goal.trust}%: 전투·기지 활동으로 상승하며 재료 합계에는 포함하지 않습니다.`);
+ if(includeShared&&goal.trust>current.trust)notes.push(`신뢰도 ${current.trust}% → ${goal.trust}%: 전투·기지 활동으로 상승하며 재료 합계에는 포함하지 않습니다.`);
  const totals={};for(const step of steps)for(const x of step.cost)totals[x.id]=(totals[x.id]||0)+x.count;
  return {operator,current,goal,steps,notes,totals};
 }
-export function calculatePlans(operators,current,plans,data){
- const results=operators.filter(o=>Object.hasOwn(plans,o.id)).map(o=>calculateGrowth(o,current[o.id],plans[o.id],data)).filter(r=>r.steps.length||r.notes.length);
+export function calculatePlans(operators,current,plans,data,selectedIds=null){
+ const sharedKeys=['elite','level','potential','trust','skill'],charged=new Set();
+ const chosen=operators.filter(o=>Object.hasOwn(plans,o.id)&&(!selectedIds||selectedIds.has(o.id))&&plans[o.id]?.owned);
+ const results=chosen.map(o=>{
+  let before=current[o.id],goal=plans[o.id],includeShared=true,unlock=false;
+  if(o.sharedGroup){
+   const group=operators.filter(c=>c.sharedGroup===o.sharedGroup);
+   const base=current[o.sharedGroup]?.owned?current[o.sharedGroup]:group.map(c=>current[c.id]).find(s=>s?.owned);
+   if(base){
+    unlock=!before?.owned;
+    before={...before,owned:true,m:before?.owned?before.m:[],mods:before?.owned?before.mods:{}};
+    for(const key of sharedKeys)before[key]=base[key];
+   }
+   includeShared=!charged.has(o.sharedGroup);charged.add(o.sharedGroup);
+  }
+  const result=calculateGrowth(o,before,goal,data,includeShared);
+  if(unlock)result.notes.push('아미야 직군 해금 필요 · 공통 육성 상태는 기존 아미야와 공유합니다.');
+  return result;
+ }).filter(r=>r.steps.length||r.notes.length);
  const totals={};for(const r of results)for(const [id,count] of Object.entries(r.totals))totals[id]=(totals[id]||0)+count;
  return {results,totals};
 }

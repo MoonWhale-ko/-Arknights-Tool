@@ -89,7 +89,9 @@ input[type=number]{width:74px}.search{min-width:220px}
 <p class="growth-help">증표에 마우스를 올리거나 누르면 대체 증표를 확인할 수 있습니다. 대체 증표는 여러 오퍼레이터가 함께 쓰므로 부족량에서 자동 차감하지 않습니다.</p>
 <div id="potentialTooltip" class="potential-tooltip" role="tooltip" hidden></div>
 </dialog>
+<script src="assets/js/operator-shared.js?v=1"></script>
 <script>
+const shared=window.ArknightsShared;
 const DATA_URL='data/operators.json';
 const SAVE_KEY='arknightsOperatorPlansV1';
 const CURRENT_KEY='arknightsOperatorProgressV1';
@@ -106,13 +108,13 @@ const CLASS_ICON_POS={"class_PIONEER":[0,0],"class_WARRIOR":[1,0],"class_TANK":[
 const professionKo={PIONEER:'뱅가드',WARRIOR:'가드',TANK:'디펜더',SNIPER:'스나이퍼',CASTER:'캐스터',MEDIC:'메딕',SUPPORT:'서포터',SPECIAL:'스페셜리스트'};
 const esc=s=>String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
 function def(){return{owned:false,elite:0,level:1,potential:1,trust:0,skill:1,m:[0,0,0],mods:{X:0,Y:0,D:0}}}
-function current(id){const s=currentState[id]||{};if(!s.owned)return def();return {...def(),...s,potential:clamp(s.potential??1,1,6),m:Array.isArray(s.m)?s.m.slice():[0,0,0],mods:{...def().mods,...s.mods}}}
+function current(id){const s=currentState[id]||{};if(!s.owned){const c=chars.find(c=>c.id===id),base=c?.sharedGroup&&shared.members(chars,id).map(c=>currentState[c.id]).find(v=>v?.owned);return base?.owned?shared.copy(def(),base):def();}return {...def(),...s,potential:clamp(s.potential??1,1,6),m:Array.isArray(s.m)?s.m.slice():[0,0,0],mods:{...def().mods,...s.mods}}}
 function get(id){
  const now=current(id),existing=state[id],valid=existing&&typeof existing==='object'&&!Array.isArray(existing);
  const s=valid?{...def(),...existing,m:Array.isArray(existing.m)?existing.m.slice():[0,0,0],mods:{...def().mods,...existing.mods}}:{...now,m:now.m.slice(),mods:{...now.mods}};
  s.potential=clamp(s.potential,1,6);
  if(now.owned)s.owned=true;
- if(s.owned&&now.owned){s.elite=Math.max(s.elite,now.elite);if(s.elite===now.elite)s.level=Math.max(s.level,now.level);for(const key of ['potential','trust','skill'])s[key]=Math.max(s[key],now[key]);s.m=s.m.map((v,i)=>Math.max(v,now.m[i]||0));const c=chars.find(c=>c.id===id);for(const m of c?.modules||[])s.mods[m.id]=Math.max(moduleStage(s,m),moduleStage(now,m));}
+ if(s.owned&&(now.owned||shared.members(chars,id).some(c=>currentState[c.id]?.owned))){s.elite=Math.max(s.elite,now.elite);if(s.elite===now.elite)s.level=Math.max(s.level,now.level);for(const key of ['potential','trust','skill'])s[key]=Math.max(s[key],now[key]);s.m=s.m.map((v,i)=>Math.max(v,now.m[i]||0));const c=chars.find(c=>c.id===id);for(const m of c?.modules||[])s.mods[m.id]=Math.max(moduleStage(s,m),moduleStage(now,m));}
  return s;
 }
 function maxLv(c,e){return c.phases[e]?.maxLevel||c.phases[0].maxLevel}
@@ -137,7 +139,14 @@ function setVal(id,k,v){
   if(!masteryUnlocked(s))s.m=s.m.map(()=>0);
   for(const m of c.modules)if(!moduleUnlocked(c,s,m)){s.mods[m.id]=0;s.mods[m.type]=0}
  }
- state[id]=get(id);save();
+ state[id]=get(id);if(shared.keys.includes(k)){
+  shared.sync(chars,state,id,def);
+  for(const peer of shared.members(chars,id)){
+   const other=state[peer.id];if(!masteryUnlocked(other))other.m=other.m.map(()=>0);
+   for(const mod of peer.modules)if(!moduleUnlocked(peer,other,mod)){other.mods[mod.id]=0;other.mods[mod.type]=0}
+  }
+ }
+ save();
 }
 function iconButton(kind,key,value,label,disabled=false,bottom=''){
  const prefix={elite:'elite-e',potential:'potential-p',mastery:'mastery-m'}[kind];
@@ -182,18 +191,19 @@ function card(c){
  c.skills.forEach((sk,i)=>{if((goal.m[i]||0)>(now.m[i]||0)){const key='m'+i;markup=markup.replace(new RegExp('(<button[^>]*data-k="'+key+'"[^>]*><img src=")[^"]+'),(_,prefix)=>prefix+plannedIcon('mastery',now.m[i]||0,goal.m[i]));}});
  return markup.replace('class="card r','class="card plan-'+kind+' r').replace(/<(?:button|select|input)\b[^>]*data-k="([^"]+)"[^>]*>/g,(tag,key)=>changed.includes(key)?(tag.includes('class="')?tag.replace('class="','class="future-change '):tag.replace('>',' class="future-change">')):tag);
 }
-window.addEventListener('storage',e=>{if(e.key===CURRENT_KEY){try{currentState=JSON.parse(localStorage.getItem(CURRENT_KEY)||'{}');render()}catch{}}});
+window.addEventListener('storage',e=>{if(e.key===CURRENT_KEY){try{currentState=JSON.parse(localStorage.getItem(CURRENT_KEY)||'{}');shared.migrate(chars,currentState,def);render()}catch{}}});
 function bind(){document.querySelectorAll('.card').forEach(el=>{
  const id=el.dataset.id,c=chars.find(c=>c.id===id);
  el.querySelectorAll('[data-k]').forEach(inp=>{
   if(inp.tagName==='BUTTON')inp.onclick=()=>{const s=get(id),k=inp.dataset.k;const next=k==='elite'?(+s.elite+1)%c.phases.length:k==='potential'?(+s.potential%((c.maxPotentialLevel??5)+1))+1:((+s.m[+k[1]]||0)+1)%4;setVal(id,k,next);refreshCard(el,c)};
   else {
    inp.onchange=()=>{setVal(id,inp.dataset.k,inp.dataset.k==='owned'?inp.checked:inp.value);refreshCard(el,c)};
-   if(inp.type==='number')inp.oninput=()=>{setVal(id,inp.dataset.k,inp.value);const s=get(id);el.querySelectorAll('[data-k^="mod:"]').forEach(select=>{const m=c.modules.find(m=>'mod:'+m.id===select.dataset.k);select.disabled=!s.owned||!moduleUnlocked(c,s,m)})};
+   if(inp.type==='number')inp.oninput=()=>{setVal(id,inp.dataset.k,inp.value);const s=get(id);el.querySelectorAll('[data-k^="mod:"]').forEach(select=>{const m=c.modules.find(m=>'mod:'+m.id===select.dataset.k);select.disabled=!s.owned||!moduleUnlocked(c,s,m)});refreshPeers(c)};
   }
  });
 })}
-function refreshCard(el,c){el.outerHTML=card(c);bind();applyFilter();fitCards()}
+function refreshPeers(c){for(const peer of shared.members(chars,c.id))if(peer.id!==c.id){const el=document.querySelector(`.card[data-id="${peer.id}"]`);if(el)el.outerHTML=card(peer)}bind()}
+function refreshCard(el,c){el.outerHTML=card(c);refreshPeers(c);applyFilter();fitCards()}
 function fitNames(){document.querySelectorAll('.settings .name').forEach(name=>{name.style.fontSize='24px';for(let size=23;(name.scrollHeight>name.clientHeight+1||name.scrollWidth>name.clientWidth+1)&&size>=10;size--)name.style.fontSize=size+'px'})}
 function fitCards(){const grid=document.getElementById('grid');grid.style.removeProperty('--card-height');const hidden=[...grid.querySelectorAll('.card.hidden,.rarity-group.hidden')];hidden.forEach(c=>c.classList.remove('hidden'));fitNames();const panels=[...grid.querySelectorAll('.settings')];const height=Math.max(402,...panels.map(p=>Math.ceil(p.getBoundingClientRect().height)+4));grid.style.setProperty('--card-height',height+'px');hidden.forEach(c=>c.classList.add('hidden'))}
 function render(){document.getElementById('grid').innerHTML=groupedCards();renderClassification();bind();applyFilter()}
@@ -212,10 +222,10 @@ document.getElementById('rarityOptions').onclick=e=>{const button=e.target.close
 document.getElementById('futureOnly').onclick=()=>{futureOnly=!futureOnly;document.getElementById('futureOnly').setAttribute('aria-pressed',String(futureOnly));applyFilter()};
 ['q','ownedFilter'].forEach(id=>document.getElementById(id).addEventListener(id==='q'?'input':'change',applyFilter));
 
-Promise.all([fetch(DATA_URL,{cache:'no-cache'}).then(r=>r.json()),fetch('data/professions.json',{cache:'no-cache'}).then(r=>r.json()),fetch('data/operator-aliases.json',{cache:'no-cache'}).then(r=>r.json()).catch(()=>({aliases:{}}))]).then(([data,classification,nicknames])=>{branchNames=classification.professions||{};chars=(data.operators||[]).map(v=>({...v,rarity:+v.rarity,aliases:nicknames.aliases?.[v.name]||[]})).filter(c=>c.id&&c.name&&c.rarity>=1&&c.rarity<=6&&c.profession&&c.phases?.length).sort((a,b)=>b.rarity-a.rarity||String(a.name).localeCompare(String(b.name),'ko'));render()}).catch(()=>document.getElementById('grid').innerHTML='<div class="muted">저장된 오퍼레이터 데이터 파일을 불러오지 못했습니다.</div>');
+Promise.all([fetch(DATA_URL,{cache:'no-cache'}).then(r=>r.json()),fetch('data/professions.json',{cache:'no-cache'}).then(r=>r.json()),fetch('data/operator-aliases.json',{cache:'no-cache'}).then(r=>r.json()).catch(()=>({aliases:{}}))]).then(([data,classification,nicknames])=>{branchNames=classification.professions||{};chars=(data.operators||[]).map(v=>({...v,rarity:+v.rarity,aliases:nicknames.aliases?.[v.name]||[]})).filter(c=>c.id&&c.name&&c.rarity>=1&&c.rarity<=6&&c.profession&&c.phases?.length).sort((a,b)=>b.rarity-a.rarity||String(a.name).localeCompare(String(b.name),'ko'));shared.migrate(chars,currentState,def);if(shared.migrate(chars,state,def))save();render()}).catch(()=>document.getElementById('grid').innerHTML='<div class="muted">저장된 오퍼레이터 데이터 파일을 불러오지 못했습니다.</div>');
 </script>
 
 
 
-<script type="module" src="assets/js/growth-materials.mjs?v=10"></script>
+<script type="module" src="assets/js/growth-materials.mjs?v=11"></script>
 </body></html>

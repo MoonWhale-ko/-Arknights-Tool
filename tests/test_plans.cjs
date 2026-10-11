@@ -4,6 +4,7 @@ const current={char_103_angel:{owned:true,elite:2,level:70,potential:3,trust:150
 const element=()=>({value:'',innerHTML:'',classList:{toggle(){}},style:{removeProperty(){},setProperty(){}},setAttribute(k,v){this[k]=v},addEventListener(){},querySelectorAll(){return[]}});
 const document={getElementById(id){if(!elements.has(id))elements.set(id,element());return elements.get(id)},querySelectorAll(){return[]},querySelector(){return null},fonts:{ready:Promise.resolve()}};
 const context=vm.createContext({document,window:{addEventListener(){}},console,localStorage:{getItem:k=>storage.get(k)||null,setItem(k,v){assert.equal(k,'arknightsOperatorPlansV1');storage.set(k,v)}},fetch:url=>Promise.resolve({json:()=>Promise.resolve(url==='data/operator-aliases.json'?JSON.parse(fs.readFileSync(path.join(root,'data/operator-aliases.json'),'utf8')):url==='data/professions.json'?JSON.parse(fs.readFileSync(path.join(root,'data/professions.json'),'utf8')):data)})});
+vm.runInContext(fs.readFileSync(path.join(root,'assets/js/operator-shared.js'),'utf8'),context);
 vm.runInContext(source,context);const run=s=>vm.runInContext(s,context),json=s=>JSON.parse(run(`JSON.stringify(${s})`));
 (async()=>{await new Promise(r=>setImmediate(r));const beforeFutureFilter=JSON.stringify(Array.from(storage));
  elements.get('futureOnly').onclick();
@@ -20,7 +21,7 @@ vm.runInContext(source,context);const run=s=>vm.runInContext(s,context),json=s=>
  }
  assert.deepEqual(json("chars.filter(c=>matchesOperator(c,'은재','','')).map(c=>c.id).sort()"),['char_1045_svash2','char_172_svrash']);
  assert.equal(run("chars.filter(c=>matchesOperator(c,'골든글로우','','')).length"),1);
- assert.equal(run("chars.filter(c=>matchesOperator(c,'힐미야','','')).length"),0,'Medic Amiya alias must not match caster Amiya');
+ assert.deepEqual(json("chars.filter(c=>matchesOperator(c,'힐미야','','')).map(c=>c.id)"),['char_1037_amiya3'],'Medic Amiya alias matches only the medic form');
  assert.equal(storage.size,1,'Opening plans must not save progress or plans');
 assert.equal(json('get("char_103_angel")').owned,true);assert.equal(json('get("char_103_angel")').level,70);assert.ok(!run('card(chars.find(c=>c.id==="char_103_angel"))').includes('future-change'),'Untouched card keeps original colors');
 run('setVal("char_103_angel","owned",true);setVal("char_103_angel","level",90);setVal("char_103_angel","m2",3)');
@@ -38,4 +39,10 @@ for(let target=2;target<=6;target++){
 }
 assert.equal(json('currentState.char_377_gdglow').potential,6,'Retained actual progress must not be modified');
 assert.equal(storage.get('arknightsOperatorProgressV1'),raw);
+run('setVal("char_002_amiya","owned",true);setVal("char_002_amiya","elite",2);setVal("char_002_amiya","skill",7);setVal("char_002_amiya","m0",1);setVal("char_1001_amiya2","owned",true);setVal("char_1001_amiya2","level",80);setVal("char_1001_amiya2","potential",4);setVal("char_1001_amiya2","trust",150);setVal("char_1001_amiya2","m0",3)');
+for(const id of ['char_002_amiya','char_1001_amiya2','char_1037_amiya3']){
+ const value=json(`get("${id}")`);assert.equal(value.elite,2);assert.equal(value.level,80);assert.equal(value.skill,7);assert.equal(value.potential,4);assert.equal(value.trust,150);
+}
+assert.equal(json('get("char_002_amiya")').m[0],1);assert.equal(json('get("char_1001_amiya2")').m[0],3);assert.equal(json('get("char_1037_amiya3")').m[0],0);
+assert.equal(json('get("char_1037_amiya3")').owned,false,'Separate form ownership must not imply story unlock');
 console.log('Plan checks passed: independent targets, copied current state, acquisition/growth distinction, current-state floors, real operator controls.');})().catch(e=>{console.error(e);process.exitCode=1});

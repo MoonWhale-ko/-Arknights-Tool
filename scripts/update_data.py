@@ -19,8 +19,25 @@ def download(url):
         return response.read()
 
 
+def merged_characters(raw):
+    chars = dict(raw['character_table'])
+    patch = raw.get('char_patch_table', {})
+    for base_id, info in patch.get('infos', {}).items():
+        if base_id in chars:
+            chars[base_id] = {**chars[base_id], 'sharedGroup': base_id}
+        for cid in info['tmplIds']:
+            if cid in patch.get('patchChars', {}):
+                form = patch['patchChars'][cid]
+                label = patch['patchDetailInfoList'][cid]['infoParam']
+                chars[cid] = {**form, 'name': form['name']+' ('+label+')', 'sharedGroup': base_id, 'baseId': base_id}
+                if base_id in chars:
+                    chars[cid]['phases'] = chars[base_id]['phases']
+                    chars[cid]['allSkillLvlup'] = chars[base_id]['allSkillLvlup']
+    return chars
+
+
 def extract(raw):
-    chars, items, skills = (raw[n] for n in FILES[:3])
+    chars, items, skills = merged_characters(raw), raw['item_table'], raw['skill_table']
     # uniequip_data is a legacy prototype, NOT a fallback for current KR modules.
     assert isinstance(raw['uniequip_data']['equipDict'], dict)
     modules = raw['uniequip_table']
@@ -44,6 +61,10 @@ def extract(raw):
         rarity = int(c['rarity'].split('_')[1])
         op = {k: c[k] for k in ('name', 'profession', 'subProfessionId', 'maxPotentialLevel')}
         op.update(id=cid, rarity=rarity, phases=[], skillLevels=[], skills=[], modules=[])
+        if cid in raw.get('char_patch_table', {}).get('unlockConds', {}):
+            op['formUnlockConditions'] = raw['char_patch_table']['unlockConds'][cid]
+        for key in ('sharedGroup', 'baseId'):
+            if key in c: op[key] = c[key]
         for phase, p in enumerate(c['phases']):
             entries = list(p['evolveCost'] or [])
             lmd = gold[rarity - 1][phase - 1] if phase else 0
@@ -69,7 +90,7 @@ def extract(raw):
             op['skills'].append(sk)
         for mid in modules['charEquip'].get(cid, []):
             m = modules['equipDict'][mid]
-            assert m['charId'] == cid
+            assert (m.get('tmplId') or m['charId']) == cid
             if m['type'] == 'INITIAL':
                 continue
             assert m['type'] == 'ADVANCED' and m['itemCost'], mid
@@ -103,14 +124,14 @@ def main():
         if not args.commit or not args.source_date:
             parser.error('--source-dir requires --commit and --source-date')
         sha, date = args.commit, args.source_date
-        blobs = {n: (args.source_dir / (n+'.json')).read_bytes() for n in FILES}
+        blobs = {n: (args.source_dir / (n+'.json')).read_bytes() for n in FILES+('char_patch_table',)}
     else:
         meta = json.loads(download(f'https://api.github.com/repos/{REPOSITORY}/commits/{args.ref}'))
         sha, date = meta['sha'], meta['commit']['committer']['date']
         def get(name):
             return name, download(f'https://raw.githubusercontent.com/{REPOSITORY}/{sha}/kr/gamedata/excel/{name}.json')
         with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:
-            blobs = dict(pool.map(get, FILES))
+            blobs = dict(pool.map(get, FILES+('char_patch_table',)))
     ops, items = extract({n: json.loads(b) for n, b in blobs.items()})
     growth = extract_growth({n: json.loads(b) for n, b in blobs.items()}, items)
     metadata = {'version': 2, 'source': {'repository': REPOSITORY, 'locale': 'kr',
@@ -120,7 +141,7 @@ def main():
     args.output_dir.mkdir(parents=True, exist_ok=True)
     branches = json.loads(blobs['uniequip_table'])['subProfDict']
     professions = {o['subProfessionId']: branches[o['subProfessionId']]['subProfessionName'] for o in ops}
-    characters = {cid: {'name': c['name'], 'obtainable': not c['isNotObtainable']} for cid, c in json.loads(blobs['character_table']).items() if cid.startswith('char_')}
+    characters = {cid: {'name': c['name'], 'obtainable': not c['isNotObtainable']} for cid, c in merged_characters({n:json.loads(b) for n,b in blobs.items()}).items() if cid.startswith('char_')}
     target = args.output_dir / 'account-characters.json'
     target.write_text(json.dumps({'version': 1, 'source': metadata['source'], 'characters': characters}, ensure_ascii=False, separators=(',', ':'))+'\n', encoding='utf-8')
     for name, payload in [('operators', ops), ('items', items), ('professions', professions)]:
@@ -168,7 +189,7 @@ def extract_growth(raw, site_items):
                     'iconId': source_items[key]['iconId']} for key in sorted(needed)}
     const = raw['gamedata_const']
     potentials, token_items = {}, {}
-    for cid, c in raw['character_table'].items():
+    for cid, c in merged_characters(raw).items():
         if not cid.startswith('char_') or c['isNotObtainable']:
             continue
         activity = bool(c['canUseActivityPotentialItem'] and c['activityPotentialItemId'])

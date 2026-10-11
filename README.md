@@ -14,6 +14,7 @@ python -m unittest discover -s tests -v
 갱신 스크립트는 ArknightsAssets/ArknightsGamedata의 master를 하나의 커밋으로 고정한 뒤 `kr/gamedata/excel/`에서 아래 원본을 읽습니다. 결과 `data/operators.json`, `data/items.json`을 함께 커밋하면 Pages 배포에 반영됩니다. 페이지 실행 중에는 이 두 내부 JSON만 읽으며 외부 게임 데이터 JSON을 요청하지 않습니다. 초상화와 재료 **이미지**는 기존 외부 이미지 저장소를 계속 사용하며, 이미지 실패는 재료명·수량 조회에 영향을 주지 않습니다.
 
 - character_table.json: 획득 가능한 char_ 오퍼레이터, 정예화, 스킬 및 마스터리 비용
+- char_patch_table.json: 아미야의 가드·메딕 직군, 실제 스킬 및 직군 해금 조건
 - item_table.json: 실제 사용되는 재료 ID, 한국어 이름, iconId
 - skill_table.json: 실제 보유 스킬의 한국어 이름
 - uniequip_table.json: charEquip 연결로 확인한 실제 모듈, 단계별 비용 및 해금 조건
@@ -33,6 +34,8 @@ python -m unittest discover -s tests -v
 - items: 사용된 재료 ID를 키로 한 `{id, name, iconId}` 사전.
 
 기본 장비(INITIAL), 소환물, 획득 불가능 유닛은 제외합니다. 모듈·마스터리 없는 오퍼레이터는 빈 배열입니다. 동일 이름의 다른 직군은 원본 ID로 구별합니다.
+
+아미야의 캐스터·가드·메딕은 별도 카드와 원본 ID로 저장합니다. `sharedGroup`으로 정예화·레벨·잠재·신뢰도·스킬 레벨을 자동 공유하며 보유 여부(직군 해금), 마스터리와 모듈은 각각 유지합니다. 기존 계정 가져오기의 `classVariants` 데이터는 별도 카드로 자동 이관합니다. 육성 계획도 같은 규칙을 사용하며, 선택된 아미야 카드 사이에서 공통 재료를 한 번만 합산합니다.
 
 모든 비용은 해당 단계로 올라가는 **단계별 비용**입니다. 향후 현재 상태→목표 상태 계산에서는 사이 단계의 cost를 ID별로 합산합니다. 모듈은 타입 대신 모듈 ID로 연결해야 합니다. `materials.html?operator=<오퍼레이터 ID>`로 특정 오퍼레이터를 바로 조회할 수 있습니다. `plans.html`의 필요 재료 확인 기능에서 현재→목표의 비용을 자동 합산합니다.
 

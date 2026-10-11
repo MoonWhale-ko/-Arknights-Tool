@@ -8,6 +8,7 @@ const elements=new Map();
 function element(){return{value:'',innerHTML:'',classList:{toggle(){}},style:{removeProperty(){},setProperty(){}},setAttribute(k,v){this[k]=v},addEventListener(){},querySelectorAll(){return[]}}}
 const document={getElementById(id){if(!elements.has(id))elements.set(id,element());return elements.get(id)},querySelectorAll(){return[]},querySelector(){return null},fonts:{ready:Promise.resolve()}};
 const ctx=vm.createContext({document,window:{addEventListener(){}},console,localStorage:{getItem(){return saved},setItem(k,v){assert.equal(k,'arknightsOperatorProgressV1');saved=v;writes++}},fetch:url=>Promise.resolve({json:()=>Promise.resolve(url==='data/operator-aliases.json'?JSON.parse(fs.readFileSync(path.join(root,'data/operator-aliases.json'),'utf8')):url==='data/professions.json'?JSON.parse(fs.readFileSync(path.join(root,'data/professions.json'),'utf8')):data)})});
+vm.runInContext(fs.readFileSync(path.join(root,'assets/js/operator-shared.js'),'utf8'),ctx);
 vm.runInContext(source,ctx);
 const run=s=>vm.runInContext(s,ctx),json=s=>JSON.parse(run(`JSON.stringify(${s})`));
 (async()=>{
@@ -27,7 +28,7 @@ const run=s=>vm.runInContext(s,ctx),json=s=>JSON.parse(run(`JSON.stringify(${s})
  }
  assert.deepEqual(json("chars.filter(c=>matchesOperator(c,'은재','','')).map(c=>c.id).sort()"),['char_1045_svash2','char_172_svrash']);
  assert.equal(run("chars.filter(c=>matchesOperator(c,'골든글로우','','')).length"),1);
- assert.equal(run("chars.filter(c=>matchesOperator(c,'힐미야','','')).length"),0,'Medic Amiya alias must not match caster Amiya');
+ assert.deepEqual(json("chars.filter(c=>matchesOperator(c,'힐미야','','')).map(c=>c.id)"),['char_1037_amiya3'],'Medic Amiya alias matches only the medic form');
  assert.equal(writes,0);assert.deepEqual(JSON.parse(saved),original,'Opening page must preserve saved progress');
  assert.equal(json('get("char_103_angel")').custom,'keep');
  assert.equal(run('chars.length'),data.operators.length);
@@ -81,5 +82,15 @@ const run=s=>vm.runInContext(s,ctx),json=s=>JSON.parse(run(`JSON.stringify(${s})
  assert.equal(json('get("char_124_kroos")').level,1);assert.equal(json('get("char_124_kroos")').elite,0);
  assert.ok(!/\.(?:settings|card)[^{]*\{[^}]*overflow(?:-y)?:auto/.test(html));assert.ok(html.includes('height:auto;min-height:var(--card-height,402px)'));
  for(const name of ['elite-e0','elite-e1','elite-e2','potential-p1','potential-p2','potential-p3','potential-p4','potential-p5','potential-p6','mastery-m0','mastery-m1','mastery-m2','mastery-m3'])assert.ok(fs.existsSync(path.join(root,'assets/icons/progress',name+'.svg')));
- console.log('Operator checks passed: saved progress, legacy modules, real skills/modules, limits, defaults, no inner scrolling, SVG assets.');
+ run('setVal("char_002_amiya","owned",true);setVal("char_002_amiya","elite",2);setVal("char_002_amiya","skill",7);setVal("char_002_amiya","m0",1);setVal("char_1001_amiya2","owned",true);setVal("char_1001_amiya2","level",80);setVal("char_1001_amiya2","potential",4);setVal("char_1001_amiya2","trust",150);setVal("char_1001_amiya2","m0",3)');
+for(const id of ['char_002_amiya','char_1001_amiya2','char_1037_amiya3']){
+ const value=json(`get("${id}")`);assert.equal(value.elite,2);assert.equal(value.level,80);assert.equal(value.skill,7);assert.equal(value.potential,4);assert.equal(value.trust,150);
+}
+assert.equal(json('get("char_002_amiya")').m[0],1);assert.equal(json('get("char_1001_amiya2")').m[0],3);assert.equal(json('get("char_1037_amiya3")').m[0],0);
+assert.equal(json('get("char_1037_amiya3")').owned,false,'Separate form ownership must not imply story unlock');
+run(`state={char_002_amiya:{...def(),owned:true,elite:2,level:80,skill:7,trust:123,m:[1,0,0],custom:'keep',classVariants:{char_1001_amiya2:{skills:chars.find(c=>c.id==='char_1001_amiya2').skills.map(s=>({id:s.id,mastery:2})),modules:{uniequip_002_amiya2:3}}}}};shared.migrate(chars,state,def)`);
+assert.equal(json('get("char_1001_amiya2")').m[0],2);assert.equal(json('get("char_1001_amiya2")').mods.uniequip_002_amiya2,3);assert.equal(json('get("char_1001_amiya2")').trust,123);
+assert.equal(json('get("char_002_amiya")').custom,'keep');assert.equal(json('get("char_002_amiya")').m[0],1);
+assert.equal(run('shared.migrate(chars,state,def)'),false,'Migration is repeatable and preserves form-specific progress');
+console.log('Operator checks passed: saved progress, legacy modules, real skills/modules, limits, defaults, no inner scrolling, SVG assets.');
 })().catch(e=>{console.error(e);process.exitCode=1});

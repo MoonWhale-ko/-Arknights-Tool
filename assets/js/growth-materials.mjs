@@ -1,4 +1,4 @@
-import {calculatePlans,ownedAmount,materialRequirements,materialUsers} from './growth-costs.mjs?v=6';
+import {calculatePlans,ownedAmount,materialRequirements,materialUsers} from './growth-costs.mjs?v=7';
 import {readInventory,INVENTORY_KEY,compareItems,tierOf,categoryOf} from './inventory-state.mjs?v=6';
 const $=id=>document.getElementById(id),dialog=$('growthDialog');
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -33,15 +33,15 @@ function render(){
  if(!loaded){$('growthContent').textContent='육성·제작 데이터를 불러오는 중입니다.';return}
  try{
   const inventory=readInventory(localStorage),all=calculatePlans(operators,read('arknightsOperatorProgressV1'),read('arknightsOperatorPlansV1'),data);
-  const planned=all.results.map(r=>r.operator),ids=new Set(planned.map(c=>c.id));
+  const plans=read('arknightsOperatorPlansV1'),current=read('arknightsOperatorProgressV1');
+  const planned=operators.filter(o=>plans[o.id]?.owned&&calculatePlans(operators,current,plans,data,new Set([o.id])).results.length),ids=new Set(planned.map(c=>c.id));
   if(selection!==null)selection=new Set([...selection].filter(id=>ids.has(id)));
   const selected=id=>selection===null||selection.has(id),allSelected=planned.length>0&&planned.every(c=>selected(c.id));
   $('growthOperators').innerHTML=`<button type="button" class="growth-select-all" data-growth-all aria-pressed="${allSelected}" ${planned.length?'':'disabled'}>전체 선택</button>`+planned.map(c=>`<button type="button" class="growth-operator-toggle" data-growth-operator="${esc(c.id)}" aria-label="${esc(c.name)} 계획 합산" aria-pressed="${selected(c.id)}"><img src="https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/dyn/arts/charavatars/${encodeURIComponent(c.id)}.png" alt="" loading="lazy"></button>`).join('');
   $('growthOperators').querySelector('[data-growth-all]').addEventListener('click',()=>{selection=allSelected?new Set():null;render()});
   $('growthOperators').querySelectorAll('[data-growth-operator]').forEach(button=>button.addEventListener('click',()=>{if(selection===null)selection=new Set(ids);const id=button.dataset.growthOperator;if(selection.has(id))selection.delete(id);else selection.add(id);render()}));
   bindImages($('growthOperators'));
-  const results=all.results.filter(r=>selected(r.operator.id)),totals={};
-  for(const r of results)for(const [id,count] of Object.entries(r.totals))totals[id]=(totals[id]||0)+count;
+  const {results,totals}=calculatePlans(operators,read('arknightsOperatorProgressV1'),read('arknightsOperatorPlansV1'),data,selection);
   $('growthSummary').textContent=`${results.length}명 계획 · 필요 재료 ${Object.keys(totals).length}종`;
   const requirements=materialRequirements(totals,inventory,data),sort=(a,b)=>compareItems(items[a.id]||{id:a.id},items[b.id]||{id:b.id});
   const selectedRows=tier==='all'?requirements.roots:requirements.rows.filter(row=>tier==='other'?(row.id==='exp'||categoryOf(items[row.id]||{id:row.id})!=='material'):row.id!=='exp'&&categoryOf(items[row.id]||{id:row.id})==='material'&&tierOf(items[row.id]||{id:row.id})===Number(tier));

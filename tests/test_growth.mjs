@@ -5,6 +5,19 @@ import {calculateGrowth,calculatePlans,ownedAmount,recipeCapacity,craftingPlan,m
 const read=p=>JSON.parse(fs.readFileSync(new URL('../data/'+p,import.meta.url)));
 const operators=read('operators.json').operators,data=read('growth.json'),op=operators.find(o=>o.id==='char_377_gdglow');
 const base={owned:true,elite:0,level:1,skill:1,potential:1,m:[0,0,0],mods:{}};
+test('Amiya common costs are charged once; a selected form retains common costs and independent mastery',()=>{
+ const forms=operators.filter(o=>o.sharedGroup==='char_002_amiya'),caster=forms.find(o=>!o.baseId),guard=forms.find(o=>o.profession==='WARRIOR');
+ assert.equal(forms.length,3);
+ const goal={...base,elite:2,level:80,skill:7,potential:4};
+ const current={[caster.id]:base},plans=Object.fromEntries(forms.map(o=>[o.id,goal]));
+ assert.deepEqual(calculatePlans(operators,current,plans,data).totals,calculateGrowth(caster,base,goal,data).totals);
+ assert.deepEqual(calculatePlans(operators,current,plans,data,new Set([guard.id])).totals,calculateGrowth(caster,base,goal,data).totals);
+ current[caster.id]=goal;
+ plans[guard.id]={...goal,m:[3,0,0]};
+ const expected={};for(const stage of guard.skills[0].mastery)for(const x of stage.cost)expected[x.id]=(expected[x.id]||0)+x.count;
+ assert.deepEqual(calculatePlans(operators,current,plans,data).totals,expected);
+ assert.deepEqual(calculatePlans(operators,current,plans,data,new Set()).totals,{});
+});
 test('same state and untargeted operators never charge; potential upgrades cost specific tokens',()=>{
  assert.deepEqual(calculateGrowth(op,base,base,data).totals,{});
  assert.deepEqual(calculatePlans(operators,{[op.id]:base},{},data).totals,{});

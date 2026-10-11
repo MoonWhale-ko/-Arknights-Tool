@@ -29,7 +29,7 @@ export function prepareImport(data, chars, previous, frames, characters = {}) {
       throw new Error("오퍼레이터 데이터가 중복되거나 잘못되었습니다.");
     seen.add(op.id);
     const baseId = Object.hasOwn(CLASS_VARIANTS,op.id) ? CLASS_VARIANTS[op.id] : null;
-    if (baseId && byId.has(baseId)) {
+    if (baseId && byId.has(baseId) && !byId.has(op.id)) {
       const base = byId.get(baseId);
       if (!integer(op.elite,0,base.phases.length-1) || !integer(op.level,1,base.phases[op.elite].maxLevel) || !integer(op.potential,1,(base.maxPotentialLevel??5)+1) || !integer(op.skill,1,7) || !Array.isArray(op.skills) || !object(op.modules) || op.skills.some(s=>!object(s)||typeof s.id!=="string"||!integer(s.mastery,0,3)) || Object.values(op.modules).some(v=>!integer(v,0,3)))
         throw new Error("직군 전환 육성 데이터 형식이 올바르지 않습니다.");
@@ -104,8 +104,8 @@ export function prepareImport(data, chars, previous, frames, characters = {}) {
   return {
     state: next,
     inventory: { version: 1, server: "kr", importedAt: data.importedAt, items },
-    owned: data.operators.length - skipped - classVariants.length,
-    classVariantCount: classVariants.length,
+    owned: new Set(data.operators.filter(op=>byId.has(op.id)).map(op=>CLASS_VARIANTS[op.id]||op.id)).size,
+    classVariantCount: data.operators.filter(op=>Object.hasOwn(CLASS_VARIANTS,op.id)&&byId.has(CLASS_VARIANTS[op.id])).length,
     skipped,
     skippedOperators,
   };
