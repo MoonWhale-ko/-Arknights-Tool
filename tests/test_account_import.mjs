@@ -142,3 +142,44 @@ test("legacy Amiya forms link to one operator without overwriting caster skills"
  assert.throws(()=>prepareImport({...data,operators:[guard]},chars.filter(c=>!c.baseId),{},frames),/基本|기본/);
  assert.throws(()=>prepareImport({...data,operators:[caster,{...medic,skills:[{id:"bad",mastery:4}]}]},chars.filter(c=>!c.baseId),{},frames),/직군 전환/);
 });
+
+import {BASE_KEY,BASE_SLOTS,normalizeBuilding,prepareBase,readBase} from '../assets/js/base-state.mjs';
+const baseFixture={roomSlots:{
+ slot_34:{roomId:'CONTROL',level:5,charInstIds:[1,2,-1,-1,-1]},
+ slot_24:{roomId:'MANUFACTURE',level:2,charInstIds:[1,-1]},
+ slot_25:{roomId:'TRADING',level:3,charInstIds:[2,3,-1]},
+ slot_26:{roomId:'POWER',level:3,charInstIds:[-1]},
+ slot_28:{roomId:'DORMITORY',level:1,charInstIds:[1,2,3,-1,-1]},
+ slot_41:{roomId:'PRIVATE',level:1,charInstIds:[1]},
+},chars:{1:{charId:'char_002_amiya'},2:{charId:'char_103_angel'}}};
+test('building snapshot keeps real slot types, levels and occupied seats only',()=>{
+ const normalized=normalizeBuilding(baseFixture,{3:{charId:'char_124_kroos'}});
+ assert.equal(normalized.rooms.length,5);
+ const prepared=prepareBase(normalized,data.importedAt);
+ assert.deepEqual(prepared.rooms.slot_24,{type:'MANUFACTURE',level:2,count:1,operators:['char_002_amiya']});
+ assert.equal(prepared.rooms.slot_25.type,'TRADING');assert.equal(prepared.rooms.slot_25.count,2);
+ assert.equal(prepared.rooms.slot_26.count,0);assert.equal(prepared.rooms.slot_28.count,3);
+ assert.equal(prepared.rooms.slot_41,undefined);assert.equal(prepared.rooms.slot_5,undefined);
+ assert.deepEqual(readBase(prepared).rooms,prepared.rooms);
+ assert.deepEqual(BASE_SLOTS.filter(s=>s[1]==='production').map(s=>s[0]),['slot_24','slot_25','slot_26','slot_14','slot_15','slot_16','slot_5','slot_6','slot_7']);
+});
+test('building is applied atomically and undo restores prior manual facility settings',()=>{
+ const s=storage(),previous=JSON.stringify({'제조소 1':{level:2,count:1}});s.setItem(BASE_KEY,previous);
+ const p=prepareImport({...data,building:normalizeBuilding(baseFixture)},chars,{},frames);
+ commitImport(s,'progress',p);assert.equal(JSON.parse(s.getItem(BASE_KEY)).source,'account');
+ restoreImport(s,'progress');assert.equal(s.getItem(BASE_KEY),previous);
+ const write=s.setItem;let fail=true;s.setItem=(key,value)=>{if(key==='progress'&&fail){fail=false;throw Error('quota');}write(key,value);};
+ assert.throws(()=>commitImport(s,'progress',p),/quota/);assert.equal(s.getItem(BASE_KEY),previous);assert.equal(s.getItem(INVENTORY_KEY),'{"previous":true}');
+});
+test('missing building keeps settings while old backups do not delete facility settings',()=>{
+ const s=storage();s.setItem(BASE_KEY,'{"keep":true}');commitImport(s,'progress',prepareImport(data,chars,{},frames));assert.equal(s.getItem(BASE_KEY),'{"keep":true}');
+ s.setItem(BACKUP_KEY,JSON.stringify({version:1,progress:null,inventory:null}));restoreImport(s,'progress');assert.equal(s.getItem(BASE_KEY),'{"keep":true}');
+});
+test('malformed building cannot replace account state and legacy manual values migrate',()=>{
+ const room={slotId:'slot_24',type:'MANUFACTURE',level:1,count:2,operators:[]};
+ assert.throws(()=>prepareImport({...data,building:{version:1,rooms:[room]}},chars,{},frames),/기반시설/);
+ assert.throws(()=>prepareBase({version:1,rooms:[{...room,count:1},{...room,count:1}]},data.importedAt),/기반시설/);
+ assert.throws(()=>prepareBase({version:1,rooms:[{...room,slotId:'slot_34',type:'POWER',count:1}]},data.importedAt),/기반시설/);
+ const old=readBase({'제조소 1':{level:3,count:3},'발전소 1':{level:3,count:5}});assert.equal(old.rooms.slot_25.level,3);assert.equal(old.rooms.slot_25.count,3);assert.equal(old.rooms.slot_26.count,0);
+ const duplicate=normalizeBuilding({roomSlots:{slot_24:{roomId:'TRADING',level:3,charInstIds:[1,'1',-1,0,true]}}});assert.equal(duplicate.rooms[0].count,1);
+});

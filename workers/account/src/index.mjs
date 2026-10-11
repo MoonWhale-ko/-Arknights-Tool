@@ -74,7 +74,8 @@ export default {
         ok: true,
         service: "arknights-account-import",
         server: "kr",
-        version: 2,
+        version: 3,
+        buildingSupported: true,
         ...(sdk ? { sdk } : {}),
       });
     }

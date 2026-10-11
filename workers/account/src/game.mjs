@@ -1,5 +1,6 @@
 // KR protocol reference: ArkPRTS auth.py and neeia/ak-roster yostarAuth.ts.
 // Only authentication and account/syncData; no game actions or retained sessions.
+import { normalizeBuilding } from "../../../assets/js/base-state.mjs";
 import { createHash, createHmac, randomUUID } from "node:crypto";
 export class AccountError extends Error {
   constructor(code, status = 502, stage = undefined, upstreamStatus = undefined) {
@@ -281,5 +282,6 @@ export function normalizeAccount(user) {
     importedAt: new Date().toISOString(),
     operators,
     inventory,
+    building: normalizeBuilding(user.building,user.troop.chars),
   };
 }

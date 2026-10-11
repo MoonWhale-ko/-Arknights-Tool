@@ -93,7 +93,7 @@ input[type=number]{width:74px}.search{min-width:220px}
 <dialog id="accountDialog" class="account-dialog" aria-labelledby="accountTitle">
 <h2 id="accountTitle">게임 계정 가져오기</h2>
 <p class="muted">한국 서버 · 요스타 이메일 인증</p>
-<p>조회하면 현재 게임 접속이 종료될 수 있습니다. 이메일과 인증번호는 계정 조회에만 사용하며, 육성·재료 정보는 이 브라우저에 저장합니다.</p>
+<p>조회하면 현재 게임 접속이 종료될 수 있습니다. 이메일과 인증번호는 계정 조회에만 사용하며, 육성·재료·기반시설 정보는 이 브라우저에 저장합니다.</p>
 <form id="accountForm">
 <label>요스타 연동 이메일<input id="accountEmail" type="email" autocomplete="off" maxlength="254" required></label>
 <button class="btn" id="accountSend" type="button">인증번호 받기</button>
@@ -221,6 +221,6 @@ Promise.all([fetch(DATA_URL,{cache:'no-cache'}).then(r=>r.json()),fetch('data/pr
 </script>
 <script src="assets/js/operator-png.js?v=12"></script>
 <script src="assets/js/account-config.js"></script>
-<script type="module" src="assets/js/account-import.mjs?v=4"></script>
+<script type="module" src="assets/js/account-import.mjs?v=5"></script>
 <a class="depot-button" href="backpack.html" aria-label="창고" title="창고"><img src="assets/icons/Depot_iconv2.svg" width="36" height="36" alt="" aria-hidden="true"></a>
 </body></html>

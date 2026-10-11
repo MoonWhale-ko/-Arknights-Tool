@@ -202,3 +202,12 @@ test("SDK probe uses an empty account and never follows redirects", async () => 
   assert.deepEqual(result, {reachable:true, httpStatus:404, postStatus:404});
   assert.deepEqual(await probeSdk(async () => {throw new DOMException("private", "TimeoutError")}), {reachable:false, reason:"timeout"});
 });
+
+test('account response includes sanitized facility snapshot with no account identifiers',()=>{
+ const building={roomSlots:{slot_34:{roomId:'CONTROL',level:5,charInstIds:[1,2,-1,-1,-1]},slot_24:{roomId:'TRADING',level:3,charInstIds:[1,-1,-1]}},status:{privateUid:'private-building-id'}};
+ const data=normalizeAccount({...user,building});assert.equal(data.building.version,1);
+ assert.equal(data.building.rooms.find(r=>r.slotId==='slot_34').count,2);
+ assert.deepEqual(data.building.rooms.find(r=>r.slotId==='slot_24').operators,['char_103_angel']);
+ assert.equal(JSON.stringify(data).includes('private-building-id'),false);assert.equal(JSON.stringify(data.building).includes('charInstIds'),false);
+ assert.equal(normalizeAccount(user).building,null);
+});
