@@ -58,6 +58,7 @@ input[type=number]{width:74px}.search{min-width:220px}
 .rarity-options{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin-top:12px}.rarity-toggle{border:1px solid #3a4556;background:#10151c;color:#9aa5b4;padding:10px 6px;font-size:13px}.rarity-toggle[aria-pressed="true"]{border-color:#edf2f7;background:#344050;color:#fff}.rarity-toggle:focus-visible{outline:2px solid #fff;outline-offset:2px}
 </style>
 <link rel="stylesheet" href="assets/css/future-operators.css?v=2">
+<link rel="stylesheet" href="assets/css/depot-button.css?v=1">
 </head>
 <body>
 <div class="wrap">
@@ -71,7 +72,7 @@ input[type=number]{width:74px}.search{min-width:220px}
 <select id="ownedFilter"><option value="">전체</option><option value="1">보유</option><option value="0">미보유</option></select>
 <button type="button" id="futureOnly" class="future-toggle" aria-pressed="false">미래시만</button>
 </div>
-<div class="materials-action"><a class="btn" href="backpack.html">가방</a><a class="btn plan-link" href="plans.html">오퍼레이터 육성 계획</a></div>
+<div class="materials-action"><a class="btn plan-link" href="plans.html">오퍼레이터 육성 계획</a></div>
 <input type="hidden" id="rarity" value=""><div id="rarityOptions" class="rarity-options" role="group" aria-label="표시할 등급"></div>
 <div class="profession-picker"><div id="professionTabs" class="profession-tabs" role="group" aria-label="기본 직군"></div><div id="branchTabs" class="branch-tabs" role="group" aria-label="세부 직군"></div></div>
 </div>
@@ -221,4 +222,5 @@ Promise.all([fetch(DATA_URL,{cache:'no-cache'}).then(r=>r.json()),fetch('data/pr
 <script src="assets/js/operator-png.js?v=12"></script>
 <script src="assets/js/account-config.js"></script>
 <script type="module" src="assets/js/account-import.mjs?v=4"></script>
+<a class="depot-button" href="backpack.html" aria-label="창고" title="창고"><img src="assets/icons/Depot_iconv2.svg" width="36" height="36" alt="" aria-hidden="true"></a>
 </body></html>
