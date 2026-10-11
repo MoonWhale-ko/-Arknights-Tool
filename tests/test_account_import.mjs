@@ -154,12 +154,12 @@ const baseFixture={roomSlots:{
 },chars:{1:{charId:'char_002_amiya'},2:{charId:'char_103_angel'}}};
 test('building snapshot keeps real slot types, levels and occupied seats only',()=>{
  const normalized=normalizeBuilding(baseFixture,{3:{charId:'char_124_kroos'}});
- assert.equal(normalized.rooms.length,5);
+ assert.equal(normalized.rooms.length,6);
  const prepared=prepareBase(normalized,data.importedAt);
  assert.deepEqual(prepared.rooms.slot_24,{type:'MANUFACTURE',level:2,count:1,operators:['char_002_amiya']});
  assert.equal(prepared.rooms.slot_25.type,'TRADING');assert.equal(prepared.rooms.slot_25.count,2);
  assert.equal(prepared.rooms.slot_26.count,0);assert.equal(prepared.rooms.slot_28.count,3);
- assert.equal(prepared.rooms.slot_41,undefined);assert.equal(prepared.rooms.slot_5,undefined);
+ assert.equal(prepared.rooms.slot_41.type,'PRIVATE');assert.equal(prepared.rooms.slot_41.occupantsKnown,false);assert.equal(prepared.rooms.slot_5,undefined);
  assert.deepEqual(readBase(prepared).rooms,prepared.rooms);
  assert.deepEqual(BASE_SLOTS.filter(s=>s[1]==='production').map(s=>s[0]),['slot_24','slot_25','slot_26','slot_14','slot_15','slot_16','slot_5','slot_6','slot_7']);
 });
@@ -182,4 +182,23 @@ test('malformed building cannot replace account state and legacy manual values m
  assert.throws(()=>prepareBase({version:1,rooms:[{...room,slotId:'slot_34',type:'POWER',count:1}]},data.importedAt),/기반시설/);
  const old=readBase({'제조소 1':{level:3,count:3},'발전소 1':{level:3,count:5}});assert.equal(old.rooms.slot_25.level,3);assert.equal(old.rooms.slot_25.count,3);assert.equal(old.rooms.slot_26.count,0);
  const duplicate=normalizeBuilding({roomSlots:{slot_24:{roomId:'TRADING',level:3,charInstIds:[1,'1',-1,0,true]}}});assert.equal(duplicate.rooms[0].count,1);
+});
+
+test('activity owners are separate from stationed staff, trust uses actual account points',()=>{
+ const raw={roomSlots:{slot_47:{roomId:'PRIVATE',level:1,charInstIds:[]},slot_51:{roomId:'PRIVATE',level:3,charInstIds:[]},slot_44:{roomId:'PRIVATE',level:1,charInstIds:[]}},rooms:{PRIVATE:{slot_47:{owners:[1]},slot_51:{owners:[]},slot_44:{owners:[2]}}}};
+ const operator0={...data.operators[0],favorPoint:0},operator200={...data.operators[0],id:'char_002_amiya',level:80,favorPoint:frames.at(-1).points,skills:[],modules:{}};
+ const troop={1:{charId:operator0.id},2:{charId:operator200.id}};
+ const building=normalizeBuilding(raw,troop),p=prepareImport({...data,operators:[operator0,operator200],building},chars,{},frames);
+ assert.equal(p.base.rooms.slot_47.count,1);assert.equal(p.base.rooms.slot_47.trust[operator0.id],0);
+ assert.equal(p.base.rooms.slot_44.trust[operator200.id],200);assert.equal(p.base.rooms.slot_51.count,0);
+ assert.equal(p.base.rooms.slot_47.occupantsKnown,true);
+ const restored=readBase(p.base);assert.deepEqual(restored.rooms.slot_44.trust,p.base.rooms.slot_44.trust);
+ const store=storage();commitImport(store,'progress',p);assert.equal(JSON.parse(store.getItem(BASE_KEY)).rooms.slot_44.trust[operator200.id],200);restoreImport(store,'progress');assert.equal(store.getItem(BASE_KEY),null);
+ const unknown=normalizeBuilding({...raw,rooms:{PRIVATE:{slot_47:{owners:[9]}}}},troop);const room=unknown.rooms.find(r=>r.slotId==='slot_47');assert.equal(room.count,1);assert.deepEqual(room.operators,[]);
+});
+test('activity trust validation rejects fake percentages and multiple owners',()=>{
+ assert.throws(()=>prepareBase({version:1,rooms:[{slotId:'slot_47',type:'PRIVATE',level:1,count:1,operators:[op.id],trust:{[op.id]:201}}]},data.importedAt),/신뢰도/);
+ assert.equal(normalizeBuilding({roomSlots:{slot_47:{roomId:'PRIVATE',level:1,charInstIds:[]}},rooms:{PRIVATE:{slot_47:{owners:[1,2]}}}}),null);
+ const old=readBase({version:2,rooms:{slot_24:{type:'TRADING',level:3,count:0,operators:[]}}});assert.equal(old.rooms.slot_47,undefined);
+ assert.equal(BASE_SLOTS.filter(s=>s[1]==='private').length,6);
 });

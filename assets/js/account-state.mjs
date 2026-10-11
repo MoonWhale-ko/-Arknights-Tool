@@ -1,4 +1,4 @@
-import { BASE_KEY, prepareBase } from "./base-state.mjs?v=1";
+import { BASE_KEY, prepareBase } from "./base-state.mjs?v=2";
 export const INVENTORY_KEY = "arknightsInventoryV1";
 export const BACKUP_KEY = "arknightsAccountImportBackupV1";
 const CLASS_VARIANTS = {char_1001_amiya2:"char_002_amiya",char_1037_amiya3:"char_002_amiya"};
@@ -102,9 +102,11 @@ export function prepareImport(data, chars, previous, frames, characters = {}) {
       throw new Error("재료 데이터 형식이 올바르지 않습니다.");
     items[id] = count;
   }
+  const base=prepareBase(data.building,data.importedAt);
+  if(base){const imported=new Map(data.operators.map(op=>[op.id,op]));for(const room of Object.values(base.rooms)){if(room.type!=='PRIVATE')continue;room.trust={};for(const id of room.operators){const op=imported.get(id);if(op)room.trust[id]=trustPercent(op.favorPoint,frames);}}}
   return {
     state: next,
-    base: prepareBase(data.building,data.importedAt),
+    base,
     inventory: { version: 1, server: "kr", importedAt: data.importedAt, items },
     owned: new Set(data.operators.filter(op=>byId.has(op.id)).map(op=>CLASS_VARIANTS[op.id]||op.id)).size,
     classVariantCount: data.operators.filter(op=>Object.hasOwn(CLASS_VARIANTS,op.id)&&byId.has(CLASS_VARIANTS[op.id])).length,

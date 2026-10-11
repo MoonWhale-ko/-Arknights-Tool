@@ -74,8 +74,9 @@ export default {
         ok: true,
         service: "arknights-account-import",
         server: "kr",
-        version: 3,
+        version: 4,
         buildingSupported: true,
+        privateRoomsSupported: true,
         ...(sdk ? { sdk } : {}),
       });
     }
