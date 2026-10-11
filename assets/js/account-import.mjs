@@ -3,7 +3,7 @@ import {
   commitImport,
   restoreImport,
   BACKUP_KEY,
-} from "./account-state.mjs?v=4";
+} from "./account-state.mjs?v=5";
 const $ = (id) => document.getElementById(id),
   dialog = $("accountDialog");
 let preview = null,
@@ -147,7 +147,7 @@ $("accountForm").onsubmit = (e) => {
   e.preventDefault();
   action(async () => {
     preview = null;
-    status("현재 육성 상태와 재료를 조회하고 있습니다.");
+    status("현재 육성 상태와 재료·기반시설을 조회하고 있습니다.");
     const result = await request("/login", {
       server: "kr",
       email: $("accountEmail").value.trim(),
@@ -169,7 +169,7 @@ $("accountForm").onsubmit = (e) => {
       names?.characters || {},
     );
     status(
-      `보유 ${preview.owned}명 · 재료 ${Object.keys(preview.inventory.items).length}종 조회 완료${preview.classVariantCount ? `\n아미야 별도 직군 ${preview.classVariantCount}종 저장 (보유 인원 중복 제외)` : ""}${preview.skipped ? `\n사이트 미수록 ${preview.skipped}명 제외\n${preview.skippedOperators.map(o=>`${o.name || "이름 확인 불가"} (${o.id})${o.obtainable===false?" · 일반 획득 불가 데이터":""}`).join("\n")}` : ""}\n적용하면 현재 보유·육성 상태와 재료가 갱신됩니다. 적용 전 상태는 자동 백업합니다.`,
+      `보유 ${preview.owned}명 · 재료 ${Object.keys(preview.inventory.items).length}종 조회 완료${preview.base ? ` · 기반시설 ${Object.keys(preview.base.rooms).length}칸` : "\n기반시설 정보가 응답에 없어 기존 시설 설정을 유지합니다."}${preview.classVariantCount ? `\n아미야 별도 직군 ${preview.classVariantCount}종 저장 (보유 인원 중복 제외)` : ""}${preview.skipped ? `\n사이트 미수록 ${preview.skipped}명 제외\n${preview.skippedOperators.map(o=>`${o.name || "이름 확인 불가"} (${o.id})${o.obtainable===false?" · 일반 획득 불가 데이터":""}`).join("\n")}` : ""}\n적용하면 현재 보유·육성 상태와 재료·조회된 기반시설이 갱신됩니다. 적용 전 상태는 자동 백업합니다.`,
     );
   });
 };
@@ -179,15 +179,16 @@ $("accountApply").onclick = () =>
     commitImport(localStorage, adapter.key, preview);
     adapter.replace(preview.state);
     const excluded = preview.skippedOperators.map(o=>`${o.name || "이름 확인 불가"} (${o.id})`).join("\n");
+    const baseApplied=Boolean(preview.base);
     preview = null;
-    status("현재 육성 상태와 보유 재료를 적용했습니다."+(excluded?"\n사이트 미수록으로 제외된 항목:\n"+excluded:""));
+    status("현재 육성 상태와 보유 재료"+(baseApplied?"·기반시설을 적용했습니다.":"를 적용했습니다. 기반시설 정보가 없어 기존 설정을 유지했습니다.")+(excluded?"\n사이트 미수록으로 제외된 항목:\n"+excluded:""));
   });
 $("accountUndo").onclick = () =>
   action(async () => {
     const adapter = window.operatorAccount;
     adapter.replace(restoreImport(localStorage, adapter.key));
     preview = null;
-    status("가져오기 전 육성 상태와 재료를 복원했습니다.");
+    status("가져오기 전 육성 상태와 재료·기반시설을 복원했습니다.");
   });
 function close() {
   controller?.abort();

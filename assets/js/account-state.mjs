@@ -1,3 +1,4 @@
+import { BASE_KEY, prepareBase } from "./base-state.mjs?v=1";
 export const INVENTORY_KEY = "arknightsInventoryV1";
 export const BACKUP_KEY = "arknightsAccountImportBackupV1";
 const CLASS_VARIANTS = {char_1001_amiya2:"char_002_amiya",char_1037_amiya3:"char_002_amiya"};
@@ -103,6 +104,7 @@ export function prepareImport(data, chars, previous, frames, characters = {}) {
   }
   return {
     state: next,
+    base: prepareBase(data.building,data.importedAt),
     inventory: { version: 1, server: "kr", importedAt: data.importedAt, items },
     owned: new Set(data.operators.filter(op=>byId.has(op.id)).map(op=>CLASS_VARIANTS[op.id]||op.id)).size,
     classVariantCount: data.operators.filter(op=>Object.hasOwn(CLASS_VARIANTS,op.id)&&byId.has(CLASS_VARIANTS[op.id])).length,
@@ -110,52 +112,22 @@ export function prepareImport(data, chars, previous, frames, characters = {}) {
     skippedOperators,
   };
 }
-export function commitImport(storage, progressKey, prepared) {
-  const progress = storage.getItem(progressKey),
-    inventory = storage.getItem(INVENTORY_KEY);
-  storage.setItem(
-    BACKUP_KEY,
-    JSON.stringify({
-      version: 1,
-      savedAt: new Date().toISOString(),
-      progress,
-      inventory,
-    }),
-  );
-  try {
-    storage.setItem(INVENTORY_KEY, JSON.stringify(prepared.inventory));
-    storage.setItem(progressKey, JSON.stringify(prepared.state));
-  } catch (e) {
-    if (inventory === null) storage.removeItem(INVENTORY_KEY);
-    else storage.setItem(INVENTORY_KEY, inventory);
-    if (progress === null) storage.removeItem(progressKey);
-    else storage.setItem(progressKey, progress);
-    throw e;
-  }
+function restoreValues(storage,values){for(const [key,value] of values)value===null?storage.removeItem(key):storage.setItem(key,value);}
+export function commitImport(storage,progressKey,prepared){
+ const progress=storage.getItem(progressKey),inventory=storage.getItem(INVENTORY_KEY),base=storage.getItem(BASE_KEY);
+ storage.setItem(BACKUP_KEY,JSON.stringify({version:1,savedAt:new Date().toISOString(),progress,inventory,base}));
+ try{
+  storage.setItem(INVENTORY_KEY,JSON.stringify(prepared.inventory));
+  if(prepared.base)storage.setItem(BASE_KEY,JSON.stringify(prepared.base));
+  storage.setItem(progressKey,JSON.stringify(prepared.state));
+ }catch(e){restoreValues(storage,[[progressKey,progress],[INVENTORY_KEY,inventory],[BASE_KEY,base]]);throw e;}
 }
-export function restoreImport(storage, progressKey) {
-  const backup = JSON.parse(storage.getItem(BACKUP_KEY) || "null");
-  if (
-    backup?.version !== 1 ||
-    !(backup.progress === null || typeof backup.progress === "string") ||
-    !(backup.inventory === null || typeof backup.inventory === "string")
-  )
-    throw new Error("가져오기 전 백업이 없습니다.");
-  const oldProgress = storage.getItem(progressKey),
-    oldInventory = storage.getItem(INVENTORY_KEY);
-  try {
-    for (const [key, value] of [
-      [progressKey, backup.progress],
-      [INVENTORY_KEY, backup.inventory],
-    ])
-      value === null ? storage.removeItem(key) : storage.setItem(key, value);
-  } catch (e) {
-    for (const [key, value] of [
-      [progressKey, oldProgress],
-      [INVENTORY_KEY, oldInventory],
-    ])
-      value === null ? storage.removeItem(key) : storage.setItem(key, value);
-    throw e;
-  }
-  return JSON.parse(backup.progress || "{}");
+export function restoreImport(storage,progressKey){
+ const backup=JSON.parse(storage.getItem(BACKUP_KEY)||'null');
+ if(backup?.version!==1||![backup.progress,backup.inventory].every(v=>v===null||typeof v==='string')||
+  (Object.hasOwn(backup,'base')&&backup.base!==null&&typeof backup.base!=='string'))throw new Error('가져오기 전 백업이 없습니다.');
+ const keys=[progressKey,INVENTORY_KEY,...(Object.hasOwn(backup,'base')?[BASE_KEY]:[])];
+ const old=keys.map(key=>[key,storage.getItem(key)]);
+ try{restoreValues(storage,[[progressKey,backup.progress],[INVENTORY_KEY,backup.inventory],...(Object.hasOwn(backup,'base')?[[BASE_KEY,backup.base]]:[])]);}catch(e){restoreValues(storage,old);throw e;}
+ return JSON.parse(backup.progress||'{}');
 }
