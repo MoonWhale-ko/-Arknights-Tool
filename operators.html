@@ -126,7 +126,7 @@ function get(id){
 }
 function maxLv(c,e){return c.phases[e]?.maxLevel||c.phases[0].maxLevel}
 function futureBadge(c){return c.isFuture?'<span class="future-badge" title="한국 서버 미출시 · 중국 서버 육성 데이터 · 이름은 비공식 표기">미래시</span>':''}
-function avatar(id){return `https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/dyn/arts/charportraits/${id}_1.png`}
+function avatar(id){return `https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/dyn/arts/charportraits/${id}_${chars.find(c=>c.id===id)?.baseId?2:1}.png`}
 function moduleType(m){return m.type==='D'?'Δ':m.type}
 function moduleStage(s,m){return +(s.mods[m.id]??s.mods[m.type]??0)}
 function moduleUnlocked(c,s,m){return s.elite>=+(String(m.unlockPhase).match(/\d+/)||[2])[0]&&s.level>=(m.unlockLevel||1)}
