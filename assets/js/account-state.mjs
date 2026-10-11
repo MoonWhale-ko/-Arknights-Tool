@@ -1,5 +1,6 @@
 export const INVENTORY_KEY = "arknightsInventoryV1";
 export const BACKUP_KEY = "arknightsAccountImportBackupV1";
+const CLASS_VARIANTS = {char_1001_amiya2:"char_002_amiya",char_1037_amiya3:"char_002_amiya"};
 const object = (v) => v && typeof v === "object" && !Array.isArray(v);
 const integer = (n, min, max) => Number.isInteger(n) && n >= min && n <= max;
 export function trustPercent(points, frames) {
@@ -22,10 +23,20 @@ export function prepareImport(data, chars, previous, frames, characters = {}) {
     seen = new Set();
   let skipped = 0;
   const skippedOperators = [];
+  const classVariants = [];
   for (const op of data.operators) {
     if (!object(op) || typeof op.id !== "string" || seen.has(op.id))
       throw new Error("오퍼레이터 데이터가 중복되거나 잘못되었습니다.");
     seen.add(op.id);
+    const baseId = Object.hasOwn(CLASS_VARIANTS,op.id) ? CLASS_VARIANTS[op.id] : null;
+    if (baseId && byId.has(baseId)) {
+      const base = byId.get(baseId);
+      if (!integer(op.elite,0,base.phases.length-1) || !integer(op.level,1,base.phases[op.elite].maxLevel) || !integer(op.potential,1,(base.maxPotentialLevel??5)+1) || !integer(op.skill,1,7) || !Array.isArray(op.skills) || !object(op.modules) || op.skills.some(s=>!object(s)||typeof s.id!=="string"||!integer(s.mastery,0,3)) || Object.values(op.modules).some(v=>!integer(v,0,3)))
+        throw new Error("직군 전환 육성 데이터 형식이 올바르지 않습니다.");
+      trustPercent(op.favorPoint,frames);
+      classVariants.push({baseId,op});
+      continue;
+    }
     const c = byId.get(op.id);
     if (!c) {
       skipped++;
@@ -70,6 +81,10 @@ export function prepareImport(data, chars, previous, frames, characters = {}) {
       mods,
     };
   }
+  for (const {baseId,op} of classVariants) {
+    if (!seen.has(baseId)) throw new Error("직군 전환의 기본 오퍼레이터 데이터가 없습니다. 다시 조회해 주세요.");
+    next[baseId].classVariants = {...(object(next[baseId].classVariants)?next[baseId].classVariants:{}),[op.id]:structuredClone(op)};
+  }
   if (![...seen].some((id) => byId.has(id)))
     throw new Error("사이트에 연결할 수 있는 오퍼레이터가 없습니다.");
   // A complete successful snapshot is authoritative for ownership, not custom goals/settings.
@@ -89,7 +104,8 @@ export function prepareImport(data, chars, previous, frames, characters = {}) {
   return {
     state: next,
     inventory: { version: 1, server: "kr", importedAt: data.importedAt, items },
-    owned: data.operators.length - skipped,
+    owned: data.operators.length - skipped - classVariants.length,
+    classVariantCount: classVariants.length,
     skipped,
     skippedOperators,
   };

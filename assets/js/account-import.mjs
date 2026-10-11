@@ -3,7 +3,7 @@ import {
   commitImport,
   restoreImport,
   BACKUP_KEY,
-} from "./account-state.mjs?v=2";
+} from "./account-state.mjs?v=3";
 const $ = (id) => document.getElementById(id),
   dialog = $("accountDialog");
 let preview = null,
@@ -169,7 +169,7 @@ $("accountForm").onsubmit = (e) => {
       names?.characters || {},
     );
     status(
-      `보유 ${preview.owned}명 · 재료 ${Object.keys(preview.inventory.items).length}종 조회 완료${preview.skipped ? `\n사이트 미수록 ${preview.skipped}명 제외\n${preview.skippedOperators.map(o=>`${o.name || "이름 확인 불가"} (${o.id})${o.obtainable===false?" · 일반 획득 불가 데이터":""}`).join("\n")}` : ""}\n적용하면 현재 보유·육성 상태와 재료가 갱신됩니다. 적용 전 상태는 자동 백업합니다.`,
+      `보유 ${preview.owned}명 · 재료 ${Object.keys(preview.inventory.items).length}종 조회 완료${preview.classVariantCount ? `\n아미야 직군 전환 ${preview.classVariantCount}종 연결 (보유 인원 중복 제외)` : ""}${preview.skipped ? `\n사이트 미수록 ${preview.skipped}명 제외\n${preview.skippedOperators.map(o=>`${o.name || "이름 확인 불가"} (${o.id})${o.obtainable===false?" · 일반 획득 불가 데이터":""}`).join("\n")}` : ""}\n적용하면 현재 보유·육성 상태와 재료가 갱신됩니다. 적용 전 상태는 자동 백업합니다.`,
     );
   });
 };

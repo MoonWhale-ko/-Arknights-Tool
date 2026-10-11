@@ -116,3 +116,20 @@ test("excluded IDs retain KR in-game names and unknown IDs remain visible",()=>{
  assert.equal(p.state[missing.id],undefined);
  const fallback=prepareImport({...data,operators:[...data.operators,missing]},chars,{},frames);assert.equal(fallback.skippedOperators[0].id,missing.id);
 });
+
+test("Amiya guard and medic forms link to one operator without overwriting caster skills",()=>{
+ const a=chars.find(c=>c.id==="char_002_amiya");
+ const caster={...data.operators[0],id:a.id,level:80,skills:a.skills.map(s=>({id:s.id,mastery:2})),modules:{}};
+ const guard={...caster,id:"char_1001_amiya2",skills:[{id:"guard-skill",mastery:3}],modules:{guard_module:1}};
+ const medic={...caster,id:"char_1037_amiya3",skills:[{id:"medic-skill",mastery:1}],modules:{medic_module:2}};
+ for(const operators of [[caster,guard,medic],[medic,guard,caster]]){
+  const p=prepareImport({...data,operators},chars,{},frames);
+  assert.equal(p.owned,1);assert.equal(p.skipped,0);assert.equal(p.classVariantCount,2);
+  assert.equal(p.state[a.id].owned,true);assert.equal(p.state[a.id].m[0],2);
+  assert.deepEqual(p.state[a.id].classVariants[guard.id].skills,guard.skills);
+  assert.deepEqual(p.state[a.id].classVariants[medic.id].modules,medic.modules);
+  assert.equal(p.state[guard.id],undefined);assert.equal(p.state[medic.id],undefined);
+ }
+ assert.throws(()=>prepareImport({...data,operators:[guard]},chars,{},frames),/基本|기본/);
+ assert.throws(()=>prepareImport({...data,operators:[caster,{...medic,skills:[{id:"bad",mastery:4}]}]},chars,{},frames),/직군 전환/);
+});
