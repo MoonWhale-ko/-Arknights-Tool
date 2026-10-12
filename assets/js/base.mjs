@@ -54,7 +54,7 @@ function privateRoom(slotId,name,saved){
  card.setAttribute('aria-label',`${name} · 레벨 ${level} · ${content.textContent}`);decorateRoom(card,'PRIVATE');return card;
 }
 function render(){const counters={};const groups={production:document.getElementById('productionRooms'),living:document.getElementById('livingRooms'),support:document.getElementById('supportRooms'),private:document.getElementById('privateRooms')};Object.values(groups).forEach(el=>el.replaceChildren());
- for(const [slotId,group,fallback] of BASE_SLOTS){const saved=settings.rooms[slotId],type=saved?.type??fallback;counters[type]=(counters[type]??0)+1;const name=FACILITIES[type].name+(['TRADING','MANUFACTURE','POWER','DORMITORY','PRIVATE'].includes(type)?` ${counters[type]}`:'');groups[group].append(type==='PRIVATE'?privateRoom(slotId,name,saved):room(slotId,type,name,saved));}statusText();}
+ for(const [slotId,group,fallback] of BASE_SLOTS){const saved=settings.rooms[slotId],type=saved?.type??fallback;counters[type]=(counters[type]??0)+1;const name=FACILITIES[type].name+(['TRADING','MANUFACTURE','POWER','DORMITORY','PRIVATE'].includes(type)?` ${counters[type]}`:'');groups[group].append(type==='PRIVATE'?privateRoom(slotId,name,saved):room(slotId,type,name,saved));}statusText();updateElevatorLinks();}
 load();render();window.addEventListener('storage',e=>{if(e.key===BASE_KEY||e.key===null){load();render();}});window.addEventListener('pageshow',()=>{load();render();});
 
 const editButton=document.getElementById('editFacilities');editButton.addEventListener('click',()=>{const editing=editButton.getAttribute('aria-pressed')!=='true';editButton.setAttribute('aria-pressed',String(editing));editButton.textContent=editing?'설비 설정 완료':'설비 설정';document.getElementById('baseMap').classList.toggle('editing',editing);});
@@ -73,10 +73,35 @@ viewport.addEventListener('pointerup',endPan);viewport.addEventListener('pointer
 const circulation=document.createElement('div');circulation.className='base-circulation';circulation.setAttribute('aria-hidden','true');
 for(const position of ['left','middle','right']){
  const shaft=document.createElement('div');shaft.className=`elevator elevator-${position}`;
- for(let floor=position==='right'?1:0;floor<(position==='right'?5:6);floor++){const landing=document.createElement('span');landing.className='elevator-landing';landing.innerHTML='<span class="elevator-guide"></span><span class="elevator-car"></span>';shaft.append(landing);}
+ for(let floor=position==='right'?1:0;floor<(position==='right'?5:6);floor++){const landing=document.createElement('span');landing.className='elevator-landing';landing.dataset.floor=String(floor);shaft.append(landing);}
  circulation.append(shaft);
 }
 for(const [side,floors] of [['production',[3]],['living',[2,3,4,5]],['support',[2,3,4]],['activity',[2,3,4]]]){
  for(const floor of floors){const passage=document.createElement('span');passage.className=`passage passage-${side} passage-${side}-${floor}`;passage.style.setProperty('--floor',floor);passage.innerHTML='<svg class="passage-art" viewBox="0 0 108 60" aria-hidden="true"><path fill="#0b0c0c" d="M4 0H36L43 7H65L72 0H104Q108 0 108 4V56Q108 60 104 60H72L65 53H43L36 60H4Q0 60 0 56V4Q0 0 4 0Z"/><g fill="#579692"><path d="m12 31 8-4v8Zm9 0 8-4v8Zm56-4 8 4-8 4Zm10 0 8 4-8 4Z"/><circle cx="48" cy="17" r="4"/><path d="m47 23 10 2 7 10h6v5h-9l-7-10-3 6 10 7v6H43v-5h10l-7-5-8 10h-6l12-16 2-6-7 3-3 7-4-2 4-9 10-4Z"/></g></svg>';circulation.append(passage);}
 }
 document.getElementById('baseMap').prepend(circulation);
+
+function updateElevatorLinks(){
+ const regions=[...document.querySelectorAll('.room,.passage,.elevator-landing')].map(el=>({el,rect:el.getBoundingClientRect()}));
+ for(const {el,rect:a} of regions){
+  if(!el.classList.contains('elevator-landing'))continue;
+  const connections=new Set();
+  for(const {el:other,rect:b} of regions){
+   if(other===el)continue;
+   const overlapX=Math.min(a.right,b.right)-Math.max(a.left,b.left),overlapY=Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top);
+   if(overlapX>.5&&Math.abs(a.top-b.bottom)<.5)connections.add('up');
+   if(overlapX>.5&&Math.abs(a.bottom-b.top)<.5)connections.add('down');
+   if(overlapY>.5&&Math.abs(a.left-b.right)<.5)connections.add('left');
+   if(overlapY>.5&&Math.abs(a.right-b.left)<.5)connections.add('right');
+  }
+  const strokes={
+   up:'<path d="M20 35V15"/><path class="link-cap" d="m18 12 2 2 2-2M18 17h4"/>',
+   down:'<path d="M20 45V65"/><path class="link-cap" d="m18 68 2-2 2 2M18 63h4"/>',
+   left:'<path d="M15 40H7"/><path class="link-cap" d="M5 38v4m4-4v4"/>',
+   right:'<path d="M25 40h8"/><path class="link-cap" d="M35 38v4m-4-4v4"/>'
+  };
+  el.dataset.connections=[...connections].join(' ');
+  el.innerHTML=`<svg class="elevator-links" viewBox="0 0 40 80" aria-hidden="true"><g class="elevator-strokes">${[...connections].map(direction=>strokes[direction]).join('')}</g><path class="elevator-cross" d="m17 37 6 6m0-6-6 6"/></svg>`;
+ }
+}
+updateElevatorLinks();new ResizeObserver(updateElevatorLinks).observe(document.getElementById('baseMap'));
