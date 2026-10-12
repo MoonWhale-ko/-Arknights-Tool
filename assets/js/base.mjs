@@ -55,3 +55,17 @@ function render(){const counters={};const groups={production:document.getElement
 load();render();window.addEventListener('storage',e=>{if(e.key===BASE_KEY||e.key===null){load();render();}});window.addEventListener('pageshow',()=>{load();render();});
 
 const editButton=document.getElementById('editFacilities');editButton.addEventListener('click',()=>{const editing=editButton.getAttribute('aria-pressed')!=='true';editButton.setAttribute('aria-pressed',String(editing));editButton.textContent=editing?'설비 설정 완료':'설비 설정';document.getElementById('baseMap').classList.toggle('editing',editing);});
+
+const viewport=document.getElementById('baseViewport');
+const panLeft=document.getElementById('panLeft'),panRight=document.getElementById('panRight');
+function updatePanButtons(){const max=viewport.scrollWidth-viewport.clientWidth;panLeft.disabled=viewport.scrollLeft<=1;panRight.disabled=viewport.scrollLeft>=max-1;}
+function pan(direction){viewport.scrollBy({left:direction*viewport.clientWidth*.65,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});}
+panLeft.addEventListener('click',()=>pan(-1));panRight.addEventListener('click',()=>pan(1));
+viewport.addEventListener('scroll',updatePanButtons,{passive:true});
+viewport.addEventListener('keydown',event=>{if(event.target!==viewport)return;if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();pan(event.key==='ArrowLeft'?-1:1);}});
+let panDrag=null;
+viewport.addEventListener('pointerdown',event=>{if(event.pointerType!=='mouse'||event.button!==0||event.target.closest('button,a,input,select,label')||viewport.scrollWidth<=viewport.clientWidth)return;panDrag={id:event.pointerId,x:event.clientX,left:viewport.scrollLeft};viewport.setPointerCapture(event.pointerId);viewport.classList.add('dragging');event.preventDefault();});
+viewport.addEventListener('pointermove',event=>{if(panDrag?.id!==event.pointerId)return;viewport.scrollLeft=panDrag.left+panDrag.x-event.clientX;});
+function endPan(event){if(panDrag?.id!==event.pointerId)return;panDrag=null;viewport.classList.remove('dragging');}
+viewport.addEventListener('pointerup',endPan);viewport.addEventListener('pointercancel',endPan);viewport.addEventListener('lostpointercapture',endPan);
+new ResizeObserver(updatePanButtons).observe(viewport);updatePanButtons();
