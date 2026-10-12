@@ -14,5 +14,5 @@ body{background-color:#e8e9e9;background-image:linear-gradient(#65717915 1px,tra
 .room-private{padding-left:10px}.room-private .facility-art{left:6px;opacity:.12}.private-occupant{position:relative;margin-top:5px}.private-occupant img{border:1px solid #d2d4cf;box-shadow:0 0 0 2px #181a1bbb}.private-trust{color:#d5e7e8;text-shadow:0 1px 2px #000}.private-empty{color:#c0c5c3}.room-private .room-occupancy{bottom:9px;right:8px}.base-status{color:#515d64}.editing .room:before{border-color:#e4eef1}.editing .room-controls{position:relative}.editing .room-private{padding-left:10px}.editing .room:after{opacity:.3}.editing .room-controls select{background:#202529}
 @media(max-width:800px){.base-overview{padding:16px 10px 20px}.room{padding-left:13px}.room-trading,.room-factory,.room-power{padding-left:23px}.room-private{padding-left:10px}.facility-art{width:68px;height:68px}.level-bars span{height:11px;width:3px}.room-occupancy{bottom:12px;font-size:13px}.room-private .room-occupancy{font-size:9px;bottom:9px}.base-status{font-size:11px}}
 
-/* Plain page background; decoration remains within facility cards. */
-body{background-image:none}.base-map:before{display:none}
+/* Plain facility interiors with their colored rail and glow retained. */
+.facility-art{display:none}.room:before{background-image:none}.room-trading:before,.room-factory:before,.room-power:before{background-image:linear-gradient(90deg,var(--color) 0 11px,transparent 11px)}
