@@ -95,13 +95,23 @@ function updateElevatorLinks(){
    if(overlapY>.5&&Math.abs(a.right-b.left)<.5)connections.add('right');
   }
   const strokes={
-   up:'<path d="M20 35V15"/><path class="link-cap" d="m18 12 2 2 2-2M18 17h4"/>',
-   down:'<path d="M20 45V65"/><path class="link-cap" d="m18 68 2-2 2 2M18 63h4"/>',
-   left:'<path d="M15 40H7"/><path class="link-cap" d="M5 38v4m4-4v4"/>',
-   right:'<path d="M25 40h8"/><path class="link-cap" d="M35 38v4m-4-4v4"/>'
+   up:'<path d="M20 36.8V15"/><path class="link-cap" d="M17 13h6"/>',
+   down:'<path d="M20 43.2V65"/><path class="link-cap" d="M17 67h6"/>',
+   left:'<path d="M16.8 40H7"/><path class="link-cap" d="M5 37v6"/>',
+   right:'<path d="M23.2 40H33"/><path class="link-cap" d="M35 37v6"/>'
   };
   el.dataset.connections=[...connections].join(' ');
   el.innerHTML=`<svg class="elevator-links" viewBox="0 0 40 80" aria-hidden="true"><g class="elevator-strokes">${[...connections].map(direction=>strokes[direction]).join('')}</g><path class="elevator-cross" d="m17 37 6 6m0-6-6 6"/></svg>`;
  }
+ updateRegionCorners();
 }
 updateElevatorLinks();new ResizeObserver(updateElevatorLinks).observe(document.getElementById('baseMap'));
+
+function updateRegionCorners(){
+ for(const el of document.querySelectorAll('.room,.passage,.elevator-landing')){
+  el.querySelector(':scope > .region-corners')?.remove();
+  const {width:w,height:h}=el.getBoundingClientRect(),inset=1.5,length=8,right=w-inset,bottom=h-inset;
+  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.classList.add('region-corners');svg.setAttribute('aria-hidden','true');svg.setAttribute('viewBox',`0 0 ${w} ${h}`);svg.setAttribute('preserveAspectRatio','none');
+  svg.innerHTML=`<path d="M${inset+length} ${inset}H${inset}V${inset+length}M${right-length} ${inset}H${right}V${inset+length}M${inset} ${bottom-length}V${bottom}H${inset+length}M${right} ${bottom-length}V${bottom}H${right-length}"/>`;el.append(svg);
+ }
+}
