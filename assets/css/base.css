@@ -65,3 +65,5 @@ body{background-color:#e8e9e9;background-image:linear-gradient(#65717915 1px,tra
 .level-text{display:none!important}.room-control .level-bars{display:flex}
 .occupancy-limit{font-size:.65em;color:#909592;letter-spacing:-.04em;margin-left:1px;font-weight:400}.occupancy-current{color:inherit}
 .facility-floor,.room-power .facility-floor{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px;height:4px;background:none;box-shadow:none}.facility-floor>span{min-width:0;background:#bfc0b6}.room-power .facility-floor>span{background:#ccff66;box-shadow:0 0 4px #ccff6644}
+
+.facility-floor,.room-power .facility-floor{display:flex;gap:3px}.facility-floor>span{flex:0 0 calc((100% - 12px)/5);height:4px}
