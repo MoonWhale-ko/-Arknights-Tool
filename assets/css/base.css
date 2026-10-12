@@ -77,3 +77,9 @@ body{background-color:#e8e9e9;background-image:linear-gradient(#65717915 1px,tra
 
 /* Passage reference: twin chevrons, a solid runner, and a rectangular bay. */
 .passage{background:none;clip-path:none;display:block;filter:none}.passage .passage-art{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 3px 3px #0004)}.passage:before{content:'';position:absolute;left:calc(var(--unit)*-.1);right:calc(var(--unit)*-.1);top:calc(var(--unit)*-.23);bottom:calc(var(--unit)*-.23);border:1px solid #939c9e80;pointer-events:none}.passage:after{content:'';position:absolute;left:calc(var(--unit)*-.06);right:calc(var(--unit)*-.06);top:calc(var(--unit)*-.19);bottom:calc(var(--unit)*-.19);border:1px solid #b0b7b850;pointer-events:none}
+
+/* Boundary-only view preserves the complete facility design for later restoration. */
+body{background:#e8e9e9;background-image:none}.base-map:before{display:none}
+.room{filter:none;border:1px solid #78868c;background:transparent!important;box-shadow:none;color:transparent}.room:before,.production-grid .room:before,.room:after,.production-grid .room:after{display:none!important}.room>*{visibility:hidden!important;pointer-events:none!important}
+.elevator{padding:0;gap:0;border:1px solid #78868c;background:none}.elevator-landing{border:0;border-bottom:1px solid #78868c}.elevator-landing:last-child{border-bottom:0}.elevator-landing>*{display:none}
+.passage{top:calc((var(--unit) + var(--gap))*var(--floor));height:var(--unit);width:calc(var(--unit)*1.18);margin-left:calc(var(--unit)*-.1);background:transparent;box-shadow:none;filter:none;border:1px solid #78868c}.passage:before,.passage:after,.passage>*{display:none!important}
