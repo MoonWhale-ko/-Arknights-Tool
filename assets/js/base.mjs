@@ -77,6 +77,6 @@ for(const position of ['left','middle','right']){
  circulation.append(shaft);
 }
 for(const [side,floors] of [['production',[3]],['living',[2,3]],['support',[2,3,4]],['activity',[2,3,4]]]){
- for(const floor of floors){const passage=document.createElement('span');passage.className=`passage passage-${side} passage-${side}-${floor}`;passage.style.setProperty('--floor',floor);passage.innerHTML='<span>◀</span><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="19" cy="5" r="2" fill="currentColor" stroke="none"/><path d="m11 13 7-5 5 7 5 1M18 8l-3 10-6 7M15 18l7 3 2 8M11 13l-3 7"/></svg><span>▶</span>';circulation.append(passage);}
+ for(const floor of floors){const passage=document.createElement('span');passage.className=`passage passage-${side} passage-${side}-${floor}`;passage.style.setProperty('--floor',floor);passage.innerHTML='<svg class="passage-art" viewBox="0 0 108 60" aria-hidden="true"><path fill="#0b0c0c" d="M4 0H36L43 7H65L72 0H104Q108 0 108 4V56Q108 60 104 60H72L65 53H43L36 60H4Q0 60 0 56V4Q0 0 4 0Z"/><g fill="#579692"><path d="m12 31 8-4v8Zm9 0 8-4v8Zm56-4 8 4-8 4Zm10 0 8 4-8 4Z"/><circle cx="48" cy="17" r="4"/><path d="m47 23 10 2 7 10h6v5h-9l-7-10-3 6 10 7v6H43v-5h10l-7-5-8 10h-6l12-16 2-6-7 3-3 7-4-2 4-9 10-4Z"/></g></svg>';circulation.append(passage);}
 }
 document.getElementById('baseMap').prepend(circulation);
