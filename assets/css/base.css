@@ -51,3 +51,6 @@ body{background-color:#e8e9e9;background-image:linear-gradient(#65717915 1px,tra
 @media(max-width:800px){.room-private{padding-left:calc(var(--unit)*1.02);padding-top:10px}.room-private h2{font-size:16px}.room-private .private-occupant img{top:10px;left:10px}.room-private .private-occupant strong{font-size:11px}.room-private .private-trust{font-size:10px}.room-private .room-occupancy{font-size:12px}.editing .room-private{padding-left:calc(var(--unit)*1.02);padding-top:10px}}
 
 .room-private .room-heading .private-trust{display:inline-block;margin:0 0 0 4px;font-size:10px;white-space:nowrap;flex:none;font-weight:500;letter-spacing:-.04em}.room-private .private-occupant{margin-top:8px}
+
+/* Side trim is independent: the panel never extends behind the colored rail. */
+.production-grid .room:before{left:29px}.production-grid .room:after{left:32px}.production-grid .room{padding-left:40px}.production-grid .facility-floor{left:40px}.editing .production-grid .room{padding-left:38px}
