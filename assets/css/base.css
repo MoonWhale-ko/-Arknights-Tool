@@ -30,3 +30,14 @@ body{background-color:#e8e9e9;background-image:linear-gradient(#65717915 1px,tra
 
 /* Horizontal navigation shares one viewport on desktop and mobile. */
 .base-map{min-width:1540px}.base-overview{cursor:grab;touch-action:pan-x pan-y;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:#73848e #c8ced1}.base-overview.dragging{cursor:grabbing;user-select:none}.base-overview:focus-visible{outline:2px solid #536873;outline-offset:2px}.base-status{margin-top:10px}@media(max-width:800px){.base-map{min-width:1240px}}
+
+/* One room-height unit preserves the proportions measured in the game reference. */
+.base-map{--unit:80px;--gap:calc(var(--unit)*.15);--step:calc(var(--unit)*1.15);width:calc(var(--unit)*24.6);min-width:0;grid-template-columns:calc(var(--unit)*8.8) calc(var(--unit)*6.4) calc(var(--unit)*2.45) calc(var(--unit)*6.95);gap:0}
+.production-grid{width:calc(var(--unit)*8.05);grid-template-columns:repeat(3,calc(var(--unit)*2.2));grid-auto-rows:var(--unit);column-gap:var(--gap);row-gap:var(--gap);padding-right:var(--step);padding-top:calc(var(--unit)*2 + var(--gap)*2)}
+.production-grid .room:nth-child(-n+3),.production-grid .room:nth-child(n+7){transform:translateX(var(--step))}
+.living-grid{width:calc(var(--unit)*4.5);grid-template-rows:calc(var(--unit)*2 + var(--gap)) repeat(4,var(--unit));gap:var(--gap)}
+.living-grid .room-dorm{width:calc(var(--unit)*3.35)}.living-grid .room-dorm:nth-child(even){margin-left:0;margin-right:var(--step)}.living-grid .room-dorm:nth-child(odd){margin-left:var(--step);margin-right:0}
+.support-grid{width:calc(var(--unit)*2.2);grid-auto-rows:var(--unit);gap:var(--gap);padding-top:calc(var(--unit) + var(--gap))}.support-grid .room:not(.room-reception){margin:0}.support-grid .room-reception{width:calc(var(--unit)*4.5);transform:translateX(calc(var(--step)*-1))}
+.private-grid{width:calc(var(--unit)*6.95);grid-template-columns:repeat(2,calc(var(--unit)*3.4));grid-auto-rows:var(--unit);gap:var(--gap);padding-top:calc(var(--unit)*2 + var(--gap)*2)}
+.room h2{font-size:18px}.room-control h2{font-size:20px}.room-private h2{font-size:16px}.room-private .level-bars span{height:15px;width:4px}.room-private .room-occupancy{font-size:13px}.private-occupant strong{font-size:13px}.private-trust{font-size:11px}.private-occupant img{width:36px;height:36px}.editing .production-grid h2{font-size:14px}.editing .production-grid .room{padding-left:30px}
+@media(max-width:800px){.base-map{--unit:72px;min-width:0;gap:0}.room h2{font-size:16px}.room-control h2{font-size:18px}.room-private h2{font-size:14px}.room-private .room-occupancy{font-size:12px}.private-occupant strong{font-size:12px}.private-trust{font-size:10px}.private-occupant img{width:32px;height:32px}}
