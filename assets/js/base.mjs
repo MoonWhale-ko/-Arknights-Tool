@@ -110,7 +110,7 @@ updateElevatorLinks();new ResizeObserver(updateElevatorLinks).observe(document.g
 function updateRegionCorners(){
  for(const el of document.querySelectorAll('.room,.passage,.elevator-landing')){
   el.querySelector(':scope > .region-corners')?.remove();
-  const {width:w,height:h}=el.getBoundingClientRect(),inset=1.5,length=8,right=w-inset,bottom=h-inset;
+  const {width:w,height:h}=el.getBoundingClientRect(),inset=3,length=8,right=w-inset,bottom=h-inset;
   const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.classList.add('region-corners');svg.setAttribute('aria-hidden','true');svg.setAttribute('viewBox',`0 0 ${w} ${h}`);svg.setAttribute('preserveAspectRatio','none');
   svg.innerHTML=`<path d="M${inset+length} ${inset}H${inset}V${inset+length}M${right-length} ${inset}H${right}V${inset+length}M${inset} ${bottom-length}V${bottom}H${inset+length}M${right} ${bottom-length}V${bottom}H${right-length}"/>`;el.append(svg);
  }
