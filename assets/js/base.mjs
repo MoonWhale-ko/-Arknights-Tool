@@ -21,7 +21,10 @@ function decorateRoom(card,type){
  const art=document.createElement('span');art.className='facility-art';art.setAttribute('aria-hidden','true');
  art.innerHTML=`<svg viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path class="facility-hex" d="m48 4 38 22v44L48 92 10 70V26Z"/>${facilityArt[type]||''}</svg>`;
  card.prepend(art);
- const trim=document.createElement('span');trim.className='facility-trim';trim.setAttribute('aria-hidden','true');trim.innerHTML='<span class="facility-rail"></span><span class="facility-floor"></span>';card.prepend(trim);
+ const trim=document.createElement('span');trim.className='facility-trim';trim.setAttribute('aria-hidden','true');trim.innerHTML='<span class="facility-rail"></span><span class="facility-floor"><span></span><span></span><span></span><span></span><span></span></span>';card.prepend(trim);
+}
+function showOccupancy(element,count,max){
+ element.replaceChildren();const current=document.createElement('span');current.className='occupancy-current';current.textContent=String(count);const limit=document.createElement('span');limit.className='occupancy-limit';limit.textContent=`/${max}`;element.append(current,limit);
 }
 function room(slotId,type,name,saved){
  const card=document.createElement('article');card.className=`room room-${FACILITIES[type].css}`;card.setAttribute('aria-label',name);let level=saved?.level??0,count=saved?.count??0;
@@ -31,7 +34,7 @@ function room(slotId,type,name,saved){
  function renderCount(){const max=capacity(type,level);count=Math.min(count,max);countInput.replaceChildren();for(let i=0;i<=max;i++){const o=document.createElement('option');o.value=i;o.textContent=i;countInput.append(o);}countInput.value=String(count);limit.textContent=` / ${max}`;
  const bars=card.querySelector('.level-bars');bars.replaceChildren();for(let i=0;i<FACILITIES[type].capacity.length;i++){const bar=document.createElement('span');bar.className=i<level?'active':'';bars.append(bar);}
  card.querySelector('.level-text').textContent=level===0?'미건설':`Lv.${level}`;
- card.querySelector('.room-occupancy').textContent=`${count} / ${max}`;
+ showOccupancy(card.querySelector('.room-occupancy'),count,max);
  card.setAttribute('aria-label',`${name} · 설비 레벨 ${level} · 인원 ${count} / ${max}`);
  }
  function update(){settings.rooms[slotId]={type,level,count,operators:[]};save();}
@@ -47,7 +50,7 @@ function privateRoom(slotId,name,saved){
   const details=document.createElement('div');const opName=document.createElement('strong');opName.textContent=characterNames[id]?.name??id;opName.title=opName.textContent;
   const trust=document.createElement('span');trust.className='private-trust';trust.textContent=Number.isInteger(saved.trust?.[id])?`신뢰도 ${saved.trust[id]}%`:'신뢰도 정보 없음';heading.append(trust);details.append(opName);content.append(image,details);
  }else{const empty=document.createElement('span');empty.className='private-empty';empty.textContent=!settings.privateRoomsIncluded?'계정 재조회 필요':!level?'미건설':saved?.occupantsKnown===false?'다시 조회해 주세요':count?'캐릭터 정보 없음':'비어 있음';content.append(empty);}
- card.append(content);const occupancy=document.createElement('span');occupancy.className='room-occupancy';occupancy.textContent=!settings.privateRoomsIncluded?'— / 1':saved?.occupantsKnown===false&&level?'인원 정보 없음':`${count} / ${level?1:0}`;card.append(occupancy);
+ card.append(content);const occupancy=document.createElement('span');occupancy.className='room-occupancy';if(saved?.occupantsKnown===false&&level&&settings.privateRoomsIncluded)occupancy.textContent='인원 정보 없음';else showOccupancy(occupancy,settings.privateRoomsIncluded?count:'—',settings.privateRoomsIncluded?(level?1:0):1);card.append(occupancy);
  card.setAttribute('aria-label',`${name} · 레벨 ${level} · ${content.textContent}`);decorateRoom(card,'PRIVATE');return card;
 }
 function render(){const counters={};const groups={production:document.getElementById('productionRooms'),living:document.getElementById('livingRooms'),support:document.getElementById('supportRooms'),private:document.getElementById('privateRooms')};Object.values(groups).forEach(el=>el.replaceChildren());

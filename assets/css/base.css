@@ -57,3 +57,11 @@ body{background-color:#e8e9e9;background-image:linear-gradient(#65717915 1px,tra
 
 /* Borderless panel, with only a one-pixel gap beside the independent color trim. */
 .room:before{display:none}.room:after{inset:0;background:#303132;box-shadow:none}.room-power:after{box-shadow:inset 0 0 8px 2px #ccff6690}.production-grid .room:after{left:25px;right:0;top:0;bottom:0}.production-grid .room{padding-left:36px}.production-grid .facility-floor{left:36px}.editing .production-grid .room{padding-left:34px}
+
+/* Reference details: independent tall trim and a plain outer rectangular frame. */
+.room{--notch:polygon(0 5%,4% 5%,6% 0,22% 0,25% 5%,74% 5%,77% 0,98% 0,100% 4%,100% 43%,99% 47%,99% 55%,100% 59%,100% 96%,98% 100%,2% 100%,0 96%,0 59%,1% 55%,1% 47%,0 43%)}
+.room:before,.production-grid .room:before{display:block;inset:-5px;clip-path:none;background:transparent!important;border:1px solid #9ca5a688;border-radius:0;transform:none;box-shadow:none!important}
+.facility-rail{top:-2px;bottom:-2px}.facility-trim{overflow:visible}
+.level-text{display:none!important}.room-control .level-bars{display:flex}
+.occupancy-limit{font-size:.65em;color:#909592;letter-spacing:-.04em;margin-left:1px;font-weight:400}.occupancy-current{color:inherit}
+.facility-floor,.room-power .facility-floor{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px;height:4px;background:none;box-shadow:none}.facility-floor>span{min-width:0;background:#bfc0b6}.room-power .facility-floor>span{background:#ccff66;box-shadow:0 0 4px #ccff6644}
