@@ -83,3 +83,5 @@ body{background:#e8e9e9;background-image:none}.base-map:before{display:none}
 .room{filter:none;border:1px solid #78868c;background:transparent!important;box-shadow:none;color:transparent}.room:before,.production-grid .room:before,.room:after,.production-grid .room:after{display:none!important}.room>*{visibility:hidden!important;pointer-events:none!important}
 .elevator{padding:0;gap:0;border:1px solid #78868c;background:none}.elevator-landing{border:0;border-bottom:1px solid #78868c}.elevator-landing:last-child{border-bottom:0}.elevator-landing>*{display:none}
 .passage{top:calc((var(--unit) + var(--gap))*var(--floor));height:var(--unit);width:calc(var(--unit)*1.18);margin-left:calc(var(--unit)*-.1);background:transparent;box-shadow:none;filter:none;border:1px solid #78868c}.passage:before,.passage:after,.passage>*{display:none!important}
+
+.passage{width:calc(var(--unit)*.98);margin-left:0}.account-link{margin-left:auto}.base-status{display:none}
