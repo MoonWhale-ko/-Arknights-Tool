@@ -94,11 +94,12 @@ function updateElevatorLinks(){
    if(overlapY>.5&&Math.abs(a.left-b.right)<.5)connections.add('left');
    if(overlapY>.5&&Math.abs(a.right-b.left)<.5)connections.add('right');
   }
+  const crossGap=3.2+.5/(el.clientWidth/40);
   const strokes={
-   up:'<path d="M20 36.3V15"/><path class="link-cap" d="M17 13h6"/>',
-   down:'<path d="M20 43.7V65"/><path class="link-cap" d="M17 67h6"/>',
-   left:'<path d="M16.3 40H7"/><path class="link-cap" d="M5 37v6"/>',
-   right:'<path d="M23.7 40H33"/><path class="link-cap" d="M35 37v6"/>'
+   up:`<path d="M20 ${40-crossGap}V15"/><path class="link-cap" d="M17 13h6"/>`,
+   down:`<path d="M20 ${40+crossGap}V65"/><path class="link-cap" d="M17 67h6"/>`,
+   left:`<path d="M${20-crossGap} 40H7"/><path class="link-cap" d="M5 37v6"/>`,
+   right:`<path d="M${20+crossGap} 40H33"/><path class="link-cap" d="M35 37v6"/>`
   };
   el.dataset.connections=[...connections].join(' ');
   el.innerHTML=`<svg class="elevator-links" viewBox="0 0 40 80" aria-hidden="true"><g class="elevator-strokes">${[...connections].map(direction=>strokes[direction]).join('')}</g><path class="elevator-cross" d="m17 37 6 6m0-6-6 6"/></svg>`;
