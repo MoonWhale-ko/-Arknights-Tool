@@ -21,6 +21,7 @@ function decorateRoom(card,type){
  const art=document.createElement('span');art.className='facility-art';art.setAttribute('aria-hidden','true');
  art.innerHTML=`<svg viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path class="facility-hex" d="m48 4 38 22v44L48 92 10 70V26Z"/>${facilityArt[type]||''}</svg>`;
  card.prepend(art);
+ const trim=document.createElement('span');trim.className='facility-trim';trim.setAttribute('aria-hidden','true');trim.innerHTML='<span class="facility-rail"></span><span class="facility-floor"></span>';card.prepend(trim);
 }
 function room(slotId,type,name,saved){
  const card=document.createElement('article');card.className=`room room-${FACILITIES[type].css}`;card.setAttribute('aria-label',name);let level=saved?.level??0,count=saved?.count??0;
