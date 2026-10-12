@@ -107,3 +107,5 @@ body{background:#e8e9e9;background-image:none}.base-map:before{display:none}
 
 /* Draw all four brackets in one coordinate system to keep opposing corners symmetric. */
 .room,.passage,.elevator-landing{background-image:none!important}.room>.region-corners,.passage>.region-corners,.elevator-landing>.region-corners{display:block!important;visibility:visible!important;position:absolute;left:-1px;top:-1px;width:calc(100% + 2px);height:calc(100% + 2px);pointer-events:none!important;z-index:2;overflow:visible}.region-corners path{fill:none;stroke:#9da7ab;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;vector-effect:non-scaling-stroke}.elevator-strokes{stroke-width:4}.elevator-strokes .link-cap{stroke-width:1.6}
+
+.elevator-strokes{stroke-width:3}.elevator-strokes .link-cap{stroke-width:1.2}
