@@ -54,3 +54,6 @@ body{background-color:#e8e9e9;background-image:linear-gradient(#65717915 1px,tra
 
 /* Side trim is independent: the panel never extends behind the colored rail. */
 .production-grid .room:before{left:29px}.production-grid .room:after{left:32px}.production-grid .room{padding-left:40px}.production-grid .facility-floor{left:40px}.editing .production-grid .room{padding-left:38px}
+
+/* Borderless panel, with only a one-pixel gap beside the independent color trim. */
+.room:before{display:none}.room:after{inset:0;background:#303132;box-shadow:none}.room-power:after{box-shadow:inset 0 0 8px 2px #ccff6690}.production-grid .room:after{left:25px;right:0;top:0;bottom:0}.production-grid .room{padding-left:36px}.production-grid .facility-floor{left:36px}.editing .production-grid .room{padding-left:34px}
