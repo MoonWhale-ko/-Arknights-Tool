@@ -68,3 +68,15 @@ viewport.addEventListener('pointermove',event=>{if(panDrag?.id!==event.pointerId
 function endPan(event){if(panDrag?.id!==event.pointerId)return;panDrag=null;viewport.classList.remove('dragging');}
 viewport.addEventListener('pointerup',endPan);viewport.addEventListener('pointercancel',endPan);viewport.addEventListener('lostpointercapture',endPan);
 
+
+// Decorative circulation layer follows the same room-height unit as the map.
+const circulation=document.createElement('div');circulation.className='base-circulation';circulation.setAttribute('aria-hidden','true');
+for(const position of ['left','middle','right']){
+ const shaft=document.createElement('div');shaft.className=`elevator elevator-${position}`;
+ for(let floor=0;floor<6;floor++){const landing=document.createElement('span');landing.className='elevator-landing';landing.innerHTML='<span class="elevator-guide"></span><span class="elevator-car"></span>';shaft.append(landing);}
+ circulation.append(shaft);
+}
+for(const [side,floors] of [['production',[3]],['living',[2,3]],['support',[2,3,4]],['activity',[2,3,4]]]){
+ for(const floor of floors){const passage=document.createElement('span');passage.className=`passage passage-${side} passage-${side}-${floor}`;passage.style.setProperty('--floor',floor);passage.innerHTML='<span>◀</span><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="19" cy="5" r="2" fill="currentColor" stroke="none"/><path d="m11 13 7-5 5 7 5 1M18 8l-3 10-6 7M15 18l7 3 2 8M11 13l-3 7"/></svg><span>▶</span>';circulation.append(passage);}
+}
+document.getElementById('baseMap').prepend(circulation);
