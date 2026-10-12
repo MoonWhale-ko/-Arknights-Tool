@@ -96,10 +96,10 @@ function updateElevatorLinks(){
   }
   const crossGap=3.2+.5/(el.clientWidth/40);
   const strokes={
-   up:`<path d="M20 ${40-crossGap}V15"/><path class="link-cap" d="M17 13h6"/>`,
-   down:`<path d="M20 ${40+crossGap}V65"/><path class="link-cap" d="M17 67h6"/>`,
-   left:`<path d="M${20-crossGap} 40H7"/><path class="link-cap" d="M5 37v6"/>`,
-   right:`<path d="M${20+crossGap} 40H33"/><path class="link-cap" d="M35 37v6"/>`
+   up:`<path d="M20 ${40-crossGap}V15"/><path class="link-cap" d="M18.5 13.7h3"/>`,
+   down:`<path d="M20 ${40+crossGap}V65"/><path class="link-cap" d="M18.5 66.3h3"/>`,
+   left:`<path d="M${20-crossGap} 40H7"/><path class="link-cap" d="M5.7 38.5v3"/>`,
+   right:`<path d="M${20+crossGap} 40H33"/><path class="link-cap" d="M34.3 38.5v3"/>`
   };
   el.dataset.connections=[...connections].join(' ');
   el.innerHTML=`<svg class="elevator-links" viewBox="0 0 40 80" aria-hidden="true"><g class="elevator-strokes">${[...connections].map(direction=>strokes[direction]).join('')}</g><path class="elevator-cross" d="m17 37 6 6m0-6-6 6"/></svg>`;
