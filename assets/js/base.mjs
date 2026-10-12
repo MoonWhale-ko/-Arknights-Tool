@@ -73,10 +73,10 @@ viewport.addEventListener('pointerup',endPan);viewport.addEventListener('pointer
 const circulation=document.createElement('div');circulation.className='base-circulation';circulation.setAttribute('aria-hidden','true');
 for(const position of ['left','middle','right']){
  const shaft=document.createElement('div');shaft.className=`elevator elevator-${position}`;
- for(let floor=0;floor<6;floor++){const landing=document.createElement('span');landing.className='elevator-landing';landing.innerHTML='<span class="elevator-guide"></span><span class="elevator-car"></span>';shaft.append(landing);}
+ for(let floor=position==='right'?1:0;floor<(position==='right'?5:6);floor++){const landing=document.createElement('span');landing.className='elevator-landing';landing.innerHTML='<span class="elevator-guide"></span><span class="elevator-car"></span>';shaft.append(landing);}
  circulation.append(shaft);
 }
-for(const [side,floors] of [['production',[3]],['living',[2,3]],['support',[2,3,4]],['activity',[2,3,4]]]){
+for(const [side,floors] of [['production',[3]],['living',[2,3,4,5]],['support',[2,3,4]],['activity',[2,3,4]]]){
  for(const floor of floors){const passage=document.createElement('span');passage.className=`passage passage-${side} passage-${side}-${floor}`;passage.style.setProperty('--floor',floor);passage.innerHTML='<svg class="passage-art" viewBox="0 0 108 60" aria-hidden="true"><path fill="#0b0c0c" d="M4 0H36L43 7H65L72 0H104Q108 0 108 4V56Q108 60 104 60H72L65 53H43L36 60H4Q0 60 0 56V4Q0 0 4 0Z"/><g fill="#579692"><path d="m12 31 8-4v8Zm9 0 8-4v8Zm56-4 8 4-8 4Zm10 0 8 4-8 4Z"/><circle cx="48" cy="17" r="4"/><path d="m47 23 10 2 7 10h6v5h-9l-7-10-3 6 10 7v6H43v-5h10l-7-5-8 10h-6l12-16 2-6-7 3-3 7-4-2 4-9 10-4Z"/></g></svg>';circulation.append(passage);}
 }
 document.getElementById('baseMap').prepend(circulation);
