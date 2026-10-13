@@ -120,6 +120,10 @@ function updateRegionCorners(){
 // A separate background layer travels at 90% of the map speed.
 const baseStage=document.getElementById('baseStage');
 function updateGridParallax(){
+ const unit=Number.parseFloat(getComputedStyle(document.getElementById('baseMap')).getPropertyValue('--unit'))||80;
+ const unitScale=unit/80;
+ baseStage.style.setProperty('--blueprint-unit',`${unit}px`);
+ baseStage.style.setProperty('--label-repeat-x',`${unit*2.0075}px`);
  const stageBounds=baseStage.getBoundingClientRect();
  const stageScale=stageBounds.width/baseStage.offsetWidth;
  baseStage.style.setProperty('--stage-edge',`${stageBounds.left/stageScale}px`);
@@ -131,19 +135,13 @@ function updateGridParallax(){
   const railCenterAtStart=((railRect.left+railRect.right)/2-stageRect.left)/scale+viewport.scrollLeft;
   baseStage.style.setProperty('--label-x',`${railCenterAtStart-30.2}px`);
   // Keep the paired lines crossing the upper trading ornament fixed as cells shrink.
-  const anchorColumn=Math.round((railCenterAtStart+10)/70);
+  const anchorColumn=Math.round((railCenterAtStart+10*unitScale)/(70*unitScale));
   const tradingTop=(rail.closest('.room').getBoundingClientRect().top-stageRect.top)/scale;
-  const anchorRow=Math.round((tradingTop-23)/70);
-  baseStage.style.setProperty('--grid-origin-x',`${-10+anchorColumn*1.5}px`);
-  baseStage.style.setProperty('--grid-origin-y',`${23+anchorRow*1.5}px`);
-  const powerRail=document.querySelector('.production-grid .room-power .facility-rail');
-  if(powerRail){
-   const powerRect=powerRail.getBoundingClientRect();
-   const powerRightAtStart=(powerRect.right-stageRect.left)/scale+viewport.scrollLeft;
-   // Two repeats separate the trading and power ornaments; A's base is 4px right of its center.
-   const repeatX=(powerRightAtStart-railCenterAtStart-4)/2;
-   if(repeatX>60)baseStage.style.setProperty('--label-repeat-x',`${repeatX}px`);
-  }
+  const anchorRow=Math.round((tradingTop-23*unitScale)/(70*unitScale));
+  baseStage.style.setProperty('--grid-origin-x',`${(-10+anchorColumn*1.5+4/1.35)*unitScale}px`);
+  baseStage.style.setProperty('--grid-origin-y',`${(23+anchorRow*1.5+3/1.35)*unitScale}px`);
+  // Keep the upper trading label row anchored while adopting the measured repeat.
+  baseStage.style.setProperty('--label-origin-y',`${tradingTop-(245-37+1.5-2/1.35)*unitScale}px`);
 
  }
 
