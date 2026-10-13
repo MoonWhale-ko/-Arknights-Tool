@@ -189,3 +189,7 @@ body{background:#efefef}
 body{overflow-x:clip}
 .base-stage{overflow:visible}
 .base-stage::before{left:calc(-1 * var(--stage-edge,32px));width:calc(100% + 2 * var(--stage-edge,32px) + var(--grid-extra));background-position:calc(var(--label-x,40px) + var(--stage-edge,32px)) 3px,var(--stage-edge,32px) -7px,var(--stage-edge,32px) -7px}
+
+/* Let facilities remain visible across the full-width background as they pan. */
+.base-overview{margin-left:calc(-1 * var(--stage-edge,32px));margin-right:calc(-1 * var(--stage-edge,32px));width:calc(100% + 2 * var(--stage-edge,32px));padding-left:calc(14px + var(--stage-edge,32px));padding-right:calc(14px + var(--stage-edge,32px))}
+@media(max-width:800px){.base-overview{padding-left:calc(10px + var(--stage-edge,10px));padding-right:calc(10px + var(--stage-edge,10px))}}
