@@ -127,6 +127,12 @@ function updateGridParallax(){
   // The outlined INFRA07 A is centered at x=30.2 in the ornament tile.
   const railCenterAtStart=((railRect.left+railRect.right)/2-stageRect.left)/scale+viewport.scrollLeft;
   baseStage.style.setProperty('--label-x',`${railCenterAtStart-30.2}px`);
+  // Anchor the A to the rail vertically, independently of the repeat interval.
+  const railCenterY=((railRect.top+railRect.bottom)/2-stageRect.top)/scale;
+  const labelAY=12.8+.8*(49-2-.25308641975308643-33*.7787274453941121);
+  const repeatY=188;
+  const row=Math.round((railCenterY-labelAY)/repeatY);
+  baseStage.style.setProperty('--label-y',`${railCenterY-labelAY-row*repeatY}px`);
  }
 
  baseStage.style.setProperty('--grid-x',`${-viewport.scrollLeft*.35}px`);
