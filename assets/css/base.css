@@ -177,7 +177,7 @@ body{background:#efefef}
  content:"";position:absolute;left:0;top:0;bottom:8px;width:calc(100% + var(--grid-extra));z-index:-1;pointer-events:none;
  --grid-color:#93999b24;
  background-image:url("../base-shapes/blueprint-label.svg?v=16"),linear-gradient(90deg,var(--grid-color) 0 1px,transparent 1px 2px,var(--grid-color) 2px 3px,transparent 3px),linear-gradient(var(--grid-color) 0 1px,transparent 1px 2px,var(--grid-color) 2px 3px,transparent 3px);
- background-size:var(--label-repeat-x,160.6px) calc(var(--blueprint-unit,80px)*2.28125),calc(var(--blueprint-unit,80px)*.85625) calc(var(--blueprint-unit,80px)*.85625),calc(var(--blueprint-unit,80px)*.85625) calc(var(--blueprint-unit,80px)*.85625);background-position:var(--label-x,40px) 3px,0 -7px,0 -7px;transform:translateX(var(--grid-x));will-change:transform
+ background-size:var(--label-repeat-x,162.1026px) 181px,68.5px 68.5px,68.5px 68.5px;background-position:var(--label-x,40px) 3px,0 -7px,0 -7px;transform:translateX(var(--grid-x));will-change:transform
 }
 .base-overview{margin-top:0;padding-top:50px;background-image:linear-gradient(to bottom,#0000000c,transparent 180px);background-size:100% 100%;background-position:0 0;background-repeat:no-repeat}
 .base-overview::-webkit-scrollbar{height:8px}
@@ -202,11 +202,11 @@ body{overflow-x:clip}
 /* Large interrupted crosses repeat independently of the text ornaments. */
 .base-stage::before{
  background-image:url("../base-shapes/blueprint-cross.svg?v=3"),url("../base-shapes/blueprint-label.svg?v=16"),linear-gradient(90deg,var(--grid-color) 0 1px,transparent 1px 2px,var(--grid-color) 2px 3px,transparent 3px),linear-gradient(var(--grid-color) 0 1px,transparent 1px 2px,var(--grid-color) 2px 3px,transparent 3px);
- background-size:calc(var(--blueprint-unit,80px)*1.6875) calc(var(--blueprint-unit,80px)*1.735),var(--label-repeat-x,160.6px) calc(var(--blueprint-unit,80px)*2.28125),calc(var(--blueprint-unit,80px)*.85625) calc(var(--blueprint-unit,80px)*.85625),calc(var(--blueprint-unit,80px)*.85625) calc(var(--blueprint-unit,80px)*.85625);
+ background-size:140px 140px,var(--label-repeat-x,162.1026px) 181px,68.5px 68.5px,68.5px 68.5px;
  background-position:calc(var(--label-x,40px) + var(--stage-edge,32px) + 54.2px + var(--cross-offset-x,0px)) -18px,calc(var(--label-x,40px) + var(--stage-edge,32px)) -17px,var(--stage-edge,32px) -27px,var(--stage-edge,32px) -27px
 }
 
 /* Restore the top crop, add half a grid above and two grids below. */
 .base-overview{padding-top:85px;padding-bottom:164px}
-.base-stage::before{background-position:calc(var(--label-x,40px) + var(--stage-edge,32px) + 54.2px + var(--cross-offset-x,0px)) 36px,calc(var(--label-x,40px) + var(--stage-edge,32px)) var(--label-origin-y,36.9815px),calc(var(--stage-edge,32px) + var(--grid-origin-x,-10px)) var(--grid-origin-y,23px),calc(var(--stage-edge,32px) + var(--grid-origin-x,-10px)) var(--grid-origin-y,23px)}
+.base-stage::before{background-position:calc(var(--label-x,40px) + var(--stage-edge,32px) + 54.2px + var(--cross-offset-x,0px)) 36px,calc(var(--label-x,40px) + var(--stage-edge,32px)) 37px,calc(var(--stage-edge,32px) + var(--grid-origin-x,-10px)) var(--grid-origin-y,23px),calc(var(--stage-edge,32px) + var(--grid-origin-x,-10px)) var(--grid-origin-y,23px)}
 @media(max-width:800px){.base-overview{padding-top:75px;padding-bottom:160px}}
