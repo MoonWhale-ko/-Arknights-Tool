@@ -24,7 +24,7 @@ function decorateRoom(card,type){
  const trim=document.createElement('span');trim.className='facility-trim';trim.setAttribute('aria-hidden','true');trim.innerHTML='<span class="facility-rail"></span><span class="facility-floor"><span></span><span></span><span></span><span></span><span></span></span>';card.prepend(trim);
 }
 function showOccupancy(element,count,max){
- element.replaceChildren();const current=document.createElement('span');current.className='occupancy-current';current.textContent=String(count);const limit=document.createElement('span');limit.className='occupancy-limit';limit.textContent=`/${max}`;element.append(current,limit);
+ element.replaceChildren();const current=document.createElement('span');current.className='occupancy-current';current.textContent=String(count);const limit=document.createElement('span');limit.className='occupancy-limit';limit.textContent=`/${max}`;if(count===3){current.textContent='';const digit=document.createElement('img');digit.className='occupancy-digit-three';digit.src='assets/icons/base-digit-3.svg';digit.alt='3';current.append(digit);}if(max===3){limit.textContent='/';const digit=document.createElement('img');digit.className='occupancy-digit-three';digit.src='assets/icons/base-digit-3.svg';digit.alt='3';limit.append(digit);}element.append(current,limit);
 }
 function room(slotId,type,name,saved){
  const card=document.createElement('article');card.className=`room room-${FACILITIES[type].css}`;card.setAttribute('aria-label',name);let level=saved?.level??0,count=saved?.count??0;
