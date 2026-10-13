@@ -130,6 +130,14 @@ function updateGridParallax(){
   // The outlined INFRA07 A is centered at x=30.2 in the ornament tile.
   const railCenterAtStart=((railRect.left+railRect.right)/2-stageRect.left)/scale+viewport.scrollLeft;
   baseStage.style.setProperty('--label-x',`${railCenterAtStart-30.2}px`);
+  const powerRail=document.querySelector('.production-grid .room-power .facility-rail');
+  if(powerRail){
+   const powerRect=powerRail.getBoundingClientRect();
+   const powerRightAtStart=(powerRect.right-stageRect.left)/scale+viewport.scrollLeft;
+   // Two repeats separate the trading and power ornaments; A's base is 4px right of its center.
+   const repeatX=(powerRightAtStart-railCenterAtStart-4)/2;
+   if(repeatX>60)baseStage.style.setProperty('--label-repeat-x',`${repeatX}px`);
+  }
 
  }
 
