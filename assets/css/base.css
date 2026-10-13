@@ -169,3 +169,11 @@ body{background:#e8e9e9;background-image:none}.base-map:before{display:none}
  clip-path:none;background:transparent;background-image:var(--rail-shape);background-size:100% 100%;background-repeat:no-repeat;
  box-shadow:none;filter:drop-shadow(0 0 2px color-mix(in srgb,var(--color) 45%,transparent))
 }
+
+/* Repeating in-game blueprint background: fine grid, crosses and vertical labels. */
+body{
+ background-color:#efefef;
+ background-image:linear-gradient(to bottom,#0000000c,transparent 180px),url("../base-shapes/blueprint-background.svg?v=1");
+ background-size:100% 100%,160px 160px;background-position:0 0,36px 8px;background-repeat:no-repeat,repeat;
+ background-attachment:fixed,fixed
+}
