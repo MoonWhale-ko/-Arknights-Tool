@@ -7,6 +7,6 @@
 <path d="M27.5 10H43.5V38.5"/>
 <path d="M27.5 17H35" stroke-dasharray="1.5 1.5"/>
 <path d="M35 17H43.5M27.5 48.5H34.5"/>
-<path d="M36.5 41.5L44 49M44 41.5L36.5 49" stroke-width="1.2"/>
+
 </g>
-</g></svg>
+</g><g transform="translate(8 7)" fill="none" stroke="#555b5e" stroke-width=".96" stroke-linecap="butt"><path d="M37.25 42.25L43.25 48.25M43.25 42.25L37.25 48.25"/></g></svg>
