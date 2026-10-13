@@ -208,5 +208,5 @@ body{overflow-x:clip}
 
 /* Restore the top crop, add half a grid above and two grids below. */
 .base-overview{padding-top:85px;padding-bottom:164px}
-.base-stage::before{background-position:calc(var(--label-x,40px) + var(--stage-edge,32px) + 54.2px + var(--cross-offset-x,0px)) 32px,calc(var(--label-x,40px) + var(--stage-edge,32px)) 33px,var(--stage-edge,32px) 23px,var(--stage-edge,32px) 23px}
+.base-stage::before{background-position:calc(var(--label-x,40px) + var(--stage-edge,32px) + 54.2px + var(--cross-offset-x,0px)) 36px,calc(var(--label-x,40px) + var(--stage-edge,32px)) 37px,var(--stage-edge,32px) 23px,var(--stage-edge,32px) 23px}
 @media(max-width:800px){.base-overview{padding-top:75px;padding-bottom:160px}}
