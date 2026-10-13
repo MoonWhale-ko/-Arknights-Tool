@@ -210,3 +210,17 @@ body{overflow-x:clip}
 .base-overview{padding-top:85px;padding-bottom:164px}
 .base-stage::before{background-position:calc(var(--label-x,40px) + var(--stage-edge,32px) + 54.2px + var(--cross-offset-x,0px)) 36px,calc(var(--label-x,40px) + var(--stage-edge,32px)) 37px,calc(var(--stage-edge,32px) + var(--grid-origin-x,-10px)) var(--grid-origin-y,23px),calc(var(--stage-edge,32px) + var(--grid-origin-x,-10px)) var(--grid-origin-y,23px)}
 @media(max-width:800px){.base-overview{padding-top:75px;padding-bottom:160px}}
+
+/* Trading title aligned to the supplied in-game panel reference. */
+.production-grid .room-trading>.room-heading{
+ visibility:visible!important;display:block;position:absolute;
+ left:17.578125%;top:21.875%;margin:0;padding:0;z-index:1
+}
+.production-grid .room-trading>.room-heading>h2{
+ visibility:visible!important;display:block;margin:0;
+ color:#f5f6f4;font-size:calc(var(--unit)*.2125);font-weight:800;
+ line-height:1;letter-spacing:-.04em;white-space:nowrap;
+ text-shadow:0 1px 2px #0008
+}
+.production-grid .room-trading>.room-heading>.level-bars,
+.production-grid .room-trading>.room-heading>.level-text{display:none!important}
