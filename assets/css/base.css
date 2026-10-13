@@ -134,3 +134,6 @@ body{background:#e8e9e9;background-image:none}.base-map:before{display:none}
  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat
 }
 .passage{isolation:isolate}
+
+/* Shift facility silhouettes down without moving the boundary grid or corridors. */
+.room::before,.production-grid .room::before{transform:translateY(3px)}
