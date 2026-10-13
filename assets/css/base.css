@@ -113,17 +113,17 @@ body{background:#e8e9e9;background-image:none}.base-map:before{display:none}
 .elevator-strokes .link-cap{stroke:#586b6c}
 
 /* Extracted black facility silhouettes, inside the existing boundary grid. */
-.room-control{--facility-shape:url("../base-shapes/control.svg?v=6")}
-.room-trading{--facility-shape:url("../base-shapes/trading.svg?v=5")}
-.room-factory{--facility-shape:url("../base-shapes/manufacture.svg?v=5")}
-.room-power{--facility-shape:url("../base-shapes/power.svg?v=5")}
-.room-dorm{--facility-shape:url("../base-shapes/dormitory.svg?v=5")}
-.room-reception{--facility-shape:url("../base-shapes/meeting.svg?v=5")}
-.room-workshop{--facility-shape:url("../base-shapes/workshop.svg?v=5")}
-.room-office{--facility-shape:url("../base-shapes/office.svg?v=5")}
-.room-training{--facility-shape:url("../base-shapes/training.svg?v=5")}
-.room-private{--facility-shape:url("../base-shapes/activity.svg?v=5")}
-.passage{--facility-shape:url("../base-shapes/corridor.svg?v=6")}
+.room-control{--facility-shape:url("../base-shapes/control.svg?v=7")}
+.room-trading{--facility-shape:url("../base-shapes/trading.svg?v=6")}
+.room-factory{--facility-shape:url("../base-shapes/manufacture.svg?v=6")}
+.room-power{--facility-shape:url("../base-shapes/power.svg?v=6")}
+.room-dorm{--facility-shape:url("../base-shapes/dormitory.svg?v=6")}
+.room-reception{--facility-shape:url("../base-shapes/meeting.svg?v=6")}
+.room-workshop{--facility-shape:url("../base-shapes/workshop.svg?v=6")}
+.room-office{--facility-shape:url("../base-shapes/office.svg?v=6")}
+.room-training{--facility-shape:url("../base-shapes/training.svg?v=6")}
+.room-private{--facility-shape:url("../base-shapes/activity.svg?v=6")}
+.passage{--facility-shape:url("../base-shapes/corridor.svg?v=7")}
 .room::before,.production-grid .room::before,.passage::before{
  content:"";display:block!important;position:absolute;inset:0;z-index:-1;
  width:auto;height:auto;border:0;border-radius:0;transform:none;clip-path:none;
@@ -160,9 +160,9 @@ body{background:#e8e9e9;background-image:none}.base-map:before{display:none}
 }
 
 /* Side ornament uses the manufacturing panel's left contour and its mirror. */
-.room-factory{--rail-shape:url("../base-shapes/rail-factory.svg?v=3")}
-.room-trading{--rail-shape:url("../base-shapes/rail-trading.svg?v=3")}
-.room-power{--rail-shape:url("../base-shapes/rail-power.svg?v=3")}
+.room-factory{--rail-shape:url("../base-shapes/rail-factory.svg?v=4")}
+.room-trading{--rail-shape:url("../base-shapes/rail-trading.svg?v=4")}
+.room-power{--rail-shape:url("../base-shapes/rail-power.svg?v=4")}
 .production-grid .room .facility-rail{
  display:block!important;visibility:visible!important;top:0;bottom:auto;left:calc(100% * 7 / 195);
  width:calc(100% * 20 / 195);height:100%;transform:none;
