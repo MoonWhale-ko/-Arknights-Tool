@@ -156,5 +156,5 @@ body{background:#e8e9e9;background-image:none}.base-map:before{display:none}
 .room::before,.production-grid .room::before,.passage::before{
  background:transparent!important;background-image:var(--facility-shape)!important;
  background-size:100% 100%!important;background-position:center!important;background-repeat:no-repeat!important;
- -webkit-mask-image:none;mask-image:none;filter:drop-shadow(0 0 3px #0006)
+ -webkit-mask-image:none;mask-image:none;filter:drop-shadow(0 0 5px #0006)
 }
