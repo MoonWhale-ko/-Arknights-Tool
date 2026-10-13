@@ -120,6 +120,9 @@ function updateRegionCorners(){
 // A separate background layer travels at 35% of the map speed.
 const baseStage=document.getElementById('baseStage');
 function updateGridParallax(){
+ const stageBounds=baseStage.getBoundingClientRect();
+ const stageScale=stageBounds.width/baseStage.offsetWidth;
+ baseStage.style.setProperty('--stage-edge',`${stageBounds.left/stageScale}px`);
  const rail=document.querySelector('.production-grid .room-trading .facility-rail');
  if(rail){
   const stageRect=baseStage.getBoundingClientRect(),railRect=rail.getBoundingClientRect();
