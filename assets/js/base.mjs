@@ -120,6 +120,15 @@ function updateRegionCorners(){
 // A separate background layer travels at 35% of the map speed.
 const baseStage=document.getElementById('baseStage');
 function updateGridParallax(){
+ const rail=document.querySelector('.production-grid .room-trading .facility-rail');
+ if(rail){
+  const stageRect=baseStage.getBoundingClientRect(),railRect=rail.getBoundingClientRect();
+  const scale=stageRect.width/baseStage.offsetWidth;
+  // The outlined INFRA07 A is centered at x=30.2 in the ornament tile.
+  const railCenterAtStart=((railRect.left+railRect.right)/2-stageRect.left)/scale+viewport.scrollLeft;
+  baseStage.style.setProperty('--label-x',`${railCenterAtStart-30.2}px`);
+ }
+
  baseStage.style.setProperty('--grid-x',`${-viewport.scrollLeft*.35}px`);
  baseStage.style.setProperty('--grid-extra',`${Math.max(0,viewport.scrollWidth-viewport.clientWidth)*.35}px`);
 }
