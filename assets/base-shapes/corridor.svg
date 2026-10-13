@@ -1,4 +1,1 @@
-<svg preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" width="99" height="63" viewBox="0 0 99 63">
-  <title>통로 검정 배경 윤곽</title>
-  <path transform="translate(0 7.5)" fill="#25282a" d="M13 2.81875 H37 L40 5.81875 H58 L61 2.81875 H86 L90 6.81875 V46.18125 L86 50.18125 H13 L9 46.18125 V6.81875 L13 2.81875 Z"/>
-</svg>
+<svg preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" width="99" height="63" viewBox="0 0 99 63"><title>위쪽 40%를 상하 대칭 복사하고 세로 중앙 정렬한 통로</title><path fill="#25282a" d="M13 16.61875H37L40 19.61875H58L61 16.61875H86L90 20.61875V42.38125L86 46.38125H61L58 43.38125H40L37 46.38125H13L9 42.38125V20.61875L13 16.61875Z"/></svg>

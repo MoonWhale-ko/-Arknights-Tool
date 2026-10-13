@@ -123,7 +123,7 @@ body{background:#e8e9e9;background-image:none}.base-map:before{display:none}
 .room-office{--facility-shape:url("../base-shapes/office.svg?v=5")}
 .room-training{--facility-shape:url("../base-shapes/training.svg?v=5")}
 .room-private{--facility-shape:url("../base-shapes/activity.svg?v=5")}
-.passage{--facility-shape:url("../base-shapes/corridor.svg?v=5")}
+.passage{--facility-shape:url("../base-shapes/corridor.svg?v=6")}
 .room::before,.production-grid .room::before,.passage::before{
  content:"";display:block!important;position:absolute;inset:0;z-index:-1;
  width:auto;height:auto;border:0;border-radius:0;transform:none;clip-path:none;
