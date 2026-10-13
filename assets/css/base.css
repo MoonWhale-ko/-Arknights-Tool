@@ -193,3 +193,8 @@ body{overflow-x:clip}
 /* Let facilities remain visible across the full-width background as they pan. */
 .base-overview{margin-left:calc(-1 * var(--stage-edge,32px));margin-right:calc(-1 * var(--stage-edge,32px));width:calc(100% + 2 * var(--stage-edge,32px));padding-left:calc(14px + var(--stage-edge,32px));padding-right:calc(14px + var(--stage-edge,32px))}
 @media(max-width:800px){.base-overview{padding-left:calc(10px + var(--stage-edge,10px));padding-right:calc(10px + var(--stage-edge,10px))}}
+
+/* Crop the top whitespace so the first decoration starts at its 7. */
+.base-overview{padding-top:30px}
+.base-stage::before{background-position:calc(var(--label-x,40px) + var(--stage-edge,32px)) -17px,var(--stage-edge,32px) -27px,var(--stage-edge,32px) -27px}
+@media(max-width:800px){.base-overview{padding-top:20px}}
