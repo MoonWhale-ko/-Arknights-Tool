@@ -151,3 +151,10 @@ body{background:#e8e9e9;background-image:none}.base-map:before{display:none}
 
 /* Move the enlarged page slightly upward (10 screen pixels at 135%). */
 .base-page{position:relative;top:calc(-10px / 1.35)}
+
+/* Render the transparent SVG directly so its silhouette casts a soft shadow. */
+.room::before,.production-grid .room::before,.passage::before{
+ background:transparent!important;background-image:var(--facility-shape)!important;
+ background-size:100% 100%!important;background-position:center!important;background-repeat:no-repeat!important;
+ -webkit-mask-image:none;mask-image:none;filter:drop-shadow(0 1px 1px #0003)
+}
