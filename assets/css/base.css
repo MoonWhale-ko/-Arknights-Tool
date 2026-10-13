@@ -113,7 +113,7 @@ body{background:#e8e9e9;background-image:none}.base-map:before{display:none}
 .elevator-strokes .link-cap{stroke:#586b6c}
 
 /* Extracted black facility silhouettes, inside the existing boundary grid. */
-.room-control{--facility-shape:url("../base-shapes/control.svg?v=5")}
+.room-control{--facility-shape:url("../base-shapes/control.svg?v=6")}
 .room-trading{--facility-shape:url("../base-shapes/trading.svg?v=5")}
 .room-factory{--facility-shape:url("../base-shapes/manufacture.svg?v=5")}
 .room-power{--facility-shape:url("../base-shapes/power.svg?v=5")}
