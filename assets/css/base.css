@@ -160,9 +160,9 @@ body{background:#e8e9e9;background-image:none}.base-map:before{display:none}
 }
 
 /* Side ornament uses the manufacturing panel's left contour and its mirror. */
-.room-factory{--rail-shape:url("../base-shapes/rail-factory.svg?v=2")}
-.room-trading{--rail-shape:url("../base-shapes/rail-trading.svg?v=2")}
-.room-power{--rail-shape:url("../base-shapes/rail-power.svg?v=2")}
+.room-factory{--rail-shape:url("../base-shapes/rail-factory.svg?v=3")}
+.room-trading{--rail-shape:url("../base-shapes/rail-trading.svg?v=3")}
+.room-power{--rail-shape:url("../base-shapes/rail-power.svg?v=3")}
 .production-grid .room .facility-rail{
  display:block!important;visibility:visible!important;top:0;bottom:auto;left:calc(100% * 7 / 195);
  width:calc(100% * 20 / 195);height:100%;transform:none;
