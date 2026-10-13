@@ -117,7 +117,7 @@ function updateRegionCorners(){
  }
 }
 
-// A separate background layer travels at 35% of the map speed.
+// A separate background layer travels at 95% of the map speed.
 const baseStage=document.getElementById('baseStage');
 function updateGridParallax(){
  const stageBounds=baseStage.getBoundingClientRect();
@@ -141,8 +141,8 @@ function updateGridParallax(){
 
  }
 
- baseStage.style.setProperty('--grid-x',`${-viewport.scrollLeft*.35}px`);
- baseStage.style.setProperty('--grid-extra',`${Math.max(0,viewport.scrollWidth-viewport.clientWidth)*.35}px`);
+ baseStage.style.setProperty('--grid-x',`${-viewport.scrollLeft*.95}px`);
+ baseStage.style.setProperty('--grid-extra',`${Math.max(0,viewport.scrollWidth-viewport.clientWidth)*.95}px`);
 }
 viewport.addEventListener('scroll',updateGridParallax,{passive:true});
 viewport.addEventListener('pointermove',updateGridParallax,{passive:true});
