@@ -158,3 +158,14 @@ body{background:#e8e9e9;background-image:none}.base-map:before{display:none}
  background-size:100% 100%!important;background-position:center!important;background-repeat:no-repeat!important;
  -webkit-mask-image:none;mask-image:none;filter:drop-shadow(0 0 5px #0006)
 }
+
+/* Reference side ornament: two paired notches, separate from the panel silhouette. */
+.room-factory{--rail-shape:url("../base-shapes/rail-factory.svg?v=1")}
+.room-trading{--rail-shape:url("../base-shapes/rail-trading.svg?v=1")}
+.room-power{--rail-shape:url("../base-shapes/rail-power.svg?v=1")}
+.production-grid .room .facility-rail{
+ display:block!important;visibility:visible!important;top:50%;bottom:auto;left:calc(100% * 7 / 195);
+ width:calc(100% * 20 / 195);height:calc(100% * 91 / 99);transform:translateY(-50%);
+ clip-path:none;background:transparent;background-image:var(--rail-shape);background-size:100% 100%;background-repeat:no-repeat;
+ box-shadow:none;filter:drop-shadow(0 0 2px color-mix(in srgb,var(--color) 45%,transparent))
+}
