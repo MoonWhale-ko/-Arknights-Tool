@@ -116,3 +116,8 @@ function updateRegionCorners(){
   svg.innerHTML=`<rect class="region-boundary" x=".75" y=".75" width="${w-1.5}" height="${h-1.5}"/><path d="M${inset+length} ${inset}H${inset}V${inset+length}M${right-length} ${inset}H${right}V${inset+length}M${inset} ${bottom-length}V${bottom}H${inset+length}M${right} ${bottom-length}V${bottom}H${right-length}"/>`;el.append(svg);
  }
 }
+
+// The grid moves at 35% of the facility map's horizontal speed.
+function updateGridParallax(){viewport.style.setProperty('--grid-x',`${-viewport.scrollLeft*.35}px`);}
+viewport.addEventListener('scroll',updateGridParallax,{passive:true});
+updateGridParallax();

@@ -170,13 +170,17 @@ body{background:#e8e9e9;background-image:none}.base-map:before{display:none}
  box-shadow:none;filter:drop-shadow(0 0 2px color-mix(in srgb,var(--color) 45%,transparent))
 }
 
-/* Repeating in-game blueprint background: fine grid, crosses and vertical labels. */
+/* Paired solid grid lines: one-pixel gap and eighty-pixel repeat. */
 body{background:#efefef}
 .base-overview{
+ --grid-x:0px;--grid-color:#93999b24;
  margin-top:0;padding-top:50px;
- background-image:linear-gradient(to bottom,#0000000c,transparent 180px),url("../base-shapes/blueprint-background.svg?v=1");
- background-size:100% 100%,160px 160px;background-position:0 0,36px 8px;background-repeat:no-repeat,repeat;
- background-attachment:scroll,scroll
+ background-image:linear-gradient(to bottom,#0000000c,transparent 180px),
+ linear-gradient(90deg,var(--grid-color) 0 1px,transparent 1px 2px,var(--grid-color) 2px 3px,transparent 3px),
+ linear-gradient(var(--grid-color) 0 1px,transparent 1px 2px,var(--grid-color) 2px 3px,transparent 3px);
+ background-size:100% 100%,80px 80px,80px 80px;
+ background-position:0 0,var(--grid-x) 0,var(--grid-x) 0;
+ background-repeat:no-repeat,repeat,repeat;background-attachment:scroll,scroll,scroll
 }
 .base-overview::-webkit-scrollbar{height:8px}
 .base-overview::-webkit-scrollbar-track{background:#c8ced1}
