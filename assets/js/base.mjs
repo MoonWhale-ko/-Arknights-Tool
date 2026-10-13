@@ -134,8 +134,8 @@ function updateGridParallax(){
   const anchorColumn=Math.round((railCenterAtStart+10)/70);
   const tradingTop=(rail.closest('.room').getBoundingClientRect().top-stageRect.top)/scale;
   const anchorRow=Math.round((tradingTop-23)/70);
-  baseStage.style.setProperty('--grid-origin-x',`${-10+anchorColumn}px`);
-  baseStage.style.setProperty('--grid-origin-y',`${23+anchorRow}px`);
+  baseStage.style.setProperty('--grid-origin-x',`${-10+anchorColumn*1.5}px`);
+  baseStage.style.setProperty('--grid-origin-y',`${23+anchorRow*1.5}px`);
   const powerRail=document.querySelector('.production-grid .room-power .facility-rail');
   if(powerRail){
    const powerRect=powerRail.getBoundingClientRect();
