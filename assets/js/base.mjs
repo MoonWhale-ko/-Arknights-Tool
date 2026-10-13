@@ -127,3 +127,14 @@ viewport.addEventListener('scroll',updateGridParallax,{passive:true});
 viewport.addEventListener('pointermove',updateGridParallax,{passive:true});
 new ResizeObserver(updateGridParallax).observe(viewport);
 updateGridParallax();
+
+// Start each page visit with the control center in the middle of the viewport.
+function centerControlRoom(){
+ const control=document.querySelector('.room-control');if(!control)return;
+ const frame=viewport.getBoundingClientRect(),room=control.getBoundingClientRect();
+ const scale=frame.width/viewport.offsetWidth;
+ viewport.scrollLeft+=((room.left+room.right-frame.left-frame.right)/2)/scale;
+ updateGridParallax();
+}
+requestAnimationFrame(centerControlRoom);
+window.addEventListener('pageshow',()=>requestAnimationFrame(centerControlRoom));
