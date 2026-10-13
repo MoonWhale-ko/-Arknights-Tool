@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
-<title>INFRA07 및 RODOS ISLAND 배경 글자와 연결선</title>
-<g transform="translate(8 7)" opacity=".25" fill="#858b8d">
-<text transform="translate(13 48) rotate(-90)" font-family="Arial,sans-serif" font-size="8.5" font-weight="700" letter-spacing="-.25">INFRA07</text>
-<text transform="translate(21 48) rotate(-90)" font-family="Arial,sans-serif" font-size="5.2" font-weight="500" letter-spacing=".15">RODOS ISLAND</text>
-<g fill="none" stroke="#858b8d" stroke-width=".8" stroke-linecap="butt">
-<path d="M8 47V58M18 48V54H23"/>
-<path d="M27 14V38" stroke-dasharray="1.5 2"/>
-<path d="M27 38V54H33M27 8H42V54M29 15H38"/>
+<title>참고 이미지의 세로 글자와 가로 연결선 장식</title>
+<g transform="translate(8 7)" fill="#858b8d" opacity=".25">
+<text transform="translate(16.5 49) rotate(-90)" font-family="Arial Narrow,Arial,sans-serif" font-size="10.5" font-weight="600" textLength="41" lengthAdjust="spacingAndGlyphs">INFRA07</text>
+<text transform="translate(23.5 49) rotate(-90)" font-family="Arial Narrow,Arial,sans-serif" font-size="6.5" font-weight="500" textLength="41" lengthAdjust="spacingAndGlyphs">RODOS ISLAND</text>
+<g fill="none" stroke="#858b8d" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter">
+<path d="M27.5 10H43.5V38.5"/>
+<path d="M27.5 17H35" stroke-dasharray="1.5 1.5"/>
+<path d="M35 17H43.5M27.5 48.5H34.5"/>
 </g>
 </g></svg>
