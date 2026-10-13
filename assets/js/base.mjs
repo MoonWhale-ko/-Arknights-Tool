@@ -141,6 +141,8 @@ function updateGridParallax(){
 
  }
 
+ // The cross background gains another 5% over the grid's 90% travel.
+ baseStage.style.setProperty('--cross-offset-x',`${-viewport.scrollLeft*.05}px`);
  baseStage.style.setProperty('--grid-x',`${-viewport.scrollLeft*.90}px`);
  baseStage.style.setProperty('--grid-extra',`${Math.max(0,viewport.scrollWidth-viewport.clientWidth)*.90}px`);
 }
