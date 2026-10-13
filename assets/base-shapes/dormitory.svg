@@ -1,4 +1,4 @@
 <svg preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" width="291" height="99" viewBox="0 0 291 99">
   <title>숙소 검정 배경 윤곽</title>
-  <path fill="#000" d="M13 4 H110 L115 9 H175 L180 4 H278 Q282 4 282 8 V39 L280 41 V47 L282 49 V81 Q282 85 278 85 H13 Q9 85 9 81 V49 L11 47 V41 L9 39 V8 Q9 4 13 4 Z"/>
+  <path fill="#000" d="M13 4 H110 L115 9 H175 L180 4 H278 L282 8 V39 L280 41 V47 L282 49 V81 L278 85 H13 L9 81 V49 L11 47 V41 L9 39 V8 L13 4 Z"/>
 </svg>
