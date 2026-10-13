@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
+<title>INFRA07 및 RODOS ISLAND 배경 글자와 연결선</title>
+<g transform="translate(8 7)" opacity=".25" fill="#858b8d">
+<text transform="translate(13 48) rotate(-90)" font-family="Arial,sans-serif" font-size="8.5" font-weight="700" letter-spacing="-.25">INFRA07</text>
+<text transform="translate(21 48) rotate(-90)" font-family="Arial,sans-serif" font-size="5.2" font-weight="500" letter-spacing=".15">RODOS ISLAND</text>
+<g fill="none" stroke="#858b8d" stroke-width=".8" stroke-linecap="butt">
+<path d="M8 47V58M18 48V54H23"/>
+<path d="M27 14V38" stroke-dasharray="1.5 2"/>
+<path d="M27 38V54H33M27 8H42V54M29 15H38"/>
+</g>
+</g></svg>
