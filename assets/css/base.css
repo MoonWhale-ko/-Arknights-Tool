@@ -184,3 +184,8 @@ body{background:#efefef}
 .base-overview::-webkit-scrollbar-track{background:#c8ced1}
 .base-overview::-webkit-scrollbar-thumb{background:#73848e}
 @media(max-width:800px){.base-overview{margin-top:0;padding-top:40px}}
+
+/* Extend only the blueprint background to both screen edges. */
+body{overflow-x:clip}
+.base-stage{overflow:visible}
+.base-stage::before{left:calc(-1 * var(--stage-edge,32px));width:calc(100% + 2 * var(--stage-edge,32px) + var(--grid-extra));background-position:calc(var(--label-x,40px) + var(--stage-edge,32px)) 3px,var(--stage-edge,32px) -7px,var(--stage-edge,32px) -7px}
