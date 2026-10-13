@@ -177,7 +177,7 @@ body{background:#efefef}
  content:"";position:absolute;left:0;top:0;bottom:8px;width:calc(100% + var(--grid-extra));z-index:-1;pointer-events:none;
  --grid-color:#93999b24;
  background-image:url("../base-shapes/blueprint-label.svg?v=11"),linear-gradient(90deg,var(--grid-color) 0 1px,transparent 1px 3px,var(--grid-color) 3px 4px,transparent 4px),linear-gradient(var(--grid-color) 0 1px,transparent 1px 3px,var(--grid-color) 3px 4px,transparent 4px);
- background-size:166px 188px,70px 70px,70px 70px;background-position:var(--label-x,40px) -6px,0 -7px,0 -7px;transform:translateX(var(--grid-x));will-change:transform
+ background-size:166px 188px,70px 70px,70px 70px;background-position:var(--label-x,40px) var(--label-y,-6px),0 -7px,0 -7px;transform:translateX(var(--grid-x));will-change:transform
 }
 .base-overview{margin-top:0;padding-top:50px;background-image:linear-gradient(to bottom,#0000000c,transparent 180px);background-size:100% 100%;background-position:0 0;background-repeat:no-repeat}
 .base-overview::-webkit-scrollbar{height:8px}
