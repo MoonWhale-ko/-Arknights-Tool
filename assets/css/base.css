@@ -137,3 +137,6 @@ body{background:#e8e9e9;background-image:none}.base-map:before{display:none}
 
 /* Shift facility silhouettes down without moving the boundary grid or corridors. */
 .room::before,.production-grid .room::before{transform:translateY(3px)}
+
+/* Six-pixel brackets with half-width strokes; retain 1.5px clearance from borders. */
+.region-corners path{stroke-width:.5}
