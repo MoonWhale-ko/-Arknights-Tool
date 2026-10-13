@@ -145,3 +145,6 @@ body{background:#e8e9e9;background-image:none}.base-map:before{display:none}
 .room,.passage,.elevator-landing,.elevator-landing:last-child{border:0}
 .room>.region-corners,.passage>.region-corners,.elevator-landing>.region-corners{left:0;top:0;width:100%;height:100%}
 .region-corners .region-boundary{fill:none;stroke:#78868c;stroke-width:.5;vector-effect:non-scaling-stroke}
+
+/* Enlarge the complete facility page, including frames and decorations. */
+.base-page{zoom:1.35}
