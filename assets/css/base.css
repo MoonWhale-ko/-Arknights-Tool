@@ -241,7 +241,8 @@ body{overflow-x:clip}
 }
 .production-grid .room-trading>.room-heading>.level-bars>span.active{opacity:1}
 .production-grid .room-trading>.facility-trim>.facility-floor{
- visibility:visible!important;display:flex;left:calc(17.578125% + 3px);right:calc(4% + 3px);
+ visibility:visible!important;display:flex;left:54.615385%;right:auto;
+ width:calc(78.421875% - 6px);transform:translateX(-50%);
  bottom:calc(var(--unit)*.055 + 2.5px);height:calc(var(--unit)*.04);
  gap:calc(var(--unit)*.0375);background:none;box-shadow:none
 }
