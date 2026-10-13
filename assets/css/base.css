@@ -111,3 +111,26 @@ body{background:#e8e9e9;background-image:none}.base-map:before{display:none}
 .elevator-strokes{stroke-width:3}.elevator-strokes .link-cap{stroke-width:1.2}
 
 .elevator-strokes .link-cap{stroke:#586b6c}
+
+/* Extracted black facility silhouettes, inside the existing boundary grid. */
+.room-control{--facility-shape:url("../base-shapes/control.svg")}
+.room-trading{--facility-shape:url("../base-shapes/trading.svg")}
+.room-factory{--facility-shape:url("../base-shapes/manufacture.svg")}
+.room-power{--facility-shape:url("../base-shapes/power.svg")}
+.room-dorm{--facility-shape:url("../base-shapes/dormitory.svg")}
+.room-reception{--facility-shape:url("../base-shapes/meeting.svg")}
+.room-workshop{--facility-shape:url("../base-shapes/workshop.svg")}
+.room-office{--facility-shape:url("../base-shapes/office.svg")}
+.room-training{--facility-shape:url("../base-shapes/training.svg")}
+.room-private{--facility-shape:url("../base-shapes/activity.svg")}
+.passage{--facility-shape:url("../base-shapes/corridor.svg")}
+.room::before,.production-grid .room::before,.passage::before{
+ content:"";display:block!important;position:absolute;inset:0;z-index:-1;
+ width:auto;height:auto;border:0;border-radius:0;transform:none;clip-path:none;
+ background:#000!important;box-shadow:none!important;filter:none;opacity:1;pointer-events:none;
+ -webkit-mask-image:var(--facility-shape);mask-image:var(--facility-shape);
+ -webkit-mask-size:100% 100%;mask-size:100% 100%;
+ -webkit-mask-position:center;mask-position:center;
+ -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat
+}
+.passage{isolation:isolate}
