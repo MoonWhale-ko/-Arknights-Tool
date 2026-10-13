@@ -130,6 +130,12 @@ function updateGridParallax(){
   // The outlined INFRA07 A is centered at x=30.2 in the ornament tile.
   const railCenterAtStart=((railRect.left+railRect.right)/2-stageRect.left)/scale+viewport.scrollLeft;
   baseStage.style.setProperty('--label-x',`${railCenterAtStart-30.2}px`);
+  // Keep the paired lines crossing the upper trading ornament fixed as cells shrink.
+  const anchorColumn=Math.round((railCenterAtStart+10)/70);
+  const tradingTop=(rail.closest('.room').getBoundingClientRect().top-stageRect.top)/scale;
+  const anchorRow=Math.round((tradingTop-23)/70);
+  baseStage.style.setProperty('--grid-origin-x',`${-10+anchorColumn}px`);
+  baseStage.style.setProperty('--grid-origin-y',`${23+anchorRow}px`);
   const powerRail=document.querySelector('.production-grid .room-power .facility-rail');
   if(powerRail){
    const powerRect=powerRail.getBoundingClientRect();
