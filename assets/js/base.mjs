@@ -117,7 +117,13 @@ function updateRegionCorners(){
  }
 }
 
-// The grid moves at 35% of the facility map's horizontal speed.
-function updateGridParallax(){viewport.style.setProperty('--grid-x',`${-viewport.scrollLeft*.35}px`);}
+// A separate background layer travels at 35% of the map speed.
+const baseStage=document.getElementById('baseStage');
+function updateGridParallax(){
+ baseStage.style.setProperty('--grid-x',`${-viewport.scrollLeft*.35}px`);
+ baseStage.style.setProperty('--grid-extra',`${Math.max(0,viewport.scrollWidth-viewport.clientWidth)*.35}px`);
+}
 viewport.addEventListener('scroll',updateGridParallax,{passive:true});
+viewport.addEventListener('pointermove',updateGridParallax,{passive:true});
+new ResizeObserver(updateGridParallax).observe(viewport);
 updateGridParallax();
