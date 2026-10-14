@@ -417,9 +417,10 @@ body{overflow-x:clip}
  bottom:calc(var(--unit)*.19252273 + 2.5px)
 }
 
-/* Move text 5px right while retaining icon and ornament positions. */
+/* Move text and level hexagons 3px right. */
 .base-map .room>.room-heading>h2,
+.base-map .room>.room-heading>.level-bars,
 .base-map .room-control .control-subtitle,
-.base-map .room-control>.room-heading>.level-text{translate:5px 0}
-.base-map .room-control>.room-heading>.level-text::before{translate:-5px 0}
-.base-map .room>.room-occupancy>:is(.occupancy-current,.occupancy-limit){position:relative;left:5px}
+.base-map .room-control>.room-heading>.level-text{translate:3px 0}
+.base-map .room-control>.room-heading>.level-text::before{translate:-3px 0}
+.base-map .room>.room-occupancy>:is(.occupancy-current,.occupancy-limit){position:relative;left:3px}
