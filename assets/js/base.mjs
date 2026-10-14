@@ -51,7 +51,7 @@ function privateRoom(slotId,name,saved){
  const bars=document.createElement('span');bars.className='level-bars';bars.setAttribute('aria-hidden','true');for(let i=0;i<3;i++){const bar=document.createElement('span');bar.className=i<level?'active':'';bars.append(bar);}heading.append(bars);card.append(heading);
  const content=document.createElement('div');content.className='private-occupant';const id=saved?.operators?.[0];
  if(id){
-  const image=document.createElement('img');image.src=`https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/dyn/arts/charportraits/${id}_1.png`;image.alt='';image.loading='lazy';image.addEventListener('error',()=>image.hidden=true);
+  const image=document.createElement('img');image.src=`https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/dyn/arts/charavatars/${id}.png`;image.alt='';image.loading='lazy';image.addEventListener('error',()=>image.hidden=true);
   const details=document.createElement('div');const opName=document.createElement('strong');opName.textContent=characterNames[id]?.name??id;opName.title=opName.textContent;
   const trust=document.createElement('span');trust.className='private-trust';trust.textContent=Number.isInteger(saved.trust?.[id])?`신뢰도 ${saved.trust[id]}%`:'신뢰도 정보 없음';heading.append(trust);details.append(opName);content.append(image,details);
  }else{const empty=document.createElement('span');empty.className='private-empty';empty.textContent=!settings.privateRoomsIncluded?'계정 재조회 필요':!level?'미건설':saved?.occupantsKnown===false?'다시 조회해 주세요':count?'캐릭터 정보 없음':'비어 있음';content.append(empty);}
