@@ -226,27 +226,27 @@ body{overflow-x:clip}
 .production-grid .room-trading>.room-heading>.level-text{display:none!important}
 
 /* Trading level markers and the five separate bottom panels. */
-.production-grid .room-trading>.room-heading{
+.production-grid :is(.room-trading,.room-factory,.room-power)>.room-heading{
  left:calc(17.578125% + 2px);display:flex;align-items:center;
  flex-wrap:nowrap;gap:calc(var(--unit)*.025)
 }
-.production-grid .room-trading>.room-heading>.level-bars{
+.production-grid :is(.room-trading,.room-factory,.room-power)>.room-heading>.level-bars{
  visibility:visible!important;display:flex!important;align-items:center;
  gap:calc(var(--unit)*.01);color:var(--color)
 }
-.production-grid .room-trading>.room-heading>.level-bars>span{
+.production-grid :is(.room-trading,.room-factory,.room-power)>.room-heading>.level-bars>span{
  visibility:visible!important;width:calc(var(--unit)*.07);height:calc(var(--unit)*.2);
  background:currentColor;clip-path:polygon(50% 0,100% 17.5%,100% 82.5%,50% 100%,0 82.5%,0 17.5%);
  opacity:.2
 }
-.production-grid .room-trading>.room-heading>.level-bars>span.active{opacity:1}
-.production-grid .room-trading>.facility-trim>.facility-floor{
+.production-grid :is(.room-trading,.room-factory,.room-power)>.room-heading>.level-bars>span.active{opacity:1}
+.production-grid :is(.room-trading,.room-factory,.room-power)>.facility-trim>.facility-floor{
  visibility:visible!important;display:flex;left:54.615385%;right:auto;
  width:calc(78.421875% - 6px);transform:translateX(-50%);
  bottom:calc(var(--unit)*.055 + 2.5px);height:calc(var(--unit)*.048);
  gap:3px;background:none;box-shadow:none
 }
-.production-grid .room-trading>.facility-trim>.facility-floor>span{
+.production-grid :is(.room-trading,.room-factory,.room-power)>.facility-trim>.facility-floor>span{
  visibility:visible!important;flex:1 1 0;min-width:0;
  height:100%;background:#aeb3b0;box-shadow:none
 }
@@ -283,4 +283,4 @@ body{overflow-x:clip}
  color:#f5f6f4;font-size:calc(var(--unit)*.2125);font-weight:800;
  line-height:1;letter-spacing:-.04em;white-space:nowrap;text-shadow:0 1px 2px #0008
 }
-.production-grid :is(.room-factory,.room-power)>.room-heading>:is(.level-bars,.level-text){display:none!important}
+.production-grid :is(.room-factory,.room-power)>.room-heading>.level-text{display:none!important}
