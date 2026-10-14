@@ -361,3 +361,6 @@ body{overflow-x:clip}
 .base-map .room-control>.room-heading>.level-text{
  color:#f5f6f4;text-shadow:0 1.5px 0 #efb851
 }
+
+@font-face{font-family:"Base Bender Light";src:url("../fonts/Bender-Light.ttf") format("truetype");font-weight:300;font-style:normal;font-display:swap}
+.base-map .room-control>.room-heading>.level-text{font-family:"Base Bender Light",sans-serif;font-weight:300}
