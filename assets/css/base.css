@@ -550,3 +550,7 @@ body{overflow-x:clip}
  background-size:calc(var(--unit)*.15) calc(var(--unit)*.15);
  background-position:right calc(var(--unit)*.125) top calc(var(--unit)*.125);
 }
+
+/* Retain slot geometry while omitting every unbuilt/uncleared room panel. */
+.base-map .room.room-empty{opacity:0!important;pointer-events:none!important;visibility:hidden!important}
+.base-map .room.room-empty::before,.base-map .room.room-empty::after{display:none!important}
