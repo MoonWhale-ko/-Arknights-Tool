@@ -438,3 +438,15 @@ body{overflow-x:clip}
 .base-map .room-private>.private-occupant>img{border-radius:5px;object-fit:cover;object-position:center}
 
 .base-map .room-private>.private-occupant>img{top:50%;transform:translateY(-50%)}
+
+/* Repeat the shared X decoration over panel silhouettes, below all foreground details.
+   The panel ::before paints first at the same stack level. */
+.base-map :is(.room,.passage)>.panel-cross-layer{
+ display:block!important;visibility:visible!important;position:absolute;inset:0;
+ z-index:-1;pointer-events:none!important;
+ background:url("../base-shapes/blueprint-cross.svg?v=3") var(--panel-cross-x,0px) var(--panel-cross-y,0px)/140px 140px repeat;
+ -webkit-mask-image:var(--facility-shape);mask-image:var(--facility-shape);
+ -webkit-mask-size:100% 100%;mask-size:100% 100%;
+ -webkit-mask-position:center;mask-position:center;
+ -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat
+}
