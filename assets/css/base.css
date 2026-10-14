@@ -455,7 +455,7 @@ body{overflow-x:clip}
 
 /* Compact factory picker matches the site's existing dialog style. */
 .base-map .room-factory{cursor:pointer}
-.base-map .room-factory:focus-visible{outline:2px solid #edca64;outline-offset:2px}
+.base-map .room-factory:focus{outline:none}
 .manufacture-dialog{width:min(480px,calc(100vw - 32px));max-height:calc(100dvh - 32px);box-sizing:border-box;padding:22px;border:1px solid #87918f;background:#151b1d;color:#f5f6f4;font-family:"Base Noto Sans KR",sans-serif;overflow-y:auto}
 .manufacture-dialog::backdrop{background:#0009}
 .manufacture-dialog h2{margin:0 0 16px;font-size:20px;font-weight:500}
