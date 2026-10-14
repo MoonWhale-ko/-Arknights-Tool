@@ -282,6 +282,7 @@ export function normalizeAccount(user) {
     importedAt: new Date().toISOString(),
     operators,
     inventory,
+    // Includes per-account corridor/elevator construction flags as well as facility staff.
     building: normalizeBuilding(user.building,user.troop.chars),
   };
 }

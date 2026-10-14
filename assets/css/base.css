@@ -554,3 +554,6 @@ body{overflow-x:clip}
 /* Retain slot geometry while omitting every unbuilt/uncleared room panel. */
 .base-map .room.room-empty{opacity:0!important;pointer-events:none!important;visibility:hidden!important}
 .base-map .room.room-empty::before,.base-map .room.room-empty::after{display:none!important}
+
+/* Unbuilt elevator landings retain their floor position without drawing a cell. */
+.base-map .circulation-empty{visibility:hidden!important;opacity:0!important;pointer-events:none!important}

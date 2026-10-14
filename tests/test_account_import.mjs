@@ -202,3 +202,87 @@ test('activity trust validation rejects fake percentages and multiple owners',()
  const old=readBase({version:2,rooms:{slot_24:{type:'TRADING',level:3,count:0,operators:[]}}});assert.equal(old.rooms.slot_47,undefined);
  assert.equal(BASE_SLOTS.filter(s=>s[1]==='private').length,6);
 });
+
+test('circulation differs by account and survives import, persistence and undo',async()=>{
+ const {CIRCULATION_SLOTS,circulationBuilt}=await import('../assets/js/base-state.mjs');
+ const allSlots=Object.fromEntries(CIRCULATION_SLOTS.map(([id,type])=>[id,{roomId:type,level:1}]));
+ allSlots.slot_10={roomId:'CORRIDOR',level:0};
+ allSlots.slot_2={roomId:'',level:0};
+ const first=normalizeBuilding({roomSlots:allSlots});
+ assert.equal(first.circulationIncluded,true);
+ assert.equal(first.circulation.slot_10,false);assert.equal(first.circulation.slot_2,false);
+ assert.equal(first.circulation.slot_29,true);assert.equal(first.circulation.slot_33,true);
+ const second=normalizeBuilding({roomSlots:{slot_10:{roomId:'CORRIDOR',level:1},slot_33:{roomId:'ELEVATOR',level:0}}});
+ const base1=prepareBase(first,data.importedAt),base2=prepareBase(second,data.importedAt);
+ assert.equal(circulationBuilt(base1,'slot_10'),false);assert.equal(circulationBuilt(base2,'slot_10'),true);
+ assert.equal(circulationBuilt(base1,'slot_33'),true);assert.equal(circulationBuilt(base2,'slot_33'),false);
+ assert.deepEqual(readBase(JSON.parse(JSON.stringify(base1))).circulation,base1.circulation);
+ const s=storage();s.setItem(BASE_KEY,JSON.stringify(base1));
+ commitImport(s,'progress',prepareImport({...data,building:second},chars,{},frames));
+ assert.equal(readBase(JSON.parse(s.getItem(BASE_KEY))).circulation.slot_10,true);
+ restoreImport(s,'progress');assert.deepEqual(readBase(JSON.parse(s.getItem(BASE_KEY))).circulation,base1.circulation);
+ assert.throws(()=>prepareBase({...first,circulation:{slot_10:true}},data.importedAt),/통로/);
+ assert.throws(()=>prepareBase({...first,circulation:{...first.circulation,slot_10:1}},data.importedAt),/통로/);
+ const legacy=readBase({version:2,rooms:{}});assert.equal(legacy.circulationIncluded,false);
+ assert.equal(circulationBuilt(legacy,'slot_10'),false);
+});
+
+test('circulation renderer omits unbuilt passages and preserves empty elevator floor positions',async()=>{
+ const vm=await import('node:vm');
+ const {CIRCULATION_SLOTS,circulationBuilt}=await import('../assets/js/base-state.mjs');
+ const source=readFileSync(new URL('../assets/js/base.mjs',import.meta.url),'utf8');
+ const fn=source.slice(source.indexOf('function updateCirculation(){'),source.indexOf('function updateElevatorLinks()'));
+ class Element{
+  constructor(){this.children=[];this.dataset={};this.className='';this.attrs={};this.style={setProperty(){}};this.classList={add:n=>this.className+=' '+n};}
+  append(...nodes){this.children.push(...nodes);}prepend(node){this.children.unshift(node);}setAttribute(k,v){this.attrs[k]=v;}
+ }
+ const map=new Element();const document={querySelector:()=>null,createElement:()=>new Element(),getElementById:()=>map};
+ const settings=prepareBase(normalizeBuilding({roomSlots:{slot_10:{roomId:'CORRIDOR',level:1},slot_8:{roomId:'ELEVATOR',level:1}}}),data.importedAt);
+ vm.runInNewContext(fn+'updateCirculation();',{document,settings,CIRCULATION_SLOTS,circulationBuilt});
+ const container=map.children[0],passages=container.children.filter(n=>n.className.startsWith('passage '));
+ assert.deepEqual(passages.map(p=>p.dataset.slotId),['slot_10']);
+ const floors=container.children.filter(n=>n.className.startsWith('elevator ')).flatMap(n=>n.children);
+ assert.equal(floors.length,16);
+ assert.equal(floors.filter(n=>!n.className.includes('circulation-empty')).length,1);
+ assert.equal(floors.find(n=>n.dataset.slotId==='slot_8').dataset.floor,'4');
+});
+
+test('elevator connections skip unbuilt rooms and hidden landings',async()=>{
+ const vm=await import('node:vm');
+ const source=readFileSync(new URL('../assets/js/base.mjs',import.meta.url),'utf8');
+ const fn=source.slice(source.indexOf('function updateElevatorLinks(){'),source.indexOf('updateElevatorLinks();new ResizeObserver'));
+ function el(classes,rect){return {classList:{contains:c=>classes.includes(c)},dataset:{},clientWidth:40,getBoundingClientRect:()=>rect};}
+ const elevator=el(['elevator-landing'],{left:0,right:40,top:80,bottom:160});
+ const unbuiltRoom=el(['room','room-empty'],{left:40,right:120,top:80,bottom:160});
+ const hiddenLanding=el(['elevator-landing','circulation-empty'],{left:0,right:40,top:160,bottom:240});
+ const upstairs=el(['room'],{left:0,right:40,top:0,bottom:80});
+ const nodes=[elevator,unbuiltRoom,hiddenLanding,upstairs];
+ const document={querySelectorAll:selector=>nodes.filter(n=>!(n.classList.contains('room-empty')&&selector.includes('.room:not(.room-empty)'))&&!(n.classList.contains('circulation-empty')&&selector.includes('.elevator-landing:not(.circulation-empty)')))};
+ vm.runInNewContext(fn+'updateElevatorLinks();',{document,updateRegionCorners(){}});
+ assert.equal(elevator.dataset.connections,'up');
+ assert.equal(hiddenLanding.dataset.connections,undefined);
+});
+
+test('uncleared and cleaned-but-unbuilt facility slots remain empty after account import',async()=>{
+ const raw={roomSlots:{
+  slot_24:{roomId:'',level:0,charInstIds:[]},
+  slot_25:{roomId:'MANUFACTURE',level:0,charInstIds:[]},
+  slot_26:{roomId:'POWER',level:1,charInstIds:[-1]},
+  slot_47:{roomId:'PRIVATE',level:0,charInstIds:[]}
+ },rooms:{PRIVATE:{slot_47:{owners:[]}}}};
+ const base=readBase(prepareBase(normalizeBuilding(raw),data.importedAt));
+ assert.equal(base.rooms.slot_24,undefined);
+ assert.equal(base.rooms.slot_25.level,0);assert.equal(base.rooms.slot_47.level,0);
+ assert.equal(base.rooms.slot_26.level,1);
+ const vm=await import('node:vm'),{FACILITIES}=await import('../assets/js/base-state.mjs');
+ const source=readFileSync(new URL('../assets/js/base.mjs',import.meta.url),'utf8');
+ const functions=source.slice(source.indexOf('function room('),source.indexOf('function render(){'));
+ class Element{constructor(){this.classes=[];this.attrs={};this.classList={add:c=>this.classes.push(c)};}setAttribute(k,v){this.attrs[k]=v;}}
+ const document={createElement:()=>new Element()};
+ const context={document,FACILITIES};vm.createContext(context);vm.runInContext(functions,context);
+ for(const [id,type] of [['slot_24','TRADING'],['slot_25','MANUFACTURE'],['slot_47','PRIVATE']]){
+  const card=type==='PRIVATE'?context.privateRoom(id,'활동실',base.rooms[id]):context.room(id,type,FACILITIES[type].name,base.rooms[id]);
+  assert.equal(card.attrs['aria-hidden'],'true');assert.ok(card.classes.includes('room-empty'));
+  assert.equal(card.innerHTML,undefined);
+ }
+});

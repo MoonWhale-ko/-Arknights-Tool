@@ -79,3 +79,7 @@ operators.json과 같은 한국 서버 원본 커밋의 변환표를 갱신합�
 Cloudflare 공식 문서:
 - https://developers.cloudflare.com/workers/ci-cd/builds/configuration/
 - https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/
+
+## 통로·엘리베이터 표시
+
+계정 조회 응답은 기반시설 24칸과 별도로 통로 11칸·엘리베이터 16칸의 건설 여부를 포함합니다. 한국 서버 배치 슬롯 번호를 사용하며, roomId가 CORRIDOR/ELEVATOR이고 level이 1인 칸만 표시합니다. 미청소·미건설 칸은 비워 두고 엘리베이터 연결선도 실제 표시된 이웃에만 연결합니다. 이전 저장 결과에는 이 정보가 없으므로 업데이트 배포 후 계정을 다시 조회하고 적용해야 합니다. 사이트와 Workers를 함께 업데이트해야 하며 GitHub 연결된 Workers Builds의 배포 완료를 확인합니다.

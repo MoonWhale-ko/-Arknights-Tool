@@ -1,9 +1,9 @@
-import {BASE_KEY,BASE_SLOTS,FACILITIES,capacity,readBase} from './base-state.mjs?v=2';
+import {BASE_KEY,BASE_SLOTS,FACILITIES,capacity,readBase,CIRCULATION_SLOTS,circulationBuilt} from './base-state.mjs?v=3';
 let characterNames={};
 fetch('data/account-characters.json').then(r=>r.ok?r.json():null).then(data=>{characterNames=data?.characters??{};render();}).catch(()=>{});
 const status=document.getElementById('baseStatus');let settings;
 function load(){try{settings=readBase(JSON.parse(localStorage.getItem(BASE_KEY)||'null'));}catch{settings=readBase(null);}}
-function statusText(){if(settings.importedAt){const time=new Date(settings.importedAt).toLocaleString('ko-KR');status.textContent=`계정 조회: ${time}${settings.source==='manual'?' · 이후 직접 수정됨':''}`;}else status.textContent='게임 계정 가져오기에서 조회 결과를 적용하면 시설 정보가 자동 반영됩니다.';}
+function statusText(){if(settings.importedAt){const time=new Date(settings.importedAt).toLocaleString('ko-KR');status.textContent=`계정 조회: ${time}${settings.source==='manual'?' · 이후 직접 수정됨':''}`;}else status.textContent='게임 계정 가져오기에서 조회 결과를 적용하면 시설 정보가 자동 반영됩니다.';if(settings.importedAt&&!settings.circulationIncluded)status.textContent+=' · 통로·엘리베이터 정보를 갱신하려면 계정을 다시 조회해 주세요.';}
 function save(){settings.source='manual';settings.modifiedAt=new Date().toISOString();try{localStorage.setItem(BASE_KEY,JSON.stringify(settings));status.textContent='시설 레벨과 인원수를 저장했습니다.';}catch{status.textContent='이 브라우저에서는 저장할 수 없습니다. 현재 화면에서만 적용됩니다.';}}
 const facilityArt={
  TRADING:'<path d="M20 29h56v39H20zM31 29v-9h34v9M30 44h34M30 54h20m11-8 10 9-10 9"/>',
@@ -128,7 +128,7 @@ function privateRoom(slotId,name,saved){
  card.setAttribute('aria-label',`${name} · 레벨 ${level} · ${content.textContent}`);decorateRoom(card,'PRIVATE');return card;
 }
 function render(){const counters={};const groups={production:document.getElementById('productionRooms'),living:document.getElementById('livingRooms'),support:document.getElementById('supportRooms'),private:document.getElementById('privateRooms')};Object.values(groups).forEach(el=>el.replaceChildren());
- for(const [slotId,group,fallback] of BASE_SLOTS){const saved=settings.rooms[slotId],type=saved?.type??fallback;counters[type]=(counters[type]??0)+1;const name=FACILITIES[type].name+(['TRADING','MANUFACTURE','POWER','DORMITORY','PRIVATE'].includes(type)?` ${counters[type]}`:'');groups[group].append(type==='PRIVATE'?privateRoom(slotId,name,saved):room(slotId,type,name,saved));}statusText();updateElevatorLinks();requestAnimationFrame(updateControlHatching);requestAnimationFrame(updateGridParallax);}
+ for(const [slotId,group,fallback] of BASE_SLOTS){const saved=settings.rooms[slotId],type=saved?.type??fallback;counters[type]=(counters[type]??0)+1;const name=FACILITIES[type].name+(['TRADING','MANUFACTURE','POWER','DORMITORY','PRIVATE'].includes(type)?` ${counters[type]}`:'');groups[group].append(type==='PRIVATE'?privateRoom(slotId,name,saved):room(slotId,type,name,saved));}statusText();updateCirculation();updateElevatorLinks();requestAnimationFrame(updateControlHatching);requestAnimationFrame(updateGridParallax);}
 load();render();window.addEventListener('storage',e=>{if(e.key===BASE_KEY||e.key===null){load();render();}});window.addEventListener('pageshow',()=>{load();render();});
 
 const editButton=document.getElementById('editFacilities');editButton.addEventListener('click',()=>{const editing=editButton.getAttribute('aria-pressed')!=='true';editButton.setAttribute('aria-pressed',String(editing));editButton.textContent=editing?'설비 설정 완료':'설비 설정';document.getElementById('baseMap').classList.toggle('editing',editing);});
@@ -143,20 +143,27 @@ function endPan(event){if(panDrag?.id!==event.pointerId)return;panDrag=null;view
 viewport.addEventListener('pointerup',endPan);viewport.addEventListener('pointercancel',endPan);viewport.addEventListener('lostpointercapture',endPan);
 
 
-// Decorative circulation layer follows the same room-height unit as the map.
-const circulation=document.createElement('div');circulation.className='base-circulation';circulation.setAttribute('aria-hidden','true');
+// Account-specific circulation cells retain their layout slots.
+function updateCirculation(){
+ document.querySelector('.base-circulation')?.remove();
+ const circulation=document.createElement('div');circulation.className='base-circulation';circulation.setAttribute('aria-hidden','true');
 for(const position of ['left','middle','right']){
  const shaft=document.createElement('div');shaft.className=`elevator elevator-${position}`;
- for(let floor=position==='right'?1:0;floor<(position==='right'?5:6);floor++){const landing=document.createElement('span');landing.className='elevator-landing';landing.dataset.floor=String(floor);shaft.append(landing);}
+ for(let floor=position==='right'?1:0;floor<(position==='right'?5:6);floor++){const landing=document.createElement('span');landing.className='elevator-landing';landing.dataset.floor=String(floor);
+  const slot=CIRCULATION_SLOTS.find(([,type,side,row])=>type==='ELEVATOR'&&side===position&&row===floor);
+  landing.dataset.slotId=slot[0];
+  if(!circulationBuilt(settings,slot[0])){landing.classList.add('circulation-empty');landing.setAttribute('aria-hidden','true');}
+  shaft.append(landing);}
  circulation.append(shaft);
 }
 for(const [side,floors] of [['production',[3]],['living',[2,3,4,5]],['support',[2,3,4]],['activity',[2,3,4]]]){
- for(const floor of floors){if(side==='living'&&[4,5].includes(floor))continue;const passage=document.createElement('span');passage.className=`passage passage-${side} passage-${side}-${floor}`;passage.style.setProperty('--floor',floor);passage.innerHTML='<svg class="passage-art" viewBox="0 0 108 60" aria-hidden="true"><path fill="#0b0c0c" d="M4 0H36L43 7H65L72 0H104Q108 0 108 4V56Q108 60 104 60H72L65 53H43L36 60H4Q0 60 0 56V4Q0 0 4 0Z"/><g fill="#579692"><path d="m12 31 8-4v8Zm9 0 8-4v8Zm56-4 8 4-8 4Zm10 0 8 4-8 4Z"/><circle cx="48" cy="17" r="4"/><path d="m47 23 10 2 7 10h6v5h-9l-7-10-3 6 10 7v6H43v-5h10l-7-5-8 10h-6l12-16 2-6-7 3-3 7-4-2 4-9 10-4Z"/></g></svg>';circulation.append(passage);}
+ for(const floor of floors){const slot=CIRCULATION_SLOTS.find(([,type,zone,row])=>type==='CORRIDOR'&&zone===side&&row===floor);if(!circulationBuilt(settings,slot[0]))continue;const passage=document.createElement('span');passage.className=`passage passage-${side} passage-${side}-${floor}`;passage.dataset.slotId=slot[0];passage.style.setProperty('--floor',floor);passage.innerHTML='<svg class="passage-art" viewBox="0 0 108 60" aria-hidden="true"><path fill="#0b0c0c" d="M4 0H36L43 7H65L72 0H104Q108 0 108 4V56Q108 60 104 60H72L65 53H43L36 60H4Q0 60 0 56V4Q0 0 4 0Z"/><g fill="#579692"><path d="m12 31 8-4v8Zm9 0 8-4v8Zm56-4 8 4-8 4Zm10 0 8 4-8 4Z"/><circle cx="48" cy="17" r="4"/><path d="m47 23 10 2 7 10h6v5h-9l-7-10-3 6 10 7v6H43v-5h10l-7-5-8 10h-6l12-16 2-6-7 3-3 7-4-2 4-9 10-4Z"/></g></svg>';circulation.append(passage);}
 }
 document.getElementById('baseMap').prepend(circulation);
+}
 
 function updateElevatorLinks(){
- const regions=[...document.querySelectorAll('.room,.passage,.elevator-landing')].map(el=>({el,rect:el.getBoundingClientRect()}));
+ const regions=[...document.querySelectorAll('.room:not(.room-empty),.passage,.elevator-landing:not(.circulation-empty)')].map(el=>({el,rect:el.getBoundingClientRect()}));
  for(const {el,rect:a} of regions){
   if(!el.classList.contains('elevator-landing'))continue;
   const connections=new Set();
@@ -183,7 +190,7 @@ function updateElevatorLinks(){
 updateElevatorLinks();new ResizeObserver(updateElevatorLinks).observe(document.getElementById('baseMap'));
 
 function updateRegionCorners(){
- for(const el of document.querySelectorAll('.room:not(.room-empty),.passage,.elevator-landing')){
+ for(const el of document.querySelectorAll('.room:not(.room-empty),.passage,.elevator-landing:not(.circulation-empty)')){
   el.querySelector(':scope > .region-corners')?.remove();
   const w=el.offsetWidth,h=el.offsetHeight,inset=2.75,length=6,right=w-inset,bottom=h-inset;
   const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.classList.add('region-corners');svg.setAttribute('aria-hidden','true');svg.setAttribute('viewBox',`0 0 ${w} ${h}`);svg.setAttribute('preserveAspectRatio','none');

@@ -11,6 +11,9 @@ export const BASE_SLOTS=[
  ['slot_36','support','MEETING','응접실'],['slot_32','support','WORKSHOP','가공소'],['slot_23','support','HIRE','사무실'],['slot_13','support','TRAINING','훈련실'],
  ['slot_47','private','PRIVATE','활동실 1'],['slot_51','private','PRIVATE','활동실 2'],['slot_44','private','PRIVATE','활동실 3'],['slot_50','private','PRIVATE','활동실 4'],['slot_41','private','PRIVATE','활동실 5'],['slot_49','private','PRIVATE','활동실 6']
 ];
+// Slot identities from KR building_data.json layouts.v0.slots.
+export const CIRCULATION_SLOTS=[["slot_37","ELEVATOR","left",0],["slot_33","ELEVATOR","left",1],["slot_27","ELEVATOR","left",2],["slot_18","ELEVATOR","left",3],["slot_8","ELEVATOR","left",4],["slot_1","ELEVATOR","left",5],["slot_38","ELEVATOR","middle",0],["slot_35","ELEVATOR","middle",1],["slot_30","ELEVATOR","middle",2],["slot_21","ELEVATOR","middle",3],["slot_11","ELEVATOR","middle",4],["slot_4","ELEVATOR","middle",5],["slot_48","ELEVATOR","right",1],["slot_46","ELEVATOR","right",2],["slot_43","ELEVATOR","right",3],["slot_40","ELEVATOR","right",4],["slot_17","CORRIDOR","production",3],["slot_29","CORRIDOR","living",2],["slot_19","CORRIDOR","living",3],["slot_10","CORRIDOR","living",4],["slot_2","CORRIDOR","living",5],["slot_31","CORRIDOR","support",2],["slot_22","CORRIDOR","support",3],["slot_12","CORRIDOR","support",4],["slot_45","CORRIDOR","activity",2],["slot_42","CORRIDOR","activity",3],["slot_39","CORRIDOR","activity",4]];
+export function circulationBuilt(base,slotId){return base.circulationIncluded===true&&base.circulation?.[slotId]===true;}
 const object=v=>v && typeof v==='object' && !Array.isArray(v);
 const integer=(v,min,max)=>Number.isInteger(v)&&v>=min&&v<=max;
 export function capacity(type,level){return FACILITIES[type]?.capacity[level-1]??0;}
@@ -29,7 +32,11 @@ export function normalizeBuilding(building,troop={}){
   const operators=instances.map(id=>troop[id]?.charId||building.chars?.[id]?.charId).filter(id=>typeof id==='string'&&/^char_[a-zA-Z0-9_]+$/.test(id));
   rooms.push({slotId,type,level:raw.level,count,operators,...(type==='PRIVATE'?{occupantsKnown}:{})});
  }
- return {version:1,rooms,privateRoomsIncluded:true};
+ const circulation=Object.fromEntries(CIRCULATION_SLOTS.map(([id,type])=>{
+  const raw=building.roomSlots[id];
+  return [id,!!(object(raw)&&raw.roomId===type&&integer(raw.level,1,1))];
+ }));
+ return {version:1,rooms,privateRoomsIncluded:true,circulationIncluded:true,circulation};
 }
 export function prepareBase(building,importedAt){
  if(building===undefined||building===null)return null;
@@ -44,11 +51,19 @@ export function prepareBase(building,importedAt){
   if(room.trust!==undefined&&(!object(room.trust)||Object.entries(room.trust).some(([id,value])=>!room.operators.includes(id)||!integer(value,0,200))))throw new Error('활동실 신뢰도 데이터 형식이 올바르지 않습니다.');
   rooms[room.slotId]={type,level:room.level,count:room.count,operators:[...room.operators],...(type==='PRIVATE'?{occupantsKnown:room.occupantsKnown!==false,trust:{...(room.trust??{})}}:{})};
  }
- return {version:2,server:'kr',source:'account',importedAt,rooms,privateRoomsIncluded:building.privateRoomsIncluded===true};
+ const circulation={};
+ if(building.circulationIncluded===true){
+  if(!object(building.circulation)||Object.keys(building.circulation).length!==CIRCULATION_SLOTS.length)throw new Error('통로·엘리베이터 데이터 형식이 올바르지 않습니다.');
+  for(const [id] of CIRCULATION_SLOTS){
+   if(typeof building.circulation[id]!=='boolean')throw new Error('통로·엘리베이터 데이터 형식이 올바르지 않습니다.');
+   circulation[id]=building.circulation[id];
+  }
+ }
+ return {version:2,server:'kr',source:'account',importedAt,rooms,privateRoomsIncluded:building.privateRoomsIncluded===true,circulationIncluded:building.circulationIncluded===true,circulation};
 }
 export function readBase(value){
  if(value?.version===2&&object(value.rooms)){
-  const prepared=prepareBase({version:1,privateRoomsIncluded:value.privateRoomsIncluded,rooms:Object.entries(value.rooms).map(([slotId,room])=>({slotId,...room,operators:room.operators??[]}))},value.importedAt);
+  const prepared=prepareBase({version:1,privateRoomsIncluded:value.privateRoomsIncluded,circulationIncluded:value.circulationIncluded,circulation:value.circulation,rooms:Object.entries(value.rooms).map(([slotId,room])=>({slotId,...room,operators:room.operators??[]}))},value.importedAt);
   return {...prepared,source:value.source==='account'?'account':'manual',modifiedAt:value.modifiedAt};
  }
  const rooms={};for(const [slotId,,type,name] of BASE_SLOTS){const old=value?.[name];const max=FACILITIES[type].capacity.length;const level=integer(old?.level,1,max)?old.level:type==='PRIVATE'?0:1;const count=integer(old?.count,0,capacity(type,level))?old.count:0;rooms[slotId]={type,level,count,operators:[]};}
