@@ -367,3 +367,11 @@ body{overflow-x:clip}
 
 /* Reference level display sits slightly right of the panel center. */
 .base-map .room-control>.room-heading>.level-text{left:calc(50% + var(--unit)*.1 + 4px)}
+
+/* Hatching ends beside the lower vertical stroke and stays 3px from the digit. */
+.base-map .room-control>.room-heading>.level-text::before{
+ content:"";position:absolute;right:calc(100% + 3px);top:calc(var(--unit)*.035);
+ width:calc(var(--unit)*.4);height:calc(var(--unit)*.375);
+ background:repeating-linear-gradient(45deg,#efb851 0 1.5px,transparent 1.5px 4px);
+ pointer-events:none
+}
