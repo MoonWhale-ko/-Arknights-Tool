@@ -420,3 +420,17 @@ body{overflow-x:clip}
 /* Move only non-control facility names and their level hexagons 3px right. */
 .base-map .room:not(.room-control)>.room-heading>h2,
 .base-map .room:not(.room-control)>.room-heading>.level-bars{translate:3px 0}
+
+/* Activity-room operator face in the left portrait frame. */
+.base-map .room-private>.private-occupant{
+ visibility:visible!important;position:static;margin:0;padding:0
+}
+.base-map .room-private>.private-occupant>img{
+ visibility:visible!important;position:absolute;
+ left:calc(var(--unit)*.15);top:calc(var(--unit)*.175);
+ width:calc(var(--unit)*.65);height:calc(var(--unit)*.65);
+ object-fit:cover;object-position:center;border:1px solid #aeb3b0;
+ background:#303437;box-shadow:none;z-index:1
+}
+.base-map .room-private>.private-occupant>:is(div,.private-empty){display:none}
+.base-map .room-private>.room-heading{left:calc(var(--unit)*.95)}
