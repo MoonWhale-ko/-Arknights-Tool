@@ -508,3 +508,6 @@ body{overflow-x:clip}
 
 /* Reconstructed control symbol is already transparent; retain the original ink color. */
 .base-map .room-control>.facility-background>img{filter:none}
+
+/* Keep the complete control branches inside the black panel's inset edges. */
+.base-map .room-control>.facility-background>img{height:calc(100% - 16px);top:8px}
