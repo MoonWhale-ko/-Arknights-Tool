@@ -526,3 +526,12 @@ body{overflow-x:clip}
  -webkit-mask-position:center;mask-position:center;
  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat
 }
+
+/* Grid brightens toward staffing counts and fades out before the facility hexagon. */
+.base-map .room>.facility-panel-grid{background:none}
+.base-map .room>.facility-panel-grid::before{
+ content:"";position:absolute;inset:0;
+ background:url("../base-shapes/facility-panel-grid.svg") 0 0/calc(var(--unit)*.125) calc(var(--unit)*.125) repeat;
+ -webkit-mask-image:linear-gradient(to right,transparent 0,transparent calc(var(--unit)*1.05),#000 calc(var(--unit)*1.75));
+ mask-image:linear-gradient(to right,transparent 0,transparent calc(var(--unit)*1.05),#000 calc(var(--unit)*1.75));
+}
