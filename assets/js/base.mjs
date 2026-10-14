@@ -180,7 +180,7 @@ function updateControlHatching(){
  const size=parseFloat(textStyle.fontSize),lineHeight=parseFloat(textStyle.lineHeight);
  const context=document.createElement('canvas').getContext('2d');
  context.font=textStyle.fontWeight+' '+size+'px '+textStyle.fontFamily;
- context.letterSpacing='0px';
+ context.letterSpacing=textStyle.letterSpacing==='normal'?'0px':textStyle.letterSpacing;
  const metrics=context.measureText(number.textContent),five=context.measureText('5');
  const ascent=metrics.fontBoundingBoxAscent??size*.915039;
  const descent=metrics.fontBoundingBoxDescent??size*.199707;
@@ -207,13 +207,11 @@ function updateControlHatching(){
   context.font=subtitleStyle.fontWeight+' '+subtitleStyle.fontSize+' '+subtitleStyle.fontFamily;
   context.letterSpacing='0px';
   const subtitleMetrics=context.measureText(subtitle.textContent);
-  const natural=subtitleMetrics.actualBoundingBoxLeft+subtitleMetrics.actualBoundingBoxRight;
-  const scaleX=width/natural;
-  subtitle.style.left=(left+subtitleMetrics.actualBoundingBoxLeft*scaleX-2)+'px';
-  subtitle.style.width=subtitleMetrics.width+'px';
-  subtitle.style.letterSpacing='0px';subtitle.style.transformOrigin='left top';
-  subtitle.style.transform='scaleX('+scaleX+')';
-  subtitle.style.top=(parseFloat(number.style.top)+parseFloat(style.top)-3-parseFloat(subtitleStyle.lineHeight))+'px';
+  const subtitleHeight=parseFloat(subtitleStyle.fontSize)*0.728;
+  subtitle.style.left=left+'px';subtitle.style.width=width+'px';
+  subtitle.style.height=subtitleHeight+'px';subtitle.style.letterSpacing='0px';
+  subtitle.style.transform='none';
+  subtitle.style.top=(parseFloat(number.style.top)+parseFloat(style.top)-3-subtitleHeight)+'px';
  }
 
 }
