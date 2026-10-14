@@ -17,7 +17,15 @@ const facilityArt={
  TRAINING:'<path d="m28 17 47 47-11 11-47-47Zm-4 40 15 15m-7-7-16 16m41-57 15 15m-7-7 16-16"/>',
  PRIVATE:'<path d="M25 21h46v54H25zM37 36h22M42 48v16m-7-8h14"/>'
 };
+const facilityBackgrounds={TRADING:'trading',MANUFACTURE:'manufacture',POWER:'power',DORMITORY:'dormitory',MEETING:'meeting',WORKSHOP:'workshop',HIRE:'hire',TRAINING:'training',CONTROL:'control'};
 function decorateRoom(card,type){
+ const backgroundName=facilityBackgrounds[type];
+ if(backgroundName){
+  const background=document.createElement('span');background.className='facility-background';background.setAttribute('aria-hidden','true');
+  const image=document.createElement('img');image.src='assets/base-backgrounds/bk_'+backgroundName+'.png';image.alt='';image.draggable=false;
+  background.append(image);card.prepend(background);
+ }
+
  const art=document.createElement('span');art.className='facility-art';art.setAttribute('aria-hidden','true');
  art.innerHTML=`<svg viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path class="facility-hex" d="m48 4 38 22v44L48 92 10 70V26Z"/>${facilityArt[type]||''}</svg>`;
  card.prepend(art);
