@@ -544,3 +544,9 @@ body{overflow-x:clip}
  -webkit-mask-image:radial-gradient(ellipse 52% 66% at 50% 50%,#000 15%,#0009 50%,transparent 100%);
  mask-image:radial-gradient(ellipse 52% 66% at 50% 50%,#000 15%,#0009 50%,transparent 100%);
 }
+
+/* Six visible dot rows; keep the upper-right reference dot at its previous inset. */
+.base-map .room:not(.room-control)>.facility-panel-grid::before{
+ background-size:calc(var(--unit)*.15) calc(var(--unit)*.15);
+ background-position:right calc(var(--unit)*.125) top calc(var(--unit)*.125);
+}
