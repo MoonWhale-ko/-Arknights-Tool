@@ -175,6 +175,19 @@ window.addEventListener('pageshow',()=>requestAnimationFrame(centerControlRoom))
 
 function updateControlHatching(){
  const number=document.querySelector('.room-control .level-text');if(!number)return;
+ const room=number.closest('.room-control'),textStyle=getComputedStyle(number);
+ const unit=parseFloat(getComputedStyle(document.getElementById('baseMap')).getPropertyValue('--unit'));
+ const size=parseFloat(textStyle.fontSize),lineHeight=parseFloat(textStyle.lineHeight);
+ const context=document.createElement('canvas').getContext('2d');
+ context.font=textStyle.fontWeight+' '+size+'px '+textStyle.fontFamily;
+ const metrics=context.measureText(number.textContent),five=context.measureText('5');
+ const ascent=metrics.fontBoundingBoxAscent??size*.915039;
+ const descent=metrics.fontBoundingBoxDescent??size*.199707;
+ const baseline=(lineHeight-ascent-descent)/2+ascent;
+ // Bracket path reaches y=85 in a 92-high SVG; include half its stroke.
+ const bracketBottom=room.clientHeight*.31+unit*.8575;
+ number.style.top=(bracketBottom-baseline-(metrics.actualBoundingBoxDescent??0)-2)+'px';
+ number.style.setProperty('--control-hatch-top',(baseline-five.actualBoundingBoxAscent)+'px');
  const style=getComputedStyle(number,'::before'),w=parseFloat(style.width),h=parseFloat(style.height);
  if(!(w>0&&h>0))return;
  const step=(w+h)/10;
