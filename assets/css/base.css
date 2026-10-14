@@ -503,5 +503,5 @@ body{overflow-x:clip}
 }
 .base-map .room>.facility-trim,.base-map .room-control>.control-level-ornament{z-index:1}
 
-/* Shift the original facility background symbols 3px right. */
-.facility-background>img{left:3px}
+/* Shift the original facility background symbols 18px right. */
+.facility-background>img{left:18px}
