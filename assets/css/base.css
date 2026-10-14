@@ -387,3 +387,5 @@ body{overflow-x:clip}
 .base-page{font-family:"Base Noto Sans KR","Noto Sans KR",sans-serif}
 
 .base-map .room>.room-heading>h2{font-weight:500}
+
+.base-map .room-control .control-subtitle{transform:none;text-align:left}
