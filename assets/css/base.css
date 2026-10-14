@@ -474,3 +474,16 @@ body{overflow-x:clip}
 .manufacture-feedback{color:#ffbc99;font-size:13px}
 .manufacture-feedback:empty{display:none}
 @media(max-width:420px){.manufacture-dialog{padding:16px}.manufacture-choices{grid-template-columns:1fr}}
+
+/* Categories stay on the left; matching products stay on the right. */
+.manufacture-dialog{width:min(600px,calc(100vw - 32px))}
+.manufacture-dialog[open]{display:grid;grid-template-columns:105px minmax(0,1fr);gap:0 14px}
+.manufacture-dialog h2,.manufacture-dialog>.manufacture-feedback,.manufacture-dialog>form{grid-column:1 / -1}
+.manufacture-categories{grid-column:1;display:flex;flex-direction:column;gap:8px;margin-bottom:0;align-self:start}
+.manufacture-categories button{padding:12px 8px;text-align:left}
+.manufacture-choices{grid-column:2;align-content:start;grid-template-columns:1fr 1fr}
+@media(max-width:520px){
+ .manufacture-dialog[open]{grid-template-columns:88px minmax(0,1fr);column-gap:10px}
+ .manufacture-choices{grid-template-columns:1fr}
+ .manufacture-categories button{padding:10px 6px;font-size:12px}
+}
