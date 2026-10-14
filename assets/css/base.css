@@ -427,10 +427,12 @@ body{overflow-x:clip}
 }
 .base-map .room-private>.private-occupant>img{
  visibility:visible!important;position:absolute;
- left:calc(var(--unit)*.15);top:calc(var(--unit)*.175);
+ left:calc(var(--unit)*.15);top:calc(var(--unit)*.175 + 2px);
  width:calc(var(--unit)*.65);height:calc(var(--unit)*.65);
  object-fit:cover;object-position:center;border:1px solid #aeb3b0;
  background:#303437;box-shadow:none;z-index:1
 }
 .base-map .room-private>.private-occupant>:is(div,.private-empty){display:none}
 .base-map .room-private>.room-heading{left:calc(var(--unit)*.95)}
+
+.base-map .room-private>.private-occupant>img{border-radius:3px}
