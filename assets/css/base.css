@@ -252,25 +252,25 @@ body{overflow-x:clip}
 }
 
 /* Trading occupancy: cyan person and count above the bottom markers. */
-.production-grid :is(.room-trading,.room-factory,.room-power)>.room-occupancy{
+.base-map :is(.room-trading,.room-factory,.room-power,.room-dorm,.room-workshop,.room-reception,.room-training,.room-office,.room-private)>.room-occupancy{
  visibility:visible!important;display:flex;align-items:baseline;
  right:8%;bottom:calc(var(--unit)*.15);z-index:1;
  color:var(--color);font-size:calc(var(--unit)*.3);font-weight:500;
  line-height:1;letter-spacing:-.06em;white-space:nowrap
 }
-.production-grid :is(.room-trading,.room-factory,.room-power)>.room-occupancy::before{
+.base-map :is(.room-trading,.room-factory,.room-power,.room-dorm,.room-workshop,.room-reception,.room-training,.room-office,.room-private)>.room-occupancy::before{
  content:"";display:block;flex:none;align-self:center;
  width:calc(var(--unit)*.125);height:calc(var(--unit)*.275);
  margin-right:calc(var(--unit)*.025);background:currentColor;clip-path:none;
  mask:url("../icons/base-person-original.png") center/100% 100% no-repeat
 }
-.production-grid :is(.room-trading,.room-factory,.room-power)>.room-occupancy>.occupancy-limit{
+.base-map :is(.room-trading,.room-factory,.room-power,.room-dorm,.room-workshop,.room-reception,.room-training,.room-office,.room-private)>.room-occupancy>.occupancy-limit{
  color:#909592;font-size:.65em;font-weight:400;margin-left:1px
 }
 
 @font-face{font-family:"Base Bender";src:url("../fonts/Bender-Regular.otf") format("opentype");font-weight:400;font-style:normal;font-display:swap}
-.production-grid :is(.room-trading,.room-factory,.room-power)>.room-occupancy{font-family:"Base Bender",sans-serif;font-weight:400;letter-spacing:0;text-shadow:none}
-.production-grid :is(.room-trading,.room-factory,.room-power)>.room-occupancy::before{width:calc(var(--unit)*.074667);height:calc(var(--unit)*.28)}
+.base-map :is(.room-trading,.room-factory,.room-power,.room-dorm,.room-workshop,.room-reception,.room-training,.room-office,.room-private)>.room-occupancy{font-family:"Base Bender",sans-serif;font-weight:400;letter-spacing:0;text-shadow:none}
+.base-map :is(.room-trading,.room-factory,.room-power,.room-dorm,.room-workshop,.room-reception,.room-training,.room-office,.room-private)>.room-occupancy::before{width:calc(var(--unit)*.074667);height:calc(var(--unit)*.28)}
 
 /* Production room titles share the trading room title layout. */
 .production-grid :is(.room-factory,.room-power)>.room-heading{
