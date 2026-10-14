@@ -22,7 +22,7 @@ function decorateRoom(card,type){
  const backgroundName=facilityBackgrounds[type];
  if(backgroundName){
   const background=document.createElement('span');background.className='facility-background';background.setAttribute('aria-hidden','true');
-  const image=document.createElement('img');image.src='assets/base-backgrounds/'+backgroundName+'.svg'+(type==='PRIVATE'?'?v=2':'');image.alt='';image.draggable=false;
+  const image=document.createElement('img');image.src='assets/base-backgrounds/'+backgroundName+'.svg?v=3';image.alt='';image.draggable=false;
   background.append(image);card.prepend(background);
  }
 

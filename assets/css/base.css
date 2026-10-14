@@ -515,4 +515,4 @@ body{overflow-x:clip}
 .base-map .room>.facility-background>img{filter:none;height:120%;top:-10%}
 
 /* Match the reference: the hexagon is about 1.3 panel heights and sits near the left inset. */
-.base-map .room:not(.room-control)>.facility-background>img{height:140%;top:-20%;left:10px}
+.base-map .room:not(.room-control)>.facility-background>img{height:133%;top:-16.5%;left:10px}
