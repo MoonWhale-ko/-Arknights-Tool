@@ -26,6 +26,38 @@ function decorateRoom(card,type){
 function showOccupancy(element,count,max){
  element.replaceChildren();const current=document.createElement('span');current.className='occupancy-current';current.textContent=String(count);const limit=document.createElement('span');limit.className='occupancy-limit';limit.textContent=`/${max}`;element.append(current,limit);
 }
+
+const manufactureKey=BASE_KEY+':manufacture-products';
+const manufactureProducts=[['record','작전기록'],['gold','순금'],['originium','오리지늄 조각'],['chip','듀얼칩']];
+function readManufactureProducts(){
+ try{const value=JSON.parse(localStorage.getItem(manufactureKey)||'{}');return value&&typeof value==='object'&&!Array.isArray(value)?value:{};}catch{return {};}
+}
+function openManufactureDialog(slotId,name,card){
+ const dialog=document.getElementById('manufactureDialog');
+ if(dialog.open)return;
+ dialog.querySelector('h2').textContent=name+' 생산 품목';
+ const selected=readManufactureProducts()[slotId];
+ const choices=dialog.querySelector('.manufacture-choices');choices.replaceChildren();
+ dialog.querySelector('.manufacture-feedback').textContent='';
+ for(const [id,label] of manufactureProducts){
+  const button=document.createElement('button');button.type='button';
+  button.textContent=label;button.setAttribute('aria-pressed',String(selected===id));
+  button.addEventListener('click',()=>{
+   const products=readManufactureProducts();products[slotId]=id;
+   try{
+    localStorage.setItem(manufactureKey,JSON.stringify(products));
+    status.textContent=name+' 생산 품목을 '+label+'(으)로 저장했습니다.';
+    card.dataset.product=id;dialog.close();
+   }catch{
+    dialog.querySelector('.manufacture-feedback').textContent='저장하지 못했습니다. 브라우저의 저장 공간을 확인해 주세요.';
+   }
+  });
+  choices.append(button);
+ }
+ dialog.onclose=()=>card.isConnected&&card.focus({preventScroll:true});
+ dialog.showModal();
+}
+
 function room(slotId,type,name,saved){
  const card=document.createElement('article');card.className=`room room-${FACILITIES[type].css}`;card.setAttribute('aria-label',name);let level=saved?.level??0,count=saved?.count??0;
  card.innerHTML=`<div class="room-heading"><h2>${name}</h2><span class="level-bars" aria-hidden="true"></span><span class="level-text"></span></div><div class="room-occupancy"></div><div class="room-controls"><label class="level-control">Lv. <select aria-label="${name} 설비 레벨"></select></label><label class="count-control">인원 <select aria-label="${name} 배치 인원"></select><span class="capacity"></span></label></div>`;
@@ -43,7 +75,13 @@ function room(slotId,type,name,saved){
  card.setAttribute('aria-label',`${name} · 설비 레벨 ${level} · 인원 ${count} / ${max}`);
  }
  function update(){settings.rooms[slotId]={type,level,count,operators:[]};save();}
- levelInput.addEventListener('change',()=>{level=Number(levelInput.value);renderCount();update();});countInput.addEventListener('change',()=>{count=Number(countInput.value);renderCount();update();});renderCount();decorateRoom(card,type);return card;
+ levelInput.addEventListener('change',()=>{level=Number(levelInput.value);renderCount();update();});countInput.addEventListener('change',()=>{count=Number(countInput.value);renderCount();update();});renderCount();decorateRoom(card,type);
+ if(type==='MANUFACTURE'){
+  card.tabIndex=0;card.setAttribute('role','button');card.setAttribute('aria-haspopup','dialog');
+  card.addEventListener('click',event=>{if(event.detail&&panMoved)return;openManufactureDialog(slotId,name,card);});
+  card.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();openManufactureDialog(slotId,name,card);}});
+ }
+ return card;
 }
 function privateRoom(slotId,name,saved){
  const card=document.createElement('article');card.className='room room-private';const level=saved?.level??0,count=saved?.count??0;
@@ -67,9 +105,9 @@ const editButton=document.getElementById('editFacilities');editButton.addEventLi
 const viewport=document.getElementById('baseViewport');
 function pan(direction){viewport.scrollBy({left:direction*viewport.clientWidth*.65,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});}
 viewport.addEventListener('keydown',event=>{if(event.target!==viewport)return;if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();pan(event.key==='ArrowLeft'?-1:1);}});
-let panDrag=null;
-viewport.addEventListener('pointerdown',event=>{if(event.pointerType!=='mouse'||event.button!==0||event.target.closest('button,a,input,select,label')||viewport.scrollWidth<=viewport.clientWidth)return;panDrag={id:event.pointerId,x:event.clientX,left:viewport.scrollLeft};viewport.setPointerCapture(event.pointerId);viewport.classList.add('dragging');event.preventDefault();});
-viewport.addEventListener('pointermove',event=>{if(panDrag?.id!==event.pointerId)return;viewport.scrollLeft=panDrag.left+panDrag.x-event.clientX;});
+let panDrag=null,panMoved=false;
+viewport.addEventListener('pointerdown',event=>{if(event.pointerType!=='mouse'||event.button!==0||event.target.closest('button,a,input,select,label')||viewport.scrollWidth<=viewport.clientWidth)return;panMoved=false;panDrag={id:event.pointerId,x:event.clientX,left:viewport.scrollLeft};});
+viewport.addEventListener('pointermove',event=>{if(panDrag?.id!==event.pointerId)return;if(!panMoved&&Math.abs(event.clientX-panDrag.x)>5){panMoved=true;viewport.setPointerCapture(event.pointerId);viewport.classList.add('dragging');}if(panMoved)viewport.scrollLeft=panDrag.left+panDrag.x-event.clientX;});
 function endPan(event){if(panDrag?.id!==event.pointerId)return;panDrag=null;viewport.classList.remove('dragging');}
 viewport.addEventListener('pointerup',endPan);viewport.addEventListener('pointercancel',endPan);viewport.addEventListener('lostpointercapture',endPan);
 
