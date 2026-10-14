@@ -32,7 +32,7 @@ function room(slotId,type,name,saved){
  if(['TRADING','MANUFACTURE','POWER','DORMITORY','MEETING','WORKSHOP','HIRE','TRAINING'].includes(type))card.querySelector('h2').textContent=FACILITIES[type].name;
  if(type==='CONTROL'){
   const subtitle=document.createElement('span');subtitle.className='control-subtitle';subtitle.textContent='LEVEL OF CONTROL INTERFACE';card.querySelector('.room-heading').append(subtitle);
-  const ornament=document.createElement('span');ornament.className='control-level-ornament';ornament.setAttribute('aria-hidden','true');ornament.innerHTML='<svg viewBox="0 0 150 92" fill="none"><path d="M12 6 3 16V72L15 85M138 6l9 10V72l-12 13" stroke="#f0f1ed" stroke-width="1.5"/><g stroke="#efb851" stroke-width="1.5"><path d="m20 25 19 19m-19-14 19 19m-19-14 19 19m-19-14 19 19m-19-14 19 19m-19-14 19 19m-19-14 14 14m-14-9 9 9m-9-4 4 4"/></g></svg>';card.append(ornament);
+  const ornament=document.createElement('span');ornament.className='control-level-ornament';ornament.setAttribute('aria-hidden','true');ornament.innerHTML='<svg viewBox="0 0 150 92" fill="none"><path d="M12 6 3 16V72L15 85M138 6l9 10V72l-12 13" stroke="#f0f1ed" stroke-width="1.5"/></svg>';card.append(ornament);
  }
  const levelInput=card.querySelector('.level-control select'),countInput=card.querySelector('.count-control select'),limit=card.querySelector('.capacity');
  for(let i=0;i<=FACILITIES[type].capacity.length;i++){const o=document.createElement('option');o.value=i;o.textContent=i===0?'미건설':i;levelInput.append(o);}levelInput.value=String(level);
