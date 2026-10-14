@@ -19,6 +19,10 @@ const facilityArt={
 };
 const facilityBackgrounds={TRADING:'trading',MANUFACTURE:'manufacture',POWER:'power',DORMITORY:'dormitory',MEETING:'meeting',WORKSHOP:'workshop',HIRE:'office',TRAINING:'training',CONTROL:'control-center',PRIVATE:'activity'};
 function decorateRoom(card,type){
+ if(type!=='CONTROL'){
+  const grid=document.createElement('span');grid.className='facility-panel-grid';grid.setAttribute('aria-hidden','true');card.prepend(grid);
+ }
+
  const backgroundName=facilityBackgrounds[type];
  if(backgroundName){
   const background=document.createElement('span');background.className='facility-background';background.setAttribute('aria-hidden','true');
