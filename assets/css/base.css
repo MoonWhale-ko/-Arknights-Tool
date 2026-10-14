@@ -262,13 +262,12 @@ body{overflow-x:clip}
  content:"";display:block;flex:none;align-self:center;
  width:calc(var(--unit)*.125);height:calc(var(--unit)*.275);
  margin-right:calc(var(--unit)*.025);background:currentColor;clip-path:none;
- mask:url("../icons/base-person.svg?v=2") center/100% 100% no-repeat
+ mask:url("../icons/base-person-original.png") center/100% 100% no-repeat
 }
 .production-grid .room-trading>.room-occupancy>.occupancy-limit{
  color:#909592;font-size:.65em;font-weight:400;margin-left:1px
 }
 
-.occupancy-digit-three{display:inline-block;width:.6923em;height:1em;vertical-align:baseline}
-.production-grid .room-trading>.room-occupancy::before{width:calc(var(--unit)*.12);height:calc(var(--unit)*.28)}
-.production-grid .room-trading .occupancy-current .occupancy-digit-three{height:calc(var(--unit)*.3);width:calc(var(--unit)*.2087)}
-.production-grid .room-trading .occupancy-limit .occupancy-digit-three{height:calc(var(--unit)*.195);width:calc(var(--unit)*.1357);filter:grayscale(1);opacity:.7}
+@font-face{font-family:"Base Bender";src:url("../fonts/Bender-Regular.otf") format("opentype");font-weight:400;font-style:normal;font-display:swap}
+.production-grid .room-trading>.room-occupancy{font-family:"Base Bender",sans-serif;font-weight:400;letter-spacing:0;text-shadow:none}
+.production-grid .room-trading>.room-occupancy::before{width:calc(var(--unit)*.074667);height:calc(var(--unit)*.28)}
