@@ -386,4 +386,4 @@ body{overflow-x:clip}
 @font-face{font-family:"Base Noto Sans KR";src:url("../fonts/NotoSansKR-Base.ttf") format("truetype");font-weight:100 900;font-style:normal;font-display:swap}
 .base-page{font-family:"Base Noto Sans KR","Noto Sans KR",sans-serif}
 
-.base-map .room>.room-heading>h2{font-weight:650}
+.base-map .room>.room-heading>h2{font-weight:500}
