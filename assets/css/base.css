@@ -378,7 +378,7 @@ body{overflow-x:clip}
  pointer-events:none
 }
 
-.base-map .room-control>.room-heading>.level-text::before{filter:drop-shadow(1px 1px 0 #d9912e)}
+.base-map .room-control>.room-heading>.level-text::before{filter:drop-shadow(0 1px 0 #d9912e)}
 
 @font-face{font-family:"Base Bender Thin";src:url("../fonts/Bender-Thin.otf") format("opentype");font-weight:100;font-style:normal;font-display:swap}
 .base-map .room-control>.room-heading>.level-text{font-family:"Base Bender Light",sans-serif;font-weight:300}
