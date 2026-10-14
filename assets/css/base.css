@@ -450,3 +450,18 @@ body{overflow-x:clip}
  -webkit-mask-position:center;mask-position:center;
  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat
 }
+
+/* Manufacture panels open a keyboard-accessible production picker. */
+.base-map .room-factory{cursor:pointer}
+.base-map .room-factory:focus-visible{outline:2px solid #edca64;outline-offset:2px}
+.manufacture-dialog{width:min(380px,calc(100vw - 40px));box-sizing:border-box;padding:22px;border:1px solid #87918f;background:#151b1d;color:#f5f6f4;font-family:"Base Noto Sans KR",sans-serif}
+.manufacture-dialog::backdrop{background:#0009}
+.manufacture-dialog h2{margin:0;font-size:20px}
+.manufacture-dialog p{margin:12px 0;font-size:14px}
+.manufacture-choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.manufacture-dialog button{font:inherit;color:inherit;border:1px solid #72807e;background:#293234;padding:12px;cursor:pointer}
+.manufacture-dialog button[aria-pressed="true"]{border-color:#edca64;background:#49412a}
+.manufacture-dialog button:focus-visible{outline:2px solid #edca64;outline-offset:2px}
+.manufacture-dialog .manufacture-close{display:block;margin:16px 0 0 auto;padding:8px 20px}
+.manufacture-dialog .manufacture-feedback{color:#ffbc99}
+.manufacture-feedback:empty{display:none}
