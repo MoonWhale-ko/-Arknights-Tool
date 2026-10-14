@@ -401,7 +401,7 @@ body{overflow-x:clip}
 /* Original human-resource status icon at the office panel's bottom left. */
 .base-map .room-office::after{
  content:"";display:block!important;position:absolute;inset:auto;
- left:calc(var(--unit)*.075);bottom:calc(var(--unit)*.075);
+ left:calc(var(--unit)*.075 + 3px);bottom:calc(var(--unit)*.075 + 3px);
  width:calc(var(--unit)*.25);height:calc(var(--unit)*.261905);z-index:1;
  background:transparent url("../icons/office-humanresource.png") center/contain no-repeat;
  border:0;clip-path:none;transform:none;box-shadow:none;opacity:1;pointer-events:none
