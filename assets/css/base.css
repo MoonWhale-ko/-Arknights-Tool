@@ -394,3 +394,6 @@ body{overflow-x:clip}
 .base-map .room-control .control-subtitle{font-family:"Base Novecento Wide",sans-serif;font-weight:400}
 
 .base-map .room-control .control-subtitle{color:transparent;background:url("../icons/control-subtitle.svg") center/100% 100% no-repeat;text-shadow:none}
+
+/* Only achieved facility levels have visible hexagons. */
+.base-map .room>.room-heading>.level-bars>span:not(.active){display:none!important}
