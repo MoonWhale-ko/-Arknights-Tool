@@ -28,36 +28,82 @@ function showOccupancy(element,count,max){
 }
 
 const manufactureKey=BASE_KEY+':manufacture-products';
-const manufactureProducts=[['record','작전기록'],['gold','순금'],['originium','오리지늄 조각'],['chip','듀얼칩']];
+
+const manufactureRecipes=[{"id":"1","category":"F_EXP","name":"기초작전기록","icon":"sprite_exp_card_t1","rarity":"TIER_2","weight":2,"seconds":2700,"level":1,"costs":[]},{"id":"2","category":"F_EXP","name":"초급작전기록","icon":"sprite_exp_card_t2","rarity":"TIER_3","weight":3,"seconds":4800,"level":2,"costs":[]},{"id":"3","category":"F_EXP","name":"중급작전기록","icon":"sprite_exp_card_t3","rarity":"TIER_4","weight":5,"seconds":10800,"level":3,"costs":[]},{"id":"4","category":"F_GOLD","name":"순금","icon":"MTL_GOLD3","rarity":"TIER_4","weight":2,"seconds":4320,"level":1,"costs":[]},{"id":"5","category":"F_ASC","name":"뱅가드 듀얼 칩","icon":"MTL_ASC_PIO3","rarity":"TIER_5","weight":5,"seconds":1,"level":3,"costs":[{"name":"뱅가드 칩셋","icon":"MTL_ASC_PIO2","count":2},{"name":"칩 첨가제","icon":"MTL_ASC_DI","count":1}]},{"id":"6","category":"F_ASC","name":"가드 듀얼 칩","icon":"MTL_ASC_GRD3","rarity":"TIER_5","weight":5,"seconds":1,"level":3,"costs":[{"name":"가드 칩셋","icon":"MTL_ASC_GRD2","count":2},{"name":"칩 첨가제","icon":"MTL_ASC_DI","count":1}]},{"id":"7","category":"F_ASC","name":"디펜더 듀얼 칩","icon":"MTL_ASC_TNK3","rarity":"TIER_5","weight":5,"seconds":1,"level":3,"costs":[{"name":"디펜더 칩셋","icon":"MTL_ASC_TNK2","count":2},{"name":"칩 첨가제","icon":"MTL_ASC_DI","count":1}]},{"id":"8","category":"F_ASC","name":"스나이퍼 듀얼 칩","icon":"MTL_ASC_SNP3","rarity":"TIER_5","weight":5,"seconds":1,"level":3,"costs":[{"name":"스나이퍼 칩셋","icon":"MTL_ASC_SNP2","count":2},{"name":"칩 첨가제","icon":"MTL_ASC_DI","count":1}]},{"id":"9","category":"F_ASC","name":"캐스터 듀얼 칩","icon":"MTL_ASC_CST3","rarity":"TIER_5","weight":5,"seconds":1,"level":3,"costs":[{"name":"캐스터 칩셋","icon":"MTL_ASC_CST2","count":2},{"name":"칩 첨가제","icon":"MTL_ASC_DI","count":1}]},{"id":"10","category":"F_ASC","name":"메딕 듀얼 칩","icon":"MTL_ASC_MED3","rarity":"TIER_5","weight":5,"seconds":1,"level":3,"costs":[{"name":"메딕 칩셋","icon":"MTL_ASC_MED2","count":2},{"name":"칩 첨가제","icon":"MTL_ASC_DI","count":1}]},{"id":"11","category":"F_ASC","name":"서포터 듀얼 칩","icon":"MTL_ASC_SUP3","rarity":"TIER_5","weight":5,"seconds":1,"level":3,"costs":[{"name":"서포터 칩셋","icon":"MTL_ASC_SUP2","count":2},{"name":"칩 첨가제","icon":"MTL_ASC_DI","count":1}]},{"id":"12","category":"F_ASC","name":"스페셜리스트 듀얼 칩","icon":"MTL_ASC_SPC3","rarity":"TIER_5","weight":5,"seconds":1,"level":3,"costs":[{"name":"스페셜리스트 칩셋","icon":"MTL_ASC_SPC2","count":2},{"name":"칩 첨가제","icon":"MTL_ASC_DI","count":1}]},{"id":"13","category":"F_DIAMOND","name":"오리지늄 조각","icon":"MTL_DIAMOND_SHD","rarity":"TIER_5","weight":3,"seconds":3600,"level":3,"costs":[{"name":"원암 큐브","icon":"MTL_SL_G2","count":2},{"name":"용문폐","icon":"GOLD","count":1600}]},{"id":"14","category":"F_DIAMOND","name":"오리지늄 조각","icon":"MTL_DIAMOND_SHD","rarity":"TIER_5","weight":3,"seconds":3600,"level":3,"costs":[{"name":"장치","icon":"MTL_SL_BOSS2","count":1},{"name":"용문폐","icon":"GOLD","count":1000}]}];
+const manufactureCategories=[['F_EXP','작전기록','sprite_exp_card_t3'],['F_GOLD','귀금속','MTL_GOLD3'],['F_ASC','칩','MTL_ASC_PIO2'],['F_DIAMOND','오리지늄 원료','MTL_DIAMOND_SHD']];
 function readManufactureProducts(){
  try{const value=JSON.parse(localStorage.getItem(manufactureKey)||'{}');return value&&typeof value==='object'&&!Array.isArray(value)?value:{};}catch{return {};}
 }
-function openManufactureDialog(slotId,name,card){
- const dialog=document.getElementById('manufactureDialog');
- if(dialog.open)return;
- dialog.querySelector('h2').textContent=name+' 생산 품목';
- const selected=readManufactureProducts()[slotId];
- const choices=dialog.querySelector('.manufacture-choices');choices.replaceChildren();
- dialog.querySelector('.manufacture-feedback').textContent='';
- for(const [id,label] of manufactureProducts){
-  const button=document.createElement('button');button.type='button';
-  button.textContent=label;button.setAttribute('aria-pressed',String(selected===id));
-  button.addEventListener('click',()=>{
-   const products=readManufactureProducts();products[slotId]=id;
-   try{
-    localStorage.setItem(manufactureKey,JSON.stringify(products));
-    status.textContent=name+' 생산 품목을 '+label+'(으)로 저장했습니다.';
-    card.dataset.product=id;dialog.close();
-   }catch{
-    dialog.querySelector('.manufacture-feedback').textContent='저장하지 못했습니다. 브라우저의 저장 공간을 확인해 주세요.';
-   }
-  });
-  choices.append(button);
- }
- dialog.onclose=()=>card.isConnected&&card.focus({preventScroll:true});
- dialog.showModal();
+function manufactureImage(icon,alt=''){
+ const img=document.createElement('img');img.src='https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/'+icon+'.png';img.alt=alt;img.draggable=false;
+ img.addEventListener('error',()=>{if(!img.dataset.fallback){img.dataset.fallback='1';img.src='https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/torappu/dynamicassets/arts/items/'+icon+'.png';}});
+ return img;
 }
-
+function openManufactureDialog(slotId,name,card){
+ const dialog=document.getElementById('manufactureDialog');if(dialog.open)return;
+ dialog.querySelector('h2').textContent=name+' · 생산 품목 선택';
+ const selected=readManufactureProducts()[slotId];
+ let category=manufactureRecipes.find(r=>r.id===selected)?.category??({record:'F_EXP',gold:'F_GOLD',chip:'F_ASC',originium:'F_DIAMOND'}[selected]??'F_EXP');
+ let sort='quality',descending=false;
+ const maxLevel=Math.max(0,...Object.values(settings.rooms).filter(r=>r.type==='MANUFACTURE').map(r=>Number(r.level)||0));
+ const categories=dialog.querySelector('.manufacture-categories'),choices=dialog.querySelector('.manufacture-choices'),feedback=dialog.querySelector('.manufacture-feedback');
+ categories.replaceChildren();feedback.textContent='';
+ for(const [id,label,icon] of manufactureCategories){
+  const button=document.createElement('button');button.type='button';button.dataset.category=id;
+  button.append(manufactureImage(icon),document.createTextNode(label));
+  button.addEventListener('click',()=>{category=id;paint();});categories.append(button);
+ }
+ function paint(){
+  categories.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.category===category)));
+  dialog.querySelectorAll('[data-sort]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.sort===sort)));
+  const direction=dialog.querySelector('.manufacture-direction');direction.textContent=descending?'☷↑':'☷↓';direction.setAttribute('aria-label',descending?'오름차순으로 정렬':'내림차순으로 정렬');
+  choices.replaceChildren();
+  const rows=manufactureRecipes.filter(r=>r.category===category).sort((a,b)=>{
+   const result=sort==='name'?a.name.localeCompare(b.name,'ko'):sort==='time'?a.seconds-b.seconds:Number(a.rarity.slice(-1))-Number(b.rarity.slice(-1));
+   return (descending?-1:1)*(result||Number(a.id)-Number(b.id));
+  });
+  for(const recipe of rows){
+   const button=document.createElement('button');button.type='button';button.className='manufacture-recipe';
+   button.setAttribute('aria-pressed',String(selected===recipe.id));
+   const locked=recipe.level>maxLevel;button.disabled=locked;
+   button.setAttribute('aria-label',recipe.name+(locked?' · 제조소 레벨 '+recipe.level+' 건설 시 개방':''));
+   const product=document.createElement('span');product.className='recipe-product';product.style.setProperty('--rarity-color',({'TIER_2':'#cddd26','TIER_3':'#22b5e8','TIER_4':'#b093bd','TIER_5':'#e5b94f'})[recipe.rarity]);
+   const weight=document.createElement('span');weight.className='recipe-weight';weight.textContent=recipe.weight;
+   const quantity=document.createElement('span');quantity.className='recipe-quantity';quantity.textContent='1';
+   product.append(manufactureImage(recipe.icon),weight,quantity);
+   const details=document.createElement('span');details.className='recipe-details';
+   const heading=document.createElement('span');heading.className='recipe-heading';
+   const title=document.createElement('span');title.textContent=recipe.name;
+   const time=document.createElement('span');time.className='recipe-time';
+   time.textContent=Math.floor(recipe.seconds/3600)+':'+String(Math.floor(recipe.seconds/60)%60).padStart(2,'0')+':'+String(recipe.seconds%60).padStart(2,'0');
+   heading.append(title,time);
+   const materials=document.createElement('span');materials.className='recipe-materials';
+   for(let i=0;i<3;i++){
+    if(i){const plus=document.createElement('span');plus.className='recipe-plus';plus.textContent='+';materials.append(plus);}
+    const material=document.createElement('span');material.className='recipe-material';
+    const cost=recipe.costs[i];const ring=document.createElement('span');ring.className='recipe-material-ring';
+    if(cost)ring.append(manufactureImage(cost.icon,cost.name));else ring.textContent='—';
+    const count=document.createElement('span');count.textContent=cost?'×'+cost.count:'－/－';
+    material.append(ring,count);materials.append(material);
+   }
+   details.append(heading,materials);button.append(product,details);
+   if(locked){
+    const lock=document.createElement('span');lock.className='recipe-locked';
+    lock.innerHTML='<svg viewBox="0 0 48 60" aria-hidden="true"><path d="M12 25V16a12 12 0 0 1 24 0v9M6 25h36v31H6z" fill="none" stroke="currentColor" stroke-width="7"/><circle cx="24" cy="40" r="4" fill="currentColor"/></svg>';
+    const label=document.createElement('span');label.textContent='제조소 Lv.'+recipe.level+' 1개 건설 시 개방';lock.append(label);button.append(lock);
+   }
+   button.addEventListener('click',()=>{
+    const products=readManufactureProducts();products[slotId]=recipe.id;
+    try{localStorage.setItem(manufactureKey,JSON.stringify(products));status.textContent=name+' 생산 품목: '+recipe.name;card.dataset.product=recipe.id;dialog.close();}
+    catch{feedback.textContent='저장하지 못했습니다. 브라우저의 저장 공간을 확인해 주세요.';}
+   });choices.append(button);
+  }
+ }
+ dialog.querySelectorAll('[data-sort]').forEach(b=>b.onclick=()=>{sort=b.dataset.sort;paint();});
+ dialog.querySelector('.manufacture-direction').onclick=()=>{descending=!descending;paint();};
+ dialog.onclose=()=>card.isConnected&&card.focus({preventScroll:true});
+ paint();dialog.showModal();
+}
 function room(slotId,type,name,saved){
  const card=document.createElement('article');card.className=`room room-${FACILITIES[type].css}`;card.setAttribute('aria-label',name);let level=saved?.level??0,count=saved?.count??0;
  card.innerHTML=`<div class="room-heading"><h2>${name}</h2><span class="level-bars" aria-hidden="true"></span><span class="level-text"></span></div><div class="room-occupancy"></div><div class="room-controls"><label class="level-control">Lv. <select aria-label="${name} 설비 레벨"></select></label><label class="count-control">인원 <select aria-label="${name} 배치 인원"></select><span class="capacity"></span></label></div>`;
