@@ -364,3 +364,7 @@ body{overflow-x:clip}
 
 @font-face{font-family:"Base Bender Light";src:url("../fonts/Bender-Light.ttf") format("truetype");font-weight:300;font-style:normal;font-display:swap}
 .base-map .room-control>.room-heading>.level-text{font-family:"Base Bender Light",sans-serif;font-weight:300}
+
+/* Reference level display sits slightly right of the panel center. */
+.base-map .room-control>.room-heading>.level-text,
+.base-map .room-control>.control-level-ornament{left:calc(50% + var(--unit)*.1)}
