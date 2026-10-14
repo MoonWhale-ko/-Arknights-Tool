@@ -311,3 +311,15 @@ body{overflow-x:clip}
 .base-map :is(.room-dorm,.room-workshop,.room-reception,.room-training,.room-office,.room-private)>.facility-trim>.facility-floor>span{
  visibility:visible!important;flex:1 1 0;min-width:0;height:100%;background:#aeb3b0;box-shadow:none
 }
+
+/* Bottom markers remain only in workshop, office and training rooms. */
+.base-map .room>.facility-trim>.facility-floor{display:none!important}
+.base-map :is(.room-workshop,.room-office,.room-training)>.facility-trim>.facility-floor{
+ display:flex!important;visibility:visible!important;left:auto;right:calc(4.591837% + 3px);
+ width:calc(var(--unit)*1.5684375 - 7.5684375px);transform:none;
+ bottom:calc(var(--unit)*.055 + 2.5px);height:calc(var(--unit)*.048);
+ gap:3px;background:none;box-shadow:none
+}
+.base-map :is(.room-workshop,.room-office,.room-training)>.facility-trim>.facility-floor>span{
+ visibility:visible!important;flex:1 1 0;min-width:0;height:100%;background:#aeb3b0;box-shadow:none
+}
