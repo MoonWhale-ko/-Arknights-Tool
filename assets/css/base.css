@@ -435,4 +435,4 @@ body{overflow-x:clip}
 .base-map .room-private>.private-occupant>:is(div,.private-empty){display:none}
 .base-map .room-private>.room-heading{left:calc(var(--unit)*.95)}
 
-.base-map .room-private>.private-occupant>img{border-radius:3px}
+.base-map .room-private>.private-occupant>img{border-radius:5px;object-fit:cover;object-position:center}
