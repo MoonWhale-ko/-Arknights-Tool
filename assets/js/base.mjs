@@ -206,8 +206,11 @@ function updateControlHatching(){
   context.font=subtitleStyle.fontWeight+' '+subtitleStyle.fontSize+' '+subtitleStyle.fontFamily;
   const subtitleMetrics=context.measureText(subtitle.textContent);
   const natural=subtitleMetrics.actualBoundingBoxLeft+subtitleMetrics.actualBoundingBoxRight;
-  subtitle.style.left=(left+subtitleMetrics.actualBoundingBoxLeft)+'px';subtitle.style.width=width+'px';
-  subtitle.style.letterSpacing=((width-natural)/Math.max(1,subtitle.textContent.length-1))+'px';
+  const scaleX=width/natural;
+  subtitle.style.left=(left+subtitleMetrics.actualBoundingBoxLeft*scaleX)+'px';
+  subtitle.style.width=subtitleMetrics.width+'px';
+  subtitle.style.letterSpacing='0px';subtitle.style.transformOrigin='left top';
+  subtitle.style.transform='scaleX('+scaleX+')';
   subtitle.style.top=(parseFloat(number.style.top)+parseFloat(style.top)-3-parseFloat(subtitleStyle.lineHeight))+'px';
  }
 
