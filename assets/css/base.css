@@ -392,3 +392,5 @@ body{overflow-x:clip}
 
 @font-face{font-family:"Base Novecento Wide";src:url("../fonts/Novecento-Control.otf") format("opentype");font-weight:400;font-style:normal;font-display:swap}
 .base-map .room-control .control-subtitle{font-family:"Base Novecento Wide",sans-serif;font-weight:400}
+
+.base-map .room-control .control-subtitle{color:transparent;background:url("../icons/control-subtitle.svg") center/100% 100% no-repeat;text-shadow:none}
