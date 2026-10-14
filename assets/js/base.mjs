@@ -17,7 +17,7 @@ const facilityArt={
  TRAINING:'<path d="m28 17 47 47-11 11-47-47Zm-4 40 15 15m-7-7-16 16m41-57 15 15m-7-7 16-16"/>',
  PRIVATE:'<path d="M25 21h46v54H25zM37 36h22M42 48v16m-7-8h14"/>'
 };
-const facilityBackgrounds={TRADING:'trading',MANUFACTURE:'manufacture',POWER:'power',DORMITORY:'dormitory',MEETING:'meeting',WORKSHOP:'workshop',HIRE:'office',TRAINING:'training',CONTROL:'control-center'};
+const facilityBackgrounds={TRADING:'trading',MANUFACTURE:'manufacture',POWER:'power',DORMITORY:'dormitory',MEETING:'meeting',WORKSHOP:'workshop',HIRE:'office',TRAINING:'training',CONTROL:'control-center',PRIVATE:'activity'};
 function decorateRoom(card,type){
  const backgroundName=facilityBackgrounds[type];
  if(backgroundName){
