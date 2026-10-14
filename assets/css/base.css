@@ -540,6 +540,6 @@ body{overflow-x:clip}
 .base-map .room-control>.facility-panel-grid::before{
  background-image:url("../base-shapes/control-panel-grid.svg");
  background-size:calc(var(--unit)*.2) calc(var(--unit)*.2);
- -webkit-mask-image:radial-gradient(ellipse 52% 66% at 60% 49%,#000 15%,#0009 50%,transparent 100%);
- mask-image:radial-gradient(ellipse 52% 66% at 60% 49%,#000 15%,#0009 50%,transparent 100%);
+ -webkit-mask-image:radial-gradient(ellipse 52% 66% at 50% 50%,#000 15%,#0009 50%,transparent 100%);
+ mask-image:radial-gradient(ellipse 52% 66% at 50% 50%,#000 15%,#0009 50%,transparent 100%);
 }
