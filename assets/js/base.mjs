@@ -204,8 +204,9 @@ function updateControlHatching(){
   const width=right-left;
   const subtitleStyle=getComputedStyle(subtitle);
   context.font=subtitleStyle.fontWeight+' '+subtitleStyle.fontSize+' '+subtitleStyle.fontFamily;
-  const natural=context.measureText(subtitle.textContent).width;
-  subtitle.style.left=left+'px';subtitle.style.width=width+'px';
+  const subtitleMetrics=context.measureText(subtitle.textContent);
+  const natural=subtitleMetrics.actualBoundingBoxLeft+subtitleMetrics.actualBoundingBoxRight;
+  subtitle.style.left=(left+subtitleMetrics.actualBoundingBoxLeft)+'px';subtitle.style.width=width+'px';
   subtitle.style.letterSpacing=((width-natural)/Math.max(1,subtitle.textContent.length-1))+'px';
   subtitle.style.top=(parseFloat(number.style.top)+parseFloat(style.top)-3-parseFloat(subtitleStyle.lineHeight))+'px';
  }
