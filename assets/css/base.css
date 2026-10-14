@@ -411,8 +411,8 @@ body{overflow-x:clip}
 
 /* Double the gap from the black panel bottom; increase occupancy-to-marker gap by 50%. */
 .base-map :is(.room-office,.room-training)>.facility-trim>.facility-floor{
- bottom:calc(var(--unit)*.03784091 + 5px)
+ bottom:calc(var(--unit)*.00352273 + 10px)
 }
 .base-map :is(.room-office,.room-training)>.room-occupancy{
- bottom:calc(var(--unit)*.15634091 + 1.25px)
+ bottom:calc(var(--unit)*.19252273 + 2.5px)
 }
