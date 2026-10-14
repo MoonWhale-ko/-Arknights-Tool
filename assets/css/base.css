@@ -374,7 +374,7 @@ body{overflow-x:clip}
  left:calc(50% - var(--unit)*.65 - 4px);
  right:calc(100% - var(--unit)*.0348633 + 2px);
  top:calc(var(--unit)*.1102295);width:auto;height:calc(var(--unit)*.3676025);
- background:transparent url("../icons/control-hatching-10.svg?v=3") center/100% 100% no-repeat;
+ background:transparent url("../icons/control-hatching-10.svg?v=4") center/100% 100% no-repeat;
  pointer-events:none
 }
 
