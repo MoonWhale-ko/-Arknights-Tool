@@ -406,3 +406,5 @@ body{overflow-x:clip}
  background:transparent url("../icons/office-humanresource.png") center/contain no-repeat;
  border:0;clip-path:none;transform:none;box-shadow:none;opacity:1;pointer-events:none
 }
+
+.base-map .room-workshop>.facility-trim>.facility-floor{display:none!important}
