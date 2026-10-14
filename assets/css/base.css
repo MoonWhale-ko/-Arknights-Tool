@@ -356,3 +356,8 @@ body{overflow-x:clip}
  width:calc(var(--unit)*1.5);height:calc(var(--unit)*.92);transform:translateX(-50%);z-index:0
 }
 .base-map .room-control>.control-level-ornament>svg{display:block;width:100%;height:100%}
+
+/* White level digits over an orange copy shifted slightly downward. */
+.base-map .room-control>.room-heading>.level-text{
+ color:#f5f6f4;text-shadow:0 1.5px 0 #efb851
+}
