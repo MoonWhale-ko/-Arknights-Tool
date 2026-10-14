@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="_레이어_1" data-name="레이어_1" version="1.1" viewBox="0 0 99 63">
+  
+  <defs>
+    <style>
+      .st0 {
+        fill: #426e69;
+      }
+
+      .st1 {
+        fill: #78cdc3;
+      }
+    </style>
+  </defs>
+  <polygon class="st1" points="24 24 24 31 18 27.5 24 24" />
+  <polygon class="st1" points="31 24 31 31 25 27.5 31 24" />
+  <polygon class="st1" points="74 24 74 31 80 27.5 74 24" />
+  <polygon class="st1" points="67 24 67 31 73 27.5 67 24" />
+  <circle class="st0" cx="44" cy="17" r="3" />
+  <polyline class="st0" points="54 18 48 18 46 20 43 21 42 25 38 25 38 27 43 27 45 23 48 28 48 30 41 40 44 40 51 30 51 36 61 36 61 34 54 34 54 28 49 20 53 20 55 24 57 24" />
+  </svg>
