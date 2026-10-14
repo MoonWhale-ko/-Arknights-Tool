@@ -196,6 +196,20 @@ function updateControlHatching(){
  }).join(' ');
  const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none"><path d="'+paths+'" fill="none" stroke="#f5f6f4" stroke-width="1.5"/></svg>';
  number.style.setProperty('--control-hatch-image','url("data:image/svg+xml,'+encodeURIComponent(svg)+'")');
+ const subtitle=room.querySelector('.control-subtitle');
+ if(subtitle){
+  const numberLeft=number.offsetLeft-number.offsetWidth/2;
+  const left=numberLeft+parseFloat(style.left);
+  const right=numberLeft+metrics.actualBoundingBoxRight;
+  const width=right-left;
+  const subtitleStyle=getComputedStyle(subtitle);
+  context.font=subtitleStyle.fontWeight+' '+subtitleStyle.fontSize+' '+subtitleStyle.fontFamily;
+  const natural=context.measureText(subtitle.textContent).width;
+  subtitle.style.left=left+'px';subtitle.style.width=width+'px';
+  subtitle.style.letterSpacing=((width-natural)/Math.max(1,subtitle.textContent.length-1))+'px';
+  subtitle.style.top=(parseFloat(number.style.top)+parseFloat(style.top)-3-parseFloat(subtitleStyle.lineHeight))+'px';
+ }
+
 }
 new ResizeObserver(updateControlHatching).observe(document.getElementById('baseMap'));
 document.fonts.ready.then(updateControlHatching);
