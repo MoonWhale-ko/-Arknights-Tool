@@ -513,3 +513,6 @@ body{overflow-x:clip}
 
 /* Let the vector ornaments extend past the top and bottom, clipped by the panel mask. */
 .base-map .room>.facility-background>img{filter:none;height:120%;top:-10%}
+
+/* Match the reference: the hexagon is about 1.3 panel heights and sits near the left inset. */
+.base-map .room:not(.room-control)>.facility-background>img{height:140%;top:-20%;left:10px}
