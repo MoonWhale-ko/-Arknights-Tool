@@ -436,3 +436,5 @@ body{overflow-x:clip}
 .base-map .room-private>.room-heading{left:calc(var(--unit)*.95)}
 
 .base-map .room-private>.private-occupant>img{border-radius:5px;object-fit:cover;object-position:center}
+
+.base-map .room-private>.private-occupant>img{top:50%;transform:translateY(-50%)}
