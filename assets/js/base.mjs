@@ -30,11 +30,15 @@ function room(slotId,type,name,saved){
  const card=document.createElement('article');card.className=`room room-${FACILITIES[type].css}`;card.setAttribute('aria-label',name);let level=saved?.level??0,count=saved?.count??0;
  card.innerHTML=`<div class="room-heading"><h2>${name}</h2><span class="level-bars" aria-hidden="true"></span><span class="level-text"></span></div><div class="room-occupancy"></div><div class="room-controls"><label class="level-control">Lv. <select aria-label="${name} 설비 레벨"></select></label><label class="count-control">인원 <select aria-label="${name} 배치 인원"></select><span class="capacity"></span></label></div>`;
  if(['TRADING','MANUFACTURE','POWER','DORMITORY','MEETING','WORKSHOP','HIRE','TRAINING'].includes(type))card.querySelector('h2').textContent=FACILITIES[type].name;
+ if(type==='CONTROL'){
+  const subtitle=document.createElement('span');subtitle.className='control-subtitle';subtitle.textContent='LEVEL OF CONTROL INTERFACE';card.querySelector('.room-heading').append(subtitle);
+  const ornament=document.createElement('span');ornament.className='control-level-ornament';ornament.setAttribute('aria-hidden','true');ornament.innerHTML='<svg viewBox="0 0 150 92" fill="none"><path d="M12 6 3 16V72L15 85M138 6l9 10V72l-12 13" stroke="#f0f1ed" stroke-width="1.5"/><g stroke="#efb851" stroke-width="1.5"><path d="m20 25 19 19m-19-14 19 19m-19-14 19 19m-19-14 19 19m-19-14 19 19m-19-14 19 19m-19-14 14 14m-14-9 9 9m-9-4 4 4"/></g></svg>';card.append(ornament);
+ }
  const levelInput=card.querySelector('.level-control select'),countInput=card.querySelector('.count-control select'),limit=card.querySelector('.capacity');
  for(let i=0;i<=FACILITIES[type].capacity.length;i++){const o=document.createElement('option');o.value=i;o.textContent=i===0?'미건설':i;levelInput.append(o);}levelInput.value=String(level);
  function renderCount(){const max=capacity(type,level);count=Math.min(count,max);countInput.replaceChildren();for(let i=0;i<=max;i++){const o=document.createElement('option');o.value=i;o.textContent=i;countInput.append(o);}countInput.value=String(count);limit.textContent=` / ${max}`;
  const bars=card.querySelector('.level-bars');bars.replaceChildren();for(let i=0;i<FACILITIES[type].capacity.length;i++){const bar=document.createElement('span');bar.className=i<level?'active':'';bars.append(bar);}
- card.querySelector('.level-text').textContent=level===0?'미건설':`Lv.${level}`;
+ card.querySelector('.level-text').textContent=type==='CONTROL'?`${level}.0`:level===0?'미건설':`Lv.${level}`;
  showOccupancy(card.querySelector('.room-occupancy'),count,max);
  card.setAttribute('aria-label',`${name} · 설비 레벨 ${level} · 인원 ${count} / ${max}`);
  }
