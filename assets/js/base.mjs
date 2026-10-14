@@ -59,7 +59,7 @@ function privateRoom(slotId,name,saved){
  card.setAttribute('aria-label',`${name} · 레벨 ${level} · ${content.textContent}`);decorateRoom(card,'PRIVATE');return card;
 }
 function render(){const counters={};const groups={production:document.getElementById('productionRooms'),living:document.getElementById('livingRooms'),support:document.getElementById('supportRooms'),private:document.getElementById('privateRooms')};Object.values(groups).forEach(el=>el.replaceChildren());
- for(const [slotId,group,fallback] of BASE_SLOTS){const saved=settings.rooms[slotId],type=saved?.type??fallback;counters[type]=(counters[type]??0)+1;const name=FACILITIES[type].name+(['TRADING','MANUFACTURE','POWER','DORMITORY','PRIVATE'].includes(type)?` ${counters[type]}`:'');groups[group].append(type==='PRIVATE'?privateRoom(slotId,name,saved):room(slotId,type,name,saved));}statusText();updateElevatorLinks();requestAnimationFrame(updateControlHatching);}
+ for(const [slotId,group,fallback] of BASE_SLOTS){const saved=settings.rooms[slotId],type=saved?.type??fallback;counters[type]=(counters[type]??0)+1;const name=FACILITIES[type].name+(['TRADING','MANUFACTURE','POWER','DORMITORY','PRIVATE'].includes(type)?` ${counters[type]}`:'');groups[group].append(type==='PRIVATE'?privateRoom(slotId,name,saved):room(slotId,type,name,saved));}statusText();updateElevatorLinks();requestAnimationFrame(updateControlHatching);requestAnimationFrame(updateGridParallax);}
 load();render();window.addEventListener('storage',e=>{if(e.key===BASE_KEY||e.key===null){load();render();}});window.addEventListener('pageshow',()=>{load();render();});
 
 const editButton=document.getElementById('editFacilities');editButton.addEventListener('click',()=>{const editing=editButton.getAttribute('aria-pressed')!=='true';editButton.setAttribute('aria-pressed',String(editing));editButton.textContent=editing?'설비 설정 완료':'설비 설정';document.getElementById('baseMap').classList.toggle('editing',editing);});
@@ -156,6 +156,19 @@ function updateGridParallax(){
  baseStage.style.setProperty('--cross-offset-x',`${-viewport.scrollLeft*.35}px`);
  baseStage.style.setProperty('--grid-x',`${-viewport.scrollLeft*.90}px`);
  baseStage.style.setProperty('--grid-extra',`${Math.max(0,viewport.scrollWidth-viewport.clientWidth)*.90}px`);
+ // Continue the same X tiles across black panels without covering their foreground.
+ const crossX=(parseFloat(baseStage.style.getPropertyValue('--label-x'))||40)+54.2-viewport.scrollLeft*1.25;
+ document.querySelectorAll('.base-map .room,.base-map .passage').forEach(panel=>{
+  let layer=panel.querySelector(':scope > .panel-cross-layer');
+  if(!layer){
+   layer=document.createElement('span');layer.className='panel-cross-layer';
+   layer.setAttribute('aria-hidden','true');panel.appendChild(layer);
+  }
+  const bounds=panel.getBoundingClientRect();
+  layer.style.setProperty('--panel-cross-x',`${crossX-(bounds.left-stageBounds.left)/stageScale}px`);
+  layer.style.setProperty('--panel-cross-y',`${36-(bounds.top-stageBounds.top)/stageScale}px`);
+ });
+
 }
 viewport.addEventListener('scroll',updateGridParallax,{passive:true});
 viewport.addEventListener('pointermove',updateGridParallax,{passive:true});
