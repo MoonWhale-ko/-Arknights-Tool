@@ -271,3 +271,16 @@ body{overflow-x:clip}
 @font-face{font-family:"Base Bender";src:url("../fonts/Bender-Regular.otf") format("opentype");font-weight:400;font-style:normal;font-display:swap}
 .production-grid :is(.room-trading,.room-factory,.room-power)>.room-occupancy{font-family:"Base Bender",sans-serif;font-weight:400;letter-spacing:0;text-shadow:none}
 .production-grid :is(.room-trading,.room-factory,.room-power)>.room-occupancy::before{width:calc(var(--unit)*.074667);height:calc(var(--unit)*.28)}
+
+/* Production room titles share the trading room title layout. */
+.production-grid :is(.room-factory,.room-power)>.room-heading{
+ visibility:visible!important;display:flex;position:absolute;
+ left:calc(17.578125% + 2px);top:21.875%;margin:0;padding:0;z-index:1;
+ align-items:center;flex-wrap:nowrap;gap:calc(var(--unit)*.025)
+}
+.production-grid :is(.room-factory,.room-power)>.room-heading>h2{
+ visibility:visible!important;display:block;margin:0;
+ color:#f5f6f4;font-size:calc(var(--unit)*.2125);font-weight:800;
+ line-height:1;letter-spacing:-.04em;white-space:nowrap;text-shadow:0 1px 2px #0008
+}
+.production-grid :is(.room-factory,.room-power)>.room-heading>:is(.level-bars,.level-text){display:none!important}
