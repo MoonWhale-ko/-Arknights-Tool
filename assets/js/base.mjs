@@ -41,57 +41,30 @@ function manufactureImage(icon,alt=''){
 }
 function openManufactureDialog(slotId,name,card){
  const dialog=document.getElementById('manufactureDialog');if(dialog.open)return;
- dialog.querySelector('h2').textContent=name+' · 생산 품목 선택';
+ dialog.querySelector('h2').textContent=name+' 생산 품목';
  const selected=readManufactureProducts()[slotId];
  let category=manufactureRecipes.find(r=>r.id===selected)?.category??({record:'F_EXP',gold:'F_GOLD',chip:'F_ASC',originium:'F_DIAMOND'}[selected]??'F_EXP');
- let sort='quality',descending=false;
  const maxLevel=Math.max(0,...Object.values(settings.rooms).filter(r=>r.type==='MANUFACTURE').map(r=>Number(r.level)||0));
  const categories=dialog.querySelector('.manufacture-categories'),choices=dialog.querySelector('.manufacture-choices'),feedback=dialog.querySelector('.manufacture-feedback');
  categories.replaceChildren();feedback.textContent='';
- for(const [id,label,icon] of manufactureCategories){
-  const button=document.createElement('button');button.type='button';button.dataset.category=id;
-  button.append(manufactureImage(icon),document.createTextNode(label));
+ for(const [id,label] of manufactureCategories){
+  const button=document.createElement('button');button.type='button';button.dataset.category=id;button.textContent=label;
   button.addEventListener('click',()=>{category=id;paint();});categories.append(button);
  }
  function paint(){
   categories.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.category===category)));
-  dialog.querySelectorAll('[data-sort]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.sort===sort)));
-  const direction=dialog.querySelector('.manufacture-direction');direction.textContent=descending?'☷↑':'☷↓';direction.setAttribute('aria-label',descending?'오름차순으로 정렬':'내림차순으로 정렬');
   choices.replaceChildren();
-  const rows=manufactureRecipes.filter(r=>r.category===category).sort((a,b)=>{
-   const result=sort==='name'?a.name.localeCompare(b.name,'ko'):sort==='time'?a.seconds-b.seconds:Number(a.rarity.slice(-1))-Number(b.rarity.slice(-1));
-   return (descending?-1:1)*(result||Number(a.id)-Number(b.id));
-  });
-  for(const recipe of rows){
+  for(const recipe of manufactureRecipes.filter(r=>r.category===category)){
    const button=document.createElement('button');button.type='button';button.className='manufacture-recipe';
    button.setAttribute('aria-pressed',String(selected===recipe.id));
    const locked=recipe.level>maxLevel;button.disabled=locked;
-   button.setAttribute('aria-label',recipe.name+(locked?' · 제조소 레벨 '+recipe.level+' 건설 시 개방':''));
-   const product=document.createElement('span');product.className='recipe-product';product.style.setProperty('--rarity-color',({'TIER_2':'#cddd26','TIER_3':'#22b5e8','TIER_4':'#b093bd','TIER_5':'#e5b94f'})[recipe.rarity]);
-   const weight=document.createElement('span');weight.className='recipe-weight';weight.textContent=recipe.weight;
-   const quantity=document.createElement('span');quantity.className='recipe-quantity';quantity.textContent='1';
-   product.append(manufactureImage(recipe.icon),weight,quantity);
-   const details=document.createElement('span');details.className='recipe-details';
-   const heading=document.createElement('span');heading.className='recipe-heading';
-   const title=document.createElement('span');title.textContent=recipe.name;
-   const time=document.createElement('span');time.className='recipe-time';
-   time.textContent=Math.floor(recipe.seconds/3600)+':'+String(Math.floor(recipe.seconds/60)%60).padStart(2,'0')+':'+String(recipe.seconds%60).padStart(2,'0');
-   heading.append(title,time);
-   const materials=document.createElement('span');materials.className='recipe-materials';
-   for(let i=0;i<3;i++){
-    if(i){const plus=document.createElement('span');plus.className='recipe-plus';plus.textContent='+';materials.append(plus);}
-    const material=document.createElement('span');material.className='recipe-material';
-    const cost=recipe.costs[i];const ring=document.createElement('span');ring.className='recipe-material-ring';
-    if(cost)ring.append(manufactureImage(cost.icon,cost.name));else ring.textContent='—';
-    const count=document.createElement('span');count.textContent=cost?'×'+cost.count:'－/－';
-    material.append(ring,count);materials.append(material);
+   const details=document.createElement('span');details.className='recipe-label';
+   const title=document.createElement('span');title.textContent=recipe.name;details.append(title);
+   if(category==='F_DIAMOND'){
+    const variant=document.createElement('small');variant.textContent=recipe.costs.filter(c=>c.name!=='용문폐').map(c=>c.name+' ×'+c.count).join(', ');details.append(variant);
    }
-   details.append(heading,materials);button.append(product,details);
-   if(locked){
-    const lock=document.createElement('span');lock.className='recipe-locked';
-    lock.innerHTML='<svg viewBox="0 0 48 60" aria-hidden="true"><path d="M12 25V16a12 12 0 0 1 24 0v9M6 25h36v31H6z" fill="none" stroke="currentColor" stroke-width="7"/><circle cx="24" cy="40" r="4" fill="currentColor"/></svg>';
-    const label=document.createElement('span');label.textContent='제조소 Lv.'+recipe.level+' 1개 건설 시 개방';lock.append(label);button.append(lock);
-   }
+   if(locked){const hint=document.createElement('small');hint.textContent='제조소 Lv.'+recipe.level+' 건설 시 개방';details.append(hint);}
+   button.append(manufactureImage(recipe.icon),details);
    button.addEventListener('click',()=>{
     const products=readManufactureProducts();products[slotId]=recipe.id;
     try{localStorage.setItem(manufactureKey,JSON.stringify(products));status.textContent=name+' 생산 품목: '+recipe.name;card.dataset.product=recipe.id;dialog.close();}
@@ -99,8 +72,6 @@ function openManufactureDialog(slotId,name,card){
    });choices.append(button);
   }
  }
- dialog.querySelectorAll('[data-sort]').forEach(b=>b.onclick=()=>{sort=b.dataset.sort;paint();});
- dialog.querySelector('.manufacture-direction').onclick=()=>{descending=!descending;paint();};
  dialog.onclose=()=>card.isConnected&&card.focus({preventScroll:true});
  paint();dialog.showModal();
 }
