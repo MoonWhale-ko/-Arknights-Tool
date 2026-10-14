@@ -199,8 +199,10 @@ function updateControlHatching(){
  number.style.setProperty('--control-hatch-image','url("data:image/svg+xml,'+encodeURIComponent(svg)+'")');
  const subtitle=room.querySelector('.control-subtitle');
  if(subtitle){
-  const numberLeft=number.offsetLeft-number.offsetWidth/2;
-  const left=numberLeft+parseFloat(style.left);
+  const heading=number.parentElement,headingBounds=heading.getBoundingClientRect();
+  const displayScale=headingBounds.width/heading.clientWidth;
+  const numberLeft=(number.getBoundingClientRect().left-headingBounds.left)/displayScale;
+  const left=numberLeft+parseFloat(style.left)-2;
   const right=numberLeft+metrics.actualBoundingBoxRight;
   const width=right-left;
   const subtitleStyle=getComputedStyle(subtitle);
