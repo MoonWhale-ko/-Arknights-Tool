@@ -143,12 +143,47 @@ function endPan(event){if(panDrag?.id!==event.pointerId)return;panDrag=null;view
 viewport.addEventListener('pointerup',endPan);viewport.addEventListener('pointercancel',endPan);viewport.addEventListener('lostpointercapture',endPan);
 
 
-// Unbuilt rooms keep their grid positions; corridor and elevator panels are omitted.
-function updateElevatorLinks(){updateRegionCorners();}
+// Decorative circulation layer follows the same room-height unit as the map.
+const circulation=document.createElement('div');circulation.className='base-circulation';circulation.setAttribute('aria-hidden','true');
+for(const position of ['left','middle','right']){
+ const shaft=document.createElement('div');shaft.className=`elevator elevator-${position}`;
+ for(let floor=position==='right'?1:0;floor<(position==='right'?5:6);floor++){const landing=document.createElement('span');landing.className='elevator-landing';landing.dataset.floor=String(floor);shaft.append(landing);}
+ circulation.append(shaft);
+}
+for(const [side,floors] of [['production',[3]],['living',[2,3,4,5]],['support',[2,3,4]],['activity',[2,3,4]]]){
+ for(const floor of floors){if(side==='living'&&[4,5].includes(floor))continue;const passage=document.createElement('span');passage.className=`passage passage-${side} passage-${side}-${floor}`;passage.style.setProperty('--floor',floor);passage.innerHTML='<svg class="passage-art" viewBox="0 0 108 60" aria-hidden="true"><path fill="#0b0c0c" d="M4 0H36L43 7H65L72 0H104Q108 0 108 4V56Q108 60 104 60H72L65 53H43L36 60H4Q0 60 0 56V4Q0 0 4 0Z"/><g fill="#579692"><path d="m12 31 8-4v8Zm9 0 8-4v8Zm56-4 8 4-8 4Zm10 0 8 4-8 4Z"/><circle cx="48" cy="17" r="4"/><path d="m47 23 10 2 7 10h6v5h-9l-7-10-3 6 10 7v6H43v-5h10l-7-5-8 10h-6l12-16 2-6-7 3-3 7-4-2 4-9 10-4Z"/></g></svg>';circulation.append(passage);}
+}
+document.getElementById('baseMap').prepend(circulation);
+
+function updateElevatorLinks(){
+ const regions=[...document.querySelectorAll('.room,.passage,.elevator-landing')].map(el=>({el,rect:el.getBoundingClientRect()}));
+ for(const {el,rect:a} of regions){
+  if(!el.classList.contains('elevator-landing'))continue;
+  const connections=new Set();
+  for(const {el:other,rect:b} of regions){
+   if(other===el)continue;
+   const overlapX=Math.min(a.right,b.right)-Math.max(a.left,b.left),overlapY=Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top);
+   if(overlapX>.5&&Math.abs(a.top-b.bottom)<.5)connections.add('up');
+   if(overlapX>.5&&Math.abs(a.bottom-b.top)<.5)connections.add('down');
+   if(overlapY>.5&&Math.abs(a.left-b.right)<.5)connections.add('left');
+   if(overlapY>.5&&Math.abs(a.right-b.left)<.5)connections.add('right');
+  }
+  const crossGap=3.2+.5/(el.clientWidth/40);
+  const strokes={
+   up:`<path d="M20 ${40-crossGap}V15"/><path class="link-cap" d="M18.5 13.7h3"/>`,
+   down:`<path d="M20 ${40+crossGap}V65"/><path class="link-cap" d="M18.5 66.3h3"/>`,
+   left:`<path d="M${20-crossGap} 40H7"/><path class="link-cap" d="M5.7 38.5v3"/>`,
+   right:`<path d="M${20+crossGap} 40H33"/><path class="link-cap" d="M34.3 38.5v3"/>`
+  };
+  el.dataset.connections=[...connections].join(' ');
+  el.innerHTML=`<svg class="elevator-links" viewBox="0 0 40 80" aria-hidden="true"><g class="elevator-strokes">${[...connections].map(direction=>strokes[direction]).join('')}</g><path class="elevator-cross" d="m17 37 6 6m0-6-6 6"/></svg>`;
+ }
+ updateRegionCorners();
+}
 updateElevatorLinks();new ResizeObserver(updateElevatorLinks).observe(document.getElementById('baseMap'));
 
 function updateRegionCorners(){
- for(const el of document.querySelectorAll('.room:not(.room-empty)')){
+ for(const el of document.querySelectorAll('.room:not(.room-empty),.passage,.elevator-landing')){
   el.querySelector(':scope > .region-corners')?.remove();
   const w=el.offsetWidth,h=el.offsetHeight,inset=2.75,length=6,right=w-inset,bottom=h-inset;
   const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.classList.add('region-corners');svg.setAttribute('aria-hidden','true');svg.setAttribute('viewBox',`0 0 ${w} ${h}`);svg.setAttribute('preserveAspectRatio','none');
@@ -192,7 +227,7 @@ function updateGridParallax(){
  baseStage.style.setProperty('--grid-extra',`${Math.max(0,viewport.scrollWidth-viewport.clientWidth)*.90}px`);
  // Continue the same X tiles across black panels without covering their foreground.
  const crossX=(parseFloat(baseStage.style.getPropertyValue('--label-x'))||40)+54.2-viewport.scrollLeft*1.25;
- document.querySelectorAll('.base-map .room:not(.room-empty)').forEach(panel=>{
+ document.querySelectorAll('.base-map .room:not(.room-empty),.base-map .passage').forEach(panel=>{
   let layer=panel.querySelector(':scope > .panel-cross-layer');
   if(!layer){
    layer=document.createElement('span');layer.className='panel-cross-layer';
