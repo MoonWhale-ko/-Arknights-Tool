@@ -417,10 +417,6 @@ body{overflow-x:clip}
  bottom:calc(var(--unit)*.19252273 + 2.5px)
 }
 
-/* Move text and level hexagons 3px right. */
-.base-map .room>.room-heading>h2,
-.base-map .room>.room-heading>.level-bars,
-.base-map .room-control .control-subtitle,
-.base-map .room-control>.room-heading>.level-text{translate:3px 0}
-.base-map .room-control>.room-heading>.level-text::before{translate:-3px 0}
-.base-map .room>.room-occupancy>:is(.occupancy-current,.occupancy-limit){position:relative;left:3px}
+/* Move only non-control facility names and their level hexagons 3px right. */
+.base-map .room:not(.room-control)>.room-heading>h2,
+.base-map .room:not(.room-control)>.room-heading>.level-bars{translate:3px 0}
