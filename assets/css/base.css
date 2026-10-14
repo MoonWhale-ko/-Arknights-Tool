@@ -509,8 +509,7 @@ body{overflow-x:clip}
 /* Reconstructed control symbol is already transparent; retain the original ink color. */
 .base-map .room-control>.facility-background>img{filter:none}
 
-/* Keep the complete control branches inside the black panel's inset edges. */
-.base-map .room-control>.facility-background>img{height:calc(100% - 16px);top:8px}
 
-/* Complete vector symbols retain their ink and fit inside every facility panel. */
-.base-map .room:not(.room-control)>.facility-background>img{filter:none;height:calc(100% - 12px);top:6px}
+
+/* Let the vector ornaments extend past the top and bottom, clipped by the panel mask. */
+.base-map .room>.facility-background>img{filter:none;height:120%;top:-10%}
