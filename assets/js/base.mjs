@@ -180,7 +180,7 @@ function updateControlHatching(){
  const size=parseFloat(textStyle.fontSize),lineHeight=parseFloat(textStyle.lineHeight);
  const context=document.createElement('canvas').getContext('2d');
  context.font=textStyle.fontWeight+' '+size+'px '+textStyle.fontFamily;
- context.letterSpacing=textStyle.letterSpacing==='normal'?'0px':textStyle.letterSpacing;
+ context.letterSpacing='0px';
  const metrics=context.measureText(number.textContent),five=context.measureText('5');
  const ascent=metrics.fontBoundingBoxAscent??size*.915039;
  const descent=metrics.fontBoundingBoxDescent??size*.199707;
