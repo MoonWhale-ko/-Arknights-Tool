@@ -59,7 +59,7 @@ function privateRoom(slotId,name,saved){
  card.setAttribute('aria-label',`${name} · 레벨 ${level} · ${content.textContent}`);decorateRoom(card,'PRIVATE');return card;
 }
 function render(){const counters={};const groups={production:document.getElementById('productionRooms'),living:document.getElementById('livingRooms'),support:document.getElementById('supportRooms'),private:document.getElementById('privateRooms')};Object.values(groups).forEach(el=>el.replaceChildren());
- for(const [slotId,group,fallback] of BASE_SLOTS){const saved=settings.rooms[slotId],type=saved?.type??fallback;counters[type]=(counters[type]??0)+1;const name=FACILITIES[type].name+(['TRADING','MANUFACTURE','POWER','DORMITORY','PRIVATE'].includes(type)?` ${counters[type]}`:'');groups[group].append(type==='PRIVATE'?privateRoom(slotId,name,saved):room(slotId,type,name,saved));}statusText();updateElevatorLinks();}
+ for(const [slotId,group,fallback] of BASE_SLOTS){const saved=settings.rooms[slotId],type=saved?.type??fallback;counters[type]=(counters[type]??0)+1;const name=FACILITIES[type].name+(['TRADING','MANUFACTURE','POWER','DORMITORY','PRIVATE'].includes(type)?` ${counters[type]}`:'');groups[group].append(type==='PRIVATE'?privateRoom(slotId,name,saved):room(slotId,type,name,saved));}statusText();updateElevatorLinks();requestAnimationFrame(updateControlHatching);}
 load();render();window.addEventListener('storage',e=>{if(e.key===BASE_KEY||e.key===null){load();render();}});window.addEventListener('pageshow',()=>{load();render();});
 
 const editButton=document.getElementById('editFacilities');editButton.addEventListener('click',()=>{const editing=editButton.getAttribute('aria-pressed')!=='true';editButton.setAttribute('aria-pressed',String(editing));editButton.textContent=editing?'설비 설정 완료':'설비 설정';document.getElementById('baseMap').classList.toggle('editing',editing);});
@@ -172,3 +172,18 @@ function centerControlRoom(){
 }
 requestAnimationFrame(centerControlRoom);
 window.addEventListener('pageshow',()=>requestAnimationFrame(centerControlRoom));
+
+function updateControlHatching(){
+ const number=document.querySelector('.room-control .level-text');if(!number)return;
+ const style=getComputedStyle(number,'::before'),w=parseFloat(style.width),h=parseFloat(style.height);
+ if(!(w>0&&h>0))return;
+ const step=(w+h)/10;
+ const paths=Array.from({length:10},(_,i)=>{
+  const x=-h+(i+.5)*step;return 'M'+x.toFixed(4)+' 0l'+h.toFixed(4)+' '+h.toFixed(4);
+ }).join(' ');
+ const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none"><path d="'+paths+'" fill="none" stroke="#f5f6f4" stroke-width="1.5"/></svg>';
+ number.style.setProperty('--control-hatch-image','url("data:image/svg+xml,'+encodeURIComponent(svg)+'")');
+}
+new ResizeObserver(updateControlHatching).observe(document.getElementById('baseMap'));
+document.fonts.ready.then(updateControlHatching);
+requestAnimationFrame(updateControlHatching);
