@@ -19,7 +19,7 @@ const facilityArt={
 };
 const facilityBackgrounds={TRADING:'trading',MANUFACTURE:'manufacture',POWER:'power',DORMITORY:'dormitory',MEETING:'meeting',WORKSHOP:'workshop',HIRE:'office',TRAINING:'training',CONTROL:'control-center',PRIVATE:'activity'};
 function decorateRoom(card,type){
- if(!['CONTROL','MANUFACTURE','TRADING','POWER'].includes(type)){
+ if(!['MANUFACTURE','TRADING','POWER'].includes(type)){
   const grid=document.createElement('span');grid.className='facility-panel-grid';grid.setAttribute('aria-hidden','true');card.prepend(grid);
  }
 
