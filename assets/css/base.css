@@ -323,3 +323,11 @@ body{overflow-x:clip}
 .base-map :is(.room-workshop,.room-office,.room-training)>.facility-trim>.facility-floor>span{
  visibility:visible!important;flex:1 1 0;min-width:0;height:100%;background:#aeb3b0;box-shadow:none
 }
+
+/* User-drawn corridor icon overlays the existing black panel. */
+.base-map .passage::after{
+ content:"";display:block!important;position:absolute;inset:0;z-index:0;
+ width:auto;height:auto;border:0;clip-path:none;transform:none;box-shadow:none;
+ background:transparent url("../icons/corridor-user.svg") center/100% 100% no-repeat;
+ pointer-events:none
+}
