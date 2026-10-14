@@ -368,10 +368,12 @@ body{overflow-x:clip}
 /* Reference level display sits slightly right of the panel center. */
 .base-map .room-control>.room-heading>.level-text{left:calc(50% + var(--unit)*.1 + 4px)}
 
-/* Hatching ends beside the lower vertical stroke and stays 3px from the digit. */
+/* Hatching follows the actual Bender Light 5 ink bounds; its left edge stays fixed. */
 .base-map .room-control>.room-heading>.level-text::before{
- content:"";position:absolute;right:calc(100% + 3px);top:calc(var(--unit)*.035);
- width:calc(var(--unit)*.4);height:calc(var(--unit)*.375);
- background:repeating-linear-gradient(45deg,#efb851 0 1.5px,transparent 1.5px 4px);
+ content:"";position:absolute;
+ left:calc(50% - var(--unit)*.65 - 4px);
+ right:calc(100% - var(--unit)*.0348633 + 2px);
+ top:calc(var(--unit)*.1102295);width:auto;height:calc(var(--unit)*.3676025);
+ background:repeating-linear-gradient(45deg,#f5f6f4 0 calc(var(--unit)*.0208496),transparent calc(var(--unit)*.0208496) 4px);
  pointer-events:none
 }
