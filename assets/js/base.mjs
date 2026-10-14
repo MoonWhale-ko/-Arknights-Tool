@@ -199,10 +199,8 @@ function updateControlHatching(){
  number.style.setProperty('--control-hatch-image','url("data:image/svg+xml,'+encodeURIComponent(svg)+'")');
  const subtitle=room.querySelector('.control-subtitle');
  if(subtitle){
-  const heading=number.parentElement,headingBounds=heading.getBoundingClientRect();
-  const displayScale=headingBounds.width/heading.clientWidth;
-  const numberLeft=(number.getBoundingClientRect().left-headingBounds.left)/displayScale;
-  const left=numberLeft+parseFloat(style.left)-2;
+  const numberLeft=number.offsetLeft-number.offsetWidth/2;
+  const left=numberLeft+parseFloat(style.left);
   const right=numberLeft+metrics.actualBoundingBoxRight;
   const width=right-left;
   const subtitleStyle=getComputedStyle(subtitle);
@@ -211,7 +209,7 @@ function updateControlHatching(){
   const subtitleMetrics=context.measureText(subtitle.textContent);
   const natural=subtitleMetrics.actualBoundingBoxLeft+subtitleMetrics.actualBoundingBoxRight;
   const scaleX=width/natural;
-  subtitle.style.left=(left+subtitleMetrics.actualBoundingBoxLeft*scaleX)+'px';
+  subtitle.style.left=(left+subtitleMetrics.actualBoundingBoxLeft*scaleX-2)+'px';
   subtitle.style.width=subtitleMetrics.width+'px';
   subtitle.style.letterSpacing='0px';subtitle.style.transformOrigin='left top';
   subtitle.style.transform='scaleX('+scaleX+')';
