@@ -505,3 +505,6 @@ body{overflow-x:clip}
 
 /* Shift the original facility background symbols 18px right. */
 .facility-background>img{left:18px}
+
+/* Reconstructed control symbol is already transparent; retain the original ink color. */
+.base-map .room-control>.facility-background>img{filter:none}
