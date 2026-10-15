@@ -563,7 +563,7 @@ body{overflow-x:clip}
  content:"VER";position:absolute;
  left:calc(50% - var(--unit)*.65 - 4px);
  right:calc(100% - var(--unit)*.0348633 + 4px);
- top:calc(var(--control-hatch-top,calc(var(--unit)*.1102295)) + var(--unit)*.3676025 + var(--unit)*.035);
- font-family:"Base Bender",sans-serif;font-size:calc(var(--unit)*.105);font-weight:400;
+ top:calc(var(--control-hatch-top,calc(var(--unit)*.1102295)) + var(--unit)*.3676025 + var(--unit)*.015);
+ font-family:"Base Bender",sans-serif;font-size:calc(var(--unit)*.17);font-weight:400;
  line-height:1;letter-spacing:.04em;text-align:center;color:#f5f6f4;text-shadow:none;pointer-events:none
 }
