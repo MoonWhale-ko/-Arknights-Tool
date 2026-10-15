@@ -87,6 +87,43 @@ function openManufactureDialog(slotId,name,card){
  dialog.onclose=()=>card.isConnected&&card.focus({preventScroll:true});
  paint();dialog.showModal();
 }
+const tradingKey=BASE_KEY+':trading-products';
+const tradingProducts=[
+ {id:'gold',name:'순금 거래',reward:'용문폐',icon:'MTL_GOLD3'},
+ {id:'originium',name:'오리지늄 거래',reward:'합성옥',icon:'MTL_DIAMOND_SHD'}
+];
+function readTradingProducts(){
+ try{const value=JSON.parse(localStorage.getItem(tradingKey)||'{}');return value&&typeof value==='object'&&!Array.isArray(value)?value:{};}catch{return {};}
+}
+function updateTradingCard(card,slotId,name){
+ const product=tradingProducts.find(p=>p.id===readTradingProducts()[slotId]);
+ card.dataset.product=product?.id??'';
+ card.title=product?`${name} · ${product.name} (${product.reward})`:name+' 거래 방식 선택';
+}
+function openTradingDialog(slotId,name,card){
+ const dialog=document.getElementById('tradingDialog');if(dialog.open)return;
+ dialog.querySelector('h2').textContent=name+' 거래 방식';
+ const selected=readTradingProducts()[slotId];
+ const choices=dialog.querySelector('.manufacture-choices'),feedback=dialog.querySelector('.manufacture-feedback');
+ choices.replaceChildren();feedback.textContent='';
+ for(const product of tradingProducts){
+  const button=document.createElement('button');button.type='button';button.className='manufacture-recipe';
+  button.setAttribute('aria-pressed',String(selected===product.id));
+  const details=document.createElement('span');details.className='recipe-label';
+  const title=document.createElement('span');title.textContent=product.name;
+  const reward=document.createElement('small');reward.textContent=product.reward;details.append(title,reward);
+  button.append(manufactureImage(product.icon),details);
+  button.addEventListener('click',()=>{
+   const products=readTradingProducts();products[slotId]=product.id;
+   try{
+    localStorage.setItem(tradingKey,JSON.stringify(products));updateTradingCard(card,slotId,name);
+    status.textContent=`${name} 거래 방식: ${product.name} (${product.reward})`;dialog.close();
+   }catch{feedback.textContent='저장하지 못했습니다. 브라우저의 저장 공간을 확인해 주세요.';}
+  });choices.append(button);
+ }
+ dialog.onclose=()=>card.isConnected&&card.focus({preventScroll:true});
+ dialog.showModal();
+}
 function room(slotId,type,name,saved){
  const card=document.createElement('article');card.className=`room room-${FACILITIES[type].css}`;card.setAttribute('aria-label',name);let level=saved?.level??0,count=saved?.count??0;
  if(!level){card.classList.add('room-empty');card.setAttribute('aria-hidden','true');return card;}
@@ -106,10 +143,12 @@ function room(slotId,type,name,saved){
  }
  function update(){settings.rooms[slotId]={type,level,count,operators:[]};save();}
  levelInput.addEventListener('change',()=>{level=Number(levelInput.value);renderCount();update();});countInput.addEventListener('change',()=>{count=Number(countInput.value);renderCount();update();});renderCount();decorateRoom(card,type);
- if(type==='MANUFACTURE'){
+ if(type==='MANUFACTURE'||type==='TRADING'){
   card.tabIndex=0;card.setAttribute('role','button');card.setAttribute('aria-haspopup','dialog');
-  card.addEventListener('click',event=>{if(event.detail&&panMoved)return;openManufactureDialog(slotId,name,card);});
-  card.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();openManufactureDialog(slotId,name,card);}});
+  const open=()=>type==='TRADING'?openTradingDialog(slotId,name,card):openManufactureDialog(slotId,name,card);
+  if(type==='TRADING')updateTradingCard(card,slotId,name);
+  card.addEventListener('click',event=>{if(event.target.closest('button,a,input,select,label'))return;if(event.detail&&panMoved)return;open();});
+  card.addEventListener('keydown',event=>{if(event.target===card&&(event.key==='Enter'||event.key===' ')){event.preventDefault();open();}});
  }
  return card;
 }
@@ -129,7 +168,7 @@ function privateRoom(slotId,name,saved){
 }
 function render(){const counters={};const groups={production:document.getElementById('productionRooms'),living:document.getElementById('livingRooms'),support:document.getElementById('supportRooms'),private:document.getElementById('privateRooms')};Object.values(groups).forEach(el=>el.replaceChildren());
  for(const [slotId,group,fallback] of BASE_SLOTS){const saved=settings.rooms[slotId],type=saved?.type??fallback;counters[type]=(counters[type]??0)+1;const name=FACILITIES[type].name+(['TRADING','MANUFACTURE','POWER','DORMITORY','PRIVATE'].includes(type)?` ${counters[type]}`:'');groups[group].append(type==='PRIVATE'?privateRoom(slotId,name,saved):room(slotId,type,name,saved));}statusText();updateCirculation();updateElevatorLinks();requestAnimationFrame(updateControlHatching);requestAnimationFrame(updateGridParallax);}
-load();render();window.addEventListener('storage',e=>{if(e.key===BASE_KEY||e.key===null){load();render();}});window.addEventListener('pageshow',()=>{load();render();});
+load();render();window.addEventListener('storage',e=>{if(e.key===BASE_KEY||e.key===tradingKey||e.key===null){load();render();}});window.addEventListener('pageshow',()=>{load();render();});
 
 const editButton=document.getElementById('editFacilities');editButton.addEventListener('click',()=>{const editing=editButton.getAttribute('aria-pressed')!=='true';editButton.setAttribute('aria-pressed',String(editing));editButton.textContent=editing?'설비 설정 완료':'설비 설정';document.getElementById('baseMap').classList.toggle('editing',editing);});
 
