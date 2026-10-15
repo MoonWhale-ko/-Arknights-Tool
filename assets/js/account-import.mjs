@@ -45,6 +45,15 @@ function api() {
     throw new Error("계정 서버 주소 설정을 확인해 주세요.");
   return u.href.replace(/\/$/, "");
 }
+let baseAdapter = null;
+async function accountAdapter() {
+  if (window.operatorAccount) return window.operatorAccount;
+  if (!baseAdapter) {
+    const {createBaseAccountAdapter} = await import('./base-account-adapter.mjs');
+    baseAdapter = await createBaseAccountAdapter();
+  }
+  return baseAdapter;
+}
 const status = (text) => ($("accountMessage").textContent = text);
 function buttons() {
   const remaining = Math.max(0, Math.ceil((retryUntil - Date.now()) / 1000));
@@ -157,7 +166,7 @@ $("accountForm").onsubmit = (e) => {
     const r = await fetch("data/account-favor.json");
     if (!r.ok) throw new Error("신뢰도 변환표를 불러오지 못했습니다.");
     const favor = await r.json();
-    const adapter = window.operatorAccount;
+    const adapter = await accountAdapter();
     if (!adapter.chars.length)
       throw new Error("오퍼레이터 데이터를 먼저 불러와야 합니다.");
     const names = await fetch("data/account-characters.json", {cache:"no-cache"}).then(r=>r.ok?r.json():null).catch(()=>null);
@@ -175,7 +184,7 @@ $("accountForm").onsubmit = (e) => {
 };
 $("accountApply").onclick = () =>
   action(async () => {
-    const adapter = window.operatorAccount;
+    const adapter = await accountAdapter();
     commitImport(localStorage, adapter.key, preview);
     adapter.replace(preview.state);
     const excluded = preview.skippedOperators.map(o=>`${o.name || "이름 확인 불가"} (${o.id})`).join("\n");
@@ -185,7 +194,7 @@ $("accountApply").onclick = () =>
   });
 $("accountUndo").onclick = () =>
   action(async () => {
-    const adapter = window.operatorAccount;
+    const adapter = await accountAdapter();
     adapter.replace(restoreImport(localStorage, adapter.key));
     preview = null;
     status("가져오기 전 육성 상태와 재료·기반시설을 복원했습니다.");

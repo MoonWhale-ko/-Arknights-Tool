@@ -295,3 +295,25 @@ test('unlinked base starts with only level-one control center; imported rooms st
  const imported={version:2,source:'account',rooms:{slot_34:{type:'CONTROL',level:5,count:0,operators:[]},slot_25:{type:'MANUFACTURE',level:3,count:0,operators:[]}}};
  assert.deepEqual(readBase(imported).rooms,imported.rooms);
 });
+
+import {createBaseAccountAdapter} from '../assets/js/base-account-adapter.mjs';
+test('base-page import adapter preserves latest state and notifies without navigating',async t=>{
+ t.mock.method(globalThis,'fetch',async()=>({ok:true,json:async()=>({operators:chars})}));
+ const storage=new Map();storage.getItem=k=>storage.get(k)??null;
+ let notified=0;// Event dispatch is provided by window in the page.
+ const previousWindow=globalThis.window;globalThis.window={dispatchEvent:e=>{assert.equal(e.type,'account-import-applied');notified++;}};
+ try{
+  const adapter=await createBaseAccountAdapter(storage);assert.ok(adapter.chars.length);assert.equal(adapter.key,'arknightsOperatorProgressV1');
+  storage.set(adapter.key,JSON.stringify({[op.id]:{owned:true,custom:'keep'}}));
+  assert.equal(adapter.state[op.id].custom,'keep');
+  const preview=prepareImport(data,adapter.chars,adapter.state,frames);
+  assert.equal(preview.state[op.id].custom,'keep');adapter.replace(preview.state);assert.equal(notified,1);
+  storage.set(adapter.key,'broken');assert.throws(()=>adapter.state,/육성 정보/);
+ }finally{if(previousWindow===undefined)delete globalThis.window;else globalThis.window=previousWindow;}
+});
+test('base page opens its own complete account dialog',()=>{
+ const html=readFileSync(new URL('../base.html',import.meta.url),'utf8');
+ assert.match(html,/<button[^>]*id="gameImport"/);assert.doesNotMatch(html,/<a[^>]*href="operators.html"[^>]*>게임 계정 가져오기/);
+ for(const id of ['accountDialog','accountForm','accountEmail','accountCode','accountSend','accountFetch','accountApply','accountUndo','accountClose'])assert.ok(html.includes(`id="${id}"`));
+ assert.ok(html.includes('account-import.mjs?v=10'));
+});

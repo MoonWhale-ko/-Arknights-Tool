@@ -363,3 +363,5 @@ function updateControlHatching(){
 new ResizeObserver(updateControlHatching).observe(document.getElementById('baseMap'));
 document.fonts.ready.then(updateControlHatching);
 requestAnimationFrame(updateControlHatching);
+
+window.addEventListener('account-import-applied',()=>{load();render();});
