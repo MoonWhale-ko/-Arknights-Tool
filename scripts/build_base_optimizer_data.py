@@ -6,7 +6,7 @@ def build(building_path, characters_path, output):
     chars=json.loads(pathlib.Path(characters_path).read_text())
     local=json.loads(pathlib.Path('data/operators.json').read_text())['operators']
     groups={o['id']:o.get('sharedGroup',o['id']) for o in local}
-    result={'version':1,'source':{'repository':'ArknightsAssets/ArknightsGamedata','server':'kr','blob':hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()},'characters':{},'buffs':{},'recipes':{},'dorms':b['dormData']['phases'],'factory':b['manufactData'],'control':b['controlData'],'workerCost':b['manufactManpowerCostByNum']}
+    result={'version':1,'source':{'repository':'ArknightsAssets/ArknightsGamedata','server':'kr','blob':hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()},'characters':{},'buffs':{},'recipes':{},'dorms':b['dormData']['phases'],'factory':b['manufactData'],'hire':b['hireData'],'control':b['controlData'],'workerCost':b['manufactManpowerCostByNum']}
     for id,v in b['chars'].items():
         c=chars.get(id)
         if not c:continue

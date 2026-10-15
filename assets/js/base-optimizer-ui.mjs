@@ -1,6 +1,6 @@
 import {offerShare} from './base-share-ui.mjs';
 import {BASE_KEY,readBase} from './base-state.mjs?v=5';
-import {DEFAULT_OPTIONS,normalizeOptions,prepareModel} from './base-optimizer.mjs';
+import {DEFAULT_OPTIONS,normalizeOptions,prepareModel} from './base-optimizer.mjs?v=2';
 const KEY=BASE_KEY+':optimizer-options',PROGRESS_KEY='arknightsOperatorProgressV1';
 const root=document.getElementById('baseOptimizer');
 const $=id=>root.querySelector('#'+id),read=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key)??'null')??fallback;}catch{return fallback;}};
@@ -31,7 +31,7 @@ function chip(op,resident=false,morale){
 function renderResult(result){
  const target=$('optimizerResult');target.replaceChildren();target.hidden=false;
  if(result.status!=='recommended'){target.append(text('p',result.reason));renderWarnings(target,result.warnings);return;}
- const summary=text('div','','optimizer-summary');for(const [i,key] of options().priority.entries())summary.append(text('span',`${i+1}순위 ${categories[key]}: ${result.score[i].toFixed(2)} ${key==='F_EXP'?'경험치':'개'}/시간`));target.append(summary);
+ const summary=text('div','','optimizer-summary');summary.append(text('span',`최우선 사무실: ${result.plan.rooms.some(r=>r.type==='HIRE')?(result.score[0]*100).toFixed(2)+'% (기본 속도 대비)':'미건설'}`));for(const [i,key] of options().priority.entries())summary.append(text('span',`${i+1}순위 ${categories[key]}: ${result.score[i+1].toFixed(2)} ${key==='F_EXP'?'경험치':'개'}/시간`));target.append(summary);
  target.append(text('p',`후보 ${result.tested.toLocaleString()}개 비교 · 10순환 시뮬레이션 · ${result.converged?'최근 컨디션 상태 반복 확인':'반복 상태 미확인'} · 탐색 범위 내 추천`));
  target.append(text('p','전체 조합의 최고 효율을 보장하지 않습니다. 미지원 효과가 있는 인원은 해당 시설의 후보에서 제외했습니다.','optimizer-note'));
  const representatives=result.stages.slice(-options().teams),wrap=text('div','','optimizer-table-wrap'),table=document.createElement('table');const head=document.createElement('thead'),hr=document.createElement('tr');hr.append(text('th','시설'));
@@ -61,11 +61,11 @@ root.addEventListener('change',event=>{
 $('optimizerRun').addEventListener('click',async()=>{
  resetResult();persist();const token=generation;busy(true);message('스킬 데이터와 입력을 확인하고 있습니다.');
  try{
-  if(!data){const response=await fetch('data/base-optimizer.json?v=1');if(!response.ok)throw Error('기반시설 스킬 데이터를 불러오지 못했습니다.');data=await response.json();}
+  if(!data){const response=await fetch('data/base-optimizer.json?v=2');if(!response.ok)throw Error('기반시설 스킬 데이터를 불러오지 못했습니다.');data=await response.json();}
   if(token!==generation)return;
   base=readBase(read(BASE_KEY,null));const progress=read(PROGRESS_KEY,{}),products=read(BASE_KEY+':manufacture-products',{}),config=options();
   const model=prepareModel(data,base,progress,products,config);if(model.missing.length)throw Error(model.missing.join('\n'));
-  worker=new Worker(new URL('./base-optimizer-worker.mjs?v=1',import.meta.url),{type:'module'});
+  worker=new Worker(new URL('./base-optimizer-worker.mjs?v=2',import.meta.url),{type:'module'});
   worker.onmessage=event=>{
    if(token!==generation)return;
    if(event.data.type==='progress')message(`후보 ${event.data.progress.tested.toLocaleString()}개 비교 중…`);

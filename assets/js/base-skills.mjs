@@ -28,6 +28,7 @@ export function compileSkill(buff){
   return rule;
  }
  if(room==='CONTROL'){
+  if(head==='control_hire_spd'){rule.kind='hireThreshold';return rule;}
   if(head==='control_prod_spd'){rule.kind='globalProd';rule.amount=.02;return rule;}
   if(head==='control_token_prod_spd'){rule.kind='botGlobalProd';return rule;}
   if(head==='control_pow_bot'){rule.kind='lancetPower';return rule;}
@@ -43,7 +44,7 @@ export function compileSkill(buff){
   if(head==='control_dorm_bd'){rule.kind='passionDorm';return rule;}
   if(head==='control_prod_bd_spd'){rule.kind='passionProd';rule.amount=number(d,/생산력\s*\+([\d.]+)%/)/100;return rule;}
   if(head==='control_mp_bd&trade'){rule.kind='passionSelf';return rule;}
-  if(head==='control_meeting_spd&bd'||head==='control_hire_spd&bd'){rule.kind='passionTen';return rule;}
+  if(head==='control_meeting_spd&bd'||head==='control_hire_spd&bd'){rule.kind='passionTen';rule.hireBonus=head==='control_hire_spd&bd'?.1:0;return rule;}
   if(head==='control_mp_bd'){rule.kind='factionResource';rule.group=id.endsWith('[000]')?'rainbow':'student';rule.resource=id.endsWith('[000]')?'info':'drink';return rule;}
   if(head==='control_mp_cost&bd1'){rule.kind='lowWorldly';return rule;}
   if(head==='control_mp_cost&bd2'&&id.endsWith('[000]')){rule.kind='highPerception';return rule;}
@@ -63,7 +64,13 @@ export function compileSkill(buff){
   if(head.startsWith('power_rec_')){rule.kind='irrelevant';return rule;}
  }
  if(room==='HIRE'){
-  if(/^(hire_spd|hire_spd_cost|hire_spd&clue|hire_spd_cost&char|hire_spd_cost&clue|hire_spd&clue2|hire_spd_dorm&lv|hire_spd_tag|hire_spd_blitz)$/.test(head))return simple();
+  if(head==='hire_spd_dorm&lv'){simple();rule.kind='hireDorm';rule.amount=id.endsWith('[010]')?.02:.01;return rule;}
+  if(head==='hire_spd_blitz'){simple();rule.kind='hireResources';return rule;}
+  if(head==='hire_spd_tag'){simple();rule.kind='hireElite';return rule;}
+  if(id==='hire_spd_cost&char[001]'){simple();rule.kind='hirePartner';return rule;}
+  // Slot-count-dependent morale and resource effects remain excluded until modeled.
+  if(id==='hire_spd_cost&clue[000]')return rule;
+  if(/^(hire_spd|hire_spd_cost|hire_spd&clue|hire_spd_cost&char|hire_spd_cost&clue|hire_spd&clue2)$/.test(head))return simple();
   return rule;
  }
  if(room==='TRADING'){

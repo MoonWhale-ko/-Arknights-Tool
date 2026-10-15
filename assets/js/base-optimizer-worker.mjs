@@ -1,4 +1,4 @@
-import {prepareModel,optimizeBase} from './base-optimizer.mjs';
+import {prepareModel,optimizeBase} from './base-optimizer.mjs?v=2';
 self.onmessage=async event=>{
  try{
   const {data,base,progress,products,options}=event.data;
