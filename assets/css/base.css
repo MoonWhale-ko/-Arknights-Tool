@@ -563,8 +563,8 @@ body{overflow-x:clip}
  content:"";position:absolute;
  left:calc(50% - var(--unit)*.65 - 4px);
  right:calc(100% - var(--unit)*.0348633 + 4px);
- top:calc(var(--control-hatch-top,calc(var(--unit)*.1102295)) + var(--unit)*.3676025 + var(--unit)*.0507);
+ top:calc(var(--control-five-bottom,calc(var(--unit)*.6)) - var(--unit)*.12325);
  height:calc(var(--unit)*.12325);
- background:transparent url("../icons/control-ver.svg") center top / calc(var(--unit)*.30668) calc(var(--unit)*.12325) no-repeat;
+ background:transparent url("../icons/control-ver.svg") center bottom / contain no-repeat;
  pointer-events:none
 }

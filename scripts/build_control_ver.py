@@ -1,6 +1,6 @@
 """Outline Bender Regular VER and offset its contours inward (fonttools, pyclipper).
 Run: python scripts/build_control_ver.py --inset 10
-The original font advances and layout bounds stay fixed; no font is needed at runtime.
+Original glyph positions are retained; the viewBox is trimmed to the visible outlines.
 """
 from pathlib import Path
 import argparse
@@ -32,7 +32,7 @@ class Contours(BasePen):
 def build(inset):
     font = TTFont(ROOT/'assets/fonts/Bender-Regular.otf')
     glyphs, cmap = font.getGlyphSet(), font.getBestCmap()
-    x, paths = 0, []
+    x, paths, all_points = 0, [], []
     for char in 'VER':
         glyph = glyphs[cmap[ord(char)]]
         pen = Contours(glyphs); glyph.draw(pen)
@@ -44,11 +44,15 @@ def build(inset):
         segments=[]
         for polygon in reduced:
             points=[(px/SCALE+x,710-py/SCALE) for px,py in polygon]
+            all_points.extend(points)
             segments.append('M'+' L'.join(f'{px:.3f},{py:.3f}' for px,py in points)+' Z')
         paths.append('<path d="'+' '.join(segments)+'"/>')
         x += glyph.width + 40
     width = x-40
-    svg=f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} 725" fill="#f5f6f4"><title>VER</title><desc>Bender Regular outlined; contours inset {inset:g} font units.</desc>'+''.join(paths)+'</svg>\n'
+    left,bottom=min(p[0] for p in all_points),min(p[1] for p in all_points)
+    right,top=max(p[0] for p in all_points),max(p[1] for p in all_points)
+    bounds=f'{left:.3f} {bottom:.3f} {right-left:.3f} {top-bottom:.3f}'
+    svg=f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{bounds}" fill="#f5f6f4"><title>VER</title><desc>Bender Regular outlined; contours inset {inset:g} font units.</desc>'+''.join(paths)+'</svg>\n'
     target=ROOT/'assets/icons/control-ver.svg';target.write_text(svg)
     print(f'{target.relative_to(ROOT)}: 3 outlined letters, original layout {width} x 725, inset {inset:g}')
 

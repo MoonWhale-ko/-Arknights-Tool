@@ -317,6 +317,7 @@ function updateControlHatching(){
  const bracketBottom=room.clientHeight*.31+unit*.8575;
  number.style.top=(bracketBottom-baseline-(metrics.actualBoundingBoxDescent??0)-2)+'px';
  number.style.setProperty('--control-hatch-top',(baseline-five.actualBoundingBoxAscent)+'px');
+ number.style.setProperty('--control-five-bottom',(baseline+(five.actualBoundingBoxDescent??0))+'px');
  const style=getComputedStyle(number,'::before'),w=parseFloat(style.width),h=parseFloat(style.height);
  if(!(w>0&&h>0))return;
  const step=(w+h)/10;
