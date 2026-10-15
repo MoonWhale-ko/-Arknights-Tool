@@ -558,12 +558,13 @@ body{overflow-x:clip}
 /* Unbuilt elevator landings retain their floor position without drawing a cell. */
 .base-map .circulation-empty{visibility:hidden!important;opacity:0!important;pointer-events:none!important}
 
-/* Version label centered directly beneath the control-center hatching. */
+/* Bender Regular glyph outlines inset by 10 font units; font-independent VER. */
 .base-map .room-control>.room-heading>.level-text::after{
- content:"VER";position:absolute;
+ content:"";position:absolute;
  left:calc(50% - var(--unit)*.65 - 4px);
  right:calc(100% - var(--unit)*.0348633 + 4px);
- top:calc(var(--control-hatch-top,calc(var(--unit)*.1102295)) + var(--unit)*.3676025 + var(--unit)*.015);
- font-family:"Base Bender Thin",sans-serif;font-size:calc(var(--unit)*.17);font-weight:100;
- line-height:1;letter-spacing:.04em;text-align:center;color:#f5f6f4;text-shadow:none;pointer-events:none
+ top:calc(var(--control-hatch-top,calc(var(--unit)*.1102295)) + var(--unit)*.3676025 + var(--unit)*.0507);
+ height:calc(var(--unit)*.12325);
+ background:transparent url("../icons/control-ver.svg") center top / calc(var(--unit)*.30668) calc(var(--unit)*.12325) no-repeat;
+ pointer-events:none
 }
