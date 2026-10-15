@@ -59,5 +59,22 @@ vm.runInContext(source,context);
  storage.arknightsOperatorProgressV1='invalid JSON';assert.doesNotThrow(()=>choose(['로봇']));
  for(let h=1;h<=9;h++){times[h-1].onclick();const rs=JSON.parse(vm.runInContext('JSON.stringify([...new Set(operators.filter(o=>eligible(o,["근거리"])).map(o=>o.rarity))].sort())',context));assert.deepEqual(rs,h<4?[1,2,3,4]:h<8?[2,3,4,5]:[3,4,5]);assert.equal(JSON.parse(storage.akRecruitSettings).hours,h);assert.equal(times.filter(t=>t.attrs['aria-pressed']==='true').length,1);assert.match(choose(['고급 특별 채용']),/최저 6★/);assert.match(choose(['특별 채용']),/최저 5★/)}
  ids.get('reset').onclick();assert.equal(JSON.parse(storage.akRecruitSettings).hours,9);assert.equal(storage.arknightsOperatorProgressV1,'invalid JSON');
+ // Display choice changes only presentation, persists, and never touches ownership.
+ const current=choose(['고급 특별 채용']);
+ assert.match(current,/charportraits\/[^" ]+_1\.png/);
+ const originalCount=ids.get('count').textContent;
+ ids.get('imageMode').value='portrait';ids.get('imageMode').onchange();
+ assert.match(ids.get('results').innerHTML,/charavatars\/[^" ]+\.png/);
+ assert.ok(!ids.get('results').innerHTML.includes('charportraits/'));
+ assert.equal(JSON.parse(storage.akRecruitSettings).imageMode,'portrait');
+ ids.get('imageMode').value='none';ids.get('imageMode').onchange();
+ assert.ok(!ids.get('results').innerHTML.includes('<img'));
+ assert.match(ids.get('results').innerHTML,/나이팅게일/);
+ assert.equal(ids.get('count').textContent,originalCount);
+ assert.equal(JSON.parse(storage.akRecruitSettings).imageMode,'none');
+ ids.get('reset').onclick();
+ assert.equal(ids.get('imageMode').value,'current');
+ assert.match(ids.get('results').innerHTML,/charportraits\//);
+ assert.equal(storage.arknightsOperatorProgressV1,'invalid JSON');
  console.log('Recruitment checks passed: actual IDs, ownership glow, rarity rows, 6-star calculation, five-tag limit, reset, settings, storage refresh and malformed storage.');
 })().catch(e=>{console.error(e);process.exitCode=1});
