@@ -14,8 +14,8 @@ jobs:
     timeout-minutes: 20
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.BASE_SHARE_CLOUDFLARE_TOKEN }}
-      CF_ACCOUNT_ID: ${{ secrets.BASE_SHARE_ACCOUNT_ID }}
-      CF_DATABASE_ID: ${{ secrets.BASE_SHARE_DATABASE_ID }}
+      CF_ACCOUNT_ID: '07837cee2afb94e5fd8a3b44486e1bc7'
+      CF_DATABASE_ID: 'ad8da28d-4b2c-44e3-a810-ffc08bf103e9'
     steps:
       - uses: actions/checkout@v6
       - name: Check connection
