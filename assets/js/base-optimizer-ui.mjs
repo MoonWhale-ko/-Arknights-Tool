@@ -1,3 +1,4 @@
+import {offerShare} from './base-share-ui.mjs';
 import {BASE_KEY,readBase} from './base-state.mjs?v=4';
 import {DEFAULT_OPTIONS,normalizeOptions,prepareModel} from './base-optimizer.mjs';
 const KEY=BASE_KEY+':optimizer-options',PROGRESS_KEY='arknightsOperatorProgressV1';
@@ -68,7 +69,7 @@ $('optimizerRun').addEventListener('click',async()=>{
   worker.onmessage=event=>{
    if(token!==generation)return;
    if(event.data.type==='progress')message(`후보 ${event.data.progress.tested.toLocaleString()}개 비교 중…`);
-   else{busy(false);worker?.terminate();worker=null;if(event.data.type==='error')message(event.data.message,true);else{message('계산을 완료했습니다. 추천 결과와 지원 범위를 확인해 주세요.');renderResult(event.data.result);}}
+   else{busy(false);worker?.terminate();worker=null;if(event.data.type==='error')message(event.data.message,true);else{message('계산을 완료했습니다. 추천 결과와 지원 범위를 확인해 주세요.');renderResult(event.data.result);offerShare($('optimizerResult'),{data,base,progress,products,options:config},event.data.result);}}
   };
   worker.onerror=()=>{if(token!==generation)return;busy(false);worker?.terminate();worker=null;message('계산 도중 오류가 발생했습니다. 페이지를 새로고침한 뒤 다시 시도해 주세요.',true);};
   worker.postMessage({data,base,progress,products,options:config});

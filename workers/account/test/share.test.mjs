@@ -1,0 +1,27 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {validateSubmission,makeSubmission} from '../../../assets/js/base-share.mjs';
+import worker from '../src/index.mjs';
+const fixture=()=>({version:1,engine:'base-v1',source:'a'.repeat(40),base:{rooms:{room1:{type:'MANUFACTURE',level:1}}},progress:{char_1:{owned:true,elite:0,level:1}},products:{room1:'4'},options:{teams:2,rotation:'12h',extraActions:false,priority:['F_GOLD','F_EXP','F_DIAMOND'],ambience:{}},plan:{rooms:['room1'],teams:[[['char_1']],[[]]],residents:[],support:[]}});
+const req=(p)=>new Request('https://example.com/optimizer-submissions',{method:'POST',headers:{Origin:'https://moonwhale-ko.github.io','Content-Type':'application/json'},body:JSON.stringify(p)});
+const env=()=>({ALLOWED_ORIGINS:'https://moonwhale-ko.github.io',IP_LIMIT:{limit:async()=>({success:true})}});
+test('rejects extra private fields, invalid refs, priority and bounds',()=>{for(const mutate of [p=>p.email='private@example.com',p=>p.progress.char_1.uid='secret',p=>p.plan.teams[0][0][0]='unknown',p=>p.options.priority=['F_GOLD'],p=>p.progress.char_1.level=999]){const p=fixture();mutate(p);assert.throws(()=>validateSubmission(p));}assert.equal(validateSubmission(fixture()).version,1);});
+test('builder strips account identifiers and uses stable operator IDs',()=>{const p=fixture(),data={source:{blob:p.source},characters:{char_1:{}}};const progress={char_1:{...p.progress.char_1,uid:'secret',email:'secret'}};const r={pool:[{id:'char_1'}],plan:{rooms:[{id:'room1'}],teams:[[[0]],[[]]],residents:[],support:[]}};const built=makeSubmission(data,{...p.base,uid:'secret'},progress,p.products,p.options,r);assert.deepEqual(built,p);assert.ok(!JSON.stringify(built).includes('secret'));});
+test('unconfigured storage fails without pretending submission succeeded',async()=>{const r=await worker.fetch(req(fixture()),env());assert.equal(r.status,503);});
+test('accepted payload stored pending, no supplied score trusted',async()=>{let bound;const e={...env(),OPTIMIZER_DB:{prepare:()=>({bind:(...args)=>{bound=args;return {run:async()=>({success:true})};}})}};const r=await worker.fetch(req(fixture()),e);assert.equal(r.status,202);assert.equal((await r.json()).status,'pending-validation');assert.deepEqual(JSON.parse(bound[1]),fixture());});
+test('rate limited and oversized requests never reach storage',async()=>{const e={...env(),OPTIMIZER_DB:{prepare:()=>{throw Error('unexpected');}}};e.IP_LIMIT.limit=async()=>({success:false});assert.equal((await worker.fetch(req(fixture()),e)).status,429);e.IP_LIMIT.limit=async()=>({success:true});assert.equal((await worker.fetch(req({x:'x'.repeat(100001)}),e)).status,413);});
+import fs from 'node:fs';
+import {decodePlan,conditionKey} from '../../../assets/js/base-share.mjs';
+import {prepareModel,simulatePlan} from '../../../assets/js/base-optimizer.mjs';
+test('shared plan replays with reordered pool for offline analysis',async()=>{
+ const data=JSON.parse(fs.readFileSync(new URL('../../../data/base-optimizer.json',import.meta.url)));
+ const base={rooms:{slot_25:{type:'MANUFACTURE',level:1},slot_28:{type:'DORMITORY',level:5,ambience:5000}}};
+ const progress={char_503_rang:{owned:true,elite:0,level:1},char_120_hibisc:{owned:true,elite:0,level:1}};
+ const options={teams:2,rotation:'12h',extraActions:false,priority:['F_GOLD','F_EXP','F_DIAMOND'],ambience:{}},products={slot_25:'4'};
+ const model=prepareModel(data,base,progress,products,options);
+ const result={pool:model.pool,plan:{rooms:model.rooms.filter(r=>r.type!=='DORMITORY'),teams:[[[0]],[[1]]],residents:[],support:[]}};
+ const payload=makeSubmission(data,base,progress,products,options,result);
+ const reordered=prepareModel(data,base,Object.fromEntries(Object.entries(progress).reverse()),products,options),plan=decodePlan(reordered,payload.plan);
+ assert.equal(reordered.pool[plan.teams[0][0][0]].id,'char_503_rang');
+ assert.equal(simulatePlan(reordered,plan,{cycles:10}).valid,true);
+ assert.equal(conditionKey(payload),conditionKey({...payload,progress:Object.fromEntries(Object.entries(payload.progress).reverse())}));
+});

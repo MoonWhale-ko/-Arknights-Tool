@@ -1,3 +1,4 @@
+import { acceptSubmission } from "./share.mjs";
 import { AccountError, sendCode, getAccount, probeSdk } from "./game.mjs";
 async function readBody(request) {
   if (
@@ -59,7 +60,7 @@ export default {
     if (!origin || !allowed.includes(origin))
       return reply({ ok: false, error: "origin-denied" }, 403);
     const path = new URL(request.url).pathname;
-    if (!["/health", "/send-code", "/login"].includes(path))
+    if (!["/health", "/send-code", "/login", "/optimizer-submissions"].includes(path))
       return reply({ ok: false, error: "not-found" }, 404);
     if (request.method === "OPTIONS")
       return new Response(null, { status: 204, headers: cors });
@@ -77,11 +78,13 @@ export default {
         version: 4,
         buildingSupported: true,
         privateRoomsSupported: true,
+        optimizerSharingSupported: Boolean(env.OPTIMIZER_DB),
         ...(sdk ? { sdk } : {}),
       });
     }
     if (request.method !== "POST" || path === "/health")
       return reply({ ok: false, error: "method-not-allowed" }, 405);
+    if (path === "/optimizer-submissions") return acceptSubmission(request, env, reply);
     try {
       const body = await readBody(request),
         email = String(body?.email || "").trim();

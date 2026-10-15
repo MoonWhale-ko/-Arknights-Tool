@@ -83,3 +83,29 @@ Cloudflare 공식 문서:
 ## 통로·엘리베이터 표시
 
 계정 조회 응답은 기반시설 24칸과 별도로 통로 11칸·엘리베이터 16칸의 건설 여부를 포함합니다. 한국 서버 배치 슬롯 번호를 사용하며, roomId가 CORRIDOR/ELEVATOR이고 level이 1인 칸만 표시합니다. 미청소·미건설 칸은 비워 두고 엘리베이터 연결선도 실제 표시된 이웃에만 연결합니다. 이전 저장 결과에는 이 정보가 없으므로 업데이트 배포 후 계정을 다시 조회하고 적용해야 합니다. 사이트와 Workers를 함께 업데이트해야 하며 GitHub 연결된 Workers Builds의 배포 완료를 확인합니다.
+
+## 계산 결과 공유 → GitHub 저장 (추가 설정)
+
+계산마다 사용자가 동의하면 `/optimizer-submissions`로 최소 계산 조건과 배치를 접수합니다.
+로그인·UID·이메일은 제출하지 않습니다. 최종 검증 결과는 공개 저장소의
+검토 브랜치의 `research/base-community.json`에 저장하며, 사용자가 요청할 때 계산 로직 개선에만 사용합니다.
+브라우저 계산기는 공유 결과를 내려받거나 추천 배치로 재사용하지 않습니다.
+현재 엔진의 미지원 스킬과 10순환 검증 한계는 그대로입니다. 최고 효율 인증이 아닙니다.
+
+1. Cloudflare D1에서 `arknights-base-sharing` 데이터베이스를 생성합니다.
+2. 해당 D1 콘솔에서 `workers/account/migrations/0001_optimizer.sql`을 실행합니다.
+3. `workers/account/wrangler.jsonc`에 다음 최상위 설정을 추가하고 실제 UUID를 넣습니다.
+   `"d1_databases": [{"binding":"OPTIMIZER_DB","database_name":"arknights-base-sharing","database_id":"실제 데이터베이스 UUID"}]`
+   GitHub 연결 Worker를 다시 배포합니다. DB 미연결 시 기존 계정 가져오기는 계속 동작하고 공유만 503으로 거절합니다.
+4. GitHub 저장소 Settings → Secrets and variables → Actions에 다음을 등록합니다.
+   - `BASE_SHARE_ACCOUNT_ID`: Cloudflare 계정 ID
+   - `BASE_SHARE_DATABASE_ID`: D1 UUID
+   - `BASE_SHARE_CLOUDFLARE_TOKEN`: 해당 계정의 D1 읽기 권한을 가진 API 토큰
+   비밀 토큰은 채팅·코드에 붙이지 않습니다.
+5. Actions의 `Collect validated base recommendations`를 한 번 실행합니다.
+   이후 6시간마다 최근 최대 1,000건을 가져와 재계산하고 같은 조건에서 더 좋은 결과만 `community/base-results` 검토 브랜치에 커밋합니다. 정식 배포는 하지 않습니다.
+   비정상/다른 데이터 버전/운영 불가능한 결과는 제외합니다. 접수 원본은 D1에 남고,
+   공개 JSON은 검증에 통과한 조건과 배치만 포함합니다. 원본 보관 기간은 운영자가 별도로 관리합니다.
+
+현재 수집은 최근 1,000건 제한입니다. 그보다 제출량이 많아지면 처리 커서 방식으로 확장해야 합니다.
+공유 결과는 연구용 검토 브랜치에만 보관합니다. 사용자 요청에 따른 분석 후 로직 수정만 정식 반영합니다.
