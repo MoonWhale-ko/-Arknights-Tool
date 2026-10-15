@@ -1,5 +1,5 @@
 import {offerShare} from './base-share-ui.mjs';
-import {BASE_KEY,readBase} from './base-state.mjs?v=4';
+import {BASE_KEY,readBase} from './base-state.mjs?v=5';
 import {DEFAULT_OPTIONS,normalizeOptions,prepareModel} from './base-optimizer.mjs';
 const KEY=BASE_KEY+':optimizer-options',PROGRESS_KEY='arknightsOperatorProgressV1';
 const root=document.getElementById('baseOptimizer');

@@ -1,4 +1,4 @@
-import {BASE_KEY,BASE_SLOTS,FACILITIES,capacity,readBase,CIRCULATION_SLOTS,circulationBuilt} from './base-state.mjs?v=4';
+import {BASE_KEY,BASE_SLOTS,FACILITIES,capacity,readBase,CIRCULATION_SLOTS,circulationBuilt} from './base-state.mjs?v=5';
 let characterNames={};
 fetch('data/account-characters.json').then(r=>r.ok?r.json():null).then(data=>{characterNames=data?.characters??{};render();}).catch(()=>{});
 const status=document.getElementById('baseStatus');let settings;

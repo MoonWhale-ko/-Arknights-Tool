@@ -286,3 +286,12 @@ test('uncleared and cleaned-but-unbuilt facility slots remain empty after accoun
   assert.equal(card.innerHTML,undefined);
  }
 });
+
+test('unlinked base starts with only level-one control center; imported rooms stay intact',()=>{
+ for(const raw of [null,undefined,{}]){
+  const base=readBase(raw);
+  assert.deepEqual(Object.entries(base.rooms).filter(([,r])=>r.level>0).map(([id,r])=>[id,r.type,r.level,r.count]),[['slot_34','CONTROL',1,0]]);
+ }
+ const imported={version:2,source:'account',rooms:{slot_34:{type:'CONTROL',level:5,count:0,operators:[]},slot_25:{type:'MANUFACTURE',level:3,count:0,operators:[]}}};
+ assert.deepEqual(readBase(imported).rooms,imported.rooms);
+});
