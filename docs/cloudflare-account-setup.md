@@ -94,12 +94,10 @@ Cloudflare 공식 문서:
 
 1. Cloudflare D1에서 `arknights-base-sharing` 데이터베이스를 생성합니다.
 2. 해당 D1 콘솔에서 `workers/account/migrations/0001_optimizer.sql`을 실행합니다.
-3. `workers/account/wrangler.jsonc`에 다음 최상위 설정을 추가하고 실제 UUID를 넣습니다.
-   `"d1_databases": [{"binding":"OPTIMIZER_DB","database_name":"arknights-base-sharing","database_id":"실제 데이터베이스 UUID"}]`
+3. `workers/account/wrangler.jsonc`의 계정·D1 바인딩은 설정되어 있습니다.
    GitHub 연결 Worker를 다시 배포합니다. DB 미연결 시 기존 계정 가져오기는 계속 동작하고 공유만 503으로 거절합니다.
 4. GitHub 저장소 Settings → Secrets and variables → Actions에 다음을 등록합니다.
-   - `BASE_SHARE_ACCOUNT_ID`: Cloudflare 계정 ID
-   - `BASE_SHARE_DATABASE_ID`: D1 UUID
+   계정 ID와 D1 UUID는 워크플로에 설정되어 있으므로 Secret으로 등록하지 않습니다.
    - `BASE_SHARE_CLOUDFLARE_TOKEN`: 해당 계정의 D1 읽기 권한을 가진 API 토큰
    비밀 토큰은 채팅·코드에 붙이지 않습니다.
 5. Actions의 `Collect validated base recommendations`를 한 번 실행합니다.

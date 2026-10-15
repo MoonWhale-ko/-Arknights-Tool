@@ -1,0 +1,32 @@
+name: Verify deployed base sharing
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'workers/account/**'
+      - 'scripts/check_base_sharing.mjs'
+      - '.github/workflows/base-sharing-live.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - name: Submit synthetic public test case
+        run: node scripts/check_base_sharing.mjs
+      - name: Confirm accepted row exists in D1
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.BASE_SHARE_CLOUDFLARE_TOKEN }}
+        run: |
+          python3 - <<'PY'
+          import json, os, pathlib, urllib.request
+          row_id=pathlib.Path('/tmp/base-sharing-smoke-id').read_text().strip()
+          url='https://api.cloudflare.com/client/v4/accounts/07837cee2afb94e5fd8a3b44486e1bc7/d1/database/ad8da28d-4b2c-44e3-a810-ffc08bf103e9/query'
+          request=urllib.request.Request(url,data=json.dumps({'sql':'SELECT COUNT(*) AS total FROM optimizer_submissions WHERE id = ?', 'params':[row_id]}).encode(),headers={'Authorization':'Bearer '+os.environ['CLOUDFLARE_API_TOKEN'],'Content-Type':'application/json'})
+          with urllib.request.urlopen(request,timeout=30) as response: body=json.load(response)
+          if not body.get('success') or body['result'][0]['results'][0]['total']!=1: raise SystemExit('Submission missing from D1')
+          print('Verified: accepted synthetic submission is stored exactly once in D1')
+          PY
