@@ -563,7 +563,7 @@ body{overflow-x:clip}
  content:"";position:absolute;
  left:calc(50% - var(--unit)*.65 - 4px);
  right:calc(100% - var(--unit)*.0348633 + 4px);
- top:calc(var(--control-five-bottom,calc(var(--unit)*.6)) - var(--unit)*.12325);
+ top:calc(var(--control-five-bottom,calc(var(--unit)*.6)) - var(--unit)*.12325 + 2px);
  height:calc(var(--unit)*.12325);
  background:transparent url("../icons/control-ver.svg") center bottom / contain no-repeat;
  pointer-events:none
