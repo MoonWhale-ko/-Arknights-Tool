@@ -1,9 +1,10 @@
-import {compileSkill,unlockSkills,hasGroup} from './base-skills.mjs?v=2';
+import {compileSkill,unlockSkills,hasGroup} from './base-skills.mjs?v=3';
 const EPS=1e-8;
-export const DEFAULT_OPTIONS={teams:2,rotation:'first',extraActions:false,priority:['F_GOLD','F_EXP','F_DIAMOND'],ambience:{}};
+export const DEFAULT_OPTIONS={teams:2,rotation:'first',extraActions:false,priority:['F_GOLD','F_EXP','F_DIAMOND'],ambience:{},missingClues:[1,2,3,4,5,6,7]};
 export function normalizeOptions(value={}){
  const priority=Array.isArray(value.priority)?[...new Set(value.priority)].filter(x=>DEFAULT_OPTIONS.priority.includes(x)):[];
- return {teams:value.teams===3?3:2,rotation:['first','all','12h'].includes(value.rotation)?value.rotation:'first',extraActions:value.extraActions===true,priority:[...priority,...DEFAULT_OPTIONS.priority.filter(x=>!priority.includes(x))],ambience:value.ambience&&typeof value.ambience==='object'?value.ambience:{}};
+ const missingClues=Array.isArray(value.missingClues)?[...new Set(value.missingClues)].filter(n=>Number.isInteger(n)&&n>=1&&n<=7).sort((a,b)=>a-b):[1,2,3,4,5,6,7];
+ return {missingClues,teams:value.teams===3?3:2,rotation:['first','all','12h'].includes(value.rotation)?value.rotation:'first',extraActions:value.extraActions===true,priority:[...priority,...DEFAULT_OPTIONS.priority.filter(x=>!priority.includes(x))],ambience:value.ambience&&typeof value.ambience==='object'?value.ambience:{}};
 }
 export function compareScores(a,b){for(let i=0;i<Math.max(a.length,b.length);i++){const delta=(a[i]??0)-(b[i]??0);if(Math.abs(delta)>EPS)return Math.sign(delta);}return 0;}
 export function prepareModel(data,base,progress,products,rawOptions){
@@ -15,15 +16,15 @@ export function prepareModel(data,base,progress,products,rawOptions){
   if(identities.has(def.identity))continue;
   identities.add(def.identity);
   const skills=unlockSkills(def,{elite:Number(state.elite)||0,level:Number(state.level)||1},buffs);
-  const op={...def,skills,index:pool.length};pool.push(op);
+  const op={...def,elite:Math.max(0,Math.min(2,Number(state.elite)||0)),skills,index:pool.length};pool.push(op);
   for(const skill of skills.filter(s=>s.kind==='unsupported'))warnings.push({operator:def.name,room:skill.room,skill:skill.name,description:skill.description,reason:'해당 효과가 있는 시설의 추천에서 제외'});
  }
  const counters={},rooms=[],missing=[];
  for(const [id,raw] of Object.entries(base.rooms??{})){
   if(!(raw.level>0))continue;
-  const type=raw.type;if(!['MANUFACTURE','POWER','TRADING','HIRE','CONTROL','DORMITORY'].includes(type))continue;
+  const type=raw.type;if(!['MANUFACTURE','POWER','TRADING','HIRE','CONTROL','DORMITORY','MEETING'].includes(type))continue;
   counters[type]=(counters[type]??0)+1;
-  const capacity=type==='DORMITORY'?5:type==='CONTROL'?raw.level:type==='HIRE'||type==='POWER'?1:Math.min(3,raw.level);
+  const capacity=type==='DORMITORY'?5:type==='CONTROL'?raw.level:type==='MEETING'?2:type==='HIRE'||type==='POWER'?1:Math.min(3,raw.level);
   const room={id,type,level:raw.level,capacity,number:counters[type]};
   if(type==='MANUFACTURE'){
    room.recipe=data.recipes[String(products?.[id])];
@@ -51,7 +52,7 @@ const matches=(skill,recipe)=>!skill.targets.length||skill.targets.includes(reci
 const countGroup=(ops,g)=>ops.filter(op=>hasGroup(op,g)).length;
 function contextFor(model,placements,morale){
  const all=placements.flatMap(p=>p.ops),byType=t=>placements.filter(p=>p.room.type===t),control=byType('CONTROL').flatMap(p=>p.ops),powerOps=byType('POWER').flatMap(p=>p.ops),dorms=byType('DORMITORY');
- const ctx={all,control,powerOps,dorms,power:model.rooms.filter(r=>r.type==='POWER').length,trading:model.rooms.filter(r=>r.type==='TRADING').length,dormLevels:dorms.reduce((n,p)=>n+p.room.level,0),training:Math.max(0,...Object.values(model.base.rooms??{}).filter(r=>r.type==='TRAINING').map(r=>r.level)),globalProd:0,hireBonus:0,hireThreshold:false,controlRecovery:0,controlPenalty:0,dormBonus:0,resources:{worldly:0,perception:0,thought:0,witchcraft:0,robots:0,dishes:0,info:0,drink:0,passion:0,dream:0,measure:0},individualRecovery:{},extraFactory:[],globalCount:g=>countGroup(all,g)};
+ const ctx={all,control,powerOps,dorms,power:model.rooms.filter(r=>r.type==='POWER').length,trading:model.rooms.filter(r=>r.type==='TRADING').length,dormLevels:dorms.reduce((n,p)=>n+p.room.level,0),training:Math.max(0,...Object.values(model.base.rooms??{}).filter(r=>r.type==='TRAINING').map(r=>r.level)),globalProd:0,hireBonus:0,hireThreshold:false,meetingBonus:0,meetingClues:[],meetingMinos:0,meetingInes:0,meetingStudents:0,controlRecovery:0,controlPenalty:0,dormBonus:0,resources:{worldly:0,perception:0,thought:0,witchcraft:0,robots:0,dishes:0,info:0,drink:0,passion:0,dream:0,measure:0},individualRecovery:{},extraFactory:[],globalCount:g=>countGroup(all,g)};
  ctx.bots=powerOps.filter(o=>o.maxMorale===24&&/^(Lancet-2|Castle-3|THRM-EX|Friston-3|저스티스 나이트|PhonoR-0|CONFESS-47)$/.test(o.name)).length;
  const activeControl=control.filter(o=>isActive(o,morale));
  for(const op of activeControl)for(const s of roomSkills(op,'CONTROL')){
@@ -67,7 +68,12 @@ function contextFor(model,placements,morale){
    case 'globalDorm':ctx.dormBonus=Math.max(ctx.dormBonus,s.amount);break;
    case 'passionDorm':ctx.resources.passion+=dorms.reduce((n,p)=>n+p.ops.length,0);break;
    case 'passionSelf':ctx.resources.passion+=20;break;
-   case 'passionTen':ctx.resources.passion+=10;ctx.hireBonus=Math.max(ctx.hireBonus,s.hireBonus??0);break;
+   case 'meetingGlobal':ctx.meetingBonus=Math.max(ctx.meetingBonus,s.amount);break;
+   case 'meetingControlClue':ctx.meetingClues.push(s.clue);break;
+   case 'meetingInes':ctx.meetingInes=.05;break;
+   case 'meetingMinos':ctx.meetingMinos=Math.max(ctx.meetingMinos,Math.min(5,ctx.globalCount('minos'))*s.amount);break;
+   case 'meetingStudents':ctx.meetingStudents+=.1;break;
+   case 'passionTen':ctx.resources.passion+=10;ctx.meetingBonus=Math.max(ctx.meetingBonus,s.meetingBonus??0);ctx.hireBonus=Math.max(ctx.hireBonus,s.hireBonus??0);break;
    case 'hireThreshold':ctx.hireThreshold=true;break;
    case 'factionResource':ctx.resources[s.resource]+=countGroup(control,s.group);break;
    case 'lowWorldly':ctx.controlRecovery+=.05;if(morale[op.index]<12)ctx.resources.worldly+=15;break;
@@ -95,7 +101,7 @@ function contextFor(model,placements,morale){
  return ctx;
 }
 export function evaluateSnapshot(model,placements,morale,worked){
- const ctx=contextFor(model,placements,morale),rates=new Float64Array(model.pool.length),factories=[],offices=[],details=[];
+ const ctx=contextFor(model,placements,morale),rates=new Float64Array(model.pool.length),factories=[],offices=[],meetings=[],details=[];
  const ccReduction=ctx.control.length*.05;
  for(const p of placements){
   const {room,ops}=p;if(room.type==='DORMITORY')continue;
@@ -105,11 +111,19 @@ export function evaluateSnapshot(model,placements,morale,worked){
   const countSkill=text=>active.flatMap(o=>roomSkills(o,room.type)).filter(s=>text==='표준화'&&skillTransform?/표준화|라인테크|피누스 실베스트리스/.test(s.name):s.name.includes(text)).length;
   for(const op of ops){
    let prod=0,cap=0,drain=1-ccReduction+(['MANUFACTURE','TRADING'].includes(room.type)?(model.data.workerCost[ops.length]??0)/100:0)+allDrain;
+   if(room.type==='CONTROL'&&roomSkills(op,'CONTROL').some(s=>s.kind==='meetingMinos')&&ctx.control.some(o=>o!==op&&hasGroup(o,'sargon')))drain+=.02;
+   if(room.type==='CONTROL'&&roomSkills(op,'CONTROL').some(s=>s.kind==='meetingStudents'))drain+=.5;
    if(room.type==='CONTROL')drain+=ctx.controlPenalty-ctx.controlRecovery-(ctx.individualRecovery[op.index]??0);
    if(isActive(op,morale))for(const s of roomSkills(op,room.type)){
     if(!matches(s,room.recipe)&&room.type==='MANUFACTURE')continue;
     switch(s.kind){
      case 'simple':prod+=s.prod;cap+=s.capacity;drain+=s.drain;break;
+     case 'meetingMissing':case 'meetingOwned':case 'meetingTarget':prod+=s.prod;break;
+     case 'meetingGroup':prod+=s.prod+(active.some(o=>o!==op&&hasGroup(o,s.group))?s.amount:0);drain+=s.drain;break;
+     case 'meetingPartner':prod+=s.prod+(active.some(o=>o.name===s.partner)?s.amount:0);drain+=s.drain;break;
+     case 'meetingDormPartner':if(ctx.dorms.some(p=>p.ops.some(o=>o.name==='피아메타')))prod+=.1;break;
+     case 'meetingSolo':if(ops.length===1){prod+=s.amount;drain+=s.drain;}break;
+     case 'meetingResource':prod+=s.prod+Math.floor(ctx.resources[s.resource]/s.divisor)*s.amount;break;
      case 'hireDorm':prod+=s.prod+ctx.dormLevels*s.amount;drain+=s.drain;break;
      case 'hireResources':prod+=s.prod+(ctx.resources.info+ctx.resources.drink)*.05;drain+=s.drain;break;
      case 'hireElite':prod+=s.prod+Math.min(5,placements.filter(p=>p.ops.some(o=>hasGroup(o,'elite'))).length)*.04;break;
@@ -136,6 +150,20 @@ export function evaluateSnapshot(model,placements,morale,worked){
     }
    }
    caps.set(op.index,cap);prods.set(op.index,prod);rates[op.index]=-drain;
+  }
+  if(room.type==='MEETING'){
+   const passive=ops.reduce((sum,o)=>sum+(model.data.meeting.basicSpeedBuff+({4:.02,5:.04,6:.05}[o.rarity]??0)+(o.elite??0)*.08),0);
+   const external=ctx.meetingBonus+ctx.meetingMinos+(active.some(o=>o.name==='이네스')?ctx.meetingInes:0)+active.filter(o=>hasGroup(o,'student')).length*ctx.meetingStudents;
+   const multiplier=ops.length?Math.max(0,1+([.07,.14,.25][room.level-1]??0)+passive+[...prods.values()].reduce((a,b)=>a+b,0)+external):0;
+   const missing=model.options.missingClues,targets=new Set(ctx.meetingClues.filter(n=>missing.includes(n)));let broad=false,owned=false;
+   for(const o of active)for(const s of roomSkills(o,'MEETING')){
+    if(s.kind==='meetingMissing'||(s.kind==='meetingPartner'&&s.missing))broad=true;
+    if(s.kind==='meetingTarget'&&missing.includes(s.clue))targets.add(s.clue);
+    if(s.kind==='meetingOwned')owned=true;
+   }
+   // Qualitative policy only: unknown probability magnitudes are never invented.
+   const preference=missing.length>0&&missing.length<7?Number(broad||targets.size>0)-Number(owned):0;
+   const meeting={id:room.id,multiplier,preference,targetClues:broad?[...missing]:[...targets]};meetings.push(meeting);details.push(meeting);
   }
   if(room.type==='HIRE'){
    const localBonus=(ops.length?model.data.hire.basicSpeedBuff:0)+[...prods.values()].reduce((a,b)=>a+b,0);
@@ -198,7 +226,7 @@ export function evaluateSnapshot(model,placements,morale,worked){
   const distributed=all.find(o=>roomSkills(o,'DORMITORY').some(s=>s.kind==='distributedRecovery'));
   if(distributed){const targets=all.filter(o=>o!==distributed&&morale[o.index]<o.maxMorale-EPS&&!roomSkills(o,'DORMITORY').some(s=>s.kind==='fixedRecovery'));for(const o of targets)rates[o.index]+=.8/Math.max(1,targets.length);}
  }
- return {rates,factories,offices,details,context:ctx};
+ return {rates,factories,offices,meetings,details,context:ctx};
 }
 function restPlacements(model,plan,team,morale,support,previous){
  const work=plan.teams[team].map((indices,i)=>({room:plan.rooms[i],ops:indices.filter(i=>i!==null).map(i=>model.pool[i])}));
@@ -240,11 +268,11 @@ export function validatePlan(model,plan){
 }
 export function simulatePlan(model,plan,{cycles=6,record=false}={}){
  validatePlan(model,plan);
- const n=model.pool.length,morale=Float64Array.from(model.pool,o=>o.maxMorale),worked=new Float64Array(n),inventory=new Map(),totals={HIRE:0,F_GOLD:0,F_EXP:0,F_DIAMOND:0},stageLogs=[],actions=[];
+ const n=model.pool.length,morale=Float64Array.from(model.pool,o=>o.maxMorale),worked=new Float64Array(n),inventory=new Map(),totals={HIRE:0,MEETING_PREFERENCE:0,MEETING:0,F_GOLD:0,F_EXP:0,F_DIAMOND:0},stageLogs=[],actions=[];
  let clock=0,measured=0,valid=true,reason='',residentValid=true,lastAssignment=new Map(),previousBoundary=null,converged=false;
  const stageCount=cycles*model.options.teams,activeResidents=new Set(plan.residents),warmupStages=model.options.teams*2;
  for(let stage=0;stage<stageCount;stage++){
-  const team=stage%model.options.teams,start=clock,startMorale=[...morale],stageProducts={HIRE:0,F_GOLD:0,F_EXP:0,F_DIAMOND:0},blocked=new Set();
+  const team=stage%model.options.teams,start=clock,startMorale=[...morale],stageProducts={HIRE:0,MEETING_PREFERENCE:0,MEETING:0,F_GOLD:0,F_EXP:0,F_DIAMOND:0},blocked=new Set();
   let placements=restPlacements(model,plan,team,morale,plan.support),stageHours=0,steps=0;
   const workIndices=placements.filter(p=>p.room.type!=='DORMITORY').flatMap(p=>p.ops.map(o=>o.index)),rotating=workIndices.filter(i=>!activeResidents.has(i));
   const assignment=new Map(placements.flatMap(p=>p.ops.map(o=>[o.index,p.room.id])));
@@ -286,6 +314,7 @@ export function simulatePlan(model,plan,{cycles=6,record=false}={}){
     if(state.progress>=f.recipe.seconds-EPS){state.progress=Math.max(0,state.progress-f.recipe.seconds);state.count+=f.recipe.count;const amount=f.recipe.category==='F_EXP'?f.recipe.xp:f.recipe.count;stageProducts[f.recipe.category]+=amount;if(stage>=warmupStages)totals[f.recipe.category]+=amount;}
    }
    const contactWork=dt*snap.offices.reduce((sum,o)=>sum+o.multiplier,0);stageProducts.HIRE+=contactWork;if(stage>=warmupStages)totals.HIRE+=contactWork;
+   for(const key of ['MEETING','MEETING_PREFERENCE']){const amount=dt*snap.meetings.reduce((n,m)=>n+(key==='MEETING'?m.multiplier:m.preference),0);stageProducts[key]+=amount;if(stage>=warmupStages)totals[key]+=amount;}
    for(let i=0;i<n;i++)morale[i]=Math.max(0,Math.min(model.pool[i].maxMorale,morale[i]+snap.rates[i]*dt));
    for(const i of workIndices)worked[i]+=dt;
    clock+=dt;stageHours+=dt;if(stage>=warmupStages)measured+=dt;
@@ -306,7 +335,7 @@ export function simulatePlan(model,plan,{cycles=6,record=false}={}){
    const boundary=[...morale];if(previousBoundary){const diff=Math.max(...boundary.map((v,i)=>Math.abs(v-previousBoundary[i])));converged=diff<1e-5;}previousBoundary=boundary;
   }
  }
- const score=['HIRE',...model.options.priority].map(p=>measured>EPS?totals[p]/measured:0);
+ const score=['HIRE','MEETING_PREFERENCE','MEETING',...model.options.priority].map(p=>measured>EPS?totals[p]/measured:0);
  return {valid,reason,residentValid,converged,score,totals,hours:measured,clock,morale:[...morale],stages:stageLogs,actions,cycles,plan};
 }
 function clonePlan(p){return {...p,teams:p.teams.map(t=>t.map(r=>[...r])),residents:[...p.residents],support:[...p.support]};}
@@ -314,9 +343,12 @@ function desirability(model,op,room){
  if(!model.canPlace(op,room))return -Infinity;
  let value=0;
  for(const s of roomSkills(op,room.type)){
-  if(['simple','hireDorm','hireResources','hireElite','hirePartner'].includes(s.kind))value+=s.prod*100-s.drain*3+Math.max(0,s.capacity)*.15;
+  if(['simple','hireDorm','hireResources','hireElite','hirePartner','meetingTarget','meetingMissing','meetingOwned'].includes(s.kind))value+=s.prod*100-s.drain*3+Math.max(0,s.capacity)*.15;
   else if(s.kind==='irrelevant')value+=0;
   else value+=({ramp:22,automation:22,bubble:15,vermeil:16,globalProd:30,controlRecovery:9,factionRecovery:12,lancetPower:20,botGlobalProd:10,extraPower:10,perception:12,resourceProd:15,pinus:15,tradeCount:22,gummy:20,capacityAutomation:10,reserveA1:12,trainingLevel:30,skillCount:10,powerBots:15,dormLevels:15,partnerRecovery:8}[s.kind]??7);
+  if(room.type==='MEETING'&&model.options.missingClues.length>0&&model.options.missingClues.length<7){if(s.kind==='meetingMissing'||s.kind==='meetingTarget'&&model.options.missingClues.includes(s.clue)||s.kind==='meetingPartner'&&s.missing)value+=100;if(s.kind==='meetingOwned')value-=100;}
+  if(s.kind==='meetingGlobal')value+=s.amount*100;
+  if(s.kind==='meetingControlClue'&&model.options.missingClues.includes(s.clue)&&model.options.missingClues.length<7)value+=50;
   if(s.kind==='hireDorm')value+=model.rooms.filter(r=>r.type==='DORMITORY').reduce((n,r)=>n+r.level,0)*s.amount*100;
   if(room.type==='MANUFACTURE'&&!matches(s,room.recipe))value-=Math.max(0,s.prod*100);
  }
@@ -327,7 +359,7 @@ function makePlan(model,random,seedIndex=0,residents=[]){
  if(control>=0)for(const team of teams)team[control]=[...residents];
  const positions=[];for(let t=0;t<teams.length;t++)for(let r=0;r<rooms.length;r++)for(let seat=teams[t][r].length;seat<rooms[r].capacity;seat++)positions.push({t,r,seat});
  positions.sort((a,b)=>{
-  const priority=r=>r.type==='HIRE'?-1:r.type==='MANUFACTURE'?model.options.priority.indexOf(r.recipe.category):r.type==='CONTROL'?0.5:r.type==='POWER'?3:r.type==='TRADING'?4:5;
+  const priority=r=>r.type==='HIRE'?-2:r.type==='MEETING'?-1:r.type==='MANUFACTURE'?model.options.priority.indexOf(r.recipe.category):r.type==='CONTROL'?0.5:r.type==='POWER'?3:r.type==='TRADING'?4:5;
   return priority(rooms[a.r])-priority(rooms[b.r])||a.seat-b.seat||a.t-b.t;
  });
  for(const p of positions){
@@ -366,7 +398,8 @@ export async function optimizeBase(model,{budgetMs=8000,onProgress=()=>{},isCanc
   for(let t=0;t<next.teams.length;t++)for(let r=0;r<next.rooms.length;r++)for(let s=0;s<next.teams[t][r].length;s++)if(!next.residents.includes(next.teams[t][r][s]))positions.push([t,r,s]);
   if(!positions.length)break;
   const a=positions[Math.floor(random()*positions.length)],get=p=>next.teams[p[0]][p[1]][p[2]],set=(p,v)=>next.teams[p[0]][p[1]][p[2]]=v;
-  if(random()<.65&&positions.length>1){const b=positions[Math.floor(random()*positions.length)],av=get(a),bv=get(b);if(av!==null&&!model.canPlace(model.pool[av],next.rooms[b[1]])||bv!==null&&!model.canPlace(model.pool[bv],next.rooms[a[1]]))continue;set(a,bv);set(b,av);}
+  if(next.rooms[a[1]].type==='MEETING'&&get(a)!==null&&random()<.12)set(a,null);
+  else if(random()<.65&&positions.length>1){const b=positions[Math.floor(random()*positions.length)],av=get(a),bv=get(b);if(av!==null&&!model.canPlace(model.pool[av],next.rooms[b[1]])||bv!==null&&!model.canPlace(model.pool[bv],next.rooms[a[1]]))continue;set(a,bv);set(b,av);}
   else{const used=new Set(next.teams.flat(2).filter(i=>i!==null)),unused=model.pool.filter(o=>!used.has(o.index)&&!next.support.includes(o.index)&&model.canPlace(o,next.rooms[a[1]]));if(!unused.length)continue;set(a,unused[Math.floor(random()*unused.length)].index);}
   const candidate=evaluate(next);
   if(candidate.valid&&(!current.valid||compareScores(candidate.score,current.score)>=0))current=candidate;

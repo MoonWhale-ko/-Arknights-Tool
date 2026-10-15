@@ -5,7 +5,7 @@ import {makeSubmission} from '../assets/js/base-share.mjs';
 const data=JSON.parse(fs.readFileSync(new URL('../data/base-optimizer.json',import.meta.url)));
 const base={rooms:{slot_25:{type:'MANUFACTURE',level:1},slot_28:{type:'DORMITORY',level:5,ambience:5000}}};
 const progress={char_500_noirc:{owned:true,elite:0,level:1},char_122_beagle:{owned:true,elite:0,level:1}};
-const options={teams:2,rotation:'12h',extraActions:false,priority:['F_GOLD','F_EXP','F_DIAMOND'],ambience:{}},products={slot_25:'4'};
+const options={teams:2,rotation:'12h',extraActions:false,priority:['F_GOLD','F_EXP','F_DIAMOND'],ambience:{},missingClues:[1,4,7]},products={slot_25:'4'};
 const model=prepareModel(data,base,progress,products,options),plan={rooms:model.rooms.filter(r=>r.type!=='DORMITORY'),teams:[[[0]],[[1]]],residents:[],support:[]};
 if(!simulatePlan(model,plan,{cycles:10}).valid)throw Error('Synthetic fixture invalid');
 const payload=makeSubmission(data,base,progress,products,options,{pool:model.pool,plan});

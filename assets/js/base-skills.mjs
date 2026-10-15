@@ -28,6 +28,11 @@ export function compileSkill(buff){
   return rule;
  }
  if(room==='CONTROL'){
+  if(head==='control_upMeetingSpeed'){rule.kind='meetingGlobal';rule.amount=number(d,/속도\s*\+([\d.]+)%/)/100;return rule;}
+  if(head==='control_clue_faction'){rule.kind='meetingControlClue';rule.clue=5;return rule;}
+  if(head==='control_meeting&ord'){rule.kind='meetingInes';return rule;}
+  if(head==='control_meeting&mp_cost'){rule.kind='meetingMinos';rule.amount=id.endsWith('[100]')?.05:.04;return rule;}
+  if(head==='control_meeting_bd'){rule.kind='meetingStudents';return rule;}
   if(head==='control_hire_spd'){rule.kind='hireThreshold';return rule;}
   if(head==='control_prod_spd'){rule.kind='globalProd';rule.amount=.02;return rule;}
   if(head==='control_token_prod_spd'){rule.kind='botGlobalProd';return rule;}
@@ -44,7 +49,7 @@ export function compileSkill(buff){
   if(head==='control_dorm_bd'){rule.kind='passionDorm';return rule;}
   if(head==='control_prod_bd_spd'){rule.kind='passionProd';rule.amount=number(d,/생산력\s*\+([\d.]+)%/)/100;return rule;}
   if(head==='control_mp_bd&trade'){rule.kind='passionSelf';return rule;}
-  if(head==='control_meeting_spd&bd'||head==='control_hire_spd&bd'){rule.kind='passionTen';rule.hireBonus=head==='control_hire_spd&bd'?.1:0;return rule;}
+  if(head==='control_meeting_spd&bd'||head==='control_hire_spd&bd'){rule.kind='passionTen';rule.hireBonus=head==='control_hire_spd&bd'?.1:0;rule.meetingBonus=head==='control_meeting_spd&bd'?.05:0;return rule;}
   if(head==='control_mp_bd'){rule.kind='factionResource';rule.group=id.endsWith('[000]')?'rainbow':'student';rule.resource=id.endsWith('[000]')?'info':'drink';return rule;}
   if(head==='control_mp_cost&bd1'){rule.kind='lowWorldly';return rule;}
   if(head==='control_mp_cost&bd2'&&id.endsWith('[000]')){rule.kind='highPerception';return rule;}
@@ -63,13 +68,37 @@ export function compileSkill(buff){
   // Drone effects do not enter the objective; none of these handlers grants a morale bonus.
   if(head.startsWith('power_rec_')){rule.kind='irrelevant';return rule;}
  }
+ if(room==='MEETING'){
+  if(head==='meet_spd'||head==='meet_spd&cost')return simple();
+  if(head==='meet_spd_notOwned'){simple();rule.kind='meetingMissing';return rule;}
+  if(head==='meet_spd_Owned'){simple();rule.kind='meetingOwned';return rule;}
+  if(head==='meet_team'||head==='meet_spd&team'){
+   simple();rule.kind='meetingTarget';
+   rule.clue=[['라인 랩',1],['펭귄 로지스틱스',2],['블랙스틸 월드와이드',3],['우르수스 학생자치단',4],['글래스고',5],['카란 무역회사',6],['로도스 아일랜드',7]].find(([name])=>d.includes(name))?.[1];
+   if(!Number.isInteger(rule.clue)||rule.clue<1||rule.clue>7){if(!d.includes('더 쉽게'))rule.kind='simple';else rule.kind='unsupported';}
+   return rule;
+  }
+  if(head==='meet_team&char')return rule;
+  if(head==='meet_spd&sami'){simple();rule.kind='meetingGroup';rule.group=id.endsWith('[000]')?'sami':'blacksteel';rule.amount=id.endsWith('[000]')?.05:id.endsWith('[100]')?.15:.20;return rule;}
+  if(head==='meet_spd&bd'){simple();rule.kind='meetingPartner';rule.partner=id.endsWith('[100]')?'스즈란':'티폰';rule.amount=id.endsWith('[100]')?.30:.15;rule.missing=id.endsWith('[010]');return rule;}
+  if(head==='meet_spd_ext&P'){rule.kind='meetingDormPartner';return rule;}
+  if(head==='meet_spd_condChar'||head==='meet_spd&cost_condChar'){
+   simple();rule.kind='meetingSolo';rule.amount=number(d,/속도\s*\+?([\d.]+)%/)/100;return rule;
+  }
+  if(head==='meet_spd_hast'){rule.kind='ramp';rule.initial=.2;rule.step=.02;rule.max=.3;return rule;}
+  if(head==='meet_spd_bd'){
+   simple();rule.kind='meetingResource';rule.resource=id.endsWith('[000]')?'info':id.endsWith('[001]')?'dishes':'worldly';rule.amount=id.endsWith('[000]')?.05:id.endsWith('[001]')?.02:.01;rule.divisor=id.endsWith('[002]')?10:1;return rule;
+  }
+  // Exchange state, accumulated clue history and guaranteed-next-clue counters are unmodeled.
+  return rule;
+ }
  if(room==='HIRE'){
   if(head==='hire_spd_dorm&lv'){simple();rule.kind='hireDorm';rule.amount=id.endsWith('[010]')?.02:.01;return rule;}
   if(head==='hire_spd_blitz'){simple();rule.kind='hireResources';return rule;}
   if(head==='hire_spd_tag'){simple();rule.kind='hireElite';return rule;}
   if(id==='hire_spd_cost&char[001]'){simple();rule.kind='hirePartner';return rule;}
   // Slot-count-dependent morale and resource effects remain excluded until modeled.
-  if(id==='hire_spd_cost&clue[000]')return rule;
+  if(id==='hire_spd_cost&clue[000]'||head==='hire_spd&clue'&&d.includes('모집 인원마다')||head==='hire_spd&clue2')return rule;
   if(/^(hire_spd|hire_spd_cost|hire_spd&clue|hire_spd_cost&char|hire_spd_cost&clue|hire_spd&clue2)$/.test(head))return simple();
   return rule;
  }

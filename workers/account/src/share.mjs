@@ -1,4 +1,5 @@
 import {validateSubmission} from '../../../assets/js/base-share.mjs';
+// Optional missingClues (1–7) is validated by the shared schema.
 export async function acceptSubmission(request,env,reply){
  if(!env.OPTIMIZER_DB||!env.IP_LIMIT)return reply({ok:false,error:'sharing-not-configured'},503);
  if(!(await env.IP_LIMIT.limit({key:'share:'+ (request.headers.get('CF-Connecting-IP')||'unknown')})).success)return reply({ok:false,error:'too-many'},429);

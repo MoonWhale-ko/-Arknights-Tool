@@ -1,4 +1,4 @@
-import {makeSubmission} from './base-share.mjs';
+import {makeSubmission} from './base-share.mjs?v=2';
 export function offerShare(target,input,result){
  if(result.status!=='recommended')return;
  const section=document.createElement('section');section.className='optimizer-share';

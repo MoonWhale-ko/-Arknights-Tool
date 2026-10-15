@@ -25,3 +25,7 @@ test('shared plan replays with reordered pool for offline analysis',async()=>{
  assert.equal(simulatePlan(reordered,plan,{cycles:10}).valid,true);
  assert.equal(conditionKey(payload),conditionKey({...payload,progress:Object.fromEntries(Object.entries(payload.progress).reverse())}));
 });
+test('optional missing clue condition is validated without rejecting older submissions',()=>{
+ const p=fixture();p.options.missingClues=[1,4,7];assert.deepEqual(validateSubmission(p).options.missingClues,[1,4,7]);
+ for(const value of [[0],[8],[1,1],['1'],null]){p.options.missingClues=value;assert.throws(()=>validateSubmission(p));}
+});
