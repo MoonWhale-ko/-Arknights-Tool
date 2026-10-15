@@ -1,6 +1,12 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "arknights-account-import",
+  "account_id": "07837cee2afb94e5fd8a3b44486e1bc7",
+  "d1_databases": [{
+    "binding": "OPTIMIZER_DB",
+    "database_name": "arknights-base-sharing",
+    "database_id": "ad8da28d-4b2c-44e3-a810-ffc08bf103e9"
+  }],
   "main": "src/index.mjs",
   "compatibility_date": "2026-10-02",
   "compatibility_flags": ["nodejs_compat"],
