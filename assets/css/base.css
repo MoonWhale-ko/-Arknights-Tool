@@ -557,3 +557,14 @@ body{overflow-x:clip}
 
 /* Unbuilt elevator landings retain their floor position without drawing a cell. */
 .base-map .circulation-empty{visibility:hidden!important;opacity:0!important;pointer-events:none!important}
+
+/* Bender Regular glyph outlines inset by 10 font units; font-independent VER. */
+.base-map .room-control>.room-heading>.level-text::after{
+ content:"";position:absolute;
+ left:calc(50% - var(--unit)*.65 - 4px);
+ right:calc(100% - var(--unit)*.0348633 + 4px);
+ top:calc(var(--control-five-bottom,calc(var(--unit)*.6)) - var(--unit)*.12325 + 2px);
+ height:calc(var(--unit)*.12325);
+ background:transparent url("../icons/control-ver.svg") center bottom / contain no-repeat;
+ pointer-events:none
+}

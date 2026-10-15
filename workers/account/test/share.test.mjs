@@ -15,13 +15,17 @@ import {prepareModel,simulatePlan} from '../../../assets/js/base-optimizer.mjs';
 test('shared plan replays with reordered pool for offline analysis',async()=>{
  const data=JSON.parse(fs.readFileSync(new URL('../../../data/base-optimizer.json',import.meta.url)));
  const base={rooms:{slot_25:{type:'MANUFACTURE',level:1},slot_28:{type:'DORMITORY',level:5,ambience:5000}}};
- const progress={char_503_rang:{owned:true,elite:0,level:1},char_120_hibisc:{owned:true,elite:0,level:1}};
+ const progress={char_500_noirc:{owned:true,elite:0,level:1},char_122_beagle:{owned:true,elite:0,level:1}};
  const options={teams:2,rotation:'12h',extraActions:false,priority:['F_GOLD','F_EXP','F_DIAMOND'],ambience:{}},products={slot_25:'4'};
  const model=prepareModel(data,base,progress,products,options);
  const result={pool:model.pool,plan:{rooms:model.rooms.filter(r=>r.type!=='DORMITORY'),teams:[[[0]],[[1]]],residents:[],support:[]}};
  const payload=makeSubmission(data,base,progress,products,options,result);
  const reordered=prepareModel(data,base,Object.fromEntries(Object.entries(progress).reverse()),products,options),plan=decodePlan(reordered,payload.plan);
- assert.equal(reordered.pool[plan.teams[0][0][0]].id,'char_503_rang');
+ assert.equal(reordered.pool[plan.teams[0][0][0]].id,'char_500_noirc');
  assert.equal(simulatePlan(reordered,plan,{cycles:10}).valid,true);
  assert.equal(conditionKey(payload),conditionKey({...payload,progress:Object.fromEntries(Object.entries(payload.progress).reverse())}));
+});
+test('optional missing clue condition is validated without rejecting older submissions',()=>{
+ const p=fixture();p.options.missingClues=[1,4,7];assert.deepEqual(validateSubmission(p).options.missingClues,[1,4,7]);
+ for(const value of [[0],[8],[1,1],['1'],null]){p.options.missingClues=value;assert.throws(()=>validateSubmission(p));}
 });

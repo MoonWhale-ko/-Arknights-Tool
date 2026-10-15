@@ -7,7 +7,7 @@ import {normalizeBuilding,prepareBase,readBase} from '../assets/js/base-state.mj
 const data=JSON.parse(fs.readFileSync(new URL('../data/base-optimizer.json',import.meta.url)));
 const progress=ids=>Object.fromEntries(ids.map(id=>[id,{owned:true,elite:2,level:90}]));
 const allProgress=progress(Object.keys(data.characters));
-function modelFixture({teams=2,rotation='12h',extraActions=false,dorm=true,ids=['char_502_nblade','char_503_rang','char_120_hibisc','char_501_durin']}={}){
+function modelFixture({teams=2,rotation='12h',extraActions=false,dorm=true,ids=['char_502_nblade','char_500_noirc','char_122_beagle','char_501_durin']}={}){
  const base={rooms:{slot_25:{type:'MANUFACTURE',level:1},...(dorm?{slot_28:{type:'DORMITORY',level:5,ambience:5000}}:{})}};
  return prepareModel(data,base,progress(ids),{slot_25:'4'},{teams,rotation,extraActions});
 }
@@ -77,9 +77,9 @@ test('same worker cannot be duplicated across shifts or rooms',()=>{
  const sim=simulatePlan(m,plan);assert.equal(sim.valid,false);assert.match(sim.reason,/상주 조건/);
 });
 test('capacity stops production until shift collection; progress is retained',()=>{
- const m=modelFixture({ids:['char_503_rang','char_120_hibisc']}),p=planFor(m,[0,1]);
- const result=simulatePlan(m,p,{cycles:4,record:true});assert.equal(result.valid,true);assert.ok(result.stages.every(s=>Math.abs(s.hours-12)<1e-8));assert.ok(result.score[0]>.5&&result.score[0]<1);
- const first=modelFixture({rotation:'first',ids:['char_503_rang','char_120_hibisc']}),r=simulatePlan(first,planFor(first,[0,1]),{cycles:4,record:true});assert.equal(r.valid,true);assert.ok(r.stages.some(s=>s.blocked.length));assert.ok(r.score[0]<result.score[0]);
+ const m=modelFixture({ids:['char_500_noirc','char_122_beagle']}),p=planFor(m,[0,1]);
+ const result=simulatePlan(m,p,{cycles:4,record:true});assert.equal(result.valid,true);assert.ok(result.stages.every(s=>Math.abs(s.hours-12)<1e-8));assert.ok(result.score[3]>.5&&result.score[3]<1.3);
+ const first=modelFixture({rotation:'first',ids:['char_500_noirc','char_122_beagle']}),r=simulatePlan(first,planFor(first,[0,1]),{cycles:4,record:true});assert.equal(r.valid,true);assert.ok(r.stages.some(s=>s.blocked.length));assert.ok(r.score[3]<result.score[3]);
 });
 test('two and three shift schedules are sequential, rest has no simultaneous duplicate',()=>{
  for(const teams of [2,3]){const m=modelFixture({teams}),p=planFor(m,Array.from({length:teams},(_,i)=>i)),r=simulatePlan(m,p,{cycles:4,record:true});assert.equal(r.valid,true);
@@ -87,7 +87,7 @@ test('two and three shift schedules are sequential, rest has no simultaneous dup
  assert.ok(r.stages.slice(-teams).every((s,i)=>s.team===i));}
 });
 test('first depletion refuses zero-hour reentry when recovery is insufficient',()=>{
- const m=modelFixture({rotation:'first',dorm:false,ids:['char_503_rang','char_120_hibisc']}),r=simulatePlan(m,planFor(m,[0,1]),{cycles:4});assert.equal(r.valid,false);assert.match(r.reason,/즉시 재교대/);
+ const m=modelFixture({rotation:'first',dorm:false,ids:['char_500_noirc','char_122_beagle']}),r=simulatePlan(m,planFor(m,[0,1]),{cycles:4});assert.equal(r.valid,false);assert.match(r.reason,/즉시 재교대/);
 });
 test('unsupported room effect is explicitly excluded and explained',()=>{
  const m=modelFixture({ids:['char_163_hpsts','char_502_nblade']});const unsupported=m.pool.find(o=>o.skills.some(s=>s.room==='MANUFACTURE'&&s.kind==='unsupported'));
@@ -102,4 +102,125 @@ test('UI is below scroll viewport and offers persistent settings and cancellatio
  const html=fs.readFileSync(new URL('../base.html',import.meta.url),'utf8');assert.ok(html.indexOf('id="baseOptimizer"')>html.indexOf('id="baseStatus"'));
  for(const id of ['optimizerTeams','optimizerRotation','optimizerExtra','optimizerPriority1','optimizerDorms','optimizerRun','optimizerCancel'])assert.ok(html.includes(`id="${id}"`));
  assert.ok(html.includes('base-optimizer-ui.mjs'));
+});
+function officeModel(){
+ return prepareModel(data,{rooms:{office:{type:'HIRE',level:1},factory:{type:'MANUFACTURE',level:1},dorm:{type:'DORMITORY',level:5,ambience:5000},control:{type:'CONTROL',level:5}}},allProgress,{factory:'4'},{rotation:'12h'});
+}
+function officeSnapshot(m,skills,{morale=24,controlSkills=[],extra=[]}={}){
+ const op={...m.pool[0],skills:skills.map(id=>compileSkill(data.buffs[id]))},cc={...m.pool[1],skills:controlSkills.map(id=>compileSkill(data.buffs[id]))};
+ const values=Float64Array.from(m.pool,()=>24);values[op.index]=morale;
+ const placements=[{room:m.rooms[0],ops:[op]},{room:m.rooms[2],ops:[]},...extra];
+ if(controlSkills.length)placements.push({room:m.rooms[3],ops:[cc]});
+ return evaluateSnapshot(m,placements,values,new Float64Array(m.pool.length));
+}
+test('office speed includes staffing bonus, dorm level and active skills only',()=>{
+ const m=officeModel();
+ assert.ok(Math.abs(officeSnapshot(m,['hire_spd[011]']).offices[0].multiplier-1.5)<1e-8);
+ assert.ok(Math.abs(officeSnapshot(m,['hire_spd_dorm&lv[010]']).offices[0].multiplier-1.2)<1e-8);
+ assert.ok(Math.abs(officeSnapshot(m,['hire_spd[011]'],{morale:0}).offices[0].multiplier-1.05)<1e-8);
+});
+test('office control threshold is strict and control buffs stack by maximum',()=>{
+ const m=officeModel();
+ let s=officeSnapshot(m,['hire_spd[000]'],{controlSkills:['control_hire_spd[000]','control_hire_spd&bd[000]']});
+ assert.ok(Math.abs(s.offices[0].multiplier-1.55)<1e-8);
+ s=officeSnapshot(m,['hire_spd[010]'],{controlSkills:['control_hire_spd[000]']});assert.ok(Math.abs(s.offices[0].multiplier-1.35)<1e-8);
+ const fake={...m.pool[2],skills:[],groups:[]};
+ const cc={...m.pool[3],skills:[compileSkill(data.buffs['control_hire_spd&bd[000]'])]};
+ s=officeSnapshot(m,['hire_spd[000]'],{controlSkills:['control_hire_spd&bd[000]'],extra:[{room:{id:'cc2',type:'CONTROL'},ops:[cc,fake]}]});
+ assert.ok(Math.abs(s.offices[0].multiplier-1.35)<1e-8);
+});
+test('office Blitz uses control-provided resources; conditional unsupported skills are excluded',()=>{
+ const m=officeModel();
+ const cc={...m.pool[1],groups:['rainbow'],skills:[compileSkill(data.buffs['control_mp_bd[000]'])]};
+ const s=officeSnapshot(m,['hire_spd_blitz[000]'],{extra:[{room:m.rooms[3],ops:[cc]}]});
+ assert.ok(Math.abs(s.offices[0].multiplier-1.3)<1e-8);
+ assert.equal(compileSkill(data.buffs['hire_spd_cost&clue[000]']).kind,'unsupported');
+});
+test('office contact work integrates exhaustion over repeated 2/3 shifts and is always first',()=>{
+ for(const teams of [2,3]){
+  const m=modelFixture({teams,ids:['char_502_nblade','char_500_noirc','char_122_beagle','char_501_durin']});
+  m.rooms.unshift({id:'office',type:'HIRE',level:1,capacity:1});
+  for(const op of m.pool){op.skills=[{room:'HIRE',kind:'simple',prod:.45,drain:2,capacity:0,targets:[]}];}
+  const p={rooms:m.rooms.filter(r=>r.type!=='DORMITORY'),teams:Array.from({length:teams},(_,i)=>[[i],[null]]),residents:[],support:[]};
+  const r=simulatePlan(m,p,{cycles:5,record:true});assert.equal(r.valid,true);
+  // Eight hours at 150%, then four hours at 105%; dorm fully restores the next shift.
+  assert.ok(Math.abs(r.score[0]-1.35)<1e-8);assert.equal(r.score.length,6);
+  assert.ok(r.stages.every(s=>Math.abs(s.products.HIRE-16.2)<1e-8));
+  assert.equal(compareScores(r.score,[1.349,1e9,1e9,1e9,1e9,1e9]),1);
+ }
+});
+test('without an office the leading objective is zero and manufacturing order is preserved',()=>{
+ const m=modelFixture(),r=simulatePlan(m,planFor(m,[0,1]),{cycles:4});
+ assert.equal(r.score[0],0);assert.ok(r.score[3]>0);
+});
+test('work requires an unlocked skill for that facility; ordinary dorm rest is allowed',async()=>{
+ const m=prepareModel(data,{rooms:{factory:{type:'MANUFACTURE',level:1},office:{type:'HIRE',level:1},dorm:{type:'DORMITORY',level:5,ambience:5000}}},progress(['char_502_nblade','char_500_noirc','char_503_rang','char_120_hibisc']),{factory:'4'},{rotation:'12h'});
+ const ranger=m.pool[2],hibiscus=m.pool[3];
+ assert.equal(m.canPlace(ranger,m.rooms[0]),false);assert.equal(m.canPlace(ranger,m.rooms[1]),true);
+ assert.equal(m.canPlace(hibiscus,m.rooms[0]),false);assert.equal(m.canPlace(ranger,m.rooms[2]),true);
+ const bad={rooms:[m.rooms[0]],teams:[[[2]],[[1]]],residents:[],support:[]};assert.throws(()=>validatePlan(m,bad),/해당 시설 스킬/);
+ const r=await optimizeBase(m,{budgetMs:60});assert.equal(r.status,'recommended');
+ for(const team of r.plan.teams)for(const [j,indices] of team.entries())for(const i of indices)if(i!==null)assert.ok(m.pool[i].skills.some(s=>s.room===r.plan.rooms[j].type));
+ const locked=prepareModel(data,{rooms:{factory:{type:'MANUFACTURE',level:1}}},{char_502_nblade:{owned:true,elite:0,level:1}},{factory:'4'},{});assert.equal(locked.canPlace(locked.pool[0],locked.rooms[0]),false);
+});
+function meetingModel({missingClues=[1],teams=2}={}){
+ return prepareModel(data,{rooms:{meeting:{type:'MEETING',level:3},factory:{type:'MANUFACTURE',level:1},dorm:{type:'DORMITORY',level:5,ambience:5000}}},allProgress,{factory:'4'},{rotation:'12h',teams,missingClues});
+}
+function meetingSnapshot(m,skillIds,{elite=2,rarity=6,morale=24,level=3,worked=0,partner}={}){
+ const op={...m.pool[0],elite,rarity,skills:skillIds.map(id=>compileSkill(data.buffs[id]))},values=Float64Array.from(m.pool,()=>24),hours=new Float64Array(m.pool.length);values[op.index]=morale;hours[op.index]=worked;
+ const room={...m.rooms[0],level};return evaluateSnapshot(m,[{room,ops:partner?[op,partner]:[op]}],values,hours);
+}
+test('meeting facility capacity is always two and passive speed uses room level, rarity and elite',()=>{
+ const m=meetingModel();assert.equal(m.rooms[0].capacity,2);
+ for(const [level,bonus] of [[1,.07],[2,.14],[3,.25]]){
+  const s=meetingSnapshot(m,['meet_spd[000]'],{level});assert.ok(Math.abs(s.meetings[0].multiplier-(1+bonus+.26+.1))<1e-8);
+ }
+ assert.ok(Math.abs(meetingSnapshot(m,['meet_spd[000]'],{morale:0}).meetings[0].multiplier-1.51)<1e-8);
+ assert.ok(Math.abs(meetingSnapshot(m,['meet_spd[000]'],{elite:1,rarity:4}).meetings[0].multiplier-1.5)<1e-8);
+ assert.equal(evaluateSnapshot(m,[{room:m.rooms[0],ops:[]}],new Float64Array(m.pool.length),new Float64Array(m.pool.length)).meetings[0].multiplier,0);
+});
+test('clue numbers are mapped by faction, not internal buff ID',()=>{
+ for(const [id,clue] of [['meet_spd&team[010]',1],['meet_spd&team[020]',2],['meet_spd&team[030]',3],['meet_spd&team[050]',4],['meet_spd&team[070]',5],['meet_spd&team[040]',6],['meet_spd&team[060]',7]])assert.equal(compileSkill(data.buffs[id]).clue,clue);
+});
+test('missing clue policy favors matching or broad effects, disables exhausted effects and avoids owned bias',()=>{
+ const m=meetingModel({missingClues:[4]});
+ assert.equal(meetingSnapshot(m,['meet_spd&team[050]']).meetings[0].preference,1);
+ assert.equal(meetingSnapshot(m,['meet_spd&team[040]']).meetings[0].preference,0);
+ assert.equal(meetingSnapshot(m,['meet_spd_notOwned[010]']).meetings[0].preference,1);
+ assert.equal(meetingSnapshot(m,['meet_spd_notOwned[010]'],{morale:0}).meetings[0].preference,0);
+ assert.equal(meetingSnapshot(m,['meet_spd_Owned[000]']).meetings[0].preference,-1);
+ for(const missingClues of [[],[1,2,3,4,5,6,7]])assert.equal(meetingSnapshot(meetingModel({missingClues}),['meet_spd_notOwned[010]']).meetings[0].preference,0);
+});
+test('meeting solo cost applies only when alone; ramp respects elapsed assignment time',()=>{
+ const m=meetingModel(),id='meet_spd&cost_condChar[000]';
+ const solo=meetingSnapshot(m,[id]);assert.equal(solo.rates[0],-3);assert.ok(Math.abs(solo.meetings[0].multiplier-2.01)<1e-8);
+ const partner={...m.pool[1],elite:0,rarity:2,skills:[]},pair=meetingSnapshot(m,[id],{partner});assert.equal(pair.rates[0],-1);assert.ok(Math.abs(pair.meetings[0].multiplier-1.56)<1e-8);
+ assert.ok(Math.abs(meetingSnapshot(m,['meet_spd_hast[000]'],{worked:8}).meetings[0].multiplier-1.81)<1e-8);
+});
+test('meeting stateful/unknown probability effects remain explicitly unsupported',()=>{
+ for(const id of ['meet_flag[010]','meet_spd&condChar_mustget[000]','meet_spd&exchange[000]','meet_spd&clue[000]'])assert.equal(compileSkill(data.buffs[id]).kind,'unsupported');
+});
+test('meeting preference and speed integrate through fatigue and rest for two and three shifts',()=>{
+ for(const teams of [2,3]){
+  const m=meetingModel({teams});
+  for(const op of m.pool.slice(0,teams))op.skills=[compileSkill(data.buffs['meet_spd_notOwned[010]'])];
+  const p={rooms:m.rooms.filter(r=>r.type!=='DORMITORY'),teams:Array.from({length:teams},(_,i)=>[[i],[null]]),residents:[],support:[]};
+  const r=simulatePlan(m,p,{cycles:4,record:true});assert.equal(r.valid,true);assert.equal(r.score[0],0);assert.ok(Math.abs(r.score[1]-1)<1e-8);assert.ok(r.score[2]>1);
+  assert.ok(r.stages.every(s=>s.products.MEETING>0&&Math.abs(s.products.MEETING_PREFERENCE-12)<1e-8));
+ }
+ assert.equal(compareScores([1.5,0,0,0,0,0],[1.49,1,100,1e9,0,0]),1);
+ assert.equal(compareScores([1.5,1,1,0,0,0],[1.5,0,100,1e9,0,0]),1);
+ assert.equal(compareScores([1.5,1,1.6,0,0,0],[1.5,1,1.59,1e9,0,0]),1);
+});
+test('missing clue settings normalize, survive storage schema and exclude invalid IDs',()=>{
+ assert.deepEqual(normalizeOptions({missingClues:[7,4,4,8,'1',0]}).missingClues,[4,7]);assert.deepEqual(normalizeOptions({missingClues:[]}).missingClues,[]);
+ const html=fs.readFileSync(new URL('../base.html',import.meta.url),'utf8');assert.ok(html.includes('id="optimizerMissingClues"'));assert.ok(html.includes('사무실·응접실 다음'));
+});
+test('meeting control buffs affect speed and missing preference only while active',()=>{
+ const m=meetingModel({missingClues:[5]}),values=Float64Array.from(m.pool,()=>24),work=new Float64Array(m.pool.length);
+ const target={...m.pool[0],elite:2,rarity:5,skills:[compileSkill(data.buffs['meet_spd[000]'])]};
+ const provider={...m.pool[1],skills:['control_upMeetingSpeed[000]','control_meeting_spd&bd[000]','control_clue_faction[070]'].map(id=>compileSkill(data.buffs[id]))};
+ const placements=[{room:m.rooms[0],ops:[target]},{room:{id:'cc',type:'CONTROL',level:5},ops:[provider]}];
+ const s=evaluateSnapshot(m,placements,values,work);assert.ok(Math.abs(s.meetings[0].multiplier-1.85)<1e-8);assert.equal(s.meetings[0].preference,1);
+ values[provider.index]=0;const exhausted=evaluateSnapshot(m,placements,values,work);assert.ok(Math.abs(exhausted.meetings[0].multiplier-1.6)<1e-8);assert.equal(exhausted.meetings[0].preference,0);
 });

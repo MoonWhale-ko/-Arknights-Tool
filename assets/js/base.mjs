@@ -1,4 +1,4 @@
-import {BASE_KEY,BASE_SLOTS,FACILITIES,capacity,readBase,CIRCULATION_SLOTS,circulationBuilt} from './base-state.mjs?v=4';
+import {BASE_KEY,BASE_SLOTS,FACILITIES,capacity,readBase,CIRCULATION_SLOTS,circulationBuilt} from './base-state.mjs?v=5';
 let characterNames={};
 fetch('data/account-characters.json').then(r=>r.ok?r.json():null).then(data=>{characterNames=data?.characters??{};render();}).catch(()=>{});
 const status=document.getElementById('baseStatus');let settings;
@@ -317,6 +317,7 @@ function updateControlHatching(){
  const bracketBottom=room.clientHeight*.31+unit*.8575;
  number.style.top=(bracketBottom-baseline-(metrics.actualBoundingBoxDescent??0)-2)+'px';
  number.style.setProperty('--control-hatch-top',(baseline-five.actualBoundingBoxAscent)+'px');
+ number.style.setProperty('--control-five-bottom',(baseline+(five.actualBoundingBoxDescent??0))+'px');
  const style=getComputedStyle(number,'::before'),w=parseFloat(style.width),h=parseFloat(style.height);
  if(!(w>0&&h>0))return;
  const step=(w+h)/10;
@@ -363,3 +364,5 @@ function updateControlHatching(){
 new ResizeObserver(updateControlHatching).observe(document.getElementById('baseMap'));
 document.fonts.ready.then(updateControlHatching);
 requestAnimationFrame(updateControlHatching);
+
+window.addEventListener('account-import-applied',()=>{load();render();});

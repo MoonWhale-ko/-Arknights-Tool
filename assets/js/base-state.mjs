@@ -69,6 +69,6 @@ export function readBase(value){
   const prepared=prepareBase({version:1,privateRoomsIncluded:value.privateRoomsIncluded,circulationIncluded:value.circulationIncluded,circulation:value.circulation,rooms:Object.entries(value.rooms).map(([slotId,room])=>({slotId,...room,operators:room.operators??[]}))},value.importedAt);
   return {...prepared,source:value.source==='account'?'account':'manual',modifiedAt:value.modifiedAt};
  }
- const rooms={};for(const [slotId,,type,name] of BASE_SLOTS){const old=value?.[name];const max=FACILITIES[type].capacity.length;const level=integer(old?.level,1,max)?old.level:type==='PRIVATE'?0:1;const count=integer(old?.count,0,capacity(type,level))?old.count:0;rooms[slotId]={type,level,count,operators:[]};}
+ const rooms={};for(const [slotId,,type,name] of BASE_SLOTS){const old=value?.[name];const max=FACILITIES[type].capacity.length;const level=integer(old?.level,1,max)?old.level:type==='CONTROL'?1:0;const count=integer(old?.count,0,capacity(type,level))?old.count:0;rooms[slotId]={type,level,count,operators:[]};}
  return {version:2,source:'manual',rooms};
 }

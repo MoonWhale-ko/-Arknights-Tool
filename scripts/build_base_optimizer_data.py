@@ -6,13 +6,13 @@ def build(building_path, characters_path, output):
     chars=json.loads(pathlib.Path(characters_path).read_text())
     local=json.loads(pathlib.Path('data/operators.json').read_text())['operators']
     groups={o['id']:o.get('sharedGroup',o['id']) for o in local}
-    result={'version':1,'source':{'repository':'ArknightsAssets/ArknightsGamedata','server':'kr','blob':hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()},'characters':{},'buffs':{},'recipes':{},'dorms':b['dormData']['phases'],'factory':b['manufactData'],'control':b['controlData'],'workerCost':b['manufactManpowerCostByNum']}
+    result={'version':1,'source':{'repository':'ArknightsAssets/ArknightsGamedata','server':'kr','blob':hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()},'characters':{},'buffs':{},'recipes':{},'dorms':b['dormData']['phases'],'factory':b['manufactData'],'meeting':b['meetingData'],'hire':b['hireData'],'control':b['controlData'],'workerCost':b['manufactManpowerCostByNum']}
     for id,v in b['chars'].items():
         c=chars.get(id)
         if not c:continue
-        result['characters'][id]={'id':id,'name':c['name'],'identity':groups.get(id,id),'groups':[s for s in [c.get('nationId'),c.get('groupId'),c.get('teamId')] if s], 'alter':c.get('isSpChar',False),'subclass':c.get('subProfessionId'),'maxMorale':v['maxManpower']/b['manpowerDisplayFactor'],'chains':[[{'id':r['buffId'],'elite':int(r['cond']['phase'][-1]),'level':r['cond']['level']} for r in g['buffData']] for g in v['buffChar'] if isinstance(g['buffData'],list)]}
+        result['characters'][id]={'id':id,'rarity':int(c['rarity'].split('_')[-1]),'name':c['name'],'identity':groups.get(id,id),'groups':[s for s in [c.get('nationId'),c.get('groupId'),c.get('teamId')] if s], 'alter':c.get('isSpChar',False),'subclass':c.get('subProfessionId'),'maxMorale':v['maxManpower']/b['manpowerDisplayFactor'],'chains':[[{'id':r['buffId'],'elite':int(r['cond']['phase'][-1]),'level':r['cond']['level']} for r in g['buffData']] for g in v['buffChar'] if isinstance(g['buffData'],list)]}
     for id,v in b['buffs'].items():
-        if v['roomType'] in ['MANUFACTURE','CONTROL','POWER','HIRE','TRADING','DORMITORY']:
+        if v['roomType'] in ['MANUFACTURE','CONTROL','POWER','HIRE','TRADING','DORMITORY','MEETING']:
             result['buffs'][id]={'id':id,'name':v['buffName'],'room':v['roomType'],'description':re.sub('<[^>]*>','',v['description']),'base':v['efficiency']/100,'targets':v['targets'] if isinstance(v['targets'],list) else []}
     for id in ['1','2','3','4','13','14']:
         r=b['manufactFormulas'][id]
