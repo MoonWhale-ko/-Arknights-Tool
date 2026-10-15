@@ -1,0 +1,40 @@
+name: Verify base result storage
+on:
+  push:
+    branches: [codex/base-result-sharing]
+    paths:
+      - '.github/workflows/base-sharing-check.yml'
+      - 'workers/account/**'
+      - 'assets/js/base-share*.mjs'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+      - name: Test submission and account behavior
+        run: node --test workers/account/test/*.test.mjs tests/test_base_optimizer.mjs
+      - name: Verify D1 token and table
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.BASE_SHARE_CLOUDFLARE_TOKEN }}
+        run: |
+          python3 - <<'PY'
+          import json, os, urllib.request, urllib.error
+          token = os.environ.get('CLOUDFLARE_API_TOKEN', '')
+          if not token:
+              raise SystemExit('Missing BASE_SHARE_CLOUDFLARE_TOKEN repository secret')
+          url = 'https://api.cloudflare.com/client/v4/accounts/07837cee2afb94e5fd8a3b44486e1bc7/d1/database/ad8da28d-4b2c-44e3-a810-ffc08bf103e9/query'
+          request = urllib.request.Request(url, data=json.dumps({'sql':'SELECT COUNT(*) AS total FROM optimizer_submissions'}).encode(), headers={'Authorization':'Bearer '+token, 'Content-Type':'application/json'})
+          try:
+              with urllib.request.urlopen(request, timeout=30) as response:
+                  result = json.load(response)
+          except urllib.error.HTTPError as error:
+              raise SystemExit('D1 connection failed: HTTP '+str(error.code))
+          if not result.get('success'):
+              raise SystemExit('D1 API rejected query')
+          total = result['result'][0]['results'][0]['total']
+          print('D1 token and optimizer_submissions table verified. Rows:', total)
+          PY
