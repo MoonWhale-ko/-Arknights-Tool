@@ -21,6 +21,8 @@ def merge_future(raw, docs, names, source):
         op = by_id[cid]
         op.update(name=name, originalName=op['name'], isFuture=True,
                   dataLocale='cn', nameIsOfficial=False)
+        if cid in names.get('releasedOperators', []):
+            op.pop('isFuture', None)
         future.append(op)
     used = set()
     for op in future:
@@ -52,7 +54,8 @@ def merge_future(raw, docs, names, source):
                 info = growth['tokenItems'][tid].copy()
                 if tid == token['id']:
                     info['name'] = op['name'] + '의 증표'
-                    info['isFuture'] = True
+                    if op.get('isFuture'):
+                        info['isFuture'] = True
                 docs['growth']['tokenItems'].setdefault(tid, info)
         branch = op['subProfessionId']
         if branch not in docs['professions']['professions']:
