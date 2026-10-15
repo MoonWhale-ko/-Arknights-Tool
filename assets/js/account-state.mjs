@@ -1,4 +1,4 @@
-import { BASE_KEY, prepareBase } from "./base-state.mjs?v=3";
+import { BASE_KEY, prepareBase } from "./base-state.mjs?v=4";
 export const INVENTORY_KEY = "arknightsInventoryV1";
 export const BACKUP_KEY = "arknightsAccountImportBackupV1";
 const CLASS_VARIANTS = {char_1001_amiya2:"char_002_amiya",char_1037_amiya3:"char_002_amiya"};

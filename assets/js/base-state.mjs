@@ -30,7 +30,9 @@ export function normalizeBuilding(building,troop={}){
   const instances=[...new Set((occupantsKnown?ownerIds:[]).filter(id=>typeof id==='number'||(typeof id==='string'&&/^\d+$/.test(id))).map(Number).filter(id=>integer(id,1,Number.MAX_SAFE_INTEGER)))];
   const count=instances.length;if(count>capacity(type,raw.level))return null;
   const operators=instances.map(id=>troop[id]?.charId||building.chars?.[id]?.charId).filter(id=>typeof id==='string'&&/^char_[a-zA-Z0-9_]+$/.test(id));
-  rooms.push({slotId,type,level:raw.level,count,operators,...(type==='PRIVATE'?{occupantsKnown}:{})});
+  const dorm=building.rooms?.DORMITORY?.[slotId];
+  const ambience=type==='DORMITORY'?[dorm?.comfort,dorm?.ambience,raw.comfort,raw.ambience].find(v=>integer(v,0,raw.level*1000)):undefined;
+  rooms.push({slotId,type,level:raw.level,count,operators,...(ambience!==undefined?{ambience}:{}),...(type==='PRIVATE'?{occupantsKnown}:{})});
  }
  const circulation=Object.fromEntries(CIRCULATION_SLOTS.map(([id,type])=>{
   const raw=building.roomSlots[id];
@@ -49,7 +51,8 @@ export function prepareBase(building,importedAt){
    !integer(room.level,0,FACILITIES[type].capacity.length)||!integer(room.count,0,capacity(type,room.level))||
    !Array.isArray(room.operators)||room.operators.length>room.count||room.operators.some(id=>typeof id!=='string'||!/^char_[a-zA-Z0-9_]+$/.test(id)))throw new Error('기반시설 데이터 형식이 올바르지 않습니다.');
   if(room.trust!==undefined&&(!object(room.trust)||Object.entries(room.trust).some(([id,value])=>!room.operators.includes(id)||!integer(value,0,200))))throw new Error('활동실 신뢰도 데이터 형식이 올바르지 않습니다.');
-  rooms[room.slotId]={type,level:room.level,count:room.count,operators:[...room.operators],...(type==='PRIVATE'?{occupantsKnown:room.occupantsKnown!==false,trust:{...(room.trust??{})}}:{})};
+  if(room.ambience!==undefined&&(type!=='DORMITORY'||!integer(room.ambience,0,room.level*1000)))throw new Error('숙소 인테리어 점수가 올바르지 않습니다.');
+  rooms[room.slotId]={type,level:room.level,count:room.count,operators:[...room.operators],...(room.ambience!==undefined?{ambience:room.ambience}:{}),...(type==='PRIVATE'?{occupantsKnown:room.occupantsKnown!==false,trust:{...(room.trust??{})}}:{})};
  }
  const circulation={};
  if(building.circulationIncluded===true){

@@ -3,7 +3,7 @@ import {
   commitImport,
   restoreImport,
   BACKUP_KEY,
-} from "./account-state.mjs?v=7";
+} from "./account-state.mjs?v=8";
 const $ = (id) => document.getElementById(id),
   dialog = $("accountDialog");
 let preview = null,

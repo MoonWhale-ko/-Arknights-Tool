@@ -1,4 +1,4 @@
-import {BASE_KEY,BASE_SLOTS,FACILITIES,capacity,readBase,CIRCULATION_SLOTS,circulationBuilt} from './base-state.mjs?v=3';
+import {BASE_KEY,BASE_SLOTS,FACILITIES,capacity,readBase,CIRCULATION_SLOTS,circulationBuilt} from './base-state.mjs?v=4';
 let characterNames={};
 fetch('data/account-characters.json').then(r=>r.ok?r.json():null).then(data=>{characterNames=data?.characters??{};render();}).catch(()=>{});
 const status=document.getElementById('baseStatus');let settings;
@@ -79,7 +79,7 @@ function openManufactureDialog(slotId,name,card){
    button.append(manufactureImage(recipe.icon),details);
    button.addEventListener('click',()=>{
     const products=readManufactureProducts();products[slotId]=recipe.id;
-    try{localStorage.setItem(manufactureKey,JSON.stringify(products));status.textContent=name+' 생산 품목: '+recipe.name;card.dataset.product=recipe.id;dialog.close();}
+    try{localStorage.setItem(manufactureKey,JSON.stringify(products));status.textContent=name+' 생산 품목: '+recipe.name;card.dataset.product=recipe.id;window.dispatchEvent(new Event('base-products-changed'));dialog.close();}
     catch{feedback.textContent='저장하지 못했습니다. 브라우저의 저장 공간을 확인해 주세요.';}
    });choices.append(button);
   }
