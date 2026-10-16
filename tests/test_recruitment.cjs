@@ -50,7 +50,13 @@ vm.runInContext(source,context);
  for(const [,rarity,body] of sections){const cards=[...body.matchAll(/class="op r(\d)/g)];assert.ok(cards.length);assert.ok(cards.every(x=>x[1]===rarity));}
  result=choose(['고급 특별 채용']);assert.match(result,/최저 6★/);assert.ok(!result.includes('data-rarity="5"'));
  times[8].onclick();
- const candidates=vm.runInContext('operators.filter(o=>eligible(o,["고급 특별 채용"])).length',context);assert.equal(candidates,33);
+ result=choose(['고급 특별 채용','가드','지원']);assert.match(result,/data-id="char_485_pallas"/);assert.match(result,/팔라스/);
+ result=choose(['가드','지원']);assert.ok(!result.includes('data-id="char_485_pallas"'));
+ times[2].onclick();result=choose(['로봇','캐스터']);assert.match(result,/data-id="char_4227_gallus"/);assert.match(result,/GALLUS²/);
+ result=choose(['로봇','디버프']);assert.match(result,/data-id="char_4227_gallus"/);
+ times[3].onclick();result=choose(['로봇','캐스터']);assert.ok(!result.includes('data-id="char_4227_gallus"'));
+ times[8].onclick();
+ const candidates=vm.runInContext('operators.filter(o=>eligible(o,["고급 특별 채용"])).length',context);assert.equal(candidates,34);
  choose(['가드','딜러','근거리','지원','생존형']);tags.find(t=>t.dataset.tag==='로봇').onclick();assert.equal(vm.runInContext('selected.length',context),5);
  ids.get('tagReset').onclick();assert.equal(ids.get('selCount').textContent,'0 / 5');
  ids.get('settingsBtn').onclick();assert.equal(ids.get('settingsBtn').attrs['aria-expanded'],'true');ids.get('settingsClose').onclick();assert.equal(ids.get('settingsBtn').attrs['aria-expanded'],'false');
