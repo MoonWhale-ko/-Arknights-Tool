@@ -38,7 +38,7 @@ button,input,select,textarea{font-family:inherit;accent-color:var(--z-accent);bo
 .zoot-home .zoot-toast{top:20px}
 .zoot-home .wrap{max-width:820px;min-height:100svh;padding:48px 24px 88px;display:flex;flex-direction:column;justify-content:center;margin:auto}
 .zoot-home .brand{text-align:center;margin-bottom:36px}
-.zoot-home .brand h1{font:600 clamp(44px,7vw,64px)/1.2 'Chakra Petch',sans-serif;letter-spacing:.06em;margin:0 0 10px}
+.zoot-home .brand h1{font:600 clamp(52.8px,8.4vw,76.8px)/1.2 'Chakra Petch',sans-serif;letter-spacing:.06em;margin:0 0 10px}
 .zoot-home .brand p{font:600 clamp(13px,2vw,17px)/1.5 'Chakra Petch',sans-serif;color:var(--z-muted);margin:0;overflow-wrap:anywhere}
 .zoot-home .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
 .zoot-home .home-card-shadow{filter:drop-shadow(0 4px 7px #00000018)}
@@ -58,3 +58,21 @@ button,input,select,textarea{font-family:inherit;accent-color:var(--z-accent);bo
 /* Pointer focus should not draw a rectangular frame around clipped cards. */
 .zoot-home :is(a,button):focus:not(:focus-visible){outline:none}
 .zoot-home :is(a,button){-webkit-tap-highlight-color:transparent}
+
+/* Home proportions: cards are 75% of the preceding width and height. */
+.zoot-home .grid{width:calc(75% + 5px);align-self:center}
+.zoot-home .home-card-shadow{container-type:inline-size}
+.zoot-home .home-card{grid-template-columns:clamp(22px,18cqw,52.5px) minmax(0,1fr);padding:clamp(8px,6cqw,18px);gap:clamp(6px,4cqw,13.5px)}
+.zoot-home .icon{width:clamp(22px,18cqw,52.5px);height:clamp(22px,18cqw,52.5px)}
+.zoot-home .home-card h2{font-size:clamp(10px,6.4cqw,18px)}
+.zoot-home .home-divider{width:calc(80% + 5px);height:1px;min-height:1px;border:0;background:var(--z-border);margin:0 auto 28px}
+@media(max-width:600px){.zoot-home .grid{width:calc(75% + 3px)}.zoot-home .home-divider{width:calc(80% + 3px)}}
+
+/* Scale cards to 75% and keep the divider slightly wider than the pair. */
+.zoot-home .grid{width:calc(75% + 5px);align-self:center}
+.zoot-home .home-card-shadow{container-type:inline-size}
+.zoot-home .home-card{grid-template-columns:clamp(22px,18cqw,52.5px) minmax(0,1fr);padding:clamp(8px,6cqw,18px);gap:clamp(6px,4cqw,13.5px)}
+.zoot-home .icon{width:clamp(22px,18cqw,52.5px);height:clamp(22px,18cqw,52.5px)}
+.zoot-home .home-card h2{font-size:clamp(10px,6.4cqw,18px)}
+.zoot-home .home-divider{width:calc(80% + 5px);height:1px;min-height:1px;border:0;background:var(--z-border);margin:0 auto 28px}
+@media(max-width:600px){.zoot-home .grid{width:calc(75% + 3px)}.zoot-home .home-divider{width:calc(80% + 3px)}}
