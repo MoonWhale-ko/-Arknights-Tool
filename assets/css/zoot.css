@@ -70,3 +70,6 @@ button,input,select,textarea{font-family:inherit;accent-color:var(--z-accent);bo
 
 /* Mobile: larger cards and content anchored near the top. */
 @media(max-width:600px){.zoot-home .wrap{justify-content:flex-start}.zoot-home .grid{width:calc(90% + 1.2px)}.zoot-home .home-divider{width:calc(96% + 1.2px)}.zoot-home .home-card h2{font-size:clamp(12.5px,6.666667cqw,22.5px)}}
+
+/* Halfway between top alignment and the former vertical centering. */
+@media(max-width:600px){.zoot-home .wrap::before,.zoot-home .wrap::after{content:"";display:block;flex-basis:0;flex-shrink:0}.zoot-home .wrap::before{flex-grow:1}.zoot-home .wrap::after{flex-grow:3}}
