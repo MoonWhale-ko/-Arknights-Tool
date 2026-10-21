@@ -1,6 +1,6 @@
 # Z.O.O.T. design decisions
 
-Zenith Operating Optimized Technology. Keep the same visual language across future pages. This change applies only to the home page; existing feature pages and account/operator/material data are unchanged.
+Zeroth Order Oil Tank. Keep the same visual language across future pages. This change applies only to the home page; existing feature pages and account/operator/material data are unchanged.
 
 ## Home
 
