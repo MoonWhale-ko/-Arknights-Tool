@@ -63,7 +63,7 @@ input[type=number]{width:74px}.search{min-width:220px}
 <link rel="stylesheet" href="assets/css/zoot.css?v=10">
 <style>
 /* Operator appearance follows the shared Z.O.O.T. palette. */
-.zoot-operators{--operator-cut:12px;--operator-symbol-filter:none}
+.zoot-operators{--operator-cut:12px;--operator-symbol-filter:invert(1)}
 html[data-theme=dark] .zoot-operators{--operator-symbol-filter:none}
 .zoot-operators>.wrap{max-width:1600px;padding:28px 24px 48px}
 .zoot-operators .top{gap:16px;align-items:center}
@@ -110,8 +110,7 @@ html[data-theme=dark] .zoot-operators{--operator-symbol-filter:none}
 .zoot-operators .field input,.zoot-operators .field select{padding:5px 7px}
 .zoot-operators .cycle{color:var(--z-text)}
 .zoot-operators .cycle img{filter:var(--operator-symbol-filter)}
-.zoot-operators .cycle[data-kind=potential][data-value="6"] img{filter:none}
-.zoot-operators .cycle:hover{background:var(--z-hover);filter:none}
+.zoot-operators .cycle:hover{background:transparent;filter:none}
 .zoot-operators .cycle:disabled{background:transparent;filter:none}
 .zoot-operators .skill-empty{color:var(--z-disabled-text)}
 .zoot-operators .skill-level{color:var(--z-text)}
@@ -148,10 +147,6 @@ html:has(.zoot-operators dialog[open]){overflow:hidden}
 }
 @media(prefers-reduced-motion:no-preference){.zoot-operators :is(.btn,.class-tab,.rarity-toggle,.future-toggle,.cycle){transition:background-color .16s ease}}
 
-/* Keep the original white and colored progress artwork legible in both themes. */
-.zoot-operators .cycle:has(img){background:#252525;clip-path:polygon(5px 0,100% 0,100% calc(100% - 5px),calc(100% - 5px) 100%,0 100%,0 5px)}
-.zoot-operators .cycle:has(img):hover{background:#353535}
-.zoot-operators .cycle:has(img) .rank{color:#c4ceda}
 </style>
 <script src="assets/js/zoot.js?v=4"></script>
 </head>
