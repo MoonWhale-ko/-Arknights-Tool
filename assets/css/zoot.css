@@ -43,7 +43,7 @@ button,input,select,textarea{font-family:inherit;accent-color:var(--z-accent);bo
 .zoot-home .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
 .zoot-home .home-card-shadow{filter:drop-shadow(0 4px 7px #00000018)}
 .zoot-home .home-card-shadow:hover{filter:drop-shadow(0 7px 10px #00000028)}
-.zoot-home .home-card{display:flex;align-items:center;justify-content:center;gap:18px;width:100%;aspect-ratio:5/4;min-width:0;padding:24px;background:var(--z-panel);color:var(--z-text);text-decoration:none;clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px)}
+.zoot-home .home-card{display:grid;grid-template-columns:clamp(36px,7vw,70px) minmax(0,1fr);align-items:center;justify-content:start;gap:18px;width:100%;aspect-ratio:5/3;min-width:0;padding:24px;background:var(--z-panel);color:var(--z-text);text-decoration:none;clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px)}
 .zoot-home .home-card:hover{background:var(--z-selected)}
 .zoot-home .home-card-shadow:has(.home-card:focus-visible){outline:2px solid var(--z-link);outline-offset:4px}
 .zoot-home .icon{width:clamp(36px,7vw,70px);height:clamp(36px,7vw,70px);object-fit:contain;filter:var(--z-icon-filter);flex-shrink:0}
