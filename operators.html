@@ -171,8 +171,6 @@ html:has(.zoot-operators dialog[open]){overflow:hidden}
 .zoot-operators .operator-owned-filter>span{color:var(--z-muted);font-size:12px;white-space:nowrap}
 .zoot-operators .operator-owned-filter select{flex:1;min-width:0;min-height:48px;background:transparent;border:0;padding:8px;font-size:14px}
 .zoot-operators .operator-toolbar .future-toggle{display:flex;align-items:center;justify-content:center;gap:9px;min-height:48px;font-size:13px}
-.zoot-operators .filter-indicator{width:7px;height:7px;flex:none;border:1px solid var(--z-muted);background:transparent}
-.zoot-operators .future-toggle[aria-pressed=true] .filter-indicator{background:var(--z-link);border-color:var(--z-link)}
 .zoot-operators .operator-filter-row{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-top:22px}
 .zoot-operators .operator-rarity-filter{flex:1;max-width:560px;min-width:0}
 .zoot-operators .operator-filter-label{display:block;font-size:12px;color:var(--z-muted);font-weight:600;line-height:1.4;margin-bottom:10px}
@@ -228,7 +226,7 @@ html:has(.zoot-operators dialog[open]){overflow:hidden}
 <div class="controls operator-search-row">
 <label class="operator-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/></svg><input class="search" id="q" placeholder="이름 또는 별명 검색" aria-label="오퍼레이터 검색" autocomplete="off"></label>
 <label class="operator-owned-filter"><span>보유 여부</span><select id="ownedFilter"><option value="">전체</option><option value="1">보유</option><option value="0">미보유</option></select></label>
-<button type="button" id="futureOnly" class="future-toggle" aria-pressed="false"><span class="filter-indicator" aria-hidden="true"></span>미래시</button>
+<button type="button" id="futureOnly" class="future-toggle" aria-pressed="false">미래시</button>
 </div>
 <div class="operator-filter-row">
 <div class="operator-rarity-filter"><span class="operator-filter-label">등급</span><input type="hidden" id="rarity" value=""><div id="rarityOptions" class="rarity-options" role="group" aria-label="표시할 등급"></div></div>
