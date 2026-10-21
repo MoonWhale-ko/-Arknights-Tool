@@ -44,7 +44,7 @@ function renderResult(result){
  for(const stage of representatives)hr.append(text('th',`${stage.team+1}조 · ${duration(stage.hours)}`));head.append(hr);table.append(head);const body=document.createElement('tbody');
  const roomOrder=representatives[0]?.rooms??[],counts={};for(const room of roomOrder){
   counts[room.type]=(counts[room.type]??0)+1;const row=document.createElement('tr');row.append(text('th',names[room.type]+(['MANUFACTURE','TRADING','POWER','DORMITORY'].includes(room.type)?` ${counts[room.type]}`:'')));
-  for(const stage of representatives){const cell=document.createElement('td'),list=text('div','','optimizer-room-ops');const entry=stage.rooms.find(r=>r.id===room.id);for(const index of entry?.operators??[])list.append(chip(result.pool[index],result.plan.residents.includes(index),stage.endMorale[index]));if(!list.children.length)list.textContent='배치 없음';cell.append(list);row.append(cell);}body.append(row);
+  for(const stage of representatives){const cell=document.createElement('td'),list=text('div','','optimizer-room-ops');const entry=stage.rooms.find(r=>r.id===room.id);for(const index of (entry?.operators??[]).filter(i=>room.type!=='DORMITORY'||result.plan.support.includes(i)))list.append(chip(result.pool[index],result.plan.residents.includes(index),stage.endMorale[index]));if(!list.children.length)list.textContent=room.type==='DORMITORY'?'고정 지원자 없음':'배치 없음';cell.append(list);row.append(cell);}body.append(row);
  }
  table.append(body);wrap.append(table);target.append(wrap);
  const timeline=document.createElement('details');timeline.append(text('summary','교대 시간표와 컨디션 보기'));const list=text('div','','optimizer-timeline');
@@ -53,7 +53,7 @@ function renderResult(result){
   for(const r of stage.rooms.filter(r=>r.type!=='DORMITORY'))for(const i of r.operators)list.append(text('div',`${result.pool[i].name}: ${stage.startMorale[i].toFixed(1)} → ${stage.endMorale[i].toFixed(1)}`));
  }
  timeline.append(list);target.append(timeline);
- if(result.actions.length){const detail=document.createElement('details');detail.append(text('summary',`숙소 조작 안내 (${result.actions.filter(a=>a.hour>=offset).length}건)`));const actions=text('div','','optimizer-timeline');for(const a of result.actions.filter(a=>a.hour>=offset)){
+ if(result.actions.some(a=>a.type==='exchange')){const detail=document.createElement('details');detail.append(text('summary',`숙소 조작 안내 (${result.actions.filter(a=>a.hour>=offset&&a.type==='exchange').length}건)`));const actions=text('div','','optimizer-timeline');for(const a of result.actions.filter(a=>a.hour>=offset&&a.type==='exchange')){
   if(a.type==='exchange')actions.append(text('p',`${duration(a.hour-offset)}: ${result.pool[a.target].name} 입실 → ${result.pool[a.provider].name} 재배치, 컨디션 교환`));
   else for(const r of a.rooms){const dorms=representatives[0].rooms.filter(room=>room.type==='DORMITORY');actions.append(text('p',`${duration(a.hour-offset)} · 숙소 ${dorms.findIndex(room=>room.id===r.id)+1}: ${r.operators.map(i=>result.pool[i].name).join(', ')}`));}
  }detail.append(actions);target.append(detail);}
@@ -121,15 +121,20 @@ function renderIntegrated(report){
    const shift=shifts.find(s=>s.team===team),index=shifts.indexOf(shift),end=shifts[index+1]?.hour??best.cycle?.hour;
    target.append(text('h3',`${team+1}조${shift&&end!=null?' · '+duration(end-shift.hour):' · 이후 근무조'}`));
    const rows=shift?.rooms??best.plan.groups.filter(g=>g.team===team).map(g=>({id:g.room,operators:g.operators}));
-   for(const r of rows){const row=text('div','','optimizer-room-ops');row.append(text('strong',roomNames[r.id]??r.id));for(const id of r.operators)row.append(chip(report.operators[id]??{id,name:id},report.input.residents.some(p=>p.id===id),best.cycle?.morale[id]??best.at24?.morale[id]));if(!r.operators.length)row.append(text('span','배치 없음'));target.append(row);}
+   for(const r of rows.filter(r=>report.rooms.find(room=>room.id===r.id)?.type!=='DORMITORY')){const row=text('div','','optimizer-room-ops');row.append(text('strong',roomNames[r.id]??r.id));for(const id of r.operators)row.append(chip(report.operators[id]??{id,name:id},report.input.residents.some(p=>p.id===id),best.cycle?.morale[id]??best.at24?.morale[id]));if(!r.operators.length)row.append(text('span','배치 없음'));target.append(row);}
+  }
+  const dormRooms=report.rooms.filter(r=>r.type==='DORMITORY');
+  if(dormRooms.length){
+   target.append(text('h3','숙소 · 고정 지원 오퍼레이터'),text('p','아래 인원은 모든 근무조에서 같은 숙소에 유지합니다. 회복을 위해 잠시 입실하는 인원은 표시하지 않으며, 회복량과 남은 침상은 계산에 반영합니다.','optimizer-note'));
+   for(const room of dormRooms){const row=text('div','','optimizer-room-ops');row.append(text('strong',roomNames[room.id]));const ids=(best.plan.dormSupport??report.input.dormSupport??{})[room.id]??[];for(const id of ids){const badge=chip(report.operators[id]??{id,name:id});badge.append(text('small','고정'));row.append(badge);}if(!ids.length)row.append(text('span','고정 지원자 없음'));target.append(row);}
   }
   target.append(text('h3','예상 생산량'),text('p','첫 사이클은 모든 근무조가 한 번씩 근무를 마칠 때까지입니다.','optimizer-note'),wrap);
   target.append(text('p','사무실·응접실의 상당 시간은 기본 속도로 같은 양을 얻는 데 필요한 시간입니다. 예: 24시간 결과가 36이면 기본 속도의 1.5배입니다.','optimizer-note'));
-  const timeline=document.createElement('details');timeline.append(text('summary','교대 시간표와 숙소 변경 기록'));
+  const timeline=document.createElement('details');timeline.append(text('summary','교대 시간표와 컨디션 교환 기록'));
   const timelineList=text('ol','','optimizer-event-list');
-  for(const e of events.filter(e=>['shift','dormChange','exchange'].includes(e.type))){
+  for(const e of events.filter(e=>['shift','exchange'].includes(e.type))){
    const item=document.createElement('li');item.append(text('strong',`시작 후 ${duration(e.hour)} · ${e.type==='shift'?`${e.team+1}조 근무 시작`:e.type==='exchange'?'컨디션 교환':'숙소 인원 변경'}`));
-   if(e.rooms){const rooms=document.createElement('ul');for(const r of e.rooms)rooms.append(text('li',`${roomNames[r.id]??r.id}: ${r.operators.map(id=>report.operators[id]?.name??id).join(', ')||'배치 없음'}`));item.append(rooms);}timelineList.append(item);
+   if(e.rooms){const rooms=document.createElement('ul');for(const r of e.rooms.filter(r=>report.rooms.find(room=>room.id===r.id)?.type!=='DORMITORY'))rooms.append(text('li',`${roomNames[r.id]??r.id}: ${r.operators.map(id=>report.operators[id]?.name??id).join(', ')||'배치 없음'}`));item.append(rooms);}timelineList.append(item);
   }timeline.append(timelineList);target.append(timeline);
   target.append(text('p','새 통합 엔진 결과는 JSON으로 저장할 수 있습니다. 서버의 기존 결과 공유 형식과 달라 자동 전송하지 않습니다.','optimizer-note'));
  }
