@@ -65,7 +65,7 @@ for(let h=1;h<=9;h++)document.getElementById('timeButtons').insertAdjacentHTML('
 const timeBtns=[...document.querySelectorAll('.time-button')];
 function setRecruitHours(hours){recruitHours=hours;saveSettings();render()}
 timeBtns.forEach(b=>b.onclick=()=>setRecruitHours(Number(b.dataset.hours)));
-const tagArea=document.getElementById('tagArea');Object.entries(groups).forEach(([g,ts])=>{let s=document.createElement('div');s.className='tag-section';s.innerHTML=`<h3>${g}</h3><div class="tags">${ts.map(t=>`<button class="tag" data-tag="${t}">${t}</button>`).join('')}</div>`;tagArea.appendChild(s)});
+const tagArea=document.getElementById('tagArea');Object.entries(groups).forEach(([g,ts])=>{let s=document.createElement('div');s.className='tag-section';s.innerHTML=`<div class="tags" role="group" aria-label="${g}">${ts.map(t=>`<button class="tag" data-tag="${t}">${t}</button>`).join('')}</div>`;tagArea.appendChild(s)});
 for(let r=1;r<=6;r++)document.getElementById('rarities').insertAdjacentHTML('beforeend',`<button class="rarity ${allowed.has(r)?'on':''}" data-r="${r}">${r}★</button>`);document.getElementById('highOnly').checked=!!saved.highOnly;
 const tagBtns=[...document.querySelectorAll('.tag')];
 const shortcutChoices=new Map();
