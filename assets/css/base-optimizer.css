@@ -62,3 +62,20 @@
  .optimizer-form fieldset{padding:12px}.base-optimizer th{white-space:normal}
  .base-optimizer table{min-width:520px}.optimizer-actions button{flex:1 1 auto}
 }
+
+/* Group each decision and keep supporting explanations out of the main path. */
+.optimizer-settings{display:flex;flex-direction:column;gap:20px}
+.optimizer-settings .optimizer-section{display:block;padding:20px;margin:0}
+.optimizer-section-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:8px 0 14px}
+.base-optimizer .optimizer-section h3{background:none;border:0;padding:0;font-size:17px;margin:18px 0 12px}
+.base-optimizer .optimizer-section h3:first-of-type{margin-top:4px}
+.base-optimizer .optimizer-rule{color:#ffe18a;margin:4px 0 18px;font-weight:650}
+.base-optimizer .optimizer-section .optimizer-note{margin:12px 0;color:#d0dce5}
+.base-optimizer .optimizer-section details{margin-bottom:0}
+.optimizer-assumptions ul{padding-left:24px;line-height:1.8;font-size:15px}
+.optimizer-assumptions li{margin:10px 0}
+.optimizer-event-list{padding-left:26px;font-size:15px}
+.optimizer-event-list>li{padding:14px 0;border-bottom:1px solid #526978}
+.optimizer-event-list ul{padding-left:20px;margin:8px 0;line-height:1.9}
+@media(max-width:800px){.optimizer-section-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.optimizer-section-grid{grid-template-columns:1fr}.optimizer-settings .optimizer-section{padding:14px}.optimizer-settings{gap:18px}}
