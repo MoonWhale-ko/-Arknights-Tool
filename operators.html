@@ -63,7 +63,7 @@ input[type=number]{width:74px}.search{min-width:220px}
 <link rel="stylesheet" href="assets/css/zoot.css?v=10">
 <style>
 /* Operator appearance follows the shared Z.O.O.T. palette. */
-.zoot-operators{--operator-cut:12px;--operator-symbol-filter:invert(1)}
+.zoot-operators{--operator-cut:12px;--operator-symbol-filter:none}
 html[data-theme=dark] .zoot-operators{--operator-symbol-filter:none}
 .zoot-operators>.wrap{max-width:1600px;padding:28px 24px 48px}
 .zoot-operators .top{gap:16px;align-items:center}
@@ -110,6 +110,10 @@ html[data-theme=dark] .zoot-operators{--operator-symbol-filter:none}
 .zoot-operators .field input,.zoot-operators .field select{padding:5px 7px}
 .zoot-operators .cycle{color:var(--z-text)}
 .zoot-operators .cycle img{filter:var(--operator-symbol-filter)}
+.zoot-operators .cycle img.progress-dark{display:none}
+.zoot-operators .cycle img.progress-light{display:block}
+html[data-theme=dark] .zoot-operators .cycle img.progress-dark{display:block}
+html[data-theme=dark] .zoot-operators .cycle img.progress-light{display:none}
 .zoot-operators .cycle:hover{background:transparent;filter:none}
 .zoot-operators .cycle:disabled{background:transparent;filter:none}
 .zoot-operators .skill-empty{color:var(--z-disabled-text)}
@@ -248,7 +252,7 @@ function setVal(id,k,v){
 }
 function iconButton(kind,key,value,label,disabled=false,bottom=''){
  const prefix={elite:'elite-e',potential:'potential-p',mastery:'mastery-m'}[kind];
- return `<button type="button" class="cycle" data-k="${key}" data-kind="${kind}" data-value="${value}" ${disabled?'disabled':''} aria-label="${esc(label)}" title="${esc(label)}"><img src="assets/icons/progress/${prefix}${value}.svg" alt=""><span class="rank">${bottom}</span></button>`;
+ return `<button type="button" class="cycle" data-k="${key}" data-kind="${kind}" data-value="${value}" ${disabled?'disabled':''} aria-label="${esc(label)}" title="${esc(label)}"><img class="progress-dark" src="assets/icons/progress/${prefix}${value}.svg" alt=""><img class="progress-light" src="assets/icons/progress/light/${prefix}${value}.svg" alt=""><span class="rank">${bottom}</span></button>`;
 }
 function classGlyph(key){if(key==='sub_supportiveranger')return '<img class="class-glyph standalone-glyph" src="assets/icons/classes/sub_supportiveranger.png" alt="">';const pos=CLASS_ICON_POS[key];return pos?`<span class="class-glyph" aria-hidden="true" style="--icon-x:${-pos[0]};--icon-y:${-pos[1]}"></span>`:''}
 function classificationButton(id,label,key,selected){return `<button type="button" class="class-tab" data-class="${esc(id)}" aria-pressed="${selected}" title="${esc(label)}">${classGlyph(key)}<span>${esc(label)}</span></button>`}
