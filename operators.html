@@ -216,9 +216,11 @@ html:has(.zoot-operators dialog[open]){overflow:hidden}
 }
 </style>
 <style>
-/* Suppress pointer/touch focus rectangles; keep keyboard focus visible. */
-.zoot-operators :is(button,a){-webkit-tap-highlight-color:transparent}
-.zoot-operators :is(button,a):focus:not(:focus-visible){outline:none!important}
+/* Use non-rectangular focus cues, including programmatically restored focus. */
+body.zoot-operators :is(button,a,input,select,textarea){-webkit-tap-highlight-color:transparent}
+body.zoot-operators :is(button,a,input,select,textarea):is(:focus,:focus-visible){outline:none!important;outline-offset:0!important}
+body.zoot-operators :is(button,a):focus-visible{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+body.zoot-operators :is(input:not([type=checkbox]):not([type=radio]),select,textarea):focus-visible{border-bottom-color:var(--z-link)}
 </style>
 <script src="assets/js/zoot.js?v=4"></script>
 </head>
