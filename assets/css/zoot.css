@@ -45,7 +45,7 @@ button,input,select,textarea{font-family:inherit;accent-color:var(--z-accent);bo
 .zoot-home .home-card-shadow:hover{filter:drop-shadow(0 7px 10px #00000028)}
 .zoot-home .home-card{display:flex;align-items:center;justify-content:center;gap:18px;width:100%;aspect-ratio:5/4;min-width:0;padding:24px;background:var(--z-panel);color:var(--z-text);text-decoration:none;clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px)}
 .zoot-home .home-card:hover{background:var(--z-selected)}
-.zoot-home .home-card-shadow:focus-within{outline:2px solid var(--z-link);outline-offset:4px}
+.zoot-home .home-card-shadow:has(.home-card:focus-visible){outline:2px solid var(--z-link);outline-offset:4px}
 .zoot-home .icon{width:clamp(36px,7vw,70px);height:clamp(36px,7vw,70px);object-fit:contain;filter:var(--z-icon-filter);flex-shrink:0}
 .zoot-home .home-card h2{font:700 clamp(15px,2.5vw,24px)/1.4 Pretendard,sans-serif;margin:0;word-break:keep-all;overflow-wrap:anywhere;text-align:left}
 @media(max-width:600px){.zoot-home .wrap{padding:32px 16px 84px}.zoot-home .grid{gap:12px}.zoot-home .home-card{padding:14px;gap:10px}.zoot-topbar{padding-inline:12px}}
@@ -54,3 +54,7 @@ button,input,select,textarea{font-family:inherit;accent-color:var(--z-accent);bo
 @keyframes zoot-popup{from{transform:translateY(8px);opacity:0}to{transform:translateY(0);opacity:1}}
 @keyframes zoot-page{from{opacity:0;translate:0 6px}to{opacity:1;translate:0 0}}
 @keyframes zoot-dim{from{background:#0000}to{background:#0008}}
+
+/* Pointer focus should not draw a rectangular frame around clipped cards. */
+.zoot-home :is(a,button):focus:not(:focus-visible){outline:none}
+.zoot-home :is(a,button){-webkit-tap-highlight-color:transparent}
