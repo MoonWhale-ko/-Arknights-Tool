@@ -60,10 +60,11 @@ html:has(dialog.recruitment-settings[open]){overflow:hidden}
 
 /* Keep the desktop tag controls in view while the result column scrolls. */
 @media(min-width:761px){
- body.zoot-page.zoot-recruit .tag-panel{position:sticky;top:88px;min-height:0;max-height:calc(100dvh - 104px);overflow-y:auto;padding:16px 18px;gap:10px;--tag-row:clamp(22px,calc((100dvh - 450px)/12),32px)}
+ body.zoot-page.zoot-recruit .tag-panel{position:sticky;top:calc(var(--z-bar) + 28px);height:calc(100dvh - var(--z-bar) - 56px);min-height:0;max-height:calc(100dvh - var(--z-bar) - 56px);overflow-y:auto;padding:16px 18px;gap:10px;--tag-row:clamp(22px,calc((100dvh - 450px)/12),32px)}
  .zoot-recruit .tag-header{min-height:28px}
  .zoot-recruit .tag-search input{min-height:36px;padding:7px 10px}
- .zoot-recruit #tagArea{flex:0 0 auto;gap:10px;justify-content:flex-start}
+ .zoot-recruit .workspace{padding-bottom:28px}
+ .zoot-recruit #tagArea{flex:1 0 auto;gap:10px;justify-content:center}
  .zoot-recruit .tag-section h3{margin-bottom:5px;font-size:12px;line-height:1.35}
  .zoot-recruit .tags{gap:4px}
  .zoot-recruit .tag{min-height:var(--tag-row);padding:3px 2px;font-size:clamp(11px,3.6cqw,14px);line-height:1.2}
