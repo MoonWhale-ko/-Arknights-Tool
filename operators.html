@@ -152,24 +152,90 @@ html:has(.zoot-operators dialog[open]){overflow:hidden}
 @media(prefers-reduced-motion:no-preference){.zoot-operators :is(.btn,.class-tab,.rarity-toggle,.future-toggle,.cycle){transition:background-color .16s ease}}
 
 </style>
+<style>
+
+/* Operator toolbar: shared clipped surfaces, clear filter groups and compact actions. */
+.zoot-operators .operator-heading{margin-bottom:0;gap:20px}
+.zoot-operators .operator-actions{gap:10px}
+.zoot-operators .operator-actions .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:44px;padding:11px 16px;background:var(--z-panel);font-size:13px;box-shadow:inset 0 -1px var(--z-border)}
+.zoot-operators .operator-actions .btn:hover{background:var(--z-hover)}
+.zoot-operators .operator-actions svg,.zoot-operators .operator-toolbar svg{width:20px;height:20px;flex:none}
+.zoot-operators .operator-toolbar{padding:24px; margin-top:24px}
+.zoot-operators .operator-search-row{display:grid;grid-template-columns:minmax(0,1fr) 190px 112px;gap:12px;align-items:stretch}
+.zoot-operators .operator-search{display:flex;align-items:center;gap:12px;min-width:0;min-height:48px;padding:0 14px;background:var(--z-input);box-shadow:inset 0 -1px var(--z-input-border)}
+.zoot-operators .operator-search svg{color:var(--z-muted)}
+.zoot-operators .operator-search:focus-within{box-shadow:inset 0 -2px var(--z-link)}
+.zoot-operators .operator-search-row .operator-search input{flex:1;width:100%;max-width:none;min-width:0;min-height:48px;margin:0;padding:10px 0;border:0;background:transparent;box-shadow:none;font-size:14px}
+.zoot-operators .operator-search input:focus-visible{outline-offset:-3px}
+.zoot-operators .operator-owned-filter{display:flex;align-items:center;min-width:0;gap:10px;background:var(--z-input);padding-left:12px;box-shadow:inset 0 -1px var(--z-input-border)}
+.zoot-operators .operator-owned-filter>span{color:var(--z-muted);font-size:12px;white-space:nowrap}
+.zoot-operators .operator-owned-filter select{flex:1;min-width:0;min-height:48px;background:transparent;border:0;padding:8px;font-size:14px}
+.zoot-operators .operator-toolbar .future-toggle{display:flex;align-items:center;justify-content:center;gap:9px;min-height:48px;font-size:13px}
+.zoot-operators .filter-indicator{width:7px;height:7px;flex:none;border:1px solid var(--z-muted);background:transparent}
+.zoot-operators .future-toggle[aria-pressed=true] .filter-indicator{background:var(--z-link);border-color:var(--z-link)}
+.zoot-operators .operator-filter-row{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-top:22px}
+.zoot-operators .operator-rarity-filter{flex:1;max-width:560px;min-width:0}
+.zoot-operators .operator-filter-label{display:block;font-size:12px;color:var(--z-muted);font-weight:600;line-height:1.4;margin-bottom:10px}
+.zoot-operators .operator-toolbar .rarity-options{margin:0;gap:8px}
+.zoot-operators .operator-toolbar .rarity-toggle{min-height:40px;padding:9px 6px;font-size:13px}
+.zoot-operators .operator-toolbar .materials-action{margin:0;flex:none}
+.zoot-operators .operator-toolbar .plan-link{display:flex;align-items:center;justify-content:center;gap:9px;min-height:40px;padding:10px 14px;background:var(--z-selected);color:var(--z-on-selected);font-size:13px}
+.zoot-operators .operator-toolbar .plan-link:hover{background:var(--z-hover)}
+.zoot-operators .plan-arrow{margin-left:10px;font-size:17px}
+.zoot-operators .operator-toolbar .profession-picker{margin-top:22px;padding-top:20px;border-top:1px solid var(--z-border)}
+.zoot-operators .operator-toolbar .profession-tabs{gap:8px;grid-template-columns:repeat(9,minmax(0,1fr))}
+.zoot-operators .operator-toolbar .profession-tabs .class-tab{min-height:78px;gap:9px;padding:12px 3px;font-size:12px}
+.zoot-operators .operator-toolbar .profession-tabs .class-glyph{--icon-size:30px}
+.zoot-operators .operator-toolbar .class-tab[aria-pressed=true]{background:var(--z-selected);color:var(--z-on-selected);box-shadow:inset 0 -3px var(--z-accent)}
+.zoot-operators .operator-toolbar .branch-tabs{margin-top:12px;gap:8px}
+.zoot-operators .operator-toolbar .branch-tabs .class-tab{min-height:64px;padding:9px 12px;font-size:11px}
+.zoot-operators .operator-toolbar .branch-tabs .class-glyph{--icon-size:24px}
+@media(max-width:900px){
+ .zoot-operators .operator-search-row{grid-template-columns:minmax(0,1fr) 175px 100px}
+ .zoot-operators .operator-filter-row{gap:16px}
+ .zoot-operators .operator-toolbar .profession-tabs{gap:5px}
+}
+@media(max-width:760px){
+ .zoot-operators .operator-heading{gap:16px}
+ .zoot-operators .operator-actions{width:100%;gap:8px}
+ .zoot-operators .operator-actions .btn{padding:10px 8px;gap:7px;flex:1;min-height:44px;font-size:12px}
+ .zoot-operators .operator-actions svg{width:18px;height:18px}
+ .zoot-operators .operator-toolbar{padding:18px 16px;margin-top:20px}
+ .zoot-operators .operator-search-row{grid-template-columns:minmax(0,1fr) 110px;gap:10px}
+ .zoot-operators .operator-search{grid-column:1/-1}
+ .zoot-operators .operator-search-row .operator-search input{flex-basis:auto}
+ .zoot-operators .operator-filter-row{align-items:stretch;flex-direction:column;gap:16px;margin-top:18px}
+ .zoot-operators .operator-rarity-filter{max-width:none}
+ .zoot-operators .operator-toolbar .rarity-options{gap:5px}
+ .zoot-operators .operator-toolbar .plan-link{min-height:44px;justify-content:flex-start}
+ .zoot-operators .operator-toolbar .plan-arrow{margin-left:auto}
+ .zoot-operators .operator-toolbar .profession-picker{margin-top:18px;padding-top:18px}
+ .zoot-operators .operator-toolbar .profession-tabs{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+ .zoot-operators .operator-toolbar .profession-tabs .class-tab{flex-direction:row;min-height:52px;gap:7px;padding:10px 3px;font-size:11px}
+ .zoot-operators .operator-toolbar .profession-tabs .class-glyph{--icon-size:24px}
+ .zoot-operators .operator-toolbar .branch-tabs .class-tab{min-width:62px;padding:8px}
+}
+</style>
 <script src="assets/js/zoot.js?v=4"></script>
 </head>
 <body class="zoot-operators">
 <div class="wrap">
-<div class="top">
+<div class="top operator-heading">
 <div><h1>오퍼레이터 관리</h1><div class="muted">보유 및 육성 현황은 이 브라우저에 자동 저장됩니다.</div></div>
-<div class="nav"><button class="btn" id="gameImport">게임 계정 가져오기</button><button class="btn" id="exportPng">PNG 출력 설정</button></div>
+<div class="nav operator-actions"><button class="btn" id="gameImport"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M4 16v4h16v-4M12 3v12m-5-5 5 5 5-5"/></svg><span>게임 계정 가져오기</span></button><button class="btn" id="exportPng"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M4 4h16v16H4z"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m4 17 6-6 4 4 3-3 3 3"/></svg><span>PNG 출력 설정</span></button></div>
 </div>
-<div class="panel">
-<div class="controls">
-<input class="search" id="q" placeholder="이름 또는 별명 검색" aria-label="오퍼레이터 검색">
-<select id="ownedFilter"><option value="">전체</option><option value="1">보유</option><option value="0">미보유</option></select>
-<button type="button" id="futureOnly" class="future-toggle" aria-pressed="false">미래시</button>
+<section class="panel operator-toolbar" aria-label="오퍼레이터 검색 및 필터">
+<div class="controls operator-search-row">
+<label class="operator-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/></svg><input class="search" id="q" placeholder="이름 또는 별명 검색" aria-label="오퍼레이터 검색" autocomplete="off"></label>
+<label class="operator-owned-filter"><span>보유 여부</span><select id="ownedFilter"><option value="">전체</option><option value="1">보유</option><option value="0">미보유</option></select></label>
+<button type="button" id="futureOnly" class="future-toggle" aria-pressed="false"><span class="filter-indicator" aria-hidden="true"></span>미래시</button>
 </div>
-<div class="materials-action"><a class="btn plan-link" href="plans.html">오퍼레이터 육성 계획</a></div>
-<input type="hidden" id="rarity" value=""><div id="rarityOptions" class="rarity-options" role="group" aria-label="표시할 등급"></div>
-<div class="profession-picker"><div id="professionTabs" class="profession-tabs" role="group" aria-label="기본 직군"></div><div id="branchTabs" class="branch-tabs" role="group" aria-label="세부 직군"></div></div>
+<div class="operator-filter-row">
+<div class="operator-rarity-filter"><span class="operator-filter-label">등급</span><input type="hidden" id="rarity" value=""><div id="rarityOptions" class="rarity-options" role="group" aria-label="표시할 등급"></div></div>
+<div class="materials-action"><a class="btn plan-link" href="plans.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M8 4H4v16h16V4h-4M8 3h8v4H8zM8 12h8m-8 4h5"/></svg><span>오퍼레이터 육성 계획</span><span class="plan-arrow" aria-hidden="true">↗</span></a></div>
 </div>
+<div class="profession-picker"><span class="operator-filter-label">직군</span><div id="professionTabs" class="profession-tabs" role="group" aria-label="기본 직군"></div><div id="branchTabs" class="branch-tabs" role="group" aria-label="세부 직군"></div></div>
+</section>
 <div id="grid"><div class="muted">오퍼레이터 데이터를 불러오는 중입니다.</div></div>
 </div>
 <dialog id="pngDialog" class="png-dialog" aria-labelledby="pngTitle">
