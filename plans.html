@@ -62,25 +62,27 @@ input[type=number]{width:74px}.search{min-width:220px}
 <link rel="stylesheet" href="assets/css/future-operators.css?v=2">
 <link rel="stylesheet" href="assets/css/depot-button.css?v=2">
 <link rel="stylesheet" href="assets/css/zoot-navigation.css?v=1">
+<link rel="stylesheet" href="assets/css/zoot.css?v=10">
+<link rel="stylesheet" href="assets/css/zoot-plans.css?v=1">
+<link rel="stylesheet" href="assets/css/zoot-features.css?v=1">
 <script src="assets/js/zoot.js?v=5"></script>
 </head>
-<body>
+<body class="zoot-feature zoot-plans">
 <div class="wrap">
 <div class="top">
 <div><h1>오퍼레이터 육성 계획</h1><div class="muted">육성 상태를 변경하면 미래 계획으로 저장됩니다. 실제로 변경한 값과 새로 체크한 보유 표시만 노란색으로 구분됩니다.</div></div>
 <div class="nav"><a class="btn" href="operators.html">오퍼레이터</a></div>
 </div>
-<div class="panel">
-<div class="controls">
-<input class="search" id="q" placeholder="이름 또는 별명 검색" aria-label="오퍼레이터 검색">
-<select id="ownedFilter"><option value="">전체</option><option value="1">보유</option><option value="0">미보유</option></select>
+<section class="panel operator-toolbar" aria-label="육성 계획 검색 및 필터">
+<div class="controls operator-search-row">
+<label class="operator-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/></svg><input class="search" id="q" placeholder="이름 또는 별명 검색" aria-label="오퍼레이터 검색"></label>
+<label class="operator-owned-filter"><span>보유 여부</span><select id="ownedFilter"><option value="">전체</option><option value="1">보유</option><option value="0">미보유</option></select></label>
 <button type="button" id="futureOnly" class="future-toggle" aria-pressed="false">미래시</button>
 </div>
-
-<div class="growth-action"><button type="button" id="growthOpen">필요 재료 확인</button></div>
-<input type="hidden" id="rarity" value=""><div id="rarityOptions" class="rarity-options" role="group" aria-label="표시할 등급"></div>
-<div class="profession-picker"><div id="professionTabs" class="profession-tabs" role="group" aria-label="기본 직군"></div><div id="branchTabs" class="branch-tabs" role="group" aria-label="세부 직군"></div></div>
-</div>
+<div class="operator-filter-row"><div class="operator-rarity-filter"><span class="operator-filter-label">등급</span><input type="hidden" id="rarity" value=""><div id="rarityOptions" class="rarity-options" role="group" aria-label="표시할 등급"></div></div>
+<div class="growth-action"><button type="button" id="growthOpen">필요 재료 확인</button></div></div>
+<div class="profession-picker"><span class="operator-filter-label">직군</span><div id="professionTabs" class="profession-tabs" role="group" aria-label="기본 직군"></div><div id="branchTabs" class="branch-tabs" role="group" aria-label="세부 직군"></div></div>
+</section>
 <div id="grid"><div class="muted">오퍼레이터 데이터를 불러오는 중입니다.</div></div>
 </div>
 <dialog id="growthDialog" class="growth-dialog" aria-labelledby="growthTitle">
@@ -232,4 +234,5 @@ Promise.all([fetch(DATA_URL,{cache:'no-cache'}).then(r=>r.json()),fetch('data/pr
 
 <script type="module" src="assets/js/growth-materials.mjs?v=11"></script>
 <a class="depot-button" href="backpack.html" aria-label="창고" title="창고"><img src="assets/icons/Depot_iconv2.svg" width="36" height="36" alt="" aria-hidden="true"></a>
+<script src="assets/js/zoot-features.js?v=1"></script>
 </body></html>

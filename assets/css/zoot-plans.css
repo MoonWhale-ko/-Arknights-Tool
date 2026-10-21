@@ -1,0 +1,162 @@
+
+/* Operator appearance follows the shared Z.O.O.T. palette. */
+.zoot-plans{--operator-cut:12px;--operator-symbol-filter:none}
+html[data-theme=dark] .zoot-plans{--operator-symbol-filter:none}
+.zoot-plans>.wrap{max-width:1600px;padding:28px 24px 48px}
+.zoot-plans .top{gap:16px;align-items:center}
+.zoot-plans .top h1{font-size:24px;font-weight:700;letter-spacing:-.025em}
+.zoot-plans .top .muted{font-size:13px;line-height:1.6;margin-top:6px}
+.zoot-plans .muted{color:var(--z-muted)}
+.zoot-plans :is(.btn,.future-toggle,.rarity-toggle,.class-tab){background:var(--z-input);color:var(--z-text);border:0;min-height:40px;padding:10px 14px;font-weight:500;clip-path:polygon(5px 0,100% 0,100% calc(100% - 5px),calc(100% - 5px) 100%,0 100%,0 5px)}
+.zoot-plans :is(.btn,.future-toggle,.rarity-toggle,.class-tab):hover{background:var(--z-hover)}
+.zoot-plans :is(.future-toggle,.rarity-toggle,.class-tab)[aria-pressed=true]{background:var(--z-selected);color:var(--z-on-selected);box-shadow:inset 0 -3px var(--z-accent);font-weight:700}
+.zoot-plans :is(#pngSave,#accountApply){background:var(--z-accent);color:#172008;font-weight:700}
+.zoot-plans :is(#pngSave,#accountApply):not(:disabled):hover{background:var(--z-accent-hover)}
+.zoot-plans :is(#pngSave,#accountApply):disabled{background:var(--z-disabled);color:var(--z-disabled-text);opacity:1;cursor:default}
+.zoot-plans :is(button:disabled,input:disabled,select:disabled){cursor:default}
+.zoot-plans .btn:disabled{opacity:.45}
+.zoot-plans .panel{position:relative;isolation:isolate;border:0;background:transparent;margin-top:24px;padding:22px;box-shadow:none;filter:drop-shadow(0 4px 7px #00000018)}
+.zoot-plans .panel::before{content:"";position:absolute;inset:0;background:var(--z-panel);clip-path:polygon(var(--operator-cut) 0,100% 0,100% calc(100% - var(--operator-cut)),calc(100% - var(--operator-cut)) 100%,0 100%,0 var(--operator-cut));z-index:-1;pointer-events:none}
+.zoot-plans .controls{gap:10px}
+.zoot-plans .controls .search{flex:1;min-width:180px;max-width:480px}
+.zoot-plans :is(.wrap,.account-dialog,.png-dialog) :is(input:not([type=checkbox]),select){background:var(--z-input);color:var(--z-text);border:1px solid var(--z-input-border);border-radius:0}
+.zoot-plans :is(.controls input,.controls select){min-height:42px;padding:10px 12px;font-size:14px}
+.zoot-plans input::placeholder{color:var(--z-muted)}
+.zoot-plans input[type=checkbox]{accent-color:var(--z-link);width:16px;height:16px;flex:none}
+.zoot-plans .materials-action{margin-top:16px}
+.zoot-plans .materials-action .btn{font-size:14px;padding:11px 18px}
+.zoot-plans .rarity-options{gap:8px;margin-top:16px}
+.zoot-plans .profession-picker{border-color:var(--z-border);margin-top:18px;padding-top:18px}
+.zoot-plans .profession-tabs{gap:8px}
+.zoot-plans .class-tab{min-height:80px;padding:12px 4px;gap:8px;font-size:13px}
+.zoot-plans .class-tab .class-glyph{filter:var(--z-icon-filter)}
+.zoot-plans .branch-tabs .class-tab{min-height:70px;font-size:12px}
+.zoot-plans .branch-tabs:empty{display:none}
+.zoot-plans .rarity-group{margin-top:28px}
+.zoot-plans .rarity-heading{border:0;border-left:3px solid var(--color);color:var(--z-text);background:var(--z-panel);padding:10px 14px;font-size:15px;letter-spacing:2px;margin-bottom:14px}
+.zoot-plans .rarity-grid{gap:16px;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr))}
+.zoot-plans .card{background:var(--z-panel);color:var(--z-text);border:1px solid var(--color);border-left:3px solid var(--color);box-shadow:var(--z-shadow)}
+.zoot-plans .photo{background:var(--z-input)}
+.zoot-plans .photo .avatar-fallback{background:var(--z-input);color:var(--z-muted)}
+.zoot-plans .settings{padding:14px 12px}
+.zoot-plans .settings .name{font-weight:700;color:var(--z-text)}
+.zoot-plans .settings>.stars{visibility:hidden}
+.zoot-plans .owned{color:var(--z-muted);gap:5px;font-size:12px}
+.zoot-plans .card[data-owned="1"] .owned{color:var(--z-link);font-weight:700}
+.zoot-plans :is(.field span,.section-title,.slot-title,.cycle .rank){color:var(--z-muted)}
+.zoot-plans .section{border-color:var(--z-border)}
+.zoot-plans .field input,.zoot-plans .field select{padding:5px 7px}
+.zoot-plans .cycle{color:var(--z-text)}
+.zoot-plans .cycle img{filter:var(--operator-symbol-filter)}
+.zoot-plans .cycle img.progress-dark{display:none}
+.zoot-plans .cycle img.progress-light{display:block}
+html[data-theme=dark] .zoot-plans .cycle img.progress-dark{display:block}
+html[data-theme=dark] .zoot-plans .cycle img.progress-light{display:none}
+.zoot-plans .cycle:hover{background:transparent;filter:none}
+.zoot-plans .cycle:disabled{background:transparent;filter:none}
+.zoot-plans .skill-empty{color:var(--z-disabled-text)}
+.zoot-plans .skill-level{color:var(--z-text)}
+.zoot-plans .progress-body.is-disabled{opacity:.48}
+.zoot-plans .photo .future-badge{background:var(--z-panel);color:var(--z-link);border-color:var(--z-accent)}
+.zoot-plans :is(.png-dialog,.account-dialog){background:var(--z-popover);color:var(--z-text);border:0;padding:24px;box-shadow:var(--z-shadow-hover);font:14px/1.6 Pretendard,system-ui,sans-serif}
+.zoot-plans :is(.png-dialog,.account-dialog)::backdrop{background:#0008}
+.zoot-plans :is(.png-dialog,.account-dialog) h2{font-size:21px;font-weight:700}
+.zoot-plans .png-options-grid{gap:16px}
+.zoot-plans .png-options-grid select{min-height:40px;padding:8px}
+.zoot-plans .png-preview{background:var(--z-input);border-color:var(--z-border)}
+.zoot-plans .png-dialog-footer{border-top:1px solid var(--z-border);padding-top:16px}
+.zoot-plans .account-dialog input{min-height:40px;padding:8px 10px}
+html:has(.zoot-plans dialog[open]){overflow:hidden}
+@media(max-width:760px){
+ .zoot-plans>.wrap{padding:20px 14px 36px}
+ .zoot-plans .top{align-items:flex-start}
+ .zoot-plans .top h1{font-size:22px}
+ .zoot-plans .nav{width:100%;margin:0;gap:8px}
+ .zoot-plans .nav .btn{flex:1;font-size:13px;padding:10px}
+ .zoot-plans .panel{padding:16px;margin-top:20px}
+ .zoot-plans .controls .search{width:100%;flex-basis:100%;max-width:none}
+ .zoot-plans .controls select{flex:1}
+ .zoot-plans .materials-action .btn{width:100%;text-align:center}
+ .zoot-plans .profession-tabs{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+ .zoot-plans .class-tab{min-height:68px;font-size:11px;padding:8px 2px}
+ .zoot-plans .profession-tabs .class-glyph{--icon-size:28px}
+ .zoot-plans .branch-tabs{gap:5px}
+ .zoot-plans .branch-tabs .class-tab{min-width:64px;font-size:11px}
+ .zoot-plans .rarity-options{gap:5px}
+ .zoot-plans .rarity-toggle{padding:10px 2px;font-size:12px}
+ .zoot-plans :is(.png-dialog,.account-dialog){padding:18px}
+ .zoot-plans .png-dialog-footer{flex-wrap:wrap}
+}
+@media(prefers-reduced-motion:no-preference){.zoot-plans :is(.btn,.class-tab,.rarity-toggle,.future-toggle,.cycle){transition:background-color .16s ease}}
+
+
+
+
+/* Operator toolbar: shared clipped surfaces, clear filter groups and compact actions. */
+.zoot-plans .operator-heading{margin-bottom:0;gap:20px}
+.zoot-plans .operator-actions{gap:10px}
+.zoot-plans .operator-actions .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:44px;padding:11px 16px;background:var(--z-panel);font-size:13px;box-shadow:inset 0 -1px var(--z-border)}
+.zoot-plans .operator-actions .btn:hover{background:var(--z-hover)}
+.zoot-plans .operator-actions svg,.zoot-plans .operator-toolbar svg{width:20px;height:20px;flex:none}
+.zoot-plans .operator-toolbar{padding:24px; margin-top:24px}
+.zoot-plans .operator-search-row{display:grid;grid-template-columns:minmax(0,1fr) 190px 112px;gap:12px;align-items:stretch}
+.zoot-plans .operator-search{display:flex;align-items:center;gap:12px;min-width:0;min-height:48px;padding:0 14px;background:var(--z-input);box-shadow:inset 0 -1px var(--z-input-border)}
+.zoot-plans .operator-search svg{color:var(--z-muted)}
+.zoot-plans .operator-search:focus-within{box-shadow:inset 0 -2px var(--z-link)}
+.zoot-plans .operator-search-row .operator-search input{flex:1;width:100%;max-width:none;min-width:0;min-height:48px;margin:0;padding:10px 0;border:0;background:transparent;box-shadow:none;font-size:14px}
+.zoot-plans .operator-search input:focus-visible{outline-offset:-3px}
+.zoot-plans .operator-owned-filter{display:flex;align-items:center;min-width:0;gap:10px;background:var(--z-input);padding-left:12px;box-shadow:inset 0 -1px var(--z-input-border)}
+.zoot-plans .operator-owned-filter>span{color:var(--z-muted);font-size:12px;white-space:nowrap}
+.zoot-plans .operator-owned-filter select{flex:1;min-width:0;min-height:48px;background:transparent;border:0;padding:8px;font-size:14px}
+.zoot-plans .operator-toolbar .future-toggle{display:flex;align-items:center;justify-content:center;min-height:48px;font-size:20px;font-weight:600}
+.zoot-plans #futureOnly::before,.zoot-plans #futureOnly::after,.zoot-plans #futureOnly .filter-indicator{content:none;display:none}
+.zoot-plans .operator-filter-row{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-top:22px}
+.zoot-plans .operator-rarity-filter{flex:1;max-width:560px;min-width:0}
+.zoot-plans .operator-filter-label{display:block;font-size:12px;color:var(--z-muted);font-weight:600;line-height:1.4;margin-bottom:10px}
+.zoot-plans .operator-toolbar .rarity-options{margin:0;gap:8px}
+.zoot-plans .operator-toolbar .rarity-toggle{min-height:40px;padding:9px 6px;font-size:13px}
+.zoot-plans .operator-toolbar .materials-action{margin:0;flex:none}
+.zoot-plans .operator-toolbar .plan-link{display:flex;align-items:center;justify-content:center;gap:9px;min-height:40px;padding:10px 14px;background:var(--z-selected);color:var(--z-on-selected);font-size:13px}
+.zoot-plans .operator-toolbar .plan-link:hover{background:var(--z-hover)}
+.zoot-plans .plan-arrow{margin-left:10px;font-size:17px}
+.zoot-plans .operator-toolbar .profession-picker{margin-top:22px;padding-top:20px;border-top:1px solid var(--z-border)}
+.zoot-plans .operator-toolbar .profession-tabs{gap:8px;grid-template-columns:repeat(9,minmax(0,1fr))}
+.zoot-plans .operator-toolbar .profession-tabs .class-tab{min-height:78px;gap:9px;padding:12px 3px;font-size:12px}
+.zoot-plans .operator-toolbar .profession-tabs .class-glyph{--icon-size:30px}
+.zoot-plans .operator-toolbar .class-tab[aria-pressed=true]{background:var(--z-selected);color:var(--z-on-selected);box-shadow:inset 0 -3px var(--z-accent)}
+.zoot-plans .operator-toolbar .branch-tabs{margin-top:12px;gap:8px}
+.zoot-plans .operator-toolbar .branch-tabs .class-tab{min-height:64px;padding:9px 12px;font-size:11px}
+.zoot-plans .operator-toolbar .branch-tabs .class-glyph{--icon-size:24px}
+@media(max-width:900px){
+ .zoot-plans .operator-search-row{grid-template-columns:minmax(0,1fr) 175px 100px}
+ .zoot-plans .operator-filter-row{gap:16px}
+ .zoot-plans .operator-toolbar .profession-tabs{gap:5px}
+}
+@media(max-width:760px){
+ .zoot-plans .operator-heading{gap:16px}
+ .zoot-plans .operator-actions{width:100%;gap:8px}
+ .zoot-plans .operator-actions .btn{padding:10px 8px;gap:7px;flex:1;min-height:44px;font-size:12px}
+ .zoot-plans .operator-actions svg{width:18px;height:18px}
+ .zoot-plans .operator-toolbar{padding:18px 16px;margin-top:20px}
+ .zoot-plans .operator-search-row{grid-template-columns:minmax(0,1fr) 110px;gap:10px}
+ .zoot-plans .operator-search{grid-column:1/-1}
+ .zoot-plans .operator-search-row .operator-search input{flex-basis:auto}
+ .zoot-plans .operator-filter-row{align-items:stretch;flex-direction:column;gap:16px;margin-top:18px}
+ .zoot-plans .operator-rarity-filter{max-width:none}
+ .zoot-plans .operator-toolbar .rarity-options{gap:5px}
+ .zoot-plans .operator-toolbar .plan-link{min-height:44px;justify-content:flex-start}
+ .zoot-plans .operator-toolbar .plan-arrow{margin-left:auto}
+ .zoot-plans .operator-toolbar .profession-picker{margin-top:18px;padding-top:18px}
+ .zoot-plans .operator-toolbar .profession-tabs{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+ .zoot-plans .operator-toolbar .profession-tabs .class-tab{flex-direction:row;min-height:52px;gap:7px;padding:10px 3px;font-size:11px}
+ .zoot-plans .operator-toolbar .profession-tabs .class-glyph{--icon-size:24px}
+ .zoot-plans .operator-toolbar .branch-tabs .class-tab{min-width:62px;padding:8px}
+}
+
+
+/* Use non-rectangular focus cues, including programmatically restored focus. */
+body.zoot-plans :is(button,a,input,select,textarea){-webkit-tap-highlight-color:transparent}
+body.zoot-plans :is(button,a,input,select,textarea):is(:focus,:focus-visible){outline:none!important;outline-offset:0!important}
+body.zoot-plans :is(button,a):focus-visible{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+body.zoot-plans :is(input:not([type=checkbox]):not([type=radio]),select,textarea):focus-visible{border-bottom-color:var(--z-link)}
+
