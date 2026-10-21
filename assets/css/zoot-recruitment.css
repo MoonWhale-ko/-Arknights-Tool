@@ -55,3 +55,6 @@
 html:has(dialog.recruitment-settings[open]){overflow:hidden}
 @media(max-width:760px){.zoot-recruit .workspace{padding:20px 14px 36px}.zoot-recruit .tag-panel{width:100%;min-height:calc((100vw - 28px)*16/9);padding:22px 18px}.zoot-recruit .results-panel{padding:0;margin-top:28px}.zoot-recruit .tag{min-height:40px;font-size:clamp(11px,3.8cqw,16px)}.zoot-recruit .tag-footer{gap:10px}.zoot-recruit .results-header h2{font-size:20px}}
 @media(prefers-reduced-motion:no-preference){.zoot-recruit :is(.tag,.time-button,.tag-reset,.settings-button,.rarity){transition:background-color .16s ease}.zoot-recruit .recruitment-settings[open]{animation:zoot-popup .18s ease-out}.zoot-recruit .recruitment-settings[open]::backdrop{animation:zoot-dim .18s ease-out}}
+
+/* A dark halo stays visible on light panels; dark mode retains its white glow. */
+:root[data-theme=light] .zoot-recruit .op.unowned .portrait-frame,:root[data-theme=light] .zoot-recruit .ops.image-none .op.unowned .optext{box-shadow:0 0 0 1px #414141,0 0 6px #20202099,0 0 14px #20202055}
