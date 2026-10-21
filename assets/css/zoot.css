@@ -64,12 +64,12 @@ button,input,select,textarea{font-family:inherit;accent-color:var(--z-accent);bo
 .zoot-home .home-card-shadow{container-type:inline-size}
 .zoot-home .home-card{grid-template-columns:clamp(22px,18cqw,52.5px) minmax(0,1fr);padding:clamp(8px,6cqw,18px);gap:clamp(6px,4cqw,13.5px)}
 .zoot-home .icon{width:clamp(22px,18cqw,52.5px);height:clamp(22px,18cqw,52.5px)}
-.zoot-home .home-card h2{font-size:clamp(12.5px,8cqw,22.5px)}
+.zoot-home .home-card h2{font-size:clamp(15px,9.6cqw,27px)}
 .zoot-home .home-divider{width:calc(80% + 5px);height:1px;min-height:1px;border:0;background:var(--z-border);margin:0 auto 28px}
 @media(max-width:600px){.zoot-home .grid{width:calc(75% + 3px)}.zoot-home .home-divider{width:calc(80% + 3px)}}
 
 /* Mobile: larger cards and content anchored near the top. */
-@media(max-width:600px){.zoot-home .wrap{justify-content:flex-start}.zoot-home .grid{width:calc(90% + 1.2px)}.zoot-home .home-divider{width:calc(96% + 1.2px)}.zoot-home .home-card h2{font-size:clamp(12.5px,6.666667cqw,22.5px)}}
+@media(max-width:600px){.zoot-home .wrap{justify-content:flex-start}.zoot-home .grid{width:calc(90% + 1.2px)}.zoot-home .home-divider{width:calc(96% + 1.2px)}.zoot-home .home-card h2{font-size:clamp(15px,8cqw,27px)}}
 
 /* Halfway between top alignment and the former vertical centering. */
 @media(max-width:600px){.zoot-home .wrap::before,.zoot-home .wrap::after{content:"";display:block;flex-basis:0;flex-shrink:0}.zoot-home .wrap::before{flex-grow:1}.zoot-home .wrap::after{flex-grow:3}}
