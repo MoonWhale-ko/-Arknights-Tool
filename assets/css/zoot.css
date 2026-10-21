@@ -32,7 +32,7 @@ button,input,select,textarea{font-family:inherit;accent-color:var(--z-accent);bo
 .zoot-drawer nav img{width:26px;height:26px;object-fit:contain;filter:var(--z-icon-filter)}
 .zoot-drawer nav a:hover{background:var(--z-hover)}
 .zoot-drawer nav a[aria-current=page]{background:var(--z-selected);color:var(--z-on-selected);box-shadow:inset 3px 0 var(--z-accent)}
-.zoot-drawer-settings{margin-top:28px;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 8px;color:var(--z-muted);font-size:14px}
+.zoot-drawer-settings{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 8px;color:var(--z-muted);font-size:14px}
 .zoot-theme-home{position:fixed;right:20px;bottom:20px;z-index:20;background:var(--z-panel);box-shadow:var(--z-shadow)}
 .zoot-toast{position:fixed;top:calc(var(--z-bar) + 12px);left:50%;transform:translateX(-50%);z-index:2200;max-width:calc(100% - 32px);padding:12px 20px;background:var(--z-popover);color:var(--z-text);box-shadow:var(--z-shadow);border-left:4px solid var(--z-success)}
 .zoot-home .zoot-toast{top:20px}
@@ -73,3 +73,5 @@ button,input,select,textarea{font-family:inherit;accent-color:var(--z-accent);bo
 
 /* Halfway between top alignment and the former vertical centering. */
 @media(max-width:600px){.zoot-home .wrap::before,.zoot-home .wrap::after{content:"";display:block;flex-basis:0;flex-shrink:0}.zoot-home .wrap::before{flex-grow:1}.zoot-home .wrap::after{flex-grow:3}}
+
+.zoot-drawer[open]{display:flex;flex-direction:column}
