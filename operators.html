@@ -73,8 +73,9 @@ html[data-theme=dark] .zoot-operators{--operator-symbol-filter:none}
 .zoot-operators :is(.btn,.future-toggle,.rarity-toggle,.class-tab){background:var(--z-input);color:var(--z-text);border:0;min-height:40px;padding:10px 14px;font-weight:500;clip-path:polygon(5px 0,100% 0,100% calc(100% - 5px),calc(100% - 5px) 100%,0 100%,0 5px)}
 .zoot-operators :is(.btn,.future-toggle,.rarity-toggle,.class-tab):hover{background:var(--z-hover)}
 .zoot-operators :is(.future-toggle,.rarity-toggle,.class-tab)[aria-pressed=true]{background:var(--z-selected);color:var(--z-on-selected);box-shadow:inset 0 -3px var(--z-accent);font-weight:700}
-.zoot-operators :is(#pngSave,#accountApply){background:var(--z-accent);color:var(--z-on-selected);font-weight:700}
-.zoot-operators :is(#pngSave,#accountApply):hover{background:var(--z-accent-hover)}
+.zoot-operators :is(#pngSave,#accountApply){background:var(--z-accent);color:#172008;font-weight:700}
+.zoot-operators :is(#pngSave,#accountApply):not(:disabled):hover{background:var(--z-accent-hover)}
+.zoot-operators :is(#pngSave,#accountApply):disabled{background:var(--z-disabled);color:var(--z-disabled-text);opacity:1;cursor:default}
 .zoot-operators :is(button:disabled,input:disabled,select:disabled){cursor:default}
 .zoot-operators .btn:disabled{opacity:.45}
 .zoot-operators .panel{position:relative;isolation:isolate;border:0;background:transparent;margin-top:24px;padding:22px;box-shadow:none;filter:drop-shadow(0 4px 7px #00000018)}
