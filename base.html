@@ -16,7 +16,7 @@
 <fieldset class="optimizer-section"><legend>2. 언제 교대할까요?</legend><div class="optimizer-section-grid"><label class="optimizer-field">교대조 수<select id="optimizerTeams"><option value="2">2교대</option><option value="3">3교대</option></select></label><label class="optimizer-field">일괄 교대 기준<select id="optimizerRotation"><option value="first">첫 소진 시</option><option value="all">전원 소진 시</option><option value="12h">12시간마다</option></select></label><label class="optimizer-field">숙소 추가 조작<select id="optimizerExtra"><option value="no">허용 안 함</option><option value="yes">허용</option></select></label></div>
 <p class="optimizer-note">첫 소진: 한 명이라도 컨디션이 0이 되면 교대합니다.<br>전원 소진: 근무조 전원의 컨디션이 0이 되면 교대합니다.<br>숙소 추가 조작: 근무 교대 사이에도 숙소 인원을 바꿀 수 있습니다.</p></fieldset>
 <fieldset class="optimizer-section"><legend>3. 숙소와 단서를 확인하세요</legend>
-<h3>숙소 인테리어 점수</h3><div class="optimizer-dorms" id="optimizerDorms"></div>
+<p class="optimizer-note">숙소 추천은 교대 없이 유지할 고정 지원자만 표시합니다. 회복하러 입실하는 인원은 별도로 추천하지 않습니다.</p><h3>숙소 인테리어 점수</h3><div class="optimizer-dorms" id="optimizerDorms"></div>
 <h3>응접실 · 현재 없는 단서</h3><p class="optimizer-note">보드와 보관함에 모두 없는 단서만 선택하세요. 단서를 얻으면 선택을 갱신하세요.</p><div id="optimizerMissingClues" class="optimizer-priority"></div>
 <p class="optimizer-note">미보유 단서 우선 오퍼레이터는 최대 1명, 나머지는 수집 속도 위주로 추천합니다.</p></fieldset>
 <fieldset class="optimizer-section"><legend>4. 계산 시간을 정하세요</legend><div class="optimizer-section-grid"><label class="optimizer-field">계산 시간<select id="optimizerSeconds"><option value="10">10초</option><option value="30">30초</option><option value="60">1분</option><option value="180">3분</option></select></label></div><p class="optimizer-note">오래 계산할수록 더 많은 후보를 비교합니다. 전체 조합의 최고 효율을 보장하지는 않습니다.</p>
@@ -54,4 +54,4 @@
 </form>
 <div id="accountMessage" class="account-message" role="status" aria-live="polite"></div>
 <div class="account-actions"><button class="btn" id="accountApply" disabled>조회 결과 적용</button><button class="btn" id="accountUndo">가져오기 전으로 복원</button><button class="btn" id="accountClose">닫기</button></div>
-</dialog><script type="module" src="assets/js/base.mjs?v=87"></script><script src="assets/js/account-config.js"></script><script type="module" src="assets/js/base-optimizer-ui.mjs?v=8"></script><script type="module" src="assets/js/account-import.mjs?v=10"></script></body></html>
+</dialog><script type="module" src="assets/js/base.mjs?v=87"></script><script src="assets/js/account-config.js"></script><script type="module" src="assets/js/base-optimizer-ui.mjs?v=9"></script><script type="module" src="assets/js/account-import.mjs?v=10"></script></body></html>
