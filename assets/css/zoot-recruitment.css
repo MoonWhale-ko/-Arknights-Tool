@@ -57,3 +57,19 @@ html:has(dialog.recruitment-settings[open]){overflow:hidden}
 @media(max-width:760px){.zoot-recruit .workspace{padding:20px 14px 36px}.zoot-recruit .tag-panel{width:100%;min-height:calc((100vw - 28px)*16/9);padding:22px 18px}.zoot-recruit .results-panel{padding:0;margin-top:28px}.zoot-recruit .tag{min-height:40px;font-size:clamp(11px,3.8cqw,16px)}.zoot-recruit .tag-footer{gap:10px}.zoot-recruit .results-header h2{font-size:20px}}
 @media(prefers-reduced-motion:no-preference){.zoot-recruit :is(.tag,.time-button,.tag-reset,.settings-button,.rarity){transition:background-color .16s ease}.zoot-recruit .recruitment-settings[open]{animation:zoot-popup .18s ease-out}.zoot-recruit .recruitment-settings[open]::backdrop{animation:zoot-dim .18s ease-out}}
 
+
+/* Keep the desktop tag controls in view while the result column scrolls. */
+@media(min-width:761px){
+ body.zoot-page.zoot-recruit .tag-panel{position:sticky;top:88px;min-height:0;max-height:calc(100dvh - 104px);overflow-y:auto;padding:16px 18px;gap:10px;--tag-row:clamp(22px,calc((100dvh - 450px)/12),32px)}
+ .zoot-recruit .tag-header{min-height:28px}
+ .zoot-recruit .tag-search input{min-height:36px;padding:7px 10px}
+ .zoot-recruit #tagArea{flex:0 0 auto;gap:10px;justify-content:flex-start}
+ .zoot-recruit .tag-section h3{margin-bottom:5px;font-size:12px;line-height:1.35}
+ .zoot-recruit .tags{gap:4px}
+ .zoot-recruit .tag{min-height:var(--tag-row);padding:3px 2px;font-size:clamp(11px,3.6cqw,14px);line-height:1.2}
+ .zoot-recruit .recruit-time{gap:4px}
+ .zoot-recruit .time-button{min-height:28px}
+ .zoot-recruit .tag-footer{min-height:34px;margin-top:2px}
+ .zoot-recruit .tag-reset,.zoot-recruit .settings-button{min-height:34px;padding:7px 10px}
+}
+@media(max-width:760px){.zoot-recruit .tag-panel{min-height:0;padding-block:16px;gap:12px}.zoot-recruit #tagArea{gap:12px}}
