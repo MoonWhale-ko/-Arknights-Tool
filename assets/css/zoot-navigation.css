@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600&display=swap');
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+/* Navigation is scoped so feature-page colors, rarity borders and diagrams stay intact. */
+.zoot-topbar,.zoot-dialog,.zoot-toast{--z-panel:#fff;--z-popover:#fff;--z-text:#202020;--z-muted:#626262;--z-input:#f0f0f0;--z-hover:#e8e8e8;--z-accent:#d4e95c;--z-on-accent:#fff;--z-selected:#eef3cf;--z-on-selected:#3d4b12;--z-icon-filter:brightness(0);--z-focus:#53651a;--z-shadow:0 4px 14px #0002;--z-success:#79cf98;box-sizing:border-box;font-family:Pretendard,system-ui,sans-serif;color-scheme:light;color:var(--z-text)}
+html[data-theme=dark] :is(.zoot-topbar,.zoot-dialog,.zoot-toast){--z-panel:#1e1e1e;--z-popover:#282828;--z-text:#f0f0f0;--z-muted:#b0b0b0;--z-input:#181818;--z-hover:#303030;--z-accent:#acd13e;--z-on-accent:#172008;--z-selected:#30391d;--z-on-selected:#acd13e;--z-icon-filter:none;--z-focus:#acd13e;--z-shadow:0 4px 14px #0005;color-scheme:dark}
+html{scroll-padding-top:76px}
+body.zoot-page{padding-top:60px}
+.zoot-topbar{position:fixed;inset:0 0 auto;z-index:1000;height:60px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 20px;background:var(--z-panel);color:var(--z-text);box-shadow:var(--z-shadow)}
+.zoot-brand-small{font:600 20px 'Chakra Petch',sans-serif;letter-spacing:2px}
+:is(.zoot-topbar,.zoot-dialog) .zoot-icon{box-sizing:border-box;display:inline-grid;place-items:center;flex-shrink:0;width:44px;height:44px;min-height:44px;min-width:44px;padding:10px;margin:0;border:0;border-radius:0;background:transparent;color:var(--z-text);cursor:pointer;text-decoration:none}
+:is(.zoot-topbar,.zoot-dialog) .zoot-icon:hover{background:var(--z-hover)}
+:is(.zoot-topbar,.zoot-dialog) .zoot-icon svg{width:24px;height:24px;display:block}
+:is(.zoot-topbar,.zoot-dialog) :is(a,button):focus:not(:focus-visible){outline:none}
+:is(.zoot-topbar,.zoot-dialog) :is(a,button,input):focus-visible{outline:2px solid var(--z-focus);outline-offset:3px}
+:is(.zoot-topbar,.zoot-dialog) :is(a,button){-webkit-tap-highlight-color:transparent}
+dialog.zoot-dialog{position:fixed;inset:0;margin:auto;width:min(480px,calc(100% - 32px));height:auto;max-width:none;max-height:calc(100dvh - 32px);padding:24px;overflow:auto;border:0;border-radius:0;background:var(--z-popover);color:var(--z-text);font:16px Pretendard,sans-serif;box-shadow:var(--z-shadow)}
+dialog.zoot-dialog:not([open]){display:none}
+dialog.zoot-dialog::backdrop{background:#0008}
+.zoot-dialog .zoot-dialog-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 20px;padding:0;border:0}
+.zoot-dialog .zoot-dialog-heading h2{font:700 20px Pretendard,sans-serif;margin:0;padding:0;letter-spacing:normal;color:var(--z-text)}
+dialog.zoot-drawer{inset:0 0 0 auto;margin:0;width:min(320px,88vw);height:100dvh;max-height:100dvh;padding:12px 16px 24px;background:var(--z-panel);box-shadow:-8px 0 30px #0004}
+dialog.zoot-drawer[open]{display:flex;flex-direction:column}
+.zoot-drawer nav{display:grid;gap:6px;width:100%;margin:0}
+.zoot-drawer nav a{display:flex;align-items:center;gap:14px;min-height:48px;padding:12px 16px;margin:0;border:0;background:transparent;color:var(--z-text);font:600 16px/1.4 Pretendard,sans-serif;text-decoration:none;box-sizing:border-box}
+.zoot-drawer nav a:hover{background:var(--z-hover)}
+.zoot-drawer nav a[aria-current=page]{background:var(--z-selected);color:var(--z-on-selected);box-shadow:inset 3px 0 var(--z-accent)}
+.zoot-drawer nav img{width:26px;height:26px;object-fit:contain;filter:var(--z-icon-filter);flex-shrink:0}
+.zoot-drawer nav svg,.zoot-nav-spacer{width:26px;height:26px;display:block;flex-shrink:0}
+.zoot-drawer-settings{margin-top:auto;padding:24px 8px 0;display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--z-muted);font-size:14px}
+.zoot-dialog form{margin:0}
+.zoot-dialog label{display:flex;align-items:center;gap:12px;min-height:48px;padding:10px;background:var(--z-input);margin:8px 0;color:var(--z-text);font:400 16px Pretendard,sans-serif}
+.zoot-dialog input[type=radio]{width:16px;height:16px;flex-shrink:0;margin:0;accent-color:var(--z-accent)}
+.zoot-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:24px}
+.zoot-dialog .zoot-button{font:600 15px Pretendard,sans-serif;padding:11px 20px;border:0;border-radius:0;background:var(--z-hover);color:var(--z-text);cursor:pointer;clip-path:polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px)}
+.zoot-dialog .zoot-button-primary{background:var(--z-accent);color:var(--z-on-accent)}
+.zoot-toast{position:fixed;top:72px;left:50%;transform:translateX(-50%);z-index:2200;max-width:calc(100% - 32px);padding:12px 20px;background:var(--z-popover);color:var(--z-text);box-shadow:var(--z-shadow);border-left:4px solid var(--z-success);font-size:14px}
+.zoot-toast[hidden]{display:none}
+/* Keep existing sticky content below the fixed bar. */
+body.zoot-page .tag-panel{top:76px}
+body.zoot-page .bag .detail{top:76px}
+html:has(dialog.zoot-dialog[open]){overflow:hidden}
+@media(max-width:760px){.zoot-topbar{padding-inline:12px}body.zoot-page .tag-panel{top:auto}}
+@media(prefers-reduced-motion:no-preference){dialog.zoot-dialog[open]{animation:zoot-popup .18s ease-out}dialog.zoot-drawer[open]{animation:zoot-slide .18s ease-out}dialog.zoot-dialog[open]::backdrop{animation:zoot-dim .18s ease-out}}
+@keyframes zoot-slide{from{transform:translateX(32px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes zoot-popup{from{transform:translateY(8px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes zoot-dim{from{background:#0000}to{background:#0008}}
