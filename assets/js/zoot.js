@@ -36,3 +36,28 @@ document.querySelectorAll('dialog.zoot-dialog').forEach(dialog=>{
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup);else setup();
 })();
+
+// All native popups share outside-click dismissal through their cancel lifecycle.
+// This preserves per-popup cleanup, unsaved-setting rollback and close animation.
+(()=>{
+ let press=null;
+ const outside=(dialog,event)=>{
+  const r=dialog.getBoundingClientRect();
+  return event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom;
+ };
+ document.addEventListener('pointerdown',event=>{
+  press=null;
+  if(event.button!==0)return;
+  const dialog=event.target?.closest?.('dialog[open]');
+  if(dialog&&event.target===dialog&&outside(dialog,event))press=dialog;
+ },true);
+ document.addEventListener('pointercancel',()=>{press=null;},true);
+ document.addEventListener('click',event=>{
+  const dialog=press;press=null;
+  if(!dialog||!dialog.open||event.button!==0||event.target!==dialog||!outside(dialog,event))return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  const cancel=new Event('cancel',{cancelable:true});
+  if(dialog.dispatchEvent(cancel)&&dialog.open)dialog.close();
+ },true);
+})();
