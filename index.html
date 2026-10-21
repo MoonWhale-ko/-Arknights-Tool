@@ -3,43 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>명일방주 도구 | Arknights Tool</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:linear-gradient(180deg,#0d1117 0%,#111722 100%);color:#eef2f7;font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif}
-.wrap{max-width:960px;margin:0 auto;padding:clamp(40px,8vh,88px) 20px 48px}
-.brand{text-align:center;margin-bottom:48px}
-.brand h1{font-size:clamp(28px,4vw,42px);font-weight:800;margin:0 0 10px}
-.brand p{margin:0;color:#9ca8b8;font-size:clamp(16px,2vw,20px);letter-spacing:.06em}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
-.card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px;min-height:340px;padding:40px 20px;border:1px solid #2c3644;border-radius:0;background:#171d26;color:inherit;text-decoration:none;transition:background .18s,border-color .18s,transform .18s}
-.card:hover{transform:translateY(-3px);border-color:#59697e;background:#1b2330}
-.card:focus-visible{outline:2px solid #eef2f7;outline-offset:5px}
-.icon{display:block;width:160px;height:160px;object-fit:contain}
-.card h2{margin:0;text-align:center;font-size:clamp(17px,2.5vw,26px);font-weight:750;line-height:1.4}
-@media(max-width:600px){.wrap{padding:40px 16px}.brand{margin-bottom:32px}.grid{gap:12px}.card{min-height:240px;padding:28px 10px;gap:24px;border-radius:0}.icon{width:clamp(80px,24vw,120px);height:clamp(80px,24vw,120px)}}
-@media(prefers-reduced-motion:reduce){.card{transition:none}.card:hover{transform:none}}
-</style>
+<meta name="theme-color" content="#121212">
+<title>Z.O.O.T. | Zenith Operating Optimized Technology</title>
+<link rel="stylesheet" href="assets/css/zoot.css?v=1">
+<script src="assets/js/zoot.js?v=1"></script>
 </head>
-<body>
+<body class="zoot-home">
 <main class="wrap">
-<header class="brand">
-<h1>명일방주 도구</h1>
-<p lang="en">Arknights Tool</p>
-</header>
+<header class="brand"><h1>Z.O.O.T.</h1><p lang="en">Zenith Operating Optimized Technology</p></header>
 <nav class="grid" aria-label="기능 선택">
-<a class="card" href="recruitment.html">
-<img class="icon" src="assets/icons/Recruit_iconv2.svg" width="160" height="160" alt="" aria-hidden="true">
-<h2>공개모집 계산기</h2>
-</a>
-<a class="card" href="operators.html">
-<img class="icon" src="assets/icons/Operator_iconv2.svg" width="160" height="160" alt="" aria-hidden="true">
-<h2>오퍼레이터</h2>
-</a>
-<a class="card" href="base.html">
-<img class="icon" src="assets/icons/Base_iconv2.svg" width="160" height="160" alt="" aria-hidden="true">
-<h2>기반시설</h2>
-</a>
+<div class="home-card-shadow"><a class="home-card" href="recruitment.html"><img class="icon" src="assets/icons/Recruit_iconv2.svg" width="70" height="70" alt="" aria-hidden="true"><h2>공개모집 계산기</h2></a></div>
+<div class="home-card-shadow"><a class="home-card" href="operators.html"><img class="icon" src="assets/icons/Operator_iconv2.svg" width="70" height="70" alt="" aria-hidden="true"><h2>오퍼레이터</h2></a></div>
+<div class="home-card-shadow"><a class="home-card" href="base.html"><img class="icon" src="assets/icons/Base_iconv2.svg" width="70" height="70" alt="" aria-hidden="true"><h2>기반시설</h2></a></div>
+<div class="home-card-shadow"><a class="home-card" href="backpack.html"><img class="icon" src="assets/icons/Depot_iconv2.svg" width="70" height="70" alt="" aria-hidden="true"><h2>창고</h2></a></div>
 </nav>
 </main>
 </body>
