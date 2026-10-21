@@ -67,12 +67,3 @@ button,input,select,textarea{font-family:inherit;accent-color:var(--z-accent);bo
 .zoot-home .home-card h2{font-size:clamp(10px,6.4cqw,18px)}
 .zoot-home .home-divider{width:calc(80% + 5px);height:1px;min-height:1px;border:0;background:var(--z-border);margin:0 auto 28px}
 @media(max-width:600px){.zoot-home .grid{width:calc(75% + 3px)}.zoot-home .home-divider{width:calc(80% + 3px)}}
-
-/* Scale cards to 75% and keep the divider slightly wider than the pair. */
-.zoot-home .grid{width:calc(75% + 5px);align-self:center}
-.zoot-home .home-card-shadow{container-type:inline-size}
-.zoot-home .home-card{grid-template-columns:clamp(22px,18cqw,52.5px) minmax(0,1fr);padding:clamp(8px,6cqw,18px);gap:clamp(6px,4cqw,13.5px)}
-.zoot-home .icon{width:clamp(22px,18cqw,52.5px);height:clamp(22px,18cqw,52.5px)}
-.zoot-home .home-card h2{font-size:clamp(10px,6.4cqw,18px)}
-.zoot-home .home-divider{width:calc(80% + 5px);height:1px;min-height:1px;border:0;background:var(--z-border);margin:0 auto 28px}
-@media(max-width:600px){.zoot-home .grid{width:calc(75% + 3px)}.zoot-home .home-divider{width:calc(80% + 3px)}}
