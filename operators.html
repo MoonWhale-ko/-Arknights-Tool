@@ -215,6 +215,11 @@ html:has(.zoot-operators dialog[open]){overflow:hidden}
  .zoot-operators .operator-toolbar .branch-tabs .class-tab{min-width:62px;padding:8px}
 }
 </style>
+<style>
+/* Suppress pointer/touch focus rectangles; keep keyboard focus visible. */
+.zoot-operators :is(button,a){-webkit-tap-highlight-color:transparent}
+.zoot-operators :is(button,a):focus:not(:focus-visible){outline:none!important}
+</style>
 <script src="assets/js/zoot.js?v=4"></script>
 </head>
 <body class="zoot-operators">
