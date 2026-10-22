@@ -18,7 +18,7 @@ function busy(value){$('optimizerRun').disabled=value;$('optimizerCancel').hidde
 function fillInputs(){
  try{base=readBase(read(BASE_KEY,null));}catch{base=null;message('저장된 기반시설 정보를 읽지 못했습니다. 계정을 다시 불러와 주세요.',true);return;}
  const integrated=read(INTEGRATED_KEY,{});
- {$('optimizerDevelopment').value=integrated.developmentMode==='max'?'max':'current';$('optimizerSeconds').value=String([10,30,60,180].includes(integrated.seconds)?integrated.seconds:10);$('optimizerWindow').value=integrated.rankingWindow==='cycle'?'cycle':'24h';}
+ {$('optimizerDevelopment').value=['next','max'].includes(integrated.developmentMode)?'next':'current';$('optimizerSeconds').value=String([10,30,60,180].includes(integrated.seconds)?integrated.seconds:10);$('optimizerWindow').value=integrated.rankingWindow==='cycle'?'cycle':'24h';}
  $('optimizerTeams').value=String(saved.teams);$('optimizerRotation').value=saved.rotation;$('optimizerExtra').value=saved.extraActions?'yes':'no';
  for(let n=1;n<=3;n++)$('optimizerPriority'+n).value=saved.priority[n-1];
  const ambience=resolveDormAmbience(base,saved.ambience,integrated.ambienceSource);
@@ -38,7 +38,7 @@ function updateSettingsSummary(reveal=false){
  $('optimizerDormNotice').hidden=!missing.length;
  $('optimizerDormNotice').textContent=missing.length?'숙소 인테리어 점수 '+missing.length+'개를 입력해야 계산할 수 있습니다.':'';
  if(reveal&&missing.length){$('optimizerAdvanced').open=true;$('optimizerDormSettings').open=true;}
- $('optimizerAdvancedNote').textContent='숙소 인테리어';$('optimizerBasis').textContent=$('optimizerDevelopment').value==='max'?'보유 · 만렙 가정':'보유 · 현재 육성 기준';
+ $('optimizerAdvancedNote').textContent='숙소 인테리어';$('optimizerBasis').textContent=$('optimizerDevelopment').value==='next'?'보유 · 다음 스킬 해금':'보유 · 현재 육성 기준';
  return missing;
 }
 function signature(){return resultSignature(readBase(read(BASE_KEY,null)),read(PROGRESS_KEY,{}),read(BASE_KEY+':manufacture-products',{}),read(BASE_KEY+':trading-products',{}),{...options(),rankingWindow:$('optimizerWindow').value,seconds:Number($('optimizerSeconds').value),developmentMode:$('optimizerDevelopment').value});}
@@ -80,9 +80,9 @@ $('optimizerRun').addEventListener('click',async()=>{
   if(token!==generation)return;
   base=readBase(read(BASE_KEY,null));const progress=read(PROGRESS_KEY,{}),products=read(BASE_KEY+':manufacture-products',{}),config=options();
   {
-   const {prepareIntegratedInput}=await import('./base-integrated-adapter.mjs?v=3');if(token!==generation)return;
+   const {prepareIntegratedInput}=await import('./base-integrated-adapter.mjs?v=4');if(token!==generation)return;
    const prepared=prepareIntegratedInput(data,base,progress,products,{...config,rankingWindow:$('optimizerWindow').value,developmentMode:runMode},read(BASE_KEY+':trading-products',{}));
-   worker=new Worker(new URL('./base-integrated-worker.mjs?v=10',import.meta.url),{type:'module'});
+   worker=new Worker(new URL('./base-integrated-worker.mjs?v=11',import.meta.url),{type:'module'});
    worker.onmessage=({data:event})=>{
     if(token!==generation)return;
     if(event.type==='started'){message(`보유 ${event.owned}명 · 배치 탐색 중…`);return;}
@@ -116,7 +116,7 @@ function renderIntegrated(report){
  details.append(text('summary','계산 상세·지원 범위'+(warnings.length?' · '+warnings.length+'건':'')));
  if(!best){target.append(text('p','현재 조건에서 비교 가능한 배치를 찾지 못했습니다. 입력 설정이나 계산 시간을 확인해 주세요.'));for(const error of report.errors??[])target.append(text('p',error,'optimizer-result-notice'));}
  else{
-  target.append(text('h3',report.training?.mode==='max'?'만렙 기준 추천 배치':'추천 배치'));
+  target.append(text('h3',report.training?.mode==='next'?'다음 스킬 해금 기준 추천 배치':'추천 배치'));
   const events=best.events??[],shifts=events.filter(e=>e.type==='shift'),firstShifts=[];
   for(let team=0;team<report.input.options.teams;team++){const shift=shifts.find(s=>s.team===team),index=shifts.indexOf(shift);if(shift)firstShifts.push({team,start:shift.hour,end:shifts[index+1]?.hour??best.cycle?.hour});}
   renderRotationSummary(target,firstShifts);
@@ -146,9 +146,9 @@ function renderIntegrated(report){
    target.append(text('h3','숙소 · 고정 지원자'),text('p','교대 없이 같은 숙소에 유지할 인원입니다.','optimizer-note'));
    for(const room of dormRooms){const row=text('div','','optimizer-room-ops');row.dataset.dorm=room.id;row.append(text('strong',roomNames[room.id]));const recovery=best.dormRecovery?.find(r=>r.id===room.id);if(recovery){const rate=text('small','평균 회복 '+number(recovery.rate)+'/시간','optimizer-dorm-rate');rate.title='컨디션 0인 일반 휴식 인원으로 남은 자리를 채운 기준 · 근무조별 평균';row.append(rate);}const ids=(best.plan.dormSupport??report.input.dormSupport??{})[room.id]??[];for(const id of ids){const badge=chip(report.operators[id]??{id,name:id});badge.append(text('small','고정'));row.append(badge);}if(!ids.length)row.append(text('span','고정 지원자 없음'));target.append(row);}
   }
-  if(report.training?.mode==='max'){
+  if(report.training?.mode==='next'){
    const recommendations=report.training.recommendations??[];target.append(text('h3','육성 추천 · '+recommendations.length+'명'));
-   target.append(text('p','보유 인원을 최대 정예화·최대 레벨로 가정한 배치입니다.','optimizer-note'));
+   target.append(text('p','보유 인원이 다음 인프라 스킬을 해금·강화하는 조건을 기준으로 계산했습니다.','optimizer-note'));
    const list=text('div','','optimizer-training-list');
    for(const recommendation of recommendations){const card=text('article','','optimizer-training-card');card.append(chip(report.operators[recommendation.id]??{id:recommendation.id,name:recommendation.id}));card.append(text('strong','정예 '+recommendation.current.elite+' · Lv.'+recommendation.current.level+' → 정예 '+recommendation.target.elite+' · Lv.'+recommendation.target.level));card.append(text('small',recommendation.roles.map(type=>names[type]??type).join(' · ')+(recommendation.skills?.length?' · '+recommendation.skills.join(' / '):'')));list.append(card);}
    if(!recommendations.length)list.append(text('p','추천 배치의 정예화·인프라 스킬 조건을 이미 충족했습니다.'));target.append(list);
