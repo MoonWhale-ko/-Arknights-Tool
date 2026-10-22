@@ -1,7 +1,9 @@
 .zoot-home-controls{position:fixed;right:max(20px,env(safe-area-inset-right));bottom:max(20px,env(safe-area-inset-bottom));z-index:20;display:flex;align-items:center;gap:10px}
 .zoot-home-controls .zoot-icon,.zoot-home-controls .zoot-guide-open{background:var(--z-panel);box-shadow:var(--z-shadow);min-height:44px}
-.zoot-home-controls .zoot-guide-open{color:var(--z-text);font-size:14px;white-space:nowrap}
+.zoot-home-controls .zoot-guide-open{background:var(--z-accent);color:#172008;font-size:14px;white-space:nowrap}
 .zoot-home-controls :is(.zoot-icon,.zoot-guide-open):hover{background:var(--z-selected);color:var(--z-on-selected)}
 .zoot-home-guide{box-sizing:border-box;width:min(640px,calc(100% - 32px));line-height:1.75}
 .zoot-home-guide .zoot-guide-intro{color:var(--z-muted);margin:0 0 20px;font-size:14px}
 @media(max-width:600px){.zoot-home-controls{right:16px;bottom:max(16px,env(safe-area-inset-bottom))}.zoot-home-guide{padding:20px}}
+
+.zoot-home-controls .zoot-guide-open:hover{background:var(--z-accent-hover);color:#172008}
