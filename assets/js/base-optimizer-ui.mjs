@@ -1,3 +1,4 @@
+import {resultSignature,saveResult,loadResult,forgetResult} from './base-result-cache.mjs';
 import {orderFacilities,orderDorms} from './base-result-layout.mjs';
 import {dormAmbienceSource,resolveDormAmbience} from './base-optimizer-settings.mjs';
 import {BASE_KEY,readBase} from './base-state.mjs?v=5';
@@ -11,13 +12,13 @@ let worker=null,data=null,base=null,saved=normalizeOptions(read(KEY,DEFAULT_OPTI
 const text=(tag,value,className)=>{const el=document.createElement(tag);el.textContent=value;if(className)el.className=className;return el;};
 function message(value,error=false){$('optimizerMessage').textContent=value;$('optimizerMessage').classList.toggle('error',error);}
 function options(){return normalizeOptions({teams:Number($('optimizerTeams').value),rotation:$('optimizerRotation').value,extraActions:$('optimizerExtra').value==='yes',missingClues:[],priority:[1,2,3].map(n=>$('optimizerPriority'+n).value),ambience:Object.fromEntries([...root.querySelectorAll('[data-ambience]')].map(input=>[input.dataset.ambience,input.value===''?null:Number(input.value)]))});}
-function persist(){saved=options();try{localStorage.setItem(INTEGRATED_KEY,JSON.stringify({seconds:Number($('optimizerSeconds').value),rankingWindow:$('optimizerWindow').value,ambienceSource:dormAmbienceSource(base)}));localStorage.setItem(KEY,JSON.stringify(saved));return true;}catch{message('설정을 저장하지 못했습니다. 현재 화면의 설정으로 계산합니다.',true);return false;}}
-function resetResult(){lastIntegrated=null;if($('optimizerExport'))$('optimizerExport').hidden=true;if($('optimizerDownload'))$('optimizerDownload').hidden=true;generation++;if(worker){worker.terminate();worker=null;busy(false);}if(!$('optimizerResult').hidden){$('optimizerResult').hidden=true;message('조건이 변경되었습니다. 다시 계산해 주세요.');}}
+function persist(){saved=options();try{localStorage.setItem(INTEGRATED_KEY,JSON.stringify({seconds:Number($('optimizerSeconds').value),rankingWindow:$('optimizerWindow').value,developmentMode:$('optimizerDevelopment').value,ambienceSource:dormAmbienceSource(base)}));localStorage.setItem(KEY,JSON.stringify(saved));return true;}catch{message('설정을 저장하지 못했습니다. 현재 화면의 설정으로 계산합니다.',true);return false;}}
+function resetResult(){lastIntegrated=null;$('optimizerForget').hidden=true;if($('optimizerExport'))$('optimizerExport').hidden=true;if($('optimizerDownload'))$('optimizerDownload').hidden=true;generation++;if(worker){worker.terminate();worker=null;busy(false);}if(!$('optimizerResult').hidden){$('optimizerResult').hidden=true;message('조건이 변경되었습니다. 다시 계산해 주세요.');}}
 function busy(value){$('optimizerRun').disabled=value;$('optimizerCancel').hidden=!value;root.setAttribute('aria-busy',String(value));}
 function fillInputs(){
  try{base=readBase(read(BASE_KEY,null));}catch{base=null;message('저장된 기반시설 정보를 읽지 못했습니다. 계정을 다시 불러와 주세요.',true);return;}
  const integrated=read(INTEGRATED_KEY,{});
- {$('optimizerSeconds').value=String([10,30,60,180].includes(integrated.seconds)?integrated.seconds:10);$('optimizerWindow').value=integrated.rankingWindow==='cycle'?'cycle':'24h';}
+ {$('optimizerDevelopment').value=integrated.developmentMode==='max'?'max':'current';$('optimizerSeconds').value=String([10,30,60,180].includes(integrated.seconds)?integrated.seconds:10);$('optimizerWindow').value=integrated.rankingWindow==='cycle'?'cycle':'24h';}
  $('optimizerTeams').value=String(saved.teams);$('optimizerRotation').value=saved.rotation;$('optimizerExtra').value=saved.extraActions?'yes':'no';
  for(let n=1;n<=3;n++)$('optimizerPriority'+n).value=saved.priority[n-1];
  const ambience=resolveDormAmbience(base,saved.ambience,integrated.ambienceSource);
@@ -37,8 +38,13 @@ function updateSettingsSummary(reveal=false){
  $('optimizerDormNotice').hidden=!missing.length;
  $('optimizerDormNotice').textContent=missing.length?'숙소 인테리어 점수 '+missing.length+'개를 입력해야 계산할 수 있습니다.':'';
  if(reveal&&missing.length){$('optimizerAdvanced').open=true;$('optimizerDormSettings').open=true;}
- $('optimizerAdvancedNote').textContent='숙소 인테리어';
+ $('optimizerAdvancedNote').textContent='숙소 인테리어';$('optimizerBasis').textContent=$('optimizerDevelopment').value==='max'?'보유 · 만렙 가정':'보유 · 현재 육성 기준';
  return missing;
+}
+function signature(){return resultSignature(readBase(read(BASE_KEY,null)),read(PROGRESS_KEY,{}),read(BASE_KEY+':manufacture-products',{}),read(BASE_KEY+':trading-products',{}),{...options(),rankingWindow:$('optimizerWindow').value,seconds:Number($('optimizerSeconds').value),developmentMode:$('optimizerDevelopment').value});}
+function showReport(report){lastIntegrated=report;renderIntegrated(report);$('optimizerDownload').hidden=!report.best;$('optimizerExport').hidden=!report.best;$('optimizerForget').hidden=!report.best;}
+function restoreResult(){
+ try{const entry=loadResult(localStorage,$('optimizerDevelopment').value,signature());if(!entry)return false;showReport(entry.report);message('임시 저장된 계산 결과를 불러왔습니다.');return true;}catch{lastIntegrated=null;$('optimizerResult').hidden=true;return false;}
 }
 function renderRotationSummary(target,stages){
  if(!stages.length)return;
@@ -64,36 +70,37 @@ function chip(op,resident=false,morale){
 }
 root.addEventListener('change',event=>{
  if(event.target.matches('[data-priority]')){const n=Number(event.target.dataset.priority)-1,values=[...saved.priority],newValue=event.target.value,other=values.indexOf(newValue);if(other!==n&&other>=0)$('optimizerPriority'+(other+1)).value=values[n];}
- resetResult();persist();updateSettingsSummary();
+ resetResult();persist();updateSettingsSummary();if(event.target.id==='optimizerDevelopment')restoreResult();
 });
 $('optimizerRun').addEventListener('click',async()=>{
  const missing=updateSettingsSummary(true);if(missing.length){message('숙소 인테리어 점수를 확인해 주세요.',true);missing[0].reportValidity();missing[0].focus();return;}
- resetResult();persist();const token=generation;busy(true);message('스킬 데이터와 입력을 확인하고 있습니다.');
+ resetResult();persist();const token=generation,runSignature=signature(),runMode=$('optimizerDevelopment').value;busy(true);message('스킬 데이터와 입력을 확인하고 있습니다.');
  try{
   if(!data){const response=await fetch('data/base-optimizer.json?v=3');if(!response.ok)throw Error('기반시설 스킬 데이터를 불러오지 못했습니다.');data=await response.json();}
   if(token!==generation)return;
   base=readBase(read(BASE_KEY,null));const progress=read(PROGRESS_KEY,{}),products=read(BASE_KEY+':manufacture-products',{}),config=options();
   {
-   const {prepareIntegratedInput}=await import('./base-integrated-adapter.mjs?v=2');if(token!==generation)return;
-   const prepared=prepareIntegratedInput(data,base,progress,products,{...config,rankingWindow:$('optimizerWindow').value},read(BASE_KEY+':trading-products',{}));
-   worker=new Worker(new URL('./base-integrated-worker.mjs?v=9',import.meta.url),{type:'module'});
+   const {prepareIntegratedInput}=await import('./base-integrated-adapter.mjs?v=3');if(token!==generation)return;
+   const prepared=prepareIntegratedInput(data,base,progress,products,{...config,rankingWindow:$('optimizerWindow').value,developmentMode:runMode},read(BASE_KEY+':trading-products',{}));
+   worker=new Worker(new URL('./base-integrated-worker.mjs?v=10',import.meta.url),{type:'module'});
    worker.onmessage=({data:event})=>{
     if(token!==generation)return;
     if(event.type==='started'){message(`보유 ${event.owned}명 · 배치 탐색 중…`);return;}
     if(event.type==='progress'){message('배치를 비교하고 있습니다…');return;}
     busy(false);worker?.terminate();worker=null;
-    if(event.type==='error')message(event.message,true);else{lastIntegrated=event.result;renderIntegrated(event.result);$('optimizerDownload').hidden=!event.result.best;$('optimizerExport').hidden=!event.result.best;message('계산 완료 · 아래 추천 배치를 확인하세요.');}
+    if(event.type==='error')message(event.message,true);else{showReport(event.result);const stored=event.result.best&&saveResult(localStorage,runMode,runSignature,event.result);message(event.result.best?(stored?'계산 완료 · 이 브라우저에 임시 저장했습니다.':'계산 완료 · 임시 저장 공간이 부족합니다.'): '현재 조건에서 배치를 찾지 못했습니다.');}
    };
    worker.onerror=event=>{if(token!==generation)return;busy(false);worker?.terminate();worker=null;message(event.message||'계산 도중 오류가 발생했습니다. 다시 시도해 주세요.',true);};
-   worker.postMessage({catalog:data,input:prepared.input,warnings:prepared.warnings,seconds:Number($('optimizerSeconds').value)});return;
+   worker.postMessage({catalog:data,input:prepared.input,warnings:prepared.warnings,training:prepared.training,seconds:Number($('optimizerSeconds').value)});return;
   }
  }catch(error){if(token!==generation)return;busy(false);message(error.message,true);}
 });
-$('optimizerCancel').addEventListener('click',()=>{generation++;worker?.terminate();worker=null;busy(false);message('계산을 취소했습니다.');});
-window.addEventListener('storage',event=>{if([BASE_KEY,PROGRESS_KEY,BASE_KEY+':manufacture-products',BASE_KEY+':trading-products',KEY,INTEGRATED_KEY,null].includes(event.key)){resetResult();if(event.key===KEY)saved=normalizeOptions(read(KEY,{}));fillInputs();message('저장된 정보가 변경되었습니다. 다시 계산해 주세요.');}});
-window.addEventListener('pageshow',()=>{resetResult();fillInputs();});
+$('optimizerCancel').addEventListener('click',()=>{generation++;worker?.terminate();worker=null;busy(false);if(!restoreResult())message('계산을 취소했습니다.');});
+window.addEventListener('storage',event=>{if([BASE_KEY,PROGRESS_KEY,BASE_KEY+':manufacture-products',BASE_KEY+':trading-products',KEY,INTEGRATED_KEY,null].includes(event.key)){resetResult();if(event.key===KEY)saved=normalizeOptions(read(KEY,{}));fillInputs();if(!restoreResult())message('저장된 정보가 변경되었습니다. 다시 계산해 주세요.');}});
+window.addEventListener('pageshow',()=>{resetResult();fillInputs();restoreResult();});
 window.addEventListener('base-products-changed',()=>{resetResult();message('생산 품목이 변경되었습니다. 다시 계산해 주세요.');});
-fillInputs();
+fillInputs();restoreResult();
+$('optimizerForget').addEventListener('click',()=>{if(!forgetResult(localStorage,$('optimizerDevelopment').value)){message('저장된 결과를 지우지 못했습니다.',true);return;}resetResult();message('이 계산 모드의 임시 결과를 지웠습니다.');});
 $('optimizerInfo').addEventListener('click',()=>document.getElementById('optimizerHelp').showModal());
 
 window.addEventListener('account-import-applied',()=>{resetResult();fillInputs();message('계정 정보가 갱신되었습니다. 생산 품목을 확인한 뒤 계산해 주세요.');});
@@ -109,7 +116,7 @@ function renderIntegrated(report){
  details.append(text('summary','계산 상세·지원 범위'+(warnings.length?' · '+warnings.length+'건':'')));
  if(!best){target.append(text('p','현재 조건에서 비교 가능한 배치를 찾지 못했습니다. 입력 설정이나 계산 시간을 확인해 주세요.'));for(const error of report.errors??[])target.append(text('p',error,'optimizer-result-notice'));}
  else{
-  target.append(text('h3','추천 배치'));
+  target.append(text('h3',report.training?.mode==='max'?'만렙 기준 추천 배치':'추천 배치'));
   const events=best.events??[],shifts=events.filter(e=>e.type==='shift'),firstShifts=[];
   for(let team=0;team<report.input.options.teams;team++){const shift=shifts.find(s=>s.team===team),index=shifts.indexOf(shift);if(shift)firstShifts.push({team,start:shift.hour,end:shifts[index+1]?.hour??best.cycle?.hour});}
   renderRotationSummary(target,firstShifts);
@@ -138,6 +145,13 @@ function renderIntegrated(report){
   if(dormRooms.length){
    target.append(text('h3','숙소 · 고정 지원자'),text('p','교대 없이 같은 숙소에 유지할 인원입니다.','optimizer-note'));
    for(const room of dormRooms){const row=text('div','','optimizer-room-ops');row.dataset.dorm=room.id;row.append(text('strong',roomNames[room.id]));const recovery=best.dormRecovery?.find(r=>r.id===room.id);if(recovery){const rate=text('small','평균 회복 '+number(recovery.rate)+'/시간','optimizer-dorm-rate');rate.title='컨디션 0인 일반 휴식 인원으로 남은 자리를 채운 기준 · 근무조별 평균';row.append(rate);}const ids=(best.plan.dormSupport??report.input.dormSupport??{})[room.id]??[];for(const id of ids){const badge=chip(report.operators[id]??{id,name:id});badge.append(text('small','고정'));row.append(badge);}if(!ids.length)row.append(text('span','고정 지원자 없음'));target.append(row);}
+  }
+  if(report.training?.mode==='max'){
+   const recommendations=report.training.recommendations??[];target.append(text('h3','육성 추천 · '+recommendations.length+'명'));
+   target.append(text('p','보유 인원을 최대 정예화·최대 레벨로 가정한 배치입니다.','optimizer-note'));
+   const list=text('div','','optimizer-training-list');
+   for(const recommendation of recommendations){const card=text('article','','optimizer-training-card');card.append(chip(report.operators[recommendation.id]??{id:recommendation.id,name:recommendation.id}));card.append(text('strong','정예 '+recommendation.current.elite+' · Lv.'+recommendation.current.level+' → 정예 '+recommendation.target.elite+' · Lv.'+recommendation.target.level));card.append(text('small',recommendation.roles.map(type=>names[type]??type).join(' · ')+(recommendation.skills?.length?' · '+recommendation.skills.join(' / '):'')));list.append(card);}
+   if(!recommendations.length)list.append(text('p','추천 배치의 정예화·인프라 스킬 조건을 이미 충족했습니다.'));target.append(list);
   }
   const a=best.at24,b=best.cycle,range=p=>p?.trade?.range?.generatedLmd?.map(number).join(' ~ ')??'—';
   const cycle=report.input.options.rankingWindow==='cycle',point=cycle?b:a;

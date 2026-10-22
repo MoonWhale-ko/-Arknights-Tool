@@ -204,3 +204,38 @@ test('dorm rate summaries remain finite for every unlocked support skill in the 
  const groups=model.tasks.filter(t=>t.team>=0).map(t=>({team:t.team,room:t.room,operators:[]}));
  for(const id of model.tasks.find(t=>t.type==='DORMITORY').candidates){const rates=describeDormRecovery(model,{groups,dormSupport:{dorm:[id]}});assert.ok(Number.isFinite(rates[0].rate),id);assert.ok(rates[0].rate>=0,id);}
 });
+
+test('max development includes only owned operators at their rarity-specific level cap and never edits current data',async()=>{
+ const {J,W}=await import('../assets/js/infra-v2-terra-engine.mjs');
+ const selected=[1,2,3,4,5,6].map(r=>J.find(o=>o.rarity===r)),progress=Object.fromEntries(selected.map(o=>[o.id,{owned:true,elite:0,level:1,skill:1}]));progress.char_4014_lunacu={owned:false,elite:0,level:1};
+ const before=JSON.stringify(progress),prepared=prepareIntegratedInput(catalog,example.base,progress,{}, {...options,developmentMode:'max'});
+ assert.equal(prepared.training.mode,'max');assert.ok(!prepared.input.progress.char_4014_lunacu);
+ for(const o of selected){const elite=o.rarity>=4?2:o.rarity===3?1:0;assert.deepEqual(prepared.input.progress[o.id],{owned:true,elite,level:W(o.rarity,elite)});assert.deepEqual(prepared.training.current[o.id],{owned:true,elite:0,level:1});}
+ assert.equal(JSON.stringify(progress),before);assert.equal(prepareIntegratedInput(catalog,example.base,progress,{},options).training.mode,'current');
+});
+
+test('training recommendations list selected, unfinished owned operators once, across crews and dorm support',async()=>{
+ const {trainingRecommendations}=await import('../assets/js/base-training-recommendations.mjs');
+ const report={rooms:[{id:'factory',type:'MANUFACTURE'},{id:'dorm',type:'DORMITORY'}],input:{progress:{a:{elite:2,level:90},b:{elite:0,level:30},unused:{elite:2,level:90}}},best:{plan:{groups:[{team:0,room:'factory',operators:['a']},{team:1,room:'factory',operators:['a']}],dormSupport:{dorm:['b']}}}};
+ const current={a:{elite:0,level:1},b:{elite:0,level:30},unused:{elite:0,level:1}};const result=trainingRecommendations(report,current);
+ assert.equal(result.length,1);assert.equal(result[0].id,'a');assert.deepEqual(result[0].roles,['MANUFACTURE']);assert.deepEqual(result[0].target,{elite:2,level:90});
+});
+
+test('temporary results survive reload independently per mode and reject changed inputs or malformed cache',async()=>{
+ const {resultSignature,saveResult,loadResult,forgetResult}=await import('../assets/js/base-result-cache.mjs');
+ const memory=new Map(),storage={getItem:k=>memory.get(k)??null,setItem:(k,v)=>memory.set(k,v)};
+ const progress={a:{owned:true,elite:0,level:1}},sig=resultSignature(example.base,progress,{}, {},options),report={best:{plan:{groups:[]}},rooms:[]};
+ assert.ok(saveResult(storage,'current',sig,report));assert.ok(saveResult(storage,'max','max',report));assert.deepEqual(loadResult(storage,'current',sig).report,report);assert.ok(loadResult(storage,'max','max'));
+ assert.equal(loadResult(storage,'current',resultSignature(example.base,{a:{owned:false}}, {},{},options)),null);assert.equal(loadResult(storage,'current',resultSignature(example.base,{a:{owned:true,elite:1,level:1}}, {},{},options)),null);
+ assert.ok(forgetResult(storage,'max'));assert.equal(loadResult(storage,'max','max'),null);assert.ok(loadResult(storage,'current',sig));
+ for(const key of memory.keys())memory.set(key,'broken JSON');assert.equal(loadResult(storage,'current',sig),null);assert.ok(saveResult(storage,'current',sig,report));assert.ok(loadResult(storage,'current',sig));
+ assert.equal(saveResult({getItem:()=>null,setItem:()=>{throw Error('quota');}},'current',sig,report),false);
+});
+
+test('training goals use infrastructure unlock levels and omit level-only changes after skills are unlocked',async()=>{
+ const {trainingRecommendations}=await import('../assets/js/base-training-recommendations.mjs');
+ const report={rooms:[{id:'meeting',type:'MEETING'},{id:'dorm',type:'DORMITORY'}],input:{progress:{char_172_svrash:{elite:2,level:90},char_501_durin:{elite:0,level:30}}},best:{plan:{groups:[{room:'meeting',operators:['char_172_svrash']}],dormSupport:{dorm:['char_501_durin']}}}};
+ const current={char_172_svrash:{elite:2,level:1},char_501_durin:{elite:0,level:1}};
+ let result=trainingRecommendations(report,current);assert.deepEqual(result.map(r=>r.id),['char_501_durin']);assert.deepEqual(result[0].target,{elite:0,level:30});
+ current.char_172_svrash={elite:0,level:1};result=trainingRecommendations(report,current);assert.deepEqual(result.find(r=>r.id==='char_172_svrash').target,{elite:2,level:1});
+});
