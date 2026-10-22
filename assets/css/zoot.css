@@ -75,3 +75,28 @@ button,input,select,textarea{font-family:inherit;accent-color:var(--z-accent);bo
 @media(max-width:600px){.zoot-home .wrap::before,.zoot-home .wrap::after{content:"";display:block;flex-basis:0;flex-shrink:0}.zoot-home .wrap::before{flex-grow:1}.zoot-home .wrap::after{flex-grow:3}}
 
 .zoot-drawer[open]{display:flex;flex-direction:column}
+
+/* Highlight account import immediately above the theme control in More. */
+.zoot-drawer .zoot-drawer-footer{margin-top:auto;display:grid;gap:14px;padding-top:24px}
+.zoot-drawer .zoot-drawer-footer .zoot-drawer-settings{margin:0;padding:0 8px}
+dialog.zoot-drawer .zoot-account-entry{display:flex;align-items:center;gap:12px;width:100%;min-height:54px;padding:14px 16px;border:0;border-radius:0;background:var(--z-accent);color:#172008;font:700 16px/1.4 Pretendard,system-ui,sans-serif;cursor:pointer;text-align:left;clip-path:polygon(7px 0,100% 0,100% calc(100% - 7px),calc(100% - 7px) 100%,0 100%,0 7px)}
+dialog.zoot-drawer .zoot-account-entry:not(:disabled):hover{background:var(--z-accent-hover)}
+dialog.zoot-drawer .zoot-account-entry svg{display:block;flex:none;width:24px;height:24px}
+dialog.zoot-drawer .zoot-account-entry:disabled{cursor:progress;opacity:.7}
+body dialog.zoot-account-dialog{box-sizing:border-box;width:min(520px,calc(100% - 32px));max-height:calc(100dvh - 32px);overflow:auto;padding:24px;border:0;border-radius:0;background:var(--z-popover);color:var(--z-text);box-shadow:var(--z-shadow-hover);font:14px/1.7 Pretendard,system-ui,sans-serif}
+body dialog.zoot-account-dialog::backdrop{background:#0008}
+body dialog.zoot-account-dialog h2{margin:0 0 12px;font-size:22px;color:var(--z-text)}
+body dialog.zoot-account-dialog p{line-height:1.7}
+body dialog.zoot-account-dialog .muted{color:var(--z-muted)}
+body dialog.zoot-account-dialog form{margin:0}
+body dialog.zoot-account-dialog label{display:block;margin:16px 0}
+body dialog.zoot-account-dialog input:not([type=checkbox]){box-sizing:border-box;width:100%;min-height:44px;margin-top:6px;padding:10px 12px;border:1px solid var(--z-input-border);border-radius:0;background:var(--z-input);color:var(--z-text);font:inherit}
+body dialog.zoot-account-dialog button{min-height:42px;padding:10px 14px;border:0;border-radius:0;background:var(--z-input);color:var(--z-text);font:600 14px/1.4 Pretendard,system-ui,sans-serif;cursor:pointer;clip-path:polygon(5px 0,100% 0,100% calc(100% - 5px),calc(100% - 5px) 100%,0 100%,0 5px)}
+body dialog.zoot-account-dialog button:not(:disabled):hover{background:var(--z-hover);color:var(--z-text)}
+body dialog.zoot-account-dialog #accountApply{background:var(--z-accent);color:#172008}
+body dialog.zoot-account-dialog #accountApply:not(:disabled):hover{background:var(--z-accent-hover);color:#172008}
+body dialog.zoot-account-dialog button:disabled{background:var(--z-disabled);color:var(--z-disabled-text);opacity:1;cursor:default}
+body dialog.zoot-account-dialog .account-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+body dialog.zoot-account-dialog .account-message{white-space:pre-line;line-height:1.7;margin-top:16px}
+
+body dialog.zoot-account-dialog #accountApply:disabled{background:var(--z-disabled);color:var(--z-disabled-text);cursor:default}
