@@ -1,4 +1,4 @@
-import {createTerraModel,INTEGRATED_VERSION} from './infra-v2-terra-model.mjs';
+import {createTerraModel,INTEGRATED_VERSION} from './infra-v2-terra-model.mjs?v=2';
 import {solveHeuristic} from './infra-v2-heuristic.mjs';
 import {simulate,score} from './infra-v2-core.mjs';
 self.onmessage=({data})=>{

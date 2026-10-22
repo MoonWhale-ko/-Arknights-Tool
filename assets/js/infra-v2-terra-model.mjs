@@ -22,7 +22,7 @@ export function createTerraModel(base,raw){
  if(raw.layoutSearch)throw Error('실제 기지 구성 하나를 입력하세요.');
  const catalog=makeTerraCatalog(base),input=cleanInput(raw,catalog);
  if(input.options.development!=='current')throw Error('통합 엔진은 현재 보유·육성 상태만 계산합니다.');
- const model=buildModel(catalog,input,input.progress,{workTypes:['MANUFACTURE','TRADING','POWER','HIRE','MEETING','CONTROL','TRAINING','WORKSHOP'],operatorFactory:(def,state)=>{
+ const model=buildModel(catalog,input,input.progress,{workTypes:['MANUFACTURE','TRADING','POWER','HIRE','MEETING','CONTROL','WORKSHOP'],operatorFactory:(def,state)=>{
   const original=terra.kt(terra.K.get(def.id),state.elite,state.level),rawSkills=original.skills.map(s=>({...s}));
   return {...def,...state,terra:{...original,elite:state.elite,level:state.level,skills:rawSkills},skills:rawSkills.map(wrap)};
  }});
