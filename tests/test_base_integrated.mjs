@@ -24,9 +24,9 @@ test('the same-origin production worker returns the integrated roster and 24h/cy
 });
 
 test('meeting compares passive-only operators against skill holders in the actual rotation search',async()=>{
- const {createTerraModel,terra}=await import('../assets/js/infra-v2-terra-model.mjs?v=3');
- const {solveHeuristic}=await import('../assets/js/infra-v2-heuristic.mjs?v=2');
- const {simulate}=await import('../assets/js/infra-v2-core.mjs?v=2');
+ const {createTerraModel,terra}=await import('../assets/js/infra-v2-terra-model.mjs?v=4');
+ const {solveHeuristic}=await import('../assets/js/infra-v2-heuristic.mjs?v=3');
+ const {simulate}=await import('../assets/js/infra-v2-core.mjs?v=3');
  const high=terra.J.filter(o=>o.rarity===6&&!o.skills.some(s=>s.room==='MEETING')).slice(0,4).map(o=>o.id);
  const raw={base:{rooms:{meeting:{type:'MEETING',level:3},training:{type:'TRAINING',level:3}}},progress:Object.fromEntries([...high.map(id=>[id,{owned:true,elite:2,level:1}]),['char_009_12fce',{owned:true,elite:0,level:30}]]),options:{teams:2,rotation:'12h',maxHours:24,missingClues:[],optimizeDormSupport:false,priority:options.priority}};
  const model=createTerraModel(catalog,raw),task=model.tasks.find(t=>t.type==='MEETING');
@@ -42,7 +42,7 @@ test('meeting compares passive-only operators against skill holders in the actua
 });
 
 test('meeting adds facility, total dorm ambience, rarity and elite bonuses; exhausted passive bonus stops',async()=>{
- const {createTerraModel,terra}=await import('../assets/js/infra-v2-terra-model.mjs?v=3');
+ const {createTerraModel,terra}=await import('../assets/js/infra-v2-terra-model.mjs?v=4');
  const four=terra.J.find(o=>o.rarity===4&&!o.skills.some(s=>s.room==='MEETING')).id;
  const five=terra.J.find(o=>o.rarity===5&&!o.skills.some(s=>s.room==='MEETING')).id;
  const rate=(id,elite,level,ambience,morale=24)=>{
@@ -57,8 +57,16 @@ test('meeting adds facility, total dorm ambience, rarity and elite bonuses; exha
  assert.ok(Math.abs(rate(four,1,3,4000,0)-1.26)<1e-8);
 });
 
-test('passive meeting candidates preserve the one missing-clue specialist limit',async()=>{
- const {meetingTeamAllowed}=await import('../assets/js/infra-v2-core.mjs?v=2');
+test('meeting has no missing-clue specialist limit when ownership preference is disabled',async()=>{
+ const {meetingTeamAllowed}=await import('../assets/js/infra-v2-core.mjs?v=3');
  const passive={skills:[]},missing={skills:[{room:'MEETING',kind:'missing'}]};
- assert.ok(meetingTeamAllowed([passive,missing],{},true));assert.ok(meetingTeamAllowed([passive,passive],{},true));assert.equal(meetingTeamAllowed([missing,missing],{},true),false);
+ assert.ok(meetingTeamAllowed([passive,missing],{},true));assert.ok(meetingTeamAllowed([passive,passive],{},true));assert.ok(meetingTeamAllowed([missing,missing],{missingClues:[]},true));assert.equal(meetingTeamAllowed([missing,missing],{missingClues:[1]},true),false);
+});
+
+
+test('site ignores previous clue ownership settings in every calculation',()=>{
+ const old=prepareIntegratedInput(catalog,example.base,example.progress,{},options);
+ const cleared=prepareIntegratedInput(catalog,example.base,example.progress,{}, {...options,missingClues:[]});
+ assert.deepEqual(old.input.options.missingClues,[]);assert.deepEqual(old,cleared);
+ const html=fs.readFileSync(new URL('../base.html',import.meta.url),'utf8');assert.ok(!html.includes('optimizerClueSettings'));assert.ok(!html.includes('미보유 단서'));
 });

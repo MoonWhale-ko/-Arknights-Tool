@@ -8,7 +8,7 @@ const categories={F_GOLD:'순금',F_EXP:'작전기록',F_DIAMOND:'오리지늄 �
 let worker=null,data=null,base=null,saved=normalizeOptions(read(KEY,DEFAULT_OPTIONS)),generation=0,lastIntegrated=null;
 const text=(tag,value,className)=>{const el=document.createElement(tag);el.textContent=value;if(className)el.className=className;return el;};
 function message(value,error=false){$('optimizerMessage').textContent=value;$('optimizerMessage').classList.toggle('error',error);}
-function options(){return normalizeOptions({teams:Number($('optimizerTeams').value),rotation:$('optimizerRotation').value,extraActions:$('optimizerExtra').value==='yes',missingClues:[...root.querySelectorAll('[data-missing-clue]:checked')].map(input=>Number(input.value)),priority:[1,2,3].map(n=>$('optimizerPriority'+n).value),ambience:Object.fromEntries([...root.querySelectorAll('[data-ambience]')].map(input=>[input.dataset.ambience,input.value===''?null:Number(input.value)]))});}
+function options(){return normalizeOptions({teams:Number($('optimizerTeams').value),rotation:$('optimizerRotation').value,extraActions:$('optimizerExtra').value==='yes',missingClues:[],priority:[1,2,3].map(n=>$('optimizerPriority'+n).value),ambience:Object.fromEntries([...root.querySelectorAll('[data-ambience]')].map(input=>[input.dataset.ambience,input.value===''?null:Number(input.value)]))});}
 function persist(){saved=options();try{localStorage.setItem(INTEGRATED_KEY,JSON.stringify({seconds:Number($('optimizerSeconds').value),rankingWindow:$('optimizerWindow').value}));localStorage.setItem(KEY,JSON.stringify(saved));return true;}catch{message('설정을 저장하지 못했습니다. 현재 화면의 설정으로 계산합니다.',true);return false;}}
 function resetResult(){lastIntegrated=null;if($('optimizerExport'))$('optimizerExport').hidden=true;if($('optimizerDownload'))$('optimizerDownload').hidden=true;generation++;if(worker){worker.terminate();worker=null;busy(false);}if(!$('optimizerResult').hidden){$('optimizerResult').hidden=true;message('조건이 변경되었습니다. 다시 계산해 주세요.');}}
 function busy(value){$('optimizerRun').disabled=value;$('optimizerCancel').hidden=!value;root.setAttribute('aria-busy',String(value));}
@@ -17,9 +17,6 @@ function fillInputs(){
  {const integrated=read(INTEGRATED_KEY,{});$('optimizerSeconds').value=String([10,30,60,180].includes(integrated.seconds)?integrated.seconds:10);$('optimizerWindow').value=integrated.rankingWindow==='cycle'?'cycle':'24h';}
  $('optimizerTeams').value=String(saved.teams);$('optimizerRotation').value=saved.rotation;$('optimizerExtra').value=saved.extraActions?'yes':'no';
  for(let n=1;n<=3;n++)$('optimizerPriority'+n).value=saved.priority[n-1];
- const clues=$('optimizerMissingClues');clues.replaceChildren();
- const clueNames=['라인 랩','펭귄 로지스틱스','블랙스틸','우르수스','글래스고','카란 무역회사','로도스'];
- for(let n=1;n<=7;n++){const label=text('label',`${n} · ${clueNames[n-1]}`);const input=document.createElement('input');input.type='checkbox';input.value=String(n);input.dataset.missingClue=String(n);input.checked=saved.missingClues.includes(n);label.prepend(input);clues.append(label);}
  const dorms=$('optimizerDorms');dorms.replaceChildren();let number=0;
  for(const [id,room] of Object.entries(base.rooms??{}))if(room.type==='DORMITORY'&&room.level>0){
   const label=text('label',`숙소 ${++number} · Lv.${room.level}`,'optimizer-field');const input=document.createElement('input');input.type='number';input.min='0';input.max=String(room.level*1000);input.step='1';input.required=true;input.dataset.ambience=id;input.setAttribute('aria-label',`숙소 ${number} 인테리어 점수`);
@@ -36,9 +33,7 @@ function updateSettingsSummary(reveal=false){
  $('optimizerDormNotice').hidden=!missing.length;
  $('optimizerDormNotice').textContent=missing.length?'숙소 인테리어 점수 '+missing.length+'개를 입력해야 계산할 수 있습니다.':'';
  if(reveal&&missing.length){$('optimizerAdvanced').open=true;$('optimizerDormSettings').open=true;}
- const clues=root.querySelectorAll('[data-missing-clue]:checked').length;
- $('optimizerClueSummary').textContent=clues?clues+'종 선택':'선택 안 함';
- $('optimizerAdvancedNote').textContent='숙소 인테리어 · 미보유 단서';
+ $('optimizerAdvancedNote').textContent='숙소 인테리어';
  return missing;
 }
 function renderRotationSummary(target,stages){
@@ -75,9 +70,9 @@ $('optimizerRun').addEventListener('click',async()=>{
   if(token!==generation)return;
   base=readBase(read(BASE_KEY,null));const progress=read(PROGRESS_KEY,{}),products=read(BASE_KEY+':manufacture-products',{}),config=options();
   {
-   const {prepareIntegratedInput}=await import('./base-integrated-adapter.mjs?v=1');if(token!==generation)return;
+   const {prepareIntegratedInput}=await import('./base-integrated-adapter.mjs?v=2');if(token!==generation)return;
    const prepared=prepareIntegratedInput(data,base,progress,products,{...config,rankingWindow:$('optimizerWindow').value},read(BASE_KEY+':trading-products',{}));
-   worker=new Worker(new URL('./base-integrated-worker.mjs?v=3',import.meta.url),{type:'module'});
+   worker=new Worker(new URL('./base-integrated-worker.mjs?v=4',import.meta.url),{type:'module'});
    worker.onmessage=({data:event})=>{
     if(token!==generation)return;
     if(event.type==='started'){message(`보유 ${event.owned}명 · 배치 탐색 중…`);return;}

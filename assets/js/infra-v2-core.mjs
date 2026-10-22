@@ -9,6 +9,7 @@ export const stable=v=>JSON.stringify(sort(v));
 function sort(v){return Array.isArray(v)?v.map(sort):v&&typeof v==='object'?Object.fromEntries(Object.keys(v).sort().map(k=>[k,sort(v[k])])):v;}
 const requireValue=(yes,message)=>{if(!yes)throw Error(message);};
 export function meetingTeamAllowed(ops,options,allowPassive=false){
+ if(allowPassive&&!options.missingClues?.length)return true;
  const missing=op=>op.skills.some(s=>s.room==='MEETING'&&s.kind==='missing'&&(!s.requiresExchange||options.clueExchangeActive));
  const speed=op=>op.skills.some(s=>s.room==='MEETING'&&((s.prod>0&&(!s.requiresExchange||options.clueExchangeActive)&&s.kind!=='exchangeSpeed')||s.kind==='exchangeSpeed'&&options.clueExchangeActive||s.kind==='solo'&&ops.length===1||s.kind==='ramp'));
  return ops.filter(missing).length<=1&&ops.every(op=>allowPassive||missing(op)||speed(op));

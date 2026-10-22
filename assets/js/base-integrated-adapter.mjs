@@ -12,5 +12,5 @@ export function prepareIntegratedInput(data,base,progress,products,options,tradi
  }
  if(!Object.keys(rooms).length)throw Error('건설된 기반시설이 없습니다. 계정 정보를 불러와 주세요.');
  const selected=Object.fromEntries(Object.entries(rooms).filter(([,r])=>r.type==='MANUFACTURE').map(([id])=>{if(!data.recipes[String(products?.[id])])throw Error(`${id}: 제조소 생산 품목을 선택해 주세요.`);return [id,String(products[id])];}));
- return {input:{base:{rooms},progress:owned,products:selected,options:{teams:options.teams,rotation:options.rotation,extraActions:options.extraActions,priority:[...options.priority],missingClues:[...options.missingClues],rankingWindow:options.rankingWindow??'24h',development:'current',maxHours:168,optimizeDormSupport:true}},warnings};
+ return {input:{base:{rooms},progress:owned,products:selected,options:{teams:options.teams,rotation:options.rotation,extraActions:options.extraActions,priority:[...options.priority],missingClues:[],rankingWindow:options.rankingWindow??'24h',development:'current',maxHours:168,optimizeDormSupport:true}},warnings};
 }

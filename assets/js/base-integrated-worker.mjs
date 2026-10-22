@@ -1,6 +1,6 @@
-import {createTerraModel,INTEGRATED_VERSION} from './infra-v2-terra-model.mjs?v=3';
-import {solveHeuristic} from './infra-v2-heuristic.mjs?v=2';
-import {simulate,score} from './infra-v2-core.mjs?v=2';
+import {createTerraModel,INTEGRATED_VERSION} from './infra-v2-terra-model.mjs?v=4';
+import {solveHeuristic} from './infra-v2-heuristic.mjs?v=3';
+import {simulate,score} from './infra-v2-core.mjs?v=3';
 self.onmessage=({data})=>{
  try{
   const catalog={...data.catalog,fingerprint:data.catalog.fingerprint??data.catalog.source.blob},model=createTerraModel(catalog,data.input);
