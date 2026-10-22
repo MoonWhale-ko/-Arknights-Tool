@@ -36,6 +36,7 @@ button,a,input{font:inherit}button{cursor:pointer}a{color:inherit;text-decoratio
 <link rel="stylesheet" href="assets/css/zoot-navigation.css?v=1">
 <link rel="stylesheet" href="assets/css/zoot.css?v=11">
 <link rel="stylesheet" href="assets/css/zoot-recruitment.css?v=7">
+<link rel="stylesheet" href="assets/css/recruitment-tooltip.css?v=1">
 <script src="assets/js/zoot.js?v=6"></script>
 </head>
 <body class="zoot-recruit">
@@ -103,7 +104,7 @@ function renderRarityGroups(list,progress){
  [...list].sort((a,b)=>b.rarity-a.rarity||a.name.localeCompare(b.name,'ko')).forEach(o=>{if(!groups.has(o.rarity))groups.set(o.rarity,[]);groups.get(o.rarity).push(o)});
  return [...groups].map(([rarity,ops])=>`<section class="rarity-group" data-rarity="${rarity}"><h3 class="rarity-heading g${rarity}">${rarity}★</h3><div class="ops image-${imageMode}">${ops.map(o=>{
   const unowned=!o.charId||progress[o.charId]?.owned!==true;
-  return `<div class="op r${o.rarity}${unowned?' unowned':''}" data-id="${esc(o.charId||'')}" aria-label="${esc(o.name)} · ${unowned?'미보유':'보유'}">${imageMode==='none'?'':`<div class="portrait-frame">${o.charId?`<img class="portrait" width="180" height="${imageMode==='portrait'?180:360}" src="${imgUrl(o)}" alt="${esc(o.name)}" loading="lazy">`:`<div class="portrait-fallback" aria-hidden="true">${esc(o.name.slice(0,1))}</div>`}</div>`}<div class="optext"><span class="stars">${'★'.repeat(o.rarity)}</span><div class="opname${o.name.length>8?' long-name':''}">${esc(o.name)}</div></div></div>`;
+  return `<div class="op r${o.rarity}${unowned?' unowned':''}" data-id="${esc(o.charId||'')}" data-recruit-name="${esc(o.name)}" data-recruit-tags="${esc(JSON.stringify(o.tags))}" tabindex="0" aria-label="${esc(o.name)} · ${unowned?'미보유':'보유'}">${imageMode==='none'?'':`<div class="portrait-frame">${o.charId?`<img class="portrait" width="180" height="${imageMode==='portrait'?180:360}" src="${imgUrl(o)}" alt="${esc(o.name)}" loading="lazy">`:`<div class="portrait-fallback" aria-hidden="true">${esc(o.name.slice(0,1))}</div>`}</div>`}<div class="optext"><span class="stars">${'★'.repeat(o.rarity)}</span><div class="opname${o.name.length>8?' long-name':''}">${esc(o.name)}</div></div></div>`;
  }).join('')}</div></section>`).join('');
 }
 function saveSettings(){if(settingsSnapshot)return;localStorage.setItem('akRecruitSettings',JSON.stringify({hours:recruitHours,imageMode,allowed:[...allowed].sort(),highOnly:document.getElementById('highOnly').checked}))}function render(){if(settingsSnapshot)return;timeBtns.forEach(b=>{const on=Number(b.dataset.hours)===recruitHours;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on))});document.getElementById('timeValue').textContent=recruitHours+'시간';document.getElementById('timeNote').textContent=(recruitHours<4?'1~4성':recruitHours<8?'2~5성':'3~5성');document.getElementById('selCount').textContent=selected.length+' / 5';tagBtns.forEach(b=>{const on=selected.includes(b.dataset.tag);b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on))});
@@ -131,4 +132,4 @@ recruitmentSettings.onclose=()=>{if(settingsSnapshot)setSettings(false);};
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&settingsSnapshot){e.preventDefault();setSettings(false);}});
 window.addEventListener('storage',e=>{if(e.key==='arknightsOperatorProgressV1'||e.key===null)render()});window.addEventListener('pageshow',render);
 fetch('data/operators.json').then(r=>r.json()).then(data=>{let byName={};for(const v of (data.operators||[]))if(v&&v.name&&v.id)byName[v.name]=v.id;operators.forEach(o=>{if(!o.charId&&byName[o.name])o.charId=byName[o.name]});render()}).catch(()=>{render()});render();
-</script></body></html>
+</script><script src="assets/js/recruitment-tooltip.js?v=1" defer></script></body></html>

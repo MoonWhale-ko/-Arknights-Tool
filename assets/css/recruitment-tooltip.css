@@ -1,0 +1,9 @@
+/* Result tooltips are mounted outside clipped recruitment panels. */
+.recruit-op-tooltip{position:fixed;z-index:2100;width:max-content;max-width:min(320px,calc(100vw - 24px));padding:14px 16px;background:var(--z-popover);color:var(--z-text);border:1px solid var(--z-border);border-top:2px solid var(--z-accent);box-shadow:var(--z-shadow-hover);font:14px/1.5 Pretendard,system-ui,sans-serif}
+.recruit-op-tooltip[hidden]{display:none!important}
+.recruit-op-tooltip strong{display:block;font-size:15px;font-weight:700;margin-bottom:3px}
+.recruit-op-tooltip .recruit-tooltip-label{display:block;color:var(--z-muted);font-size:11px;margin-bottom:10px}
+.recruit-op-tooltip .recruit-tooltip-tags{display:flex;flex-wrap:wrap;gap:6px}
+.recruit-op-tooltip .recruit-tooltip-tag{padding:4px 8px;background:var(--z-input);color:var(--z-text);font-size:12px;white-space:nowrap}
+.recruit-op-tooltip .recruit-tooltip-tag.is-selected{background:var(--z-selected);color:var(--z-on-selected);font-weight:700}
+.zoot-recruit .op[data-recruit-tags]:focus-visible .opname{text-decoration:underline;text-underline-offset:4px}
