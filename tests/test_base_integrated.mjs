@@ -102,3 +102,42 @@ test('Tragodia stays in EXP manufacturing before reception in exact and heuristi
   assert.ok(compare(result.best.score,score(model,moved))>0);
  }
 });
+
+
+test('fresh account dorm scores replace stale manual values, while same-import edits persist',async()=>{
+ const {dormAmbienceSource,resolveDormAmbience}=await import('../assets/js/base-optimizer-settings.mjs');
+ const {normalizeBuilding,prepareBase}=await import('../assets/js/base-state.mjs');
+ const building={roomSlots:{slot_28:{roomId:'DORMITORY',level:5,charInstIds:[]},slot_20:{roomId:'DORMITORY',level:3,charInstIds:[]}},rooms:{DORMITORY:{slot_28:{comfort:4800},slot_20:{comfort:2700}}}};
+ const base=prepareBase(normalizeBuilding(building),'import-1'),stale={slot_28:1000,slot_20:0};
+ assert.deepEqual(resolveDormAmbience(base,stale),{slot_28:4800,slot_20:2700});
+ const source=dormAmbienceSource(base);
+ assert.deepEqual(resolveDormAmbience(base,stale,source),stale);
+ const next=prepareBase(normalizeBuilding(building),'import-2');
+ assert.deepEqual(resolveDormAmbience(next,stale,source),{slot_28:4800,slot_20:2700});
+ delete building.rooms.DORMITORY.slot_20.comfort;
+ const missing=prepareBase(normalizeBuilding(building),'import-3');
+ assert.equal(resolveDormAmbience(missing,stale,source).slot_20,undefined);
+ assert.equal(resolveDormAmbience(missing,{slot_20:0},dormAmbienceSource(missing)).slot_20,0);
+ assert.equal(resolveDormAmbience(base,{slot_28:null},source).slot_28,null);
+ assert.deepEqual(resolveDormAmbience({...base,source:'manual'},stale),stale);
+ assert.notEqual(dormAmbienceSource({...base,rooms:{...base.rooms,slot_20:{...base.rooms.slot_20,level:2}}}),source);
+});
+
+
+test('self-only dorm occupants are removed unless they improve production through occupancy links',async()=>{
+ const {createTerraModel}=await import('../assets/js/infra-v2-terra-model.mjs?v=5');
+ const {simulate,score,compare}=await import('../assets/js/infra-v2-core.mjs?v=4');
+ const {trimDormSupport}=await import('../assets/js/base-dorm-support.mjs');
+ const raw={base:{rooms:{factory:{type:'MANUFACTURE',level:1},dorm:{type:'DORMITORY',level:5,ambience:5000}}},products:{factory:'4'},progress:{char_4014_lunacu:{owned:true,elite:0,level:1},char_193_frostl:{owned:true,elite:0,level:1},char_501_durin:{owned:true,elite:0,level:30},char_502_nblade:{owned:true,elite:0,level:30},char_500_noirc:{owned:true,elite:0,level:30},char_391_rosmon:{owned:true,elite:2,level:1}},options:{teams:2,rotation:'12h',maxHours:24,optimizeDormSupport:false,priority:['F_GOLD','F_EXP','F_DIAMOND']}};
+ const plan={groups:[{team:0,room:'factory',operators:['char_502_nblade']},{team:1,room:'factory',operators:['char_500_noirc']}],dormSupport:{dorm:['char_4014_lunacu','char_193_frostl','char_501_durin']}};
+ const model=createTerraModel(catalog,raw),before=simulate(model,plan),cleaned=trimDormSupport(model,plan);
+ assert.deepEqual(cleaned.plan.dormSupport.dorm,['char_501_durin']);assert.ok(compare(score(model,cleaned.result),score(model,before))>=0);
+ assert.ok(model.canPlace(model.byId.char_193_frostl,model.rooms.find(r=>r.type==='DORMITORY')),'self recovery must remain available during normal rest');
+ // Wu You turns dorm occupancy into trade speed; retain fillers when actual income improves.
+ const linkedRaw=structuredClone(raw);linkedRaw.base.rooms={trading:{type:'TRADING',level:3},dorm:raw.base.rooms.dorm};linkedRaw.products={};linkedRaw.progress.char_455_nothin={owned:true,elite:2,level:1};
+ const linkedModel=createTerraModel(catalog,linkedRaw),linked={groups:[{team:0,room:'trading',operators:['char_455_nothin']},{team:1,room:'trading',operators:['char_500_noirc']}],dormSupport:plan.dormSupport};
+ const linkedBefore=simulate(linkedModel,linked),linkedAfter=trimDormSupport(linkedModel,linked);
+ assert.ok(linkedAfter.plan.dormSupport.dorm.includes('char_4014_lunacu'));
+ assert.ok(compare(score(linkedModel,linkedAfter.result),score(linkedModel,linkedBefore))>=0);
+ assert.deepEqual(plan.dormSupport.dorm,['char_4014_lunacu','char_193_frostl','char_501_durin']);
+});
