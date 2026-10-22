@@ -6,7 +6,7 @@
 <title>명일방주 창고</title>
 <link rel="stylesheet" href="assets/css/zoot-navigation.css?v=1">
 <link rel="stylesheet" href="assets/css/zoot.css?v=11">
-<link rel="stylesheet" href="assets/css/zoot-depot.css?v=3">
+<link rel="stylesheet" href="assets/css/zoot-depot.css?v=4">
 <script src="assets/js/zoot.js?v=6"></script>
 </head>
 <body class="zoot-depot">
@@ -18,7 +18,7 @@
 <div class="toolbar">
 <input id="search" type="search" placeholder="재료 검색" aria-label="재료 검색">
 <select id="subcategory" aria-label="세부 분류"><option value="all">세부 분류 전체</option><option value="material">육성 재료</option><option value="experience">작전기록</option><option value="chip">정예화 칩</option><option value="skill">스킬개론</option><option value="module">모듈 재료</option><option value="potential">증표</option><option value="currency">재화</option></select>
-<button id="ownedOnly" type="button" aria-pressed="true">보유만 보기</button>
+<button id="ownedOnly" class="ownership-switch" type="button" role="switch" aria-checked="true" aria-label="보유 아이템 보기" title="보유 아이템 표시 중 · 누르면 미보유 아이템 표시"><span class="ownership-owned">보유</span><span class="ownership-track" aria-hidden="true"><span></span><span></span></span><span class="ownership-unowned">미보유</span></button>
 <span id="itemTotal" aria-live="polite"></span>
 <div id="wallet" class="wallet" aria-label="보유 용문폐"></div>
 </div>
@@ -32,6 +32,6 @@
 <div id="detail"></div>
 <p id="detailStatus" class="detail-status" role="status" aria-live="polite"></p>
 </dialog>
-<script type="module" src="assets/js/backpack.mjs?v=13"></script>
+<script type="module" src="assets/js/backpack.mjs?v=14"></script>
 </body>
 </html>
