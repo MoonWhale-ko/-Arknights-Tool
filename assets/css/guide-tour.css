@@ -14,4 +14,3 @@ body dialog.zoot-tour::backdrop{background:transparent;animation:none}
 .zoot-tour-actions button:disabled{opacity:.4;cursor:default}
 @media(max-height:480px){.zoot-tour-panel{padding:12px}.zoot-tour-panel h2{margin:8px 0}.zoot-tour-panel p{margin-bottom:12px}}
 
-.zoot-tour-panel .zoot-tour-hint{font-size:12px;margin-top:-8px;color:var(--z-muted)}
