@@ -1,62 +1,80 @@
-/* Original in-game rarity frames; item artwork and inventory data remain separate. */
+/* In-game depot geometry, with the site's light/dark color tokens. */
+body.zoot-depot,body.zoot-depot *{box-sizing:border-box}
+body.zoot-depot{background-image:none;--depot-count-bg:#202020d9;--depot-count-text:#f4f4f4}
+html[data-theme=dark] body.zoot-depot{--depot-count-bg:#181818d9;--depot-count-text:#f0f0f0}
 .zoot-depot [data-tier="1"]{--item-frame:url('../icons/items/frame-r1.png')}
 .zoot-depot [data-tier="2"]{--item-frame:url('../icons/items/frame-r2.png')}
 .zoot-depot [data-tier="3"]{--item-frame:url('../icons/items/frame-r3.png')}
 .zoot-depot [data-tier="4"]{--item-frame:url('../icons/items/frame-r4.png')}
 .zoot-depot [data-tier="5"]{--item-frame:url('../icons/items/frame-r5.png')}
 .zoot-depot [data-tier="6"]{--item-frame:url('../icons/items/frame-r6.png')}
-.zoot-depot .items{grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:20px 14px}
-.zoot-depot .item .item-art,.zoot-depot .detail-art{display:block;position:relative;aspect-ratio:1;background:var(--item-frame) center/contain no-repeat;isolation:isolate}
-.zoot-depot .item .item-art{width:100%}
-.zoot-depot .item-art>img,.zoot-depot .detail-art>img{display:block;position:absolute;left:11%;top:11%;width:78%;height:78%;object-fit:contain;z-index:1}
-.zoot-depot .item .quantity{position:absolute;left:auto;right:5%;bottom:7%;transform:none;max-width:calc(100% - 10px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:#20242ce8;color:#fff;box-shadow:none;padding:2px 7px;line-height:1.3;font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;z-index:2}
-.zoot-depot .item .item-name{margin-top:7px;font-size:12px;line-height:1.5;color:var(--z-text)}
-.zoot-depot .item[aria-pressed=true] .item-art{filter:drop-shadow(0 0 4px color-mix(in srgb,var(--z-accent) 65%,transparent))}
-.zoot-depot .item[aria-pressed=true] .item-name{text-decoration:underline;text-decoration-color:var(--z-link);text-decoration-thickness:2px;text-underline-offset:4px}
-.zoot-depot .item:hover .item-name{color:var(--z-link)}
-.zoot-depot .detail-art{width:min(100%,184px);margin:0 auto 18px}
-@media(max-width:1000px){.zoot-depot .items{grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:18px 10px}}
-@media(max-width:700px){.zoot-depot .items{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px 7px}.zoot-depot .item .quantity{font-size:12px;padding:2px 5px;right:2%;bottom:6%}.zoot-depot .item .item-name{font-size:11px}.zoot-depot .detail-art{width:148px}}
-
-/* Complete depot surfaces follow the site's shared theme. */
-body.zoot-depot{background-image:none}
-.zoot-depot .bag{padding-top:28px}
-.zoot-depot .bag>header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px;padding:0 0 24px;border-bottom:1px solid var(--z-border);margin-bottom:24px}
-.zoot-depot .title{gap:14px}
-.zoot-depot .title h1{letter-spacing:-.025em;font-size:28px}
-.zoot-depot .wallet{min-height:0;gap:10px;padding:10px 16px;background:var(--z-input);clip-path:polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px)}
-.zoot-depot .wallet img{width:32px;height:32px}
-.zoot-depot .wallet span{font-size:13px}
-.zoot-depot .wallet strong{font:600 22px/1.3 'Chakra Petch',Pretendard,sans-serif;font-variant-numeric:tabular-nums}
-.zoot-depot .layout{grid-template-columns:156px minmax(0,1fr) 260px;align-items:start;gap:24px}
-.zoot-depot .categories{position:sticky;top:calc(var(--z-bar) + 24px);gap:6px}
-body.zoot-depot .bag .layout .categories button{position:relative;border:0;padding:14px 16px;min-height:48px;background:transparent;color:var(--z-muted);font-size:14px;font-weight:500}
-body.zoot-depot .bag .layout .categories button:hover{background:var(--z-hover);color:var(--z-text)}
-body.zoot-depot .bag .layout .categories button[aria-pressed=true]{background:var(--z-selected);color:var(--z-on-selected);font-weight:700;border:0;box-shadow:none}
-body.zoot-depot .bag .layout .categories button[aria-pressed=true]::before{content:"";position:absolute;inset:0;background:var(--z-accent);clip-path:polygon(5px 0,9.25px 0,3px 6.25px,3px 100%,0 100%,0 5px);pointer-events:none}
-.zoot-depot .contents{min-width:0}
-.zoot-depot .toolbar{padding:14px;margin-bottom:24px;background:var(--z-panel);box-shadow:var(--z-shadow);gap:10px}
-.zoot-depot .toolbar input{width:0;min-width:120px;flex:1 1 120px;font-size:14px}
-.zoot-depot .toolbar button{font-size:14px;min-height:44px}
-.zoot-depot .toolbar span{padding-inline:4px;font-variant-numeric:tabular-nums}
-.zoot-depot .items{padding:0 4px}
-.zoot-depot .zero{opacity:.75}
-.zoot-depot .item:hover,.zoot-depot .item[aria-pressed=true]{opacity:1}
-.zoot-depot .detail{position:sticky;top:calc(var(--z-bar) + 24px);border:0;padding:24px;min-height:300px;background:var(--z-panel)}
-.zoot-depot .detail::before{content:"";position:absolute;inset:0;background:var(--z-accent);clip-path:polygon(10px 0,14.25px 0,3px 11.25px,3px 100%,0 100%,0 10px);pointer-events:none}
-.zoot-depot .detail h2{font-size:20px;line-height:1.5;overflow-wrap:anywhere;letter-spacing:-.02em}
-.zoot-depot .detail .kind{font-size:13px;line-height:1.6;margin-bottom:24px}
-.zoot-depot .detail label{font-size:13px;font-weight:600;color:var(--z-muted)}
-.zoot-depot .detail input{font-size:22px;font-variant-numeric:tabular-nums;min-height:48px}
-.zoot-depot .detail button{font-size:14px;min-height:46px}
-.zoot-depot .empty-detail{font-size:14px;margin:0;line-height:1.8}
+.zoot-depot .bag{height:calc(100dvh - var(--z-bar));min-height:460px;display:grid;grid-template-rows:auto auto minmax(0,1fr) auto;gap:18px;padding:24px 32px 16px;margin:auto;max-width:1920px}
+.zoot-depot .depot-header{display:flex;align-items:center;justify-content:space-between;gap:24px}
+.zoot-depot .title{display:flex;align-items:baseline;gap:12px;flex:none}
+.zoot-depot .title h1{font-size:26px;line-height:1.4;letter-spacing:-.03em;margin:0}
+.zoot-depot .title>span{font:600 13px 'Chakra Petch',sans-serif;color:var(--z-muted);letter-spacing:3px}
+.zoot-depot .categories{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));width:min(940px,76%);background:var(--z-panel);box-shadow:var(--z-shadow);overflow:hidden}
+.zoot-depot .categories button{position:relative;display:flex;align-items:center;justify-content:center;gap:12px;min-height:62px;border:0;padding:12px 14px;background:transparent;color:var(--z-text);font:500 17px/1.4 Pretendard,system-ui,sans-serif;white-space:nowrap;cursor:pointer}
+.zoot-depot .categories button+button::before{content:"";position:absolute;left:0;top:25%;bottom:25%;width:1px;background:var(--z-border)}
+.zoot-depot .categories button:hover{background:var(--z-hover)}
+.zoot-depot .categories button[aria-pressed=true]{background:var(--z-selected);color:var(--z-on-selected);font-weight:700;box-shadow:inset 0 -3px var(--z-accent)}
+.zoot-depot .categories button[aria-pressed=true]::before,.zoot-depot .categories button[aria-pressed=true]+button::before{display:none}
+.zoot-depot .categories svg{width:27px;height:27px;fill:currentColor;flex:none}
+.zoot-depot .toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-width:0}
+.zoot-depot .toolbar :is(input,select,button){min-height:40px;padding:9px 12px;border:1px solid var(--z-border);border-radius:0;background:var(--z-input);color:var(--z-text);font:500 13px/1.4 Pretendard,system-ui,sans-serif}
+.zoot-depot .toolbar input{width:220px;min-width:0}
+.zoot-depot .toolbar input::placeholder{color:var(--z-muted)}
+.zoot-depot .toolbar select{max-width:160px}
+.zoot-depot .toolbar button{cursor:pointer}
+.zoot-depot .toolbar button:hover{background:var(--z-hover)}
+.zoot-depot .toolbar button[aria-pressed=true]{background:var(--z-selected);color:var(--z-on-selected);border-color:var(--z-link)}
+.zoot-depot #itemTotal{color:var(--z-muted);font-size:12px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.zoot-depot .wallet{margin-left:auto;display:flex;align-items:center;gap:9px;color:var(--z-muted);font-size:12px}
+.zoot-depot .wallet img{width:30px;height:30px;object-fit:contain}
+.zoot-depot .wallet strong{font:600 21px/1.3 'Chakra Petch',Pretendard,sans-serif;color:var(--z-text);font-variant-numeric:tabular-nums}
+.zoot-depot .items-viewport{container-type:size;min-width:0;min-height:0;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:var(--z-border) transparent;touch-action:pan-x pan-y;border-block:1px solid color-mix(in srgb,var(--z-border) 50%,transparent)}
+.zoot-depot .items{--item-size:clamp(64px,calc((100cqh - 88px)/3),160px);height:100%;width:max-content;min-width:100%;display:grid;grid-template-rows:repeat(3,minmax(0,1fr));grid-auto-flow:column;grid-auto-columns:var(--item-size);align-items:center;column-gap:clamp(24px,3vw,48px);row-gap:20px;padding:24px 18px}
+.zoot-depot .item{position:relative;display:block;aspect-ratio:1;width:100%;min-width:0;border:0;margin:0;padding:0;background:transparent;color:var(--z-text);cursor:pointer}
+.zoot-depot .item-art,.zoot-depot .detail-art{display:block;position:relative;aspect-ratio:1;background:var(--item-frame) center/contain no-repeat;isolation:isolate}
+.zoot-depot .item-art{width:100%}
+.zoot-depot .item-art>img,.zoot-depot .detail-art>img{position:absolute;inset:-6%;width:112%;height:112%;object-fit:contain;z-index:1;pointer-events:none}
+.zoot-depot .item .quantity{position:absolute;right:0;bottom:5%;max-width:100%;padding:2px 7px;overflow:hidden;text-overflow:ellipsis;background:var(--depot-count-bg);color:var(--depot-count-text);font:500 clamp(13px,1.6vw,21px)/1.2 'Chakra Petch',Pretendard,sans-serif;font-variant-numeric:tabular-nums;white-space:nowrap;z-index:2}
+.zoot-depot .item.zero .quantity{color:color-mix(in srgb,var(--depot-count-text) 70%,transparent)}
+.zoot-depot .item.zero .item-art>img{opacity:.7}
+.zoot-depot .item:hover .item-art,.zoot-depot .item:focus-visible .item-art,.zoot-depot .item[aria-pressed=true] .item-art{filter:drop-shadow(0 0 5px color-mix(in srgb,var(--z-accent) 75%,transparent))}
+.zoot-depot .item:hover .item-art>img{opacity:1}
+.zoot-depot .items.is-empty{display:flex;width:100%;align-items:center;justify-content:center;padding:24px}
+.zoot-depot .no-items{color:var(--z-muted);font-size:14px;text-align:center}
+.zoot-depot .depot-footer{min-width:0}
+.zoot-depot .note{margin:0;color:var(--z-muted);font-size:12px;line-height:1.7}
+.zoot-depot .status{color:var(--z-link);font-size:13px;line-height:1.6;margin:0 0 6px}
 .zoot-depot .status:empty{display:none}
-.zoot-depot .status:not(:empty){margin:24px 0 0;padding:12px 16px;background:var(--z-input);border-left:3px solid var(--z-accent);line-height:1.6}
-.zoot-depot .note{margin-top:28px;padding-top:18px;color:var(--z-muted)}
-@media(max-width:1100px){.zoot-depot .layout{grid-template-columns:120px minmax(0,1fr) 220px;gap:18px}body.zoot-depot .bag .layout .categories button{padding-inline:12px}.zoot-depot .detail{padding:20px}}
-@media(max-width:700px){.zoot-depot .bag{padding-top:20px}.zoot-depot .bag>header{margin-bottom:18px;padding-bottom:18px;gap:12px}.zoot-depot .title h1{font-size:24px}.zoot-depot .wallet{padding:8px 10px;gap:7px}.zoot-depot .wallet img{width:26px;height:26px}.zoot-depot .wallet strong{font-size:19px}.zoot-depot .wallet span{font-size:12px}.zoot-depot .layout{display:flex;gap:18px}.zoot-depot .categories{position:static;width:100%;padding-bottom:4px;gap:5px}body.zoot-depot .bag .layout .categories button{flex:0 0 auto;min-height:42px;padding:11px 13px;font-size:13px}.zoot-depot .contents{width:100%}.zoot-depot .toolbar{padding:12px;margin-bottom:20px;gap:8px}.zoot-depot .toolbar input{min-width:120px}.zoot-depot .toolbar button{padding-inline:10px;font-size:13px}.zoot-depot .toolbar span{font-size:12px}.zoot-depot .detail{position:static;width:100%;min-height:0;padding:22px}.zoot-depot .detail-art{margin-bottom:12px}.zoot-depot .detail h2{margin-top:8px}.zoot-depot .note{margin-top:22px}}
+body.zoot-depot dialog.depot-item-dialog{position:fixed;inset:0;margin:auto;width:min(620px,calc(100% - 32px));max-height:calc(100dvh - 32px);overflow:auto;padding:40px 32px 28px;border:0;border-top:3px solid var(--z-accent);background:var(--z-popover);color:var(--z-text);box-shadow:var(--z-shadow-hover);font:14px/1.6 Pretendard,system-ui,sans-serif}
+.zoot-depot .depot-item-dialog::backdrop{background:#0008}
+.zoot-depot .detail-close{position:absolute;right:8px;top:8px;display:grid;place-items:center;width:40px;height:40px;padding:8px;border:0;background:transparent;color:var(--z-text);cursor:pointer}
+.zoot-depot .detail-close:hover{background:var(--z-hover)}
+.zoot-depot .detail-close svg{width:24px;height:24px}
+.zoot-depot .detail-hero{display:grid;grid-template-columns:176px minmax(0,1fr);gap:28px;align-items:center;margin:4px 0 28px}
+.zoot-depot .detail-art{width:176px;margin:0}
+.zoot-depot .detail-eyebrow{font:600 12px 'Chakra Petch',sans-serif;letter-spacing:3px;color:var(--z-muted);margin-bottom:8px}
+.zoot-depot #itemTitle{font-size:24px;line-height:1.4;letter-spacing:-.025em;margin:0 0 12px;overflow-wrap:anywhere}
+.zoot-depot .kind{font-size:13px;color:var(--z-muted);margin:0}
+.zoot-depot #quantityForm{padding-top:20px;border-top:1px solid var(--z-border)}
+.zoot-depot #quantityForm label{display:block;color:var(--z-muted);font-weight:600;font-size:13px;margin-bottom:8px}
+.zoot-depot .quantity-editor{display:flex;gap:12px}
+.zoot-depot .quantity-editor input{min-width:0;flex:1;width:100%;min-height:48px;padding:10px 12px;background:var(--z-input);color:var(--z-text);border:1px solid var(--z-input-border);font:500 22px/1.3 'Chakra Petch',Pretendard,sans-serif;font-variant-numeric:tabular-nums}
+.zoot-depot .quantity-editor button{flex:none;padding:10px 22px;min-height:48px;background:var(--z-accent);color:#172008;border:0;font:700 14px Pretendard,system-ui,sans-serif;cursor:pointer}
+.zoot-depot .quantity-editor button:hover{background:var(--z-accent-hover)}
+.zoot-depot .quantity-editor :disabled{background:var(--z-disabled);color:var(--z-disabled-text);cursor:default}
+.zoot-depot .detail-status{color:var(--z-link);line-height:1.7;white-space:pre-line;margin:16px 0 0}
+.zoot-depot .detail-status:empty{display:none}
+body.zoot-depot :is(button,a,input,select){-webkit-tap-highlight-color:transparent}
+body.zoot-depot :is(button,a,input,select):is(:focus,:focus-visible){outline:none!important}
+.zoot-depot :is(input,select):focus-visible{border-color:var(--z-link)}
+.zoot-depot .categories button:focus-visible,.zoot-depot .toolbar button:focus-visible,.zoot-depot .detail-close:focus-visible,.zoot-depot .quantity-editor button:focus-visible{text-decoration:underline;text-underline-offset:4px}
+html:has(.depot-item-dialog[open]){overflow:hidden}
+@media(max-width:850px){.zoot-depot .bag{padding:18px 18px 12px;gap:14px}.zoot-depot .depot-header{flex-wrap:wrap;gap:14px}.zoot-depot .categories{width:100%}.zoot-depot .categories button{min-height:52px;font-size:14px;gap:8px;padding:10px 8px}.zoot-depot .categories svg{width:24px;height:24px}.zoot-depot .title h1{font-size:22px}.zoot-depot .toolbar input{width:180px}.zoot-depot .wallet strong{font-size:18px}}
+@media(max-width:560px){.zoot-depot .bag{min-height:560px;padding:16px 14px 12px;gap:12px}.zoot-depot .title h1{font-size:21px}.zoot-depot .title>span{font-size:11px}.zoot-depot .categories button{font-size:12px;gap:5px;padding:9px 5px;min-height:48px}.zoot-depot .categories svg{width:20px;height:20px}.zoot-depot .toolbar{gap:8px}.zoot-depot .toolbar input{width:0;flex:1;min-width:100px}.zoot-depot .toolbar select{max-width:120px;width:120px}.zoot-depot .toolbar :is(input,select,button){font-size:12px;padding:8px;min-height:38px}.zoot-depot .wallet{margin-left:auto;gap:6px}.zoot-depot .wallet img{width:24px;height:24px}.zoot-depot .wallet span{font-size:11px}.zoot-depot .wallet strong{font-size:17px}.zoot-depot .items{column-gap:26px;row-gap:16px;padding:20px 12px;--item-size:clamp(64px,calc((100cqh - 72px)/3),160px)}.zoot-depot .item .quantity{font-size:16px;padding:2px 5px}.zoot-depot .note{font-size:11px}.zoot-depot .detail-hero{grid-template-columns:110px minmax(0,1fr);gap:18px;margin-bottom:22px}.zoot-depot .detail-art{width:110px}.zoot-depot #itemTitle{font-size:21px}body.zoot-depot dialog.depot-item-dialog{padding:44px 20px 24px}.zoot-depot .quantity-editor{gap:8px}.zoot-depot .quantity-editor button{padding-inline:14px}}
 
-/* Override inherited feature-control rules, including their hover states. */
-body.zoot-depot .bag .layout .categories button[aria-pressed=true]:not(:disabled):hover,
-body.zoot-depot .bag .layout .toolbar button[aria-pressed=true]{background:var(--z-selected);color:var(--z-on-selected)}
-body.zoot-depot .bag .layout .detail{border:0}
+/* Older bundled item PNGs already include the original rarity circle. */
+.zoot-depot :is(.item-art,.detail-art):has(>img[data-framed=true]){background-image:none}
