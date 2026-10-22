@@ -74,3 +74,6 @@ html:has(dialog.recruitment-settings[open]){overflow:hidden}
  .zoot-recruit .tag-reset,.zoot-recruit .settings-button{min-height:34px;padding:7px 10px}
 }
 @media(max-width:760px){.zoot-recruit .tag-panel{min-height:0;padding-block:16px;gap:12px}.zoot-recruit #tagArea{gap:12px}}
+
+/* Keep a fallback illustration aligned to the face in square portrait mode. */
+.zoot-recruit .ops.image-portrait .portrait.image-fallback{object-position:top}
