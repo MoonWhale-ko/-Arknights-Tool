@@ -129,3 +129,18 @@
 .zoot-base .optimizer-help-dialog ul{padding-left:20px;font-size:14px;line-height:1.9;color:var(--z-text)}
 .zoot-base .optimizer-help-dialog li+li{margin-top:10px}
 @media(max-width:600px){.zoot-base .optimizer-settings>.optimizer-compute-settings{gap:12px}.zoot-base .optimizer-heading-actions{gap:8px}}
+
+/* Compare crews inside each facility, with no repeated facility list. */
+.zoot-base .optimizer-facilities{display:grid;gap:18px;margin:24px 0}
+.zoot-base .optimizer-facility{border:1px solid var(--z-border);min-width:0;background:var(--z-input)}
+.zoot-base .optimizer-facility h4{margin:0;padding:12px 16px;border-left:3px solid var(--z-accent);border-bottom:1px solid var(--z-border);font-size:17px;color:var(--z-text)}
+.zoot-base .optimizer-crew-grid{display:grid;grid-template-columns:repeat(var(--crew-count),minmax(0,1fr))}
+.zoot-base .optimizer-crew{min-width:0;padding:14px}
+.zoot-base .optimizer-crew+.optimizer-crew{border-left:1px solid var(--z-border)}
+.zoot-base .optimizer-crew h5{margin:0 0 12px;font-size:16px;color:var(--z-link)}
+.zoot-base .optimizer-crew-operators{display:flex;flex-direction:column;gap:8px;min-width:0}
+.zoot-base .optimizer-crew .optimizer-chip{min-width:0;flex-wrap:wrap;align-items:center}
+.zoot-base .optimizer-crew .optimizer-chip>span{min-width:0;overflow-wrap:anywhere}
+.zoot-base .optimizer-empty-crew{color:var(--z-muted);font-size:14px}
+.zoot-base .base-optimizer .optimizer-dorm-rate{color:var(--z-link);font-size:13px;font-weight:600}
+@media(max-width:600px){.zoot-base .optimizer-crew{padding:10px 6px}.zoot-base .optimizer-crew h5{font-size:14px}.zoot-base .optimizer-crew .optimizer-chip{flex-direction:column;padding:7px 4px;text-align:center;font-size:12px}.zoot-base .optimizer-crew .optimizer-chip img{width:30px;height:30px}.zoot-base .optimizer-empty-crew{font-size:12px}.zoot-base .optimizer-facility h4{padding:10px 12px;font-size:15px}}

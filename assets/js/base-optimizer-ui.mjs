@@ -1,3 +1,4 @@
+import {orderFacilities,orderDorms} from './base-result-layout.mjs';
 import {dormAmbienceSource,resolveDormAmbience} from './base-optimizer-settings.mjs';
 import {BASE_KEY,readBase} from './base-state.mjs?v=5';
 import {DEFAULT_OPTIONS,normalizeOptions} from './base-optimizer.mjs?v=3';
@@ -75,7 +76,7 @@ $('optimizerRun').addEventListener('click',async()=>{
   {
    const {prepareIntegratedInput}=await import('./base-integrated-adapter.mjs?v=2');if(token!==generation)return;
    const prepared=prepareIntegratedInput(data,base,progress,products,{...config,rankingWindow:$('optimizerWindow').value},read(BASE_KEY+':trading-products',{}));
-   worker=new Worker(new URL('./base-integrated-worker.mjs?v=8',import.meta.url),{type:'module'});
+   worker=new Worker(new URL('./base-integrated-worker.mjs?v=9',import.meta.url),{type:'module'});
    worker.onmessage=({data:event})=>{
     if(token!==generation)return;
     if(event.type==='started'){message(`보유 ${event.owned}명 · 배치 탐색 중…`);return;}
@@ -117,19 +118,26 @@ function renderIntegrated(report){
   if(best.reason)target.append(text('p',best.reason,'optimizer-result-notice'));
   const roomNames={},counts={};
   for(const r of report.rooms){counts[r.type]=(counts[r.type]??0)+1;roomNames[r.id]=(names[r.type]??({TRAINING:'훈련실',WORKSHOP:'가공소'}[r.type])??r.type)+(['MANUFACTURE','TRADING','POWER','DORMITORY'].includes(r.type)?' '+counts[r.type]:'')+' · Lv.'+r.level;}
-  for(let team=0;team<report.input.options.teams;team++){
-   const shift=shifts.find(s=>s.team===team);target.append(text('h3',(team+1)+'조'));
-   const rows=shift?.rooms??best.plan.groups.filter(g=>g.team===team).map(g=>({id:g.room,operators:g.operators}));
-   for(const r of rows.filter(r=>report.rooms.find(room=>room.id===r.id)?.type!=='DORMITORY')){
-    const row=text('div','','optimizer-room-ops');row.append(text('strong',roomNames[r.id]??r.id));
-    for(const id of r.operators)row.append(chip(report.operators[id]??{id,name:id},report.input.residents.some(p=>p.id===id),best.cycle?.morale?.[id]??best.at24?.morale?.[id]));
-    if(!r.operators.length)row.append(text('span','배치 없음'));target.append(row);
+  const facilityRooms=orderFacilities(report.rooms.filter(r=>r.type!=='DORMITORY'&&(!['TRAINING','WORKSHOP'].includes(r.type)||best.plan.groups.some(g=>g.room===r.id&&g.operators.length))));
+  const facilities=text('div','','optimizer-facilities');
+  for(const room of facilityRooms){
+   const section=text('section','','optimizer-facility');section.dataset.room=room.id;section.dataset.type=room.type;
+   const heading=text('h4',roomNames[room.id]);heading.id='assignment-'+room.id;section.setAttribute('aria-labelledby',heading.id);section.append(heading);
+   const crews=text('div','','optimizer-crew-grid');crews.style.setProperty('--crew-count',report.input.options.teams);
+   for(let team=0;team<report.input.options.teams;team++){
+    const crew=text('section','','optimizer-crew'),title=text('h5',(team+1)+'조');crew.append(title);crew.setAttribute('aria-label',(team+1)+'조');
+    const ids=best.plan.groups.find(g=>g.team===team&&g.room===room.id)?.operators??shifts.find(s=>s.team===team)?.rooms.find(r=>r.id===room.id)?.operators??[];
+    const list=text('div','','optimizer-crew-operators');
+    for(const id of ids)list.append(chip(report.operators[id]??{id,name:id},report.input.residents.some(p=>p.id===id),best.cycle?.morale?.[id]??best.at24?.morale?.[id]));
+    if(!ids.length)list.append(text('span','배치 없음','optimizer-empty-crew'));crew.append(list);crews.append(crew);
    }
+   section.append(crews);facilities.append(section);
   }
-  const dormRooms=report.rooms.filter(r=>r.type==='DORMITORY');
+  target.append(facilities);
+  const dormRooms=orderDorms(report.rooms.filter(r=>r.type==='DORMITORY'),best.dormRecovery);
   if(dormRooms.length){
    target.append(text('h3','숙소 · 고정 지원자'),text('p','교대 없이 같은 숙소에 유지할 인원입니다.','optimizer-note'));
-   for(const room of dormRooms){const row=text('div','','optimizer-room-ops');row.append(text('strong',roomNames[room.id]));const ids=(best.plan.dormSupport??report.input.dormSupport??{})[room.id]??[];for(const id of ids){const badge=chip(report.operators[id]??{id,name:id});badge.append(text('small','고정'));row.append(badge);}if(!ids.length)row.append(text('span','고정 지원자 없음'));target.append(row);}
+   for(const room of dormRooms){const row=text('div','','optimizer-room-ops');row.dataset.dorm=room.id;row.append(text('strong',roomNames[room.id]));const recovery=best.dormRecovery?.find(r=>r.id===room.id);if(recovery){const rate=text('small','평균 회복 '+number(recovery.rate)+'/시간','optimizer-dorm-rate');rate.title='컨디션 0인 일반 휴식 인원으로 남은 자리를 채운 기준 · 근무조별 평균';row.append(rate);}const ids=(best.plan.dormSupport??report.input.dormSupport??{})[room.id]??[];for(const id of ids){const badge=chip(report.operators[id]??{id,name:id});badge.append(text('small','고정'));row.append(badge);}if(!ids.length)row.append(text('span','고정 지원자 없음'));target.append(row);}
   }
   const a=best.at24,b=best.cycle,range=p=>p?.trade?.range?.generatedLmd?.map(number).join(' ~ ')??'—';
   const cycle=report.input.options.rankingWindow==='cycle',point=cycle?b:a;

@@ -183,3 +183,24 @@ test('each dorm allows one all-recovery and one single-recovery supporter, with 
  const splitPlan={...plan,dormSupport:{dorm:['char_501_durin','char_120_hibisc'],dorm2:['char_302_glaze','char_212_ansel']}};
  assert.doesNotThrow(()=>simulate(createTerraModel(catalog,split),splitPlan));
 });
+
+test('facility order and dorm recovery ranking use actual levels, ambience and support effects',async()=>{
+ const {orderFacilities,orderDorms,describeDormRecovery}=await import('../assets/js/base-result-layout.mjs');
+ const {createTerraModel}=await import('../assets/js/infra-v2-terra-model.mjs?v=7');
+ const types=['HIRE','POWER','TRADING','MANUFACTURE','MEETING','CONTROL'];assert.deepEqual(orderFacilities(types.map(type=>({type}))).map(r=>r.type),['CONTROL','MEETING','MANUFACTURE','TRADING','POWER','HIRE']);
+ const raw={base:{rooms:{slow:{type:'DORMITORY',level:3,ambience:2700},fast:{type:'DORMITORY',level:5,ambience:5000}}},progress:{char_501_durin:{owned:true,elite:0,level:30},char_120_hibisc:{owned:true,elite:0,level:1}},options:{teams:3,rotation:'12h',maxHours:48,optimizeDormSupport:false}};
+ const model=createTerraModel(catalog,raw),plan={groups:[],dormSupport:{slow:['char_501_durin','char_120_hibisc'],fast:[]}},before=JSON.stringify(plan);
+ const scores=describeDormRecovery(model,plan);assert.ok(Math.abs(scores.find(r=>r.id==='fast').rate-4)<1e-8);assert.ok(Math.abs(scores.find(r=>r.id==='slow').rate-(1.8+2700*.0004+.25+.55/3))<1e-8);
+ assert.deepEqual(orderDorms(model.rooms,scores).map(r=>r.id),['fast','slow']);assert.equal(JSON.stringify(plan),before);
+ raw.base.rooms.slow={type:'DORMITORY',level:5,ambience:5000};const equal=createTerraModel(catalog,raw),boosted=describeDormRecovery(equal,plan);assert.deepEqual(orderDorms(equal.rooms,boosted).map(r=>r.id),['slow','fast']);
+ assert.ok(Math.abs(boosted.find(r=>r.id==='slow').rate-(4+.25+.55/3))<1e-8);
+});
+
+test('dorm rate summaries remain finite for every unlocked support skill in the bundled roster',async()=>{
+ const {createTerraModel,terra}=await import('../assets/js/infra-v2-terra-model.mjs?v=7');
+ const {describeDormRecovery}=await import('../assets/js/base-result-layout.mjs');
+ const progress=Object.fromEntries(terra.J.map(o=>[o.id,{owned:true,elite:o.rarity>=4?2:o.rarity===3?1:0,level:1}]));
+ const model=createTerraModel(catalog,{base:{rooms:{dorm:{type:'DORMITORY',level:5,ambience:5000},power:{type:'POWER',level:3},office:{type:'HIRE',level:3},control:{type:'CONTROL',level:5}}},progress,options:{teams:3,optimizeDormSupport:true}});
+ const groups=model.tasks.filter(t=>t.team>=0).map(t=>({team:t.team,room:t.room,operators:[]}));
+ for(const id of model.tasks.find(t=>t.type==='DORMITORY').candidates){const rates=describeDormRecovery(model,{groups,dormSupport:{dorm:[id]}});assert.ok(Number.isFinite(rates[0].rate),id);assert.ok(rates[0].rate>=0,id);}
+});
