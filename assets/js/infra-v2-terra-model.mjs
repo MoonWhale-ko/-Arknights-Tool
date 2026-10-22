@@ -1,9 +1,10 @@
+import {isSelfOnlyDormSupport} from './base-dorm-support.mjs?v=2';
 import * as terra from './infra-v2-terra-engine.mjs';
 import {cleanInput,buildModel,meetingTeamAllowed} from './infra-v2-core.mjs?v=4';
 import {rule} from './infra-v2-rules.mjs';
 import {terraSnapshot} from './infra-v2-terra-snapshot.mjs';
 import {improveRest} from './infra-v2-terra-rest.mjs';
-export const INTEGRATED_VERSION='terra27-time-simulator-4';
+export const INTEGRATED_VERSION='terra27-time-simulator-5';
 export {terra};
 const point=s=>{const m=s.unlock.match(/정예화\s*(\d+)/);return {id:s.buffId,elite:m?Number(m[1]):0,level:m?1:Number(s.unlock.match(/\d+/)?.[0]??1)};};
 export function makeTerraCatalog(base){
@@ -28,6 +29,7 @@ export function createTerraModel(base,raw){
  }});
  model.restOptimizer=improveRest;
  model.engineVersion=INTEGRATED_VERSION;model.snapshotEvaluator=terraSnapshot;model.meetingLast=true;
+ for(const task of model.tasks)if(task.type==='DORMITORY')task.candidates=task.candidates.filter(id=>!isSelfOnlyDormSupport(model.byId[id]));
  model.startingSelections=linkedSeeds(model);
  model.warnings=[
   '업로드한 테라아카이브 v27의 스킬 평가식을 시간 시뮬레이터에 연결한 버전입니다. 원본 A/B 가중치는 사용하지 않습니다.',

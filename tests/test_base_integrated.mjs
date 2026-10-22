@@ -17,14 +17,15 @@ test('manufacturing selection is required and unsupported trade type never silen
 });
 test('the same-origin production worker returns the integrated roster and 24h/cycle results',async()=>{
  const base=structuredClone(example.base);base.rooms.training={type:'TRAINING',level:3};
- const prepared=prepareIntegratedInput(catalog,base,example.progress,{},options);
+ const progress={...example.progress,char_4014_lunacu:{owned:true,elite:0,level:1},char_193_frostl:{owned:true,elite:0,level:1}};
+ const prepared=prepareIntegratedInput(catalog,base,progress,{},options);
  const url=new URL('../assets/js/base-integrated-worker.mjs',import.meta.url).href,source=`import {parentPort} from 'node:worker_threads';globalThis.self={postMessage:v=>parentPort.postMessage(v)};await import(${JSON.stringify(url)});parentPort.on('message',data=>self.onmessage({data}));parentPort.postMessage({type:'ready'});`;
  const w=new Worker(new URL('data:text/javascript,'+encodeURIComponent(source)),{type:'module'});
- try{const report=await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('worker timeout')),10000);w.on('error',reject);w.on('message',d=>{if(d.type==='ready')w.postMessage({catalog,...prepared,seconds:1});if(d.type==='error'){clearTimeout(timer);reject(Error(d.message));}if(d.type==='result'){clearTimeout(timer);resolve(d.result);}});});assert.equal(report.modelVersion,'terra27-time-simulator-4');assert.ok(report.best.at24);assert.ok(report.best.cycle);assert.equal(report.stats.evaluationErrors,0);assert.ok(report.rooms.some(r=>r.type==='TRAINING'));assert.ok(report.best.plan.groups.every(g=>g.room!=='training'||g.operators.length===0));assert.ok(report.best.events.every(e=>(e.rooms??[]).every(r=>r.id!=='training'||r.operators.length===0)));assert.equal(report.operators.char_486_takila.name,'테킬라');assert.equal(report.input.options.teams,2);assert.doesNotThrow(()=>JSON.parse(JSON.stringify(report)));}finally{await w.terminate();}
+ try{const report=await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('worker timeout')),10000);w.on('error',reject);w.on('message',d=>{if(d.type==='ready')w.postMessage({catalog,...prepared,seconds:1});if(d.type==='error'){clearTimeout(timer);reject(Error(d.message));}if(d.type==='result'){clearTimeout(timer);resolve(d.result);}});});assert.equal(report.modelVersion,'terra27-time-simulator-5');assert.ok(report.best.at24);assert.ok(report.best.cycle);assert.equal(report.stats.evaluationErrors,0);assert.ok(report.rooms.some(r=>r.type==='TRAINING'));assert.ok(report.best.plan.groups.every(g=>g.room!=='training'||g.operators.length===0));assert.ok(report.best.events.every(e=>(e.rooms??[]).every(r=>r.id!=='training'||r.operators.length===0)));assert.equal(report.operators.char_486_takila.name,'테킬라');assert.equal(report.input.options.teams,2);assert.ok(!report.input.progress.char_455_nothin&&!report.input.progress.char_391_rosmon);for(const ids of Object.values(report.best.plan.dormSupport??{}))assert.ok(!ids.includes('char_4014_lunacu')&&!ids.includes('char_193_frostl'));assert.doesNotThrow(()=>JSON.parse(JSON.stringify(report)));}finally{await w.terminate();}
 });
 
 test('meeting compares passive-only operators against skill holders in the actual rotation search',async()=>{
- const {createTerraModel,terra}=await import('../assets/js/infra-v2-terra-model.mjs?v=5');
+ const {createTerraModel,terra}=await import('../assets/js/infra-v2-terra-model.mjs?v=6');
  const {solveHeuristic}=await import('../assets/js/infra-v2-heuristic.mjs?v=4');
  const {simulate}=await import('../assets/js/infra-v2-core.mjs?v=4');
  const high=terra.J.filter(o=>o.rarity===6&&!o.skills.some(s=>s.room==='MEETING')).slice(0,4).map(o=>o.id);
@@ -42,7 +43,7 @@ test('meeting compares passive-only operators against skill holders in the actua
 });
 
 test('meeting adds facility, total dorm ambience, rarity and elite bonuses; exhausted passive bonus stops',async()=>{
- const {createTerraModel,terra}=await import('../assets/js/infra-v2-terra-model.mjs?v=5');
+ const {createTerraModel,terra}=await import('../assets/js/infra-v2-terra-model.mjs?v=6');
  const four=terra.J.find(o=>o.rarity===4&&!o.skills.some(s=>s.room==='MEETING')).id;
  const five=terra.J.find(o=>o.rarity===5&&!o.skills.some(s=>s.room==='MEETING')).id;
  const rate=(id,elite,level,ambience,morale=24)=>{
@@ -87,7 +88,7 @@ test('production and trade income outrank reception efficiency in both compariso
 });
 
 test('Tragodia stays in EXP manufacturing before reception in exact and heuristic searches',async()=>{
- const {createTerraModel}=await import('../assets/js/infra-v2-terra-model.mjs?v=5');
+ const {createTerraModel}=await import('../assets/js/infra-v2-terra-model.mjs?v=6');
  const {solveHeuristic}=await import('../assets/js/infra-v2-heuristic.mjs?v=4');
  const {simulate,score,compare}=await import('../assets/js/infra-v2-core.mjs?v=4');
  const raw={base:{rooms:{meeting:{type:'MEETING',level:3},factory:{type:'MANUFACTURE',level:1}}},progress:{char_1042_phatm2:{owned:true,elite:2,level:1},char_009_12fce:{owned:true,elite:0,level:30},char_500_noirc:{owned:true,elite:0,level:30}},products:{factory:'1'},options:{teams:2,rotation:'12h',maxHours:24,priority:['F_EXP','F_GOLD','F_DIAMOND'],optimizeDormSupport:false}};
@@ -124,20 +125,35 @@ test('fresh account dorm scores replace stale manual values, while same-import e
 });
 
 
-test('self-only dorm occupants are removed unless they improve production through occupancy links',async()=>{
- const {createTerraModel}=await import('../assets/js/infra-v2-terra-model.mjs?v=5');
+test('self-only dorm occupants never reserve support beds, even with occupancy links',async()=>{
+ const {createTerraModel}=await import('../assets/js/infra-v2-terra-model.mjs?v=6');
  const {simulate,score,compare}=await import('../assets/js/infra-v2-core.mjs?v=4');
- const {trimDormSupport}=await import('../assets/js/base-dorm-support.mjs');
+ const {trimDormSupport}=await import('../assets/js/base-dorm-support.mjs?v=2');
  const raw={base:{rooms:{factory:{type:'MANUFACTURE',level:1},dorm:{type:'DORMITORY',level:5,ambience:5000}}},products:{factory:'4'},progress:{char_4014_lunacu:{owned:true,elite:0,level:1},char_193_frostl:{owned:true,elite:0,level:1},char_501_durin:{owned:true,elite:0,level:30},char_502_nblade:{owned:true,elite:0,level:30},char_500_noirc:{owned:true,elite:0,level:30},char_391_rosmon:{owned:true,elite:2,level:1}},options:{teams:2,rotation:'12h',maxHours:24,optimizeDormSupport:false,priority:['F_GOLD','F_EXP','F_DIAMOND']}};
  const plan={groups:[{team:0,room:'factory',operators:['char_502_nblade']},{team:1,room:'factory',operators:['char_500_noirc']}],dormSupport:{dorm:['char_4014_lunacu','char_193_frostl','char_501_durin']}};
  const model=createTerraModel(catalog,raw),before=simulate(model,plan),cleaned=trimDormSupport(model,plan);
  assert.deepEqual(cleaned.plan.dormSupport.dorm,['char_501_durin']);assert.ok(compare(score(model,cleaned.result),score(model,before))>=0);
  assert.ok(model.canPlace(model.byId.char_193_frostl,model.rooms.find(r=>r.type==='DORMITORY')),'self recovery must remain available during normal rest');
- // Wu You turns dorm occupancy into trade speed; retain fillers when actual income improves.
+ // Occupancy links must not reintroduce pure self-recovery operators as fixed supporters.
  const linkedRaw=structuredClone(raw);linkedRaw.base.rooms={trading:{type:'TRADING',level:3},dorm:raw.base.rooms.dorm};linkedRaw.products={};linkedRaw.progress.char_455_nothin={owned:true,elite:2,level:1};
  const linkedModel=createTerraModel(catalog,linkedRaw),linked={groups:[{team:0,room:'trading',operators:['char_455_nothin']},{team:1,room:'trading',operators:['char_500_noirc']}],dormSupport:plan.dormSupport};
- const linkedBefore=simulate(linkedModel,linked),linkedAfter=trimDormSupport(linkedModel,linked);
- assert.ok(linkedAfter.plan.dormSupport.dorm.includes('char_4014_lunacu'));
- assert.ok(compare(score(linkedModel,linkedAfter.result),score(linkedModel,linkedBefore))>=0);
+ const linkedAfter=trimDormSupport(linkedModel,linked);
+ assert.deepEqual(linkedAfter.plan.dormSupport.dorm,['char_501_durin']);
  assert.deepEqual(plan.dormSupport.dorm,['char_4014_lunacu','char_193_frostl','char_501_durin']);
+});
+
+
+test('automatic support candidates exclude current self-only skills without losing ordinary rest',async()=>{
+ const {createTerraModel}=await import('../assets/js/infra-v2-terra-model.mjs?v=6');
+ const {solveHeuristic}=await import('../assets/js/infra-v2-heuristic.mjs?v=4');
+ const {isSelfOnlyDormSupport}=await import('../assets/js/base-dorm-support.mjs?v=2');
+ const progress={char_4014_lunacu:{owned:true,elite:0,level:1},char_193_frostl:{owned:true,elite:0,level:1},char_501_durin:{owned:true,elite:0,level:30},char_120_hibisc:{owned:true,elite:0,level:1},char_300_phenxi:{owned:true,elite:0,level:1},char_502_nblade:{owned:true,elite:0,level:30},char_500_noirc:{owned:true,elite:0,level:30}};
+ const raw={base:{rooms:{factory:{type:'MANUFACTURE',level:1},dorm:{type:'DORMITORY',level:5,ambience:5000}}},products:{factory:'4'},progress,options:{teams:2,rotation:'12h',maxHours:48,optimizeDormSupport:true}};
+ for(const exactThreshold of [100000,0]){
+  const model=createTerraModel(catalog,raw),support=model.tasks.find(t=>t.type==='DORMITORY'),dorm=model.rooms.find(r=>r.type==='DORMITORY');
+  for(const id of ['char_4014_lunacu','char_193_frostl']){assert.ok(isSelfOnlyDormSupport(model.byId[id]));assert.ok(!support.candidates.includes(id));assert.ok(model.canPlace(model.byId[id],dorm));}
+  for(const id of ['char_501_durin','char_120_hibisc','char_300_phenxi'])assert.ok(support.candidates.includes(id));
+  const result=solveHeuristic(model,{maxMilliseconds:3000,exactThreshold,starts:2});assert.ok(result.best);assert.equal(result.stats.evaluationErrors,0);
+  for(const ids of Object.values(result.best.plan.dormSupport))for(const id of ids)assert.equal(isSelfOnlyDormSupport(model.byId[id]),false);
+ }
 });

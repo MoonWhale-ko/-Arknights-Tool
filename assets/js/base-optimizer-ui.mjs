@@ -75,7 +75,7 @@ $('optimizerRun').addEventListener('click',async()=>{
   {
    const {prepareIntegratedInput}=await import('./base-integrated-adapter.mjs?v=2');if(token!==generation)return;
    const prepared=prepareIntegratedInput(data,base,progress,products,{...config,rankingWindow:$('optimizerWindow').value},read(BASE_KEY+':trading-products',{}));
-   worker=new Worker(new URL('./base-integrated-worker.mjs?v=6',import.meta.url),{type:'module'});
+   worker=new Worker(new URL('./base-integrated-worker.mjs?v=7',import.meta.url),{type:'module'});
    worker.onmessage=({data:event})=>{
     if(token!==generation)return;
     if(event.type==='started'){message(`보유 ${event.owned}명 · 배치 탐색 중…`);return;}

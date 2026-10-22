@@ -1,5 +1,5 @@
-import {trimDormSupport} from './base-dorm-support.mjs';
-import {createTerraModel,INTEGRATED_VERSION} from './infra-v2-terra-model.mjs?v=5';
+import {trimDormSupport} from './base-dorm-support.mjs?v=2';
+import {createTerraModel,INTEGRATED_VERSION} from './infra-v2-terra-model.mjs?v=6';
 import {solveHeuristic} from './infra-v2-heuristic.mjs?v=4';
 import {score} from './infra-v2-core.mjs?v=4';
 self.onmessage=({data})=>{
