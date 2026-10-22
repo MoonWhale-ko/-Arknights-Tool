@@ -205,10 +205,10 @@ test('dorm rate summaries remain finite for every unlocked support skill in the 
  for(const id of model.tasks.find(t=>t.type==='DORMITORY').candidates){const rates=describeDormRecovery(model,{groups,dormSupport:{dorm:[id]}});assert.ok(Number.isFinite(rates[0].rate),id);assert.ok(rates[0].rate>=0,id);}
 });
 
-test('next unlock comparison uses only owned operators and preserves already-unlocked and current states',async()=>{
+test('complete unlock comparison uses only owned operators and preserves already-unlocked and current states',async()=>{
  const progress={char_501_durin:{owned:true,elite:0,level:1},char_486_takila:{owned:true,elite:0,level:1},char_172_svrash:{owned:true,elite:2,level:1},char_4014_lunacu:{owned:false,elite:0,level:1}};
- const before=JSON.stringify(progress),prepared=prepareIntegratedInput(catalog,example.base,progress,{}, {...options,developmentMode:'next'});
- assert.equal(prepared.training.mode,'next');assert.ok(!prepared.input.progress.char_4014_lunacu);
+ const before=JSON.stringify(progress),prepared=prepareIntegratedInput(catalog,example.base,progress,{}, {...options,developmentMode:'complete'});
+ assert.equal(prepared.training.mode,'complete');assert.ok(!prepared.input.progress.char_4014_lunacu);
  assert.deepEqual(prepared.input.progress.char_501_durin,{owned:true,elite:0,level:30});assert.deepEqual(prepared.input.progress.char_486_takila,{owned:true,elite:2,level:1});
  assert.deepEqual(prepared.input.progress.char_172_svrash,progress.char_172_svrash);assert.ok(!prepared.training.goals.char_172_svrash);assert.equal(JSON.stringify(progress),before);
 });
@@ -224,23 +224,24 @@ test('temporary results survive reload independently per mode and reject changed
  const {resultSignature,saveResult,loadResult,forgetResult}=await import('../assets/js/base-result-cache.mjs');
  const memory=new Map(),storage={getItem:k=>memory.get(k)??null,setItem:(k,v)=>memory.set(k,v)};
  const progress={a:{owned:true,elite:0,level:1}},sig=resultSignature(example.base,progress,{}, {},options),report={best:{plan:{groups:[]}},rooms:[]};
- assert.ok(saveResult(storage,'current',sig,report));assert.ok(saveResult(storage,'next','next',report));assert.deepEqual(loadResult(storage,'current',sig).report,report);assert.ok(loadResult(storage,'next','next'));
+ assert.ok(saveResult(storage,'current',sig,report));assert.ok(saveResult(storage,'complete','complete',report));assert.deepEqual(loadResult(storage,'current',sig).report,report);assert.ok(loadResult(storage,'complete','complete'));
  assert.equal(loadResult(storage,'current',resultSignature(example.base,{a:{owned:false}}, {},{},options)),null);assert.equal(loadResult(storage,'current',resultSignature(example.base,{a:{owned:true,elite:1,level:1}}, {},{},options)),null);
- assert.ok(forgetResult(storage,'next'));assert.equal(loadResult(storage,'next','next'),null);assert.ok(loadResult(storage,'current',sig));
+ assert.ok(forgetResult(storage,'complete'));assert.equal(loadResult(storage,'complete','complete'),null);assert.ok(loadResult(storage,'current',sig));
  for(const key of memory.keys())memory.set(key,'broken JSON');assert.equal(loadResult(storage,'current',sig),null);assert.ok(saveResult(storage,'current',sig,report));assert.ok(loadResult(storage,'current',sig));
  assert.equal(saveResult({getItem:()=>null,setItem:()=>{throw Error('quota');}},'current',sig,report),false);
 });
 
-test('next unlock selects the earliest threshold and includes upgrades, without advancing fully unlocked operators',async()=>{
- const {nextInfrastructureUnlock}=await import('../assets/js/base-training-targets.mjs');const {K}=await import('../assets/js/infra-v2-terra-engine.mjs');
- assert.deepEqual(nextInfrastructureUnlock(K.get('char_501_durin'),{elite:0,level:1}).target,{elite:0,level:30});assert.equal(nextInfrastructureUnlock(K.get('char_501_durin'),{elite:0,level:30}),null);
- assert.deepEqual(nextInfrastructureUnlock(K.get('char_193_frostl'),{elite:0,level:1}).target,{elite:1,level:1});assert.equal(nextInfrastructureUnlock(K.get('char_193_frostl'),{elite:1,level:1}),null);
- assert.equal(nextInfrastructureUnlock(K.get('char_172_svrash'),{elite:2,level:1}),null);
- const def={id:'test',rarity:6,skills:[]};assert.equal(nextInfrastructureUnlock(def,{elite:0,level:1}),null);
+test('complete unlock selects the final threshold and includes upgrades, without advancing fully unlocked operators',async()=>{
+ const {completeInfrastructureUnlock}=await import('../assets/js/base-training-targets.mjs');const {K}=await import('../assets/js/infra-v2-terra-engine.mjs');
+ assert.deepEqual(completeInfrastructureUnlock(K.get('char_501_durin'),{elite:0,level:1}).target,{elite:0,level:30});assert.equal(completeInfrastructureUnlock(K.get('char_501_durin'),{elite:0,level:30}),null);
+ assert.deepEqual(completeInfrastructureUnlock(K.get('char_193_frostl'),{elite:0,level:1}).target,{elite:1,level:1});assert.equal(completeInfrastructureUnlock(K.get('char_193_frostl'),{elite:1,level:1}),null);
+ const mulberry=completeInfrastructureUnlock(K.get('char_473_mberry'),{elite:0,level:1});assert.deepEqual(mulberry.target,{elite:2,level:1});assert.equal(mulberry.skills.length,2);assert.deepEqual(completeInfrastructureUnlock(K.get('char_473_mberry'),{elite:1,level:1}).target,{elite:2,level:1});
+ assert.equal(completeInfrastructureUnlock(K.get('char_172_svrash'),{elite:2,level:1}),null);
+ const def={id:'test',rarity:6,skills:[]};assert.equal(completeInfrastructureUnlock(def,{elite:0,level:1}),null);
 });
 
-test('every next-unlock target fits its operator phase and level cap',async()=>{
- const {J,W}=await import('../assets/js/infra-v2-terra-engine.mjs');const {nextInfrastructureUnlock}=await import('../assets/js/base-training-targets.mjs');
- let count=0;for(const def of J){const max=def.rarity>=4?2:def.rarity===3?1:0;for(let elite=0;elite<=max;elite++){const current={elite,level:1},goal=nextInfrastructureUnlock(def,current);if(!goal)continue;count++;assert.ok(goal.target.elite<=max,def.id);assert.ok(goal.target.level<=W(def.rarity,goal.target.elite),def.id);assert.ok(goal.skills.length,def.id);assert.ok(goal.target.elite>elite||goal.target.level>1,def.id);}}
+test('every complete-unlock target fits its operator phase and level cap',async()=>{
+ const {J,W}=await import('../assets/js/infra-v2-terra-engine.mjs');const {completeInfrastructureUnlock}=await import('../assets/js/base-training-targets.mjs');
+ let count=0;for(const def of J){const max=def.rarity>=4?2:def.rarity===3?1:0;for(let elite=0;elite<=max;elite++){const current={elite,level:1},goal=completeInfrastructureUnlock(def,current);if(!goal)continue;count++;assert.ok(goal.target.elite<=max,def.id);assert.ok(goal.target.level<=W(def.rarity,goal.target.elite),def.id);assert.ok(goal.skills.length,def.id);assert.ok(goal.target.elite>elite||goal.target.level>1,def.id);}}
  assert.ok(count>100);
 });

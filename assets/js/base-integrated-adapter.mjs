@@ -1,11 +1,11 @@
-import {nextInfrastructureUnlock} from './base-training-targets.mjs';
+import {completeInfrastructureUnlock} from './base-training-targets.mjs?v=2';
 import {J} from './infra-v2-terra-engine.mjs';
 const known=new Map(J.map(o=>[o.id,o]));
 export function prepareIntegratedInput(data,base,progress,products,options,tradingProducts={}){
  const rooms={},owned={},warnings=[];
  for(const [id,state] of Object.entries(progress??{}))if(state?.owned===true){if(!known.has(id)){warnings.push(`${data.characters[id]?.name??id}: 통합 스킬 데이터에 없어 제외했습니다.`);continue;}owned[id]={owned:true,elite:Number(state.elite??0),level:Number(state.level??1)};}
- const current=structuredClone(owned),mode=options.developmentMode==='next'?'next':'current',goals={};
- if(mode==='next')for(const [id,state] of Object.entries(owned)){const goal=nextInfrastructureUnlock(known.get(id),state);if(goal){goals[id]=goal;state.elite=goal.target.elite;state.level=goal.target.level;}}
+ const current=structuredClone(owned),mode=options.developmentMode==='complete'?'complete':'current',goals={};
+ if(mode==='complete')for(const [id,state] of Object.entries(owned)){const goal=completeInfrastructureUnlock(known.get(id),state);if(goal){goals[id]=goal;state.elite=goal.target.elite;state.level=goal.target.level;}}
  if(!Object.keys(owned).length)throw Error('보유 오퍼레이터가 없습니다. 계정 가져오기 또는 오퍼레이터 화면에서 보유 상태를 설정해 주세요.');
  for(const [id,r] of Object.entries(base.rooms??{})){
   if(!(r.level>0)||r.type==='PRIVATE')continue;

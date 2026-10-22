@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ko">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>명일방주 기반시설 | Arknights Tool</title><link rel="stylesheet" href="assets/css/base.css?v=183"><link rel="stylesheet" href="assets/css/base-optimizer.css?v=8"><link rel="stylesheet" href="assets/css/account-dialog.css?v=1"><link rel="stylesheet" href="assets/css/zoot-navigation.css?v=1">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>명일방주 기반시설 | Arknights Tool</title><link rel="stylesheet" href="assets/css/base.css?v=183"><link rel="stylesheet" href="assets/css/base-optimizer.css?v=9"><link rel="stylesheet" href="assets/css/account-dialog.css?v=1"><link rel="stylesheet" href="assets/css/zoot-navigation.css?v=1">
 <link rel="stylesheet" href="assets/css/zoot.css?v=12">
 <link rel="stylesheet" href="assets/css/zoot-features.css?v=1">
 <script src="assets/js/zoot.js?v=6"></script>
@@ -20,7 +20,7 @@
 <div class="optimizer-section-grid"><label class="optimizer-field">교대조 수<select id="optimizerTeams"><option value="2">2교대</option><option value="3">3교대</option></select></label><label class="optimizer-field">교대 시점<select id="optimizerRotation"><option value="first" title="한 명이라도 컨디션이 0이 되면 교대">첫 소진 시</option><option value="all" title="근무조 전원의 컨디션이 0이 되면 교대">전원 소진 시</option><option value="12h">12시간마다</option></select></label><label class="optimizer-field">교대 사이 숙소 조작<select id="optimizerExtra"><option value="no">허용 안 함</option><option value="yes">허용</option></select></label></div>
 </section>
 </div>
-<div class="optimizer-section-grid optimizer-compute-settings"><label class="optimizer-field">육성 기준<select id="optimizerDevelopment"><option value="current">현재 육성</option><option value="next">다음 인프라 스킬 해금</option></select></label><label class="optimizer-field">비교할 생산량<select id="optimizerWindow"><option value="24h">첫 24시간</option><option value="cycle">첫 사이클</option></select></label><label class="optimizer-field">계산 시간<select id="optimizerSeconds"><option value="10">10초</option><option value="30">30초</option><option value="60">1분</option><option value="180">3분</option></select></label></div>
+<div class="optimizer-section-grid optimizer-compute-settings"><label class="optimizer-field">비교할 생산량<select id="optimizerWindow"><option value="24h">첫 24시간</option><option value="cycle">첫 사이클</option></select></label><label class="optimizer-field">계산 시간<select id="optimizerSeconds"><option value="10">10초</option><option value="30">30초</option><option value="60">1분</option><option value="180">3분</option></select></label></div>
 <p id="optimizerDormNotice" class="optimizer-input-notice" role="status" hidden></p>
 <details id="optimizerAdvanced" class="optimizer-advanced"><summary>세부 설정 <span id="optimizerAdvancedNote" class="optimizer-detail-caption"></span></summary>
 <details id="optimizerDormSettings"><summary id="optimizerDormSummary">숙소 인테리어</summary><div class="optimizer-dorms" id="optimizerDorms"></div></details>
@@ -29,7 +29,7 @@
 
 </details>
 </div>
-<div class="optimizer-actions"><button type="button" class="optimizer-run" id="optimizerRun">배치 계산</button><button type="button" id="optimizerCancel" hidden>계산 취소</button><button type="button" id="optimizerForget" hidden>결과 지우기</button></div>
+<div class="optimizer-actions"><button type="button" class="optimizer-run" id="optimizerRun">현재 육성 기준 계산</button><button type="button" id="optimizerTrainingRun">인프라 스킬 해금 완료 시 계산</button><button type="button" id="optimizerCancel" hidden>계산 취소</button><button type="button" id="optimizerForget" hidden>결과 지우기</button></div>
 <p class="optimizer-message" id="optimizerMessage" role="status" aria-live="polite">제조소와 무역소를 눌러 생산·거래 품목을 확인하세요.</p>
 <div class="optimizer-result" id="optimizerResult" hidden></div>
 <details id="optimizerExport" class="optimizer-export" hidden><summary>결과 내보내기</summary><button type="button" id="optimizerDownload" hidden>JSON 파일 저장</button></details>
@@ -58,4 +58,4 @@
 </form>
 <div id="accountMessage" class="account-message" role="status" aria-live="polite"></div>
 <div class="account-actions"><button class="btn" id="accountApply" disabled>조회 결과 적용</button><button class="btn" id="accountUndo">가져오기 전으로 복원</button><button class="btn" id="accountClose">닫기</button></div>
-</dialog><script type="module" src="assets/js/base.mjs?v=87"></script><script src="assets/js/account-config.js"></script><script type="module" src="assets/js/base-optimizer-ui.mjs?v=23"></script><script type="module" src="assets/js/account-import.mjs?v=10"></script></body></html>
+</dialog><script type="module" src="assets/js/base.mjs?v=87"></script><script src="assets/js/account-config.js"></script><script type="module" src="assets/js/base-optimizer-ui.mjs?v=24"></script><script type="module" src="assets/js/account-import.mjs?v=10"></script></body></html>
