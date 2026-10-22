@@ -8,9 +8,9 @@
 <link rel="stylesheet" href="assets/css/zoot.css?v=10">
 <script src="assets/js/zoot.js?v=5"></script>
 <style>
-/* Retain only the accent rail on the left edge of each home card. */
+/* Continue the 3px left rail around the 45-degree upper-left cut. */
 .zoot-home .home-card{position:relative}
-.zoot-home .home-card::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:3px;background:var(--z-accent);pointer-events:none}
+.zoot-home .home-card::before{content:"";position:absolute;inset:0;background:var(--z-accent);clip-path:polygon(12px 0,16.25px 0,3px 13.25px,3px 100%,0 100%,0 12px);pointer-events:none}
 </style>
 </head>
 <body class="zoot-home">
