@@ -1,6 +1,6 @@
 // Independent implementation of a facility-greedy, seeded, local-improvement
 // search. The optional Terra adapter supplies third-party skill evaluation.
-import {Enumerator,simulate,score,compare,subsetCount,stable} from './infra-v2-core.mjs';
+import {Enumerator,simulate,score,compare,subsetCount,stable} from './infra-v2-core.mjs?v=2';
 import {snapshot} from './infra-v2-evaluator.mjs';
 
 export const HEURISTIC_VERSION='facility-seeded-search-1';
@@ -62,7 +62,7 @@ function proxy(model,selection,teamCache){
 }
 function heuristicWeight(model,task,id){
  const op=model.byId[id],ss=op.skills.filter(s=>s.room===task.type),prod=ss.reduce((n,s)=>n+(s.prod??0)+(s.amount??0)+(s.kind==='ramp'?s.max??0:0)+(s.cap??0)*.02,0);
- return prod+(task.type==='MEETING'?op.elite*.08+(op.rarity>=4?(op.rarity-2)*.01:0):0);
+ return prod+(task.type==='MEETING'?op.elite*.08+(model.allowMeetingPassive?({4:.07,5:.09,6:.10}[op.rarity]??.05):(op.rarity>=4?(op.rarity-2)*.01:0)):0);
 }
 export function shortlist(model,task,top=40){
  const ranked=[...task.candidates].sort((a,b)=>heuristicWeight(model,task,b)-heuristicWeight(model,task,a)||a.localeCompare(b));

@@ -1,9 +1,9 @@
 import * as terra from './infra-v2-terra-engine.mjs';
-import {cleanInput,buildModel,meetingTeamAllowed} from './infra-v2-core.mjs';
+import {cleanInput,buildModel,meetingTeamAllowed} from './infra-v2-core.mjs?v=2';
 import {rule} from './infra-v2-rules.mjs';
 import {terraSnapshot} from './infra-v2-terra-snapshot.mjs';
 import {improveRest} from './infra-v2-terra-rest.mjs';
-export const INTEGRATED_VERSION='terra27-time-simulator-2';
+export const INTEGRATED_VERSION='terra27-time-simulator-3';
 export {terra};
 const point=s=>{const m=s.unlock.match(/정예화\s*(\d+)/);return {id:s.buffId,elite:m?Number(m[1]):0,level:m?1:Number(s.unlock.match(/\d+/)?.[0]??1)};};
 export function makeTerraCatalog(base){
@@ -22,7 +22,7 @@ export function createTerraModel(base,raw){
  if(raw.layoutSearch)throw Error('실제 기지 구성 하나를 입력하세요.');
  const catalog=makeTerraCatalog(base),input=cleanInput(raw,catalog);
  if(input.options.development!=='current')throw Error('통합 엔진은 현재 보유·육성 상태만 계산합니다.');
- const model=buildModel(catalog,input,input.progress,{workTypes:['MANUFACTURE','TRADING','POWER','HIRE','MEETING','CONTROL','WORKSHOP'],operatorFactory:(def,state)=>{
+ const model=buildModel(catalog,input,input.progress,{allowMeetingPassive:true,workTypes:['MANUFACTURE','TRADING','POWER','HIRE','MEETING','CONTROL','WORKSHOP'],operatorFactory:(def,state)=>{
   const original=terra.kt(terra.K.get(def.id),state.elite,state.level),rawSkills=original.skills.map(s=>({...s}));
   return {...def,...state,terra:{...original,elite:state.elite,level:state.level,skills:rawSkills},skills:rawSkills.map(wrap)};
  }});
@@ -38,7 +38,7 @@ export function createTerraModel(base,raw){
   '첫 24시간과 첫 사이클을 계산합니다. 무한 반복 운영의 지속 가능성과 전체 최적해 또는 99% 정확도를 보장하지 않습니다.'
  ];
  // Preserve the existing policy even when a probability-only skill is present.
- for(const task of model.tasks)if(task.type==='MEETING')task.accept=ids=>meetingTeamAllowed(ids.map(id=>model.byId[id]),input.options);
+ for(const task of model.tasks)if(task.type==='MEETING')task.accept=ids=>meetingTeamAllowed(ids.map(id=>model.byId[id]),input.options,true);
  return model;
 }
 function linkedSeeds(model){

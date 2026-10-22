@@ -8,10 +8,10 @@ const EPS=1e-8,TYPES=['MANUFACTURE','HIRE','MEETING','CONTROL','POWER','TRADING'
 export const stable=v=>JSON.stringify(sort(v));
 function sort(v){return Array.isArray(v)?v.map(sort):v&&typeof v==='object'?Object.fromEntries(Object.keys(v).sort().map(k=>[k,sort(v[k])])):v;}
 const requireValue=(yes,message)=>{if(!yes)throw Error(message);};
-export function meetingTeamAllowed(ops,options){
+export function meetingTeamAllowed(ops,options,allowPassive=false){
  const missing=op=>op.skills.some(s=>s.room==='MEETING'&&s.kind==='missing'&&(!s.requiresExchange||options.clueExchangeActive));
  const speed=op=>op.skills.some(s=>s.room==='MEETING'&&((s.prod>0&&(!s.requiresExchange||options.clueExchangeActive)&&s.kind!=='exchangeSpeed')||s.kind==='exchangeSpeed'&&options.clueExchangeActive||s.kind==='solo'&&ops.length===1||s.kind==='ramp'));
- return ops.filter(missing).length<=1&&ops.every(op=>missing(op)||speed(op));
+ return ops.filter(missing).length<=1&&ops.every(op=>allowPassive||missing(op)||speed(op));
 }
 export function cleanInput(raw,catalog){
  requireValue(raw&&typeof raw==='object'&&!Array.isArray(raw),'조건 JSON이 필요합니다.');
@@ -88,14 +88,14 @@ export function scenarioAt(groups,rank){
  for(let i=0;i<groups.length;i++)for(const state of groups[i].states){const left=count-(state?1:0),ways=left>=0?(table[i+1][left]??0n):0n;if(rank<ways){if(state){progress[groups[i].id]=state;count--;}break;}rank-=ways;}
  return progress;
 }
-export function buildModel(catalog,input,progress=input.progress,{operatorFactory,workTypes=TYPES}={}){
+export function buildModel(catalog,input,progress=input.progress,{operatorFactory,workTypes=TYPES,allowMeetingPassive=false}={}){
  const buffs=Object.fromEntries(Object.values(catalog.buffs).map(b=>[b.id,rule(b)])),pool=Object.keys(progress).sort().map(id=>operatorFactory?operatorFactory(catalog.characters[id],progress[id]):({...catalog.characters[id],...progress[id],skills:unlock(catalog.characters[id],progress[id],buffs)}));
  const byId=Object.fromEntries(pool.map(o=>[o.id,o])),warnings=[],excluded=[];
  const cap=r=>r.type==='CONTROL'?r.level:r.type==='DORMITORY'?5:r.type==='MEETING'?2:['POWER','HIRE','TRAINING','WORKSHOP'].includes(r.type)?1:r.level;
  const rooms=Object.entries(input.base.rooms).map(([id,r])=>({id,...r,capacity:cap(r),recipe:r.type==='MANUFACTURE'?catalog.recipes[input.products[id]]:null}));
  const maxFactory=Math.max(0,...rooms.filter(r=>r.type==='MANUFACTURE').map(r=>r.level));
  for(const r of rooms)if(r.recipe)requireValue(r.recipe.unlockLevel<=maxFactory,'생산 품목 개방 조건 미충족');
- const canPlace=(op,r)=>op.skills.some(s=>s.room===r.type)&&!op.skills.some(s=>s.room===r.type&&s.kind==='unsupported');
+ const canPlace=(op,r)=>(r.type==='MEETING'&&allowMeetingPassive||op.skills.some(s=>s.room===r.type))&&!op.skills.some(s=>s.room===r.type&&s.kind==='unsupported');
  const reserved=new Set([...Object.values(input.dormSupport).flat(),...input.residents.map(r=>r.id)]),reservedKeys=new Set([...reserved].map(id=>byId[id].identity??id));requireValue(reservedKeys.size===reserved.size,'고정 인원 사이 동일 오퍼레이터 형태 중복');
  for(const r of rooms.filter(r=>TYPES.includes(r.type)))for(const op of pool){
   const bad=op.skills.filter(s=>s.room===r.type&&s.kind==='unsupported');if(bad.length)excluded.push({id:op.id,name:op.name,room:r.id,skills:bad.map(s=>({id:s.id,name:s.name,description:s.description}))});
@@ -107,7 +107,7 @@ export function buildModel(catalog,input,progress=input.progress,{operatorFactor
  for(let t=0;t<input.options.teams;t++)for(const r of work){
   const fixed=input.residents.filter(x=>x.room===r.id).map(x=>x.id);
   const candidates=pool.filter(op=>!reservedKeys.has(op.identity??op.id)&&canPlace(op,r)&&(!input.candidates[r.id]||input.candidates[r.id].includes(op.id))).map(o=>o.id);
-  tasks.push({team:t,room:r.id,type:r.type,level:r.level,recipe:r.recipe?.id??null,capacity:r.capacity-fixed.length,candidates,fixed,accept:r.type==='MEETING'?ids=>meetingTeamAllowed(ids.map(id=>byId[id]),input.options):null,symmetryKey:fixed.length?null:stable({type:r.type,level:r.level,recipe:r.recipe?.id??null,candidates}),identityMap:Object.fromEntries(pool.map(op=>[op.id,op.identity??op.id]))});
+  tasks.push({team:t,room:r.id,type:r.type,level:r.level,recipe:r.recipe?.id??null,capacity:r.capacity-fixed.length,candidates,fixed,accept:r.type==='MEETING'?ids=>meetingTeamAllowed(ids.map(id=>byId[id]),input.options,allowMeetingPassive):null,symmetryKey:fixed.length?null:stable({type:r.type,level:r.level,recipe:r.recipe?.id??null,candidates}),identityMap:Object.fromEntries(pool.map(op=>[op.id,op.identity??op.id]))});
  }
  if(rooms.some(r=>r.type==='MEETING'))warnings.push('응접실 기본 속도·분위기 공식은 검토 중인 실험식입니다. 종류별 확률과 단서 자동 획득은 계산하지 않습니다.');
  if(rooms.some(r=>r.type==='TRADING'))warnings.push('무역소는 순금 거래·재료 충분·교대 시 납품을 가정한 기대 작업량 근사입니다. 품질 우대 없는 기본 분포와 충분히 누적된 분포의 두 시나리오 기대값 범위를 표시합니다. 실제 수익 보장 구간이나 신뢰구간이 아니며 초기 3/5시간의 확률 변화와 개별 주문의 교대 이월을 재현하지 않습니다. 배치 비교는 성숙 시나리오 수익 기준입니다. 고품질 분포는 3레벨의 관측된 조합만 지원합니다.');
@@ -115,7 +115,7 @@ export function buildModel(catalog,input,progress=input.progress,{operatorFactor
  if(pool.some(op=>op.skills.some(s=>s.room==='DORMITORY'&&s.kind==='unsupported')))warnings.push('미지원 숙소 스킬을 가진 인원은 자동 휴식 배치에서도 제외합니다. 해당 인원의 회복은 계산하지 않습니다.');
  const ledger=pool.map(op=>({id:op.id,name:op.name,elite:op.elite,level:op.level,unlocked:op.skills.map(s=>({id:s.id,name:s.name,room:s.room,supported:s.kind!=='unsupported'})),locked:op.chains.flat().filter(r=>!(op.elite>r.elite||op.elite===r.elite&&op.level>=r.level)).map(r=>({id:r.id,elite:r.elite,level:r.level,name:catalog.buffs[r.id]?.name??r.id}))}));
  if(input.options.searchStrategy==='bounded')tasks.sort((a,b)=>a.team-b.team||(['HIRE','MEETING','CONTROL','MANUFACTURE','TRADING','POWER'].indexOf(a.type)-['HIRE','MEETING','CONTROL','MANUFACTURE','TRADING','POWER'].indexOf(b.type)));
- return {catalog,input,pool,byId,rooms,work,tasks,excluded,warnings,ledger,canPlace};
+ return {catalog,input,pool,byId,rooms,work,tasks,excluded,warnings,ledger,canPlace,allowMeetingPassive};
 }
 export function choose(n,k){if(k<0||k>n)return 0n;let v=1n;for(let i=1;i<=k;i++)v=v*BigInt(n-i+1)/BigInt(i);return v;}
 export function subsetCount(n,cap){let nTotal=0n;for(let k=0;k<=Math.min(n,cap);k++)nTotal+=choose(n,k);return nTotal;}
@@ -151,7 +151,7 @@ export function simulate(model,plan,{record=false}={}){
  for(const [room,ids] of Object.entries(model.input.dormSupport))for(const id of ids)requireValue((input.dormSupport[room]??[]).includes(id),'고정 숙소 지원자 누락');
  const supportKeys=new Set(supportIds.map(id=>byId[id].identity??id));
  const used=new Set();requireValue(plan.groups.length===work.length*o.teams,'배치 그룹 수 오류');
- for(let t=0;t<o.teams;t++){const seen=new Set();for(const r of work){const gs=plan.groups.filter(g=>g.team===t&&g.room===r.id);requireValue(gs.length===1,'배치 시설 누락/중복');const ids=gs[0].operators;requireValue(ids.length<=r.capacity&&new Set(ids).size===ids.length,'정원/인원 중복');if(r.type==='MEETING')requireValue(meetingTeamAllowed(ids.map(id=>byId[id]).filter(Boolean),o),'응접실은 미보유 단서 담당 최대 1명과 속도 스킬 인원으로 구성해야 합니다.');for(const id of ids){requireValue(byId[id]&&model.canPlace(byId[id],r),'스킬 없는 배치 또는 미지원 배치');requireValue(!seen.has(byId[id].identity??id)&&(!used.has(byId[id].identity??id)||residentIds.has(id)),'동시/교대조 인원 중복');requireValue(!supportKeys.has(byId[id].identity??id),'숙소 지원자 근무 중복');if(residentIds.has(id))requireValue(input.residents.some(x=>x.id===id&&x.room===r.id),'상주 시설 불일치');seen.add(byId[id].identity??id);used.add(byId[id].identity??id);}for(const resident of input.residents.filter(x=>x.room===r.id))requireValue(ids.includes(resident.id),'상주자 누락');}}
+ for(let t=0;t<o.teams;t++){const seen=new Set();for(const r of work){const gs=plan.groups.filter(g=>g.team===t&&g.room===r.id);requireValue(gs.length===1,'배치 시설 누락/중복');const ids=gs[0].operators;requireValue(ids.length<=r.capacity&&new Set(ids).size===ids.length,'정원/인원 중복');if(r.type==='MEETING')requireValue(meetingTeamAllowed(ids.map(id=>byId[id]).filter(Boolean),o,model.allowMeetingPassive),'응접실 미보유 단서 담당은 최대 1명까지 배치할 수 있습니다.');for(const id of ids){requireValue(byId[id]&&model.canPlace(byId[id],r),'스킬 없는 배치 또는 미지원 배치');requireValue(!seen.has(byId[id].identity??id)&&(!used.has(byId[id].identity??id)||residentIds.has(id)),'동시/교대조 인원 중복');requireValue(!supportKeys.has(byId[id].identity??id),'숙소 지원자 근무 중복');if(residentIds.has(id))requireValue(input.residents.some(x=>x.id===id&&x.room===r.id),'상주 시설 불일치');seen.add(byId[id].identity??id);used.add(byId[id].identity??id);}for(const resident of input.residents.filter(x=>x.room===r.id))requireValue(ids.includes(resident.id),'상주자 누락');}}
  const tradeTotals={lmd:0,gold:0,orders:0},tradeCollected={lmd:0,gold:0,orders:0},tradeInventory=Object.fromEntries(work.filter(r=>r.type==='TRADING').map(r=>[r.id,{lmd:0,gold:0,orders:0}]));
  const baselineTotals={lmd:0,gold:0,orders:0},baselineCollected={lmd:0,gold:0,orders:0},baselineInventory=structuredClone(tradeInventory);
  const collectBaseline=()=>{for(const state of Object.values(baselineInventory))for(const k of ['lmd','gold','orders']){baselineCollected[k]+=state[k];state[k]=0;}};
