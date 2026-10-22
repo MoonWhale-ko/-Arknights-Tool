@@ -214,7 +214,7 @@ test('meeting preference and speed integrate through fatigue and rest for two an
 });
 test('missing clue settings normalize, survive storage schema and exclude invalid IDs',()=>{
  assert.deepEqual(normalizeOptions({missingClues:[7,4,4,8,'1',0]}).missingClues,[4,7]);assert.deepEqual(normalizeOptions({missingClues:[]}).missingClues,[]);
- const html=fs.readFileSync(new URL('../base.html',import.meta.url),'utf8');assert.ok(html.includes('id="optimizerMissingClues"'));assert.ok(html.includes('사무실·응접실 다음'));
+ const html=fs.readFileSync(new URL('../base.html',import.meta.url),'utf8');assert.ok(html.includes('id="optimizerMissingClues"'));assert.ok(html.includes('id="optimizerHelp"'));assert.ok(!html.includes('id="optimizerEngine"'));assert.ok(!html.includes('사무실·응접실 다음'));
 });
 test('meeting control buffs affect speed and missing preference only while active',()=>{
  const m=meetingModel({missingClues:[5]}),values=Float64Array.from(m.pool,()=>24),work=new Float64Array(m.pool.length);

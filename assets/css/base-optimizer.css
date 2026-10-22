@@ -117,3 +117,15 @@
 .zoot-base .optimizer-export button{margin-bottom:16px}
 @media(max-width:1100px){.zoot-base .optimizer-basic-settings{grid-template-columns:1fr}}
 @media(max-width:600px){.zoot-base .base-optimizer .optimizer-basic-settings>.optimizer-section{padding:16px}.zoot-base .optimizer-basic-settings .optimizer-priority{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.zoot-base .optimizer-basic-settings .optimizer-priority label{font-size:12px}.zoot-base .optimizer-basic-settings .optimizer-priority select{padding:10px 6px;font-size:13px}.zoot-base .optimizer-basic-settings .optimizer-section-grid{grid-template-columns:1fr}.zoot-base .optimizer-advanced .optimizer-compute-settings{grid-template-columns:1fr}.zoot-base .optimizer-shift-cards{grid-template-columns:1fr}.zoot-base .base-optimizer .optimizer-next-shift{font-size:15px;padding:12px 14px}.zoot-base .optimizer-output-summary{grid-template-columns:1fr}.zoot-base .optimizer-detail-caption{margin-left:0;display:block;margin-top:3px}}
+
+/* Closed setting panels and an on-demand information dialog. */
+.zoot-base .base-optimizer .optimizer-basic-settings>.optimizer-section{border:1px solid var(--z-border)}
+.zoot-base .base-optimizer .optimizer-basic-settings h3{margin:0 0 18px;padding:0;border:0;background:none;font-size:18px}
+.zoot-base .optimizer-heading-actions{display:flex;align-items:center;gap:12px}
+.zoot-base .base-optimizer .optimizer-info{display:grid;place-items:center;min-width:32px;width:32px;min-height:32px;height:32px;padding:0;font-family:serif;font-weight:700;font-size:19px;background:var(--z-input);color:var(--z-text);border:1px solid var(--z-border)}
+.zoot-base .optimizer-settings>.optimizer-compute-settings{grid-template-columns:repeat(2,minmax(0,1fr));margin:0;gap:20px}
+.zoot-base .optimizer-help-dialog{width:min(680px,calc(100vw - 32px));max-height:calc(100dvh - 48px);overflow:auto}
+.zoot-base .optimizer-help-dialog h3{font-size:17px;margin:24px 0 12px}
+.zoot-base .optimizer-help-dialog ul{padding-left:20px;font-size:14px;line-height:1.9;color:var(--z-text)}
+.zoot-base .optimizer-help-dialog li+li{margin-top:10px}
+@media(max-width:600px){.zoot-base .optimizer-settings>.optimizer-compute-settings{gap:12px}.zoot-base .optimizer-heading-actions{gap:8px}}

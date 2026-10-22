@@ -1,6 +1,5 @@
-import {offerShare} from './base-share-ui.mjs?v=2';
 import {BASE_KEY,readBase} from './base-state.mjs?v=5';
-import {DEFAULT_OPTIONS,normalizeOptions,prepareModel} from './base-optimizer.mjs?v=3';
+import {DEFAULT_OPTIONS,normalizeOptions} from './base-optimizer.mjs?v=3';
 const INTEGRATED_KEY=BASE_KEY+':integrated-options';
 const KEY=BASE_KEY+':optimizer-options',PROGRESS_KEY='arknightsOperatorProgressV1';
 const root=document.getElementById('baseOptimizer');
@@ -10,12 +9,12 @@ let worker=null,data=null,base=null,saved=normalizeOptions(read(KEY,DEFAULT_OPTI
 const text=(tag,value,className)=>{const el=document.createElement(tag);el.textContent=value;if(className)el.className=className;return el;};
 function message(value,error=false){$('optimizerMessage').textContent=value;$('optimizerMessage').classList.toggle('error',error);}
 function options(){return normalizeOptions({teams:Number($('optimizerTeams').value),rotation:$('optimizerRotation').value,extraActions:$('optimizerExtra').value==='yes',missingClues:[...root.querySelectorAll('[data-missing-clue]:checked')].map(input=>Number(input.value)),priority:[1,2,3].map(n=>$('optimizerPriority'+n).value),ambience:Object.fromEntries([...root.querySelectorAll('[data-ambience]')].map(input=>[input.dataset.ambience,input.value===''?null:Number(input.value)]))});}
-function persist(){saved=options();try{if($('optimizerEngine'))localStorage.setItem(INTEGRATED_KEY,JSON.stringify({engine:$('optimizerEngine').value,seconds:Number($('optimizerSeconds').value),rankingWindow:$('optimizerWindow').value}));localStorage.setItem(KEY,JSON.stringify(saved));return true;}catch{message('설정을 저장하지 못했습니다. 현재 화면의 설정으로 계산합니다.',true);return false;}}
+function persist(){saved=options();try{localStorage.setItem(INTEGRATED_KEY,JSON.stringify({seconds:Number($('optimizerSeconds').value),rankingWindow:$('optimizerWindow').value}));localStorage.setItem(KEY,JSON.stringify(saved));return true;}catch{message('설정을 저장하지 못했습니다. 현재 화면의 설정으로 계산합니다.',true);return false;}}
 function resetResult(){lastIntegrated=null;if($('optimizerExport'))$('optimizerExport').hidden=true;if($('optimizerDownload'))$('optimizerDownload').hidden=true;generation++;if(worker){worker.terminate();worker=null;busy(false);}if(!$('optimizerResult').hidden){$('optimizerResult').hidden=true;message('조건이 변경되었습니다. 다시 계산해 주세요.');}}
 function busy(value){$('optimizerRun').disabled=value;$('optimizerCancel').hidden=!value;root.setAttribute('aria-busy',String(value));}
 function fillInputs(){
  try{base=readBase(read(BASE_KEY,null));}catch{base=null;message('저장된 기반시설 정보를 읽지 못했습니다. 계정을 다시 불러와 주세요.',true);return;}
- if($('optimizerEngine')){const integrated=read(INTEGRATED_KEY,{});$('optimizerEngine').value=integrated.engine==='legacy'?'legacy':'integrated';$('optimizerSeconds').value=String([10,30,60,180].includes(integrated.seconds)?integrated.seconds:10);$('optimizerWindow').value=integrated.rankingWindow==='cycle'?'cycle':'24h';}
+ {const integrated=read(INTEGRATED_KEY,{});$('optimizerSeconds').value=String([10,30,60,180].includes(integrated.seconds)?integrated.seconds:10);$('optimizerWindow').value=integrated.rankingWindow==='cycle'?'cycle':'24h';}
  $('optimizerTeams').value=String(saved.teams);$('optimizerRotation').value=saved.rotation;$('optimizerExtra').value=saved.extraActions?'yes':'no';
  for(let n=1;n<=3;n++)$('optimizerPriority'+n).value=saved.priority[n-1];
  const clues=$('optimizerMissingClues');clues.replaceChildren();
@@ -39,8 +38,7 @@ function updateSettingsSummary(reveal=false){
  if(reveal&&missing.length){$('optimizerAdvanced').open=true;$('optimizerDormSettings').open=true;}
  const clues=root.querySelectorAll('[data-missing-clue]:checked').length;
  $('optimizerClueSummary').textContent=clues?clues+'종 선택':'선택 안 함';
- const seconds=Number($('optimizerSeconds').value);
- $('optimizerAdvancedNote').textContent=($('optimizerWindow').value==='cycle'?'첫 사이클':'24시간')+' · '+(seconds>=60?seconds/60+'분':seconds+'초')+' 계산';
+ $('optimizerAdvancedNote').textContent='숙소 인테리어 · 미보유 단서';
  return missing;
 }
 function renderRotationSummary(target,stages){
@@ -65,41 +63,6 @@ function duration(hours){const minutes=Math.round(hours*60);return `${Math.floor
 function chip(op,resident=false,morale){
  const element=document.createElement('span');element.className='optimizer-chip';const img=document.createElement('img');img.alt='';img.loading='lazy';img.src=`https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/dyn/arts/charavatars/${op.id}.png`;img.addEventListener('error',()=>img.remove(),{once:true});element.append(img,text('span',op.name));if(resident)element.append(text('small','상주'));if(morale!==undefined)element.title=`종료 컨디션 ${morale.toFixed(1)} / 24`;return element;
 }
-function renderResult(result){
- const target=$('optimizerResult');target.replaceChildren();target.hidden=false;
- if(result.status!=='recommended'){target.append(text('p',result.reason));renderWarnings(target,result.warnings);return;}
- const representatives=result.stages.slice(-options().teams),offset=representatives[0]?.start??0;
- target.append(text('h3','추천 배치'));
- renderRotationSummary(target,representatives.map(stage=>({team:stage.team,start:stage.start-offset,end:stage.end-offset})));
- renderWarnings(target,result.warnings);
- const wrap=text('div','','optimizer-table-wrap'),table=document.createElement('table'),head=document.createElement('thead'),hr=document.createElement('tr');hr.append(text('th','시설'));
- for(const stage of representatives)hr.append(text('th',(stage.team+1)+'조'));head.append(hr);table.append(head);const body=document.createElement('tbody');
- const roomOrder=representatives[0]?.rooms??[],counts={},roomNames={};
- for(const room of roomOrder){
-  counts[room.type]=(counts[room.type]??0)+1;roomNames[room.id]=names[room.type]+(['MANUFACTURE','TRADING','POWER','DORMITORY'].includes(room.type)?' '+counts[room.type]:'');
-  if(room.type==='DORMITORY')continue;
-  const row=document.createElement('tr');row.append(text('th',roomNames[room.id]));
-  for(const stage of representatives){const cell=document.createElement('td'),list=text('div','','optimizer-room-ops');const entry=stage.rooms.find(r=>r.id===room.id);for(const index of entry?.operators??[])list.append(chip(result.pool[index],result.plan.residents.includes(index),stage.endMorale[index]));if(!list.children.length)list.textContent='배치 없음';cell.append(list);row.append(cell);}body.append(row);
- }
- table.append(body);wrap.append(table);target.append(wrap);
- const dorms=roomOrder.filter(room=>room.type==='DORMITORY');
- if(dorms.length){target.append(text('h3','숙소 · 고정 지원자'));for(const room of dorms){const row=text('div','','optimizer-room-ops');row.append(text('strong',roomNames[room.id]));for(const index of room.operators.filter(i=>result.plan.support.includes(i)))row.append(chip(result.pool[index]));if(row.children.length===1)row.append(text('span','고정 지원자 없음'));target.append(row);}}
- target.append(text('h3','예상 생산 효율'));
- const summary=text('div','','optimizer-summary');
- if(result.plan.rooms.some(r=>r.type==='HIRE'))summary.append(text('span','사무실 · 기본 대비 '+(result.score[0]*100).toFixed(1)+'%'));
- if(result.plan.rooms.some(r=>r.type==='MEETING'))summary.append(text('span','응접실 · 기본 대비 '+(result.score[2]*100).toFixed(1)+'%'));
- for(const [i,key] of options().priority.entries())summary.append(text('span',categories[key]+' · '+result.score[i+3].toFixed(2)+(key==='F_EXP'?' 경험치':'개')+'/시간'));target.append(summary);
- const timeline=document.createElement('details');timeline.append(text('summary','교대·컨디션 상세 기록'));const list=text('div','','optimizer-timeline');
- for(const stage of representatives){
-  list.append(text('p',duration(stage.start-offset)+' → '+duration(stage.end-offset)+': '+(stage.team+1)+'조 근무'+(stage.blocked.length?' · '+stage.blocked.length+'개 제조소 보관 한도 도달':'')));
-  for(const r of stage.rooms.filter(r=>r.type!=='DORMITORY'))for(const i of r.operators)list.append(text('div',result.pool[i].name+': '+stage.startMorale[i].toFixed(1)+' → '+stage.endMorale[i].toFixed(1)));
- }
- timeline.append(list);
- if(result.actions.some(a=>a.type==='exchange')){const actions=text('div','','optimizer-timeline');for(const a of result.actions.filter(a=>a.hour>=offset&&a.type==='exchange'))actions.append(text('p',duration(a.hour-offset)+': '+result.pool[a.target].name+' 입실 → '+result.pool[a.provider].name+' 재배치, 컨디션 교환'));timeline.append(actions);}
- target.append(timeline);
- const diagnostics=document.createElement('details');diagnostics.append(text('summary','계산 상세'),text('p','후보 '+result.tested.toLocaleString()+'개 비교 · 10순환 시뮬레이션 · '+(result.converged?'반복 상태 확인':'반복 상태 미확인')),text('p','탐색 범위 내 추천이며, 전체 최적해를 보장하지 않습니다. 미지원 효과가 있는 인원은 해당 시설 후보에서 제외했습니다.','optimizer-note'),text('p','미보유 단서 우선 효과는 스킬 가동 시간으로 비교하며 실제 획득 확률·종류·시각은 보장하지 않습니다.','optimizer-note'));target.append(diagnostics);
-}
-function renderWarnings(target,warnings=[]){if(!warnings.length)return;const details=document.createElement('details');details.append(text('summary',`미지원·누락 데이터 확인 (${warnings.length}건)`));const list=text('ul','','optimizer-warnings');for(const warning of warnings){const li=text('li',`${warning.operator} · ${names[warning.room]??''} ${warning.skill??''}: ${warning.reason}`);if(warning.description)li.title=warning.description;list.append(li);}details.append(list);target.append(details);}
 root.addEventListener('change',event=>{
  if(event.target.matches('[data-priority]')){const n=Number(event.target.dataset.priority)-1,values=[...saved.priority],newValue=event.target.value,other=values.indexOf(newValue);if(other!==n&&other>=0)$('optimizerPriority'+(other+1)).value=values[n];}
  resetResult();persist();updateSettingsSummary();
@@ -111,7 +74,7 @@ $('optimizerRun').addEventListener('click',async()=>{
   if(!data){const response=await fetch('data/base-optimizer.json?v=3');if(!response.ok)throw Error('기반시설 스킬 데이터를 불러오지 못했습니다.');data=await response.json();}
   if(token!==generation)return;
   base=readBase(read(BASE_KEY,null));const progress=read(PROGRESS_KEY,{}),products=read(BASE_KEY+':manufacture-products',{}),config=options();
-  if($('optimizerEngine')?.value==='integrated'){
+  {
    const {prepareIntegratedInput}=await import('./base-integrated-adapter.mjs?v=1');if(token!==generation)return;
    const prepared=prepareIntegratedInput(data,base,progress,products,{...config,rankingWindow:$('optimizerWindow').value},read(BASE_KEY+':trading-products',{}));
    worker=new Worker(new URL('./base-integrated-worker.mjs?v=1',import.meta.url),{type:'module'});
@@ -125,15 +88,6 @@ $('optimizerRun').addEventListener('click',async()=>{
    worker.onerror=event=>{if(token!==generation)return;busy(false);worker?.terminate();worker=null;message(event.message||'계산 도중 오류가 발생했습니다. 다시 시도해 주세요.',true);};
    worker.postMessage({catalog:data,input:prepared.input,warnings:prepared.warnings,seconds:Number($('optimizerSeconds').value)});return;
   }
-  const model=prepareModel(data,base,progress,products,config);if(model.missing.length)throw Error(model.missing.join('\n'));
-  worker=new Worker(new URL('./base-optimizer-worker.mjs?v=3',import.meta.url),{type:'module'});
-  worker.onmessage=event=>{
-   if(token!==generation)return;
-   if(event.data.type==='progress')message('배치를 비교하고 있습니다…');
-   else{busy(false);worker?.terminate();worker=null;if(event.data.type==='error')message(event.data.message,true);else{message('계산을 완료했습니다. 추천 결과와 지원 범위를 확인해 주세요.');renderResult(event.data.result);const sharing=document.createElement('details');sharing.append(text('summary','결과 공유'));offerShare(sharing,{data,base,progress,products,options:config},event.data.result);$('optimizerResult').append(sharing);}}
-  };
-  worker.onerror=()=>{if(token!==generation)return;busy(false);worker?.terminate();worker=null;message('계산 도중 오류가 발생했습니다. 페이지를 새로고침한 뒤 다시 시도해 주세요.',true);};
-  worker.postMessage({data,base,progress,products,options:config});
  }catch(error){if(token!==generation)return;busy(false);message(error.message,true);}
 });
 $('optimizerCancel').addEventListener('click',()=>{generation++;worker?.terminate();worker=null;busy(false);message('계산을 취소했습니다.');});
@@ -141,6 +95,7 @@ window.addEventListener('storage',event=>{if([BASE_KEY,PROGRESS_KEY,BASE_KEY+':m
 window.addEventListener('pageshow',()=>{resetResult();fillInputs();});
 window.addEventListener('base-products-changed',()=>{resetResult();message('생산 품목이 변경되었습니다. 다시 계산해 주세요.');});
 fillInputs();
+$('optimizerInfo').addEventListener('click',()=>document.getElementById('optimizerHelp').showModal());
 
 window.addEventListener('account-import-applied',()=>{resetResult();fillInputs();message('계정 정보가 갱신되었습니다. 생산 품목을 확인한 뒤 계산해 주세요.');});
 

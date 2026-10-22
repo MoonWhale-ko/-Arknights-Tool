@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ko">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>명일방주 기반시설 | Arknights Tool</title><link rel="stylesheet" href="assets/css/base.css?v=183"><link rel="stylesheet" href="assets/css/base-optimizer.css?v=5"><link rel="stylesheet" href="assets/css/account-dialog.css?v=1"><link rel="stylesheet" href="assets/css/zoot-navigation.css?v=1">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>명일방주 기반시설 | Arknights Tool</title><link rel="stylesheet" href="assets/css/base.css?v=183"><link rel="stylesheet" href="assets/css/base-optimizer.css?v=6"><link rel="stylesheet" href="assets/css/account-dialog.css?v=1"><link rel="stylesheet" href="assets/css/zoot-navigation.css?v=1">
 <link rel="stylesheet" href="assets/css/zoot.css?v=12">
 <link rel="stylesheet" href="assets/css/zoot-features.css?v=1">
 <script src="assets/js/zoot.js?v=6"></script>
@@ -9,26 +9,24 @@
 <header class="page-header"><div class="title"><h1>기반시설</h1></div><button hidden class="edit-button" id="editFacilities" type="button" aria-pressed="false">설비 설정</button><button class="account-link" id="gameImport" type="button">게임 계정 가져오기</button></header>
 <div class="base-stage" id="baseStage"><section class="base-overview" id="baseViewport" tabindex="0" aria-label="로도스 아일랜드 기반시설 배치도"><div class="base-map" id="baseMap"><div class="production-grid" id="productionRooms" aria-label="생산 시설"></div><div class="living-grid" id="livingRooms" aria-label="제어 센터와 숙소"></div><div class="support-grid" id="supportRooms" aria-label="보조 시설"></div><div class="private-grid" id="privateRooms" aria-label="활동실"></div></div></section></div><p class="base-status" id="baseStatus" role="status">설비 레벨과 배치 인원수를 직접 입력해 주세요.</p>
 <section class="base-optimizer" id="baseOptimizer" aria-labelledby="optimizerTitle" aria-busy="false">
-<div class="optimizer-head"><h2 id="optimizerTitle">오퍼레이터 배치 추천</h2><span class="optimizer-status-pill">보유 · 현재 육성 기준</span></div>
+<div class="optimizer-head"><h2 id="optimizerTitle">오퍼레이터 배치 추천</h2><div class="optimizer-heading-actions"><span class="optimizer-status-pill">보유 · 현재 육성 기준</span><button type="button" class="optimizer-info" id="optimizerInfo" aria-label="설정 설명과 계산 가정 보기" aria-haspopup="dialog" aria-controls="optimizerHelp">i</button></div></div>
 <p class="optimizer-intro">생산 품목을 확인하고 교대 조건을 정한 뒤, 배치 계산을 눌러주세요.</p>
 <div class="optimizer-form optimizer-settings">
 <div class="optimizer-basic-settings">
-<fieldset class="optimizer-section"><legend>생산 우선순위</legend>
-<p class="optimizer-rule">사무실·응접실 다음으로 우선할 생산품을 정하세요.</p>
+<section class="optimizer-section" aria-labelledby="optimizerPriorityTitle"><h3 id="optimizerPriorityTitle">생산 우선순위</h3>
 <div class="optimizer-priority"><label>1순위<select id="optimizerPriority1" data-priority="1"><option value="F_GOLD">순금</option><option value="F_EXP">작전기록</option><option value="F_DIAMOND">오리지늄 조각</option></select></label><label>2순위<select id="optimizerPriority2" data-priority="2"><option value="F_GOLD">순금</option><option value="F_EXP">작전기록</option><option value="F_DIAMOND">오리지늄 조각</option></select></label><label>3순위<select id="optimizerPriority3" data-priority="3"><option value="F_GOLD">순금</option><option value="F_EXP">작전기록</option><option value="F_DIAMOND">오리지늄 조각</option></select></label></div>
-</fieldset>
-<fieldset class="optimizer-section"><legend>교대 조건</legend>
+</section>
+<section class="optimizer-section" aria-labelledby="optimizerRotationTitle"><h3 id="optimizerRotationTitle">교대 조건</h3>
 <div class="optimizer-section-grid"><label class="optimizer-field">교대조 수<select id="optimizerTeams"><option value="2">2교대</option><option value="3">3교대</option></select></label><label class="optimizer-field">교대 시점<select id="optimizerRotation"><option value="first" title="한 명이라도 컨디션이 0이 되면 교대">첫 소진 시</option><option value="all" title="근무조 전원의 컨디션이 0이 되면 교대">전원 소진 시</option><option value="12h">12시간마다</option></select></label><label class="optimizer-field">교대 사이 숙소 조작<select id="optimizerExtra"><option value="no">허용 안 함</option><option value="yes">허용</option></select></label></div>
-</fieldset>
+</section>
 </div>
+<div class="optimizer-section-grid optimizer-compute-settings"><label class="optimizer-field">비교할 생산량<select id="optimizerWindow"><option value="24h">첫 24시간</option><option value="cycle">첫 사이클</option></select></label><label class="optimizer-field">계산 시간<select id="optimizerSeconds"><option value="10">10초</option><option value="30">30초</option><option value="60">1분</option><option value="180">3분</option></select></label></div>
 <p id="optimizerDormNotice" class="optimizer-input-notice" role="status" hidden></p>
 <details id="optimizerAdvanced" class="optimizer-advanced"><summary>세부 설정 <span id="optimizerAdvancedNote" class="optimizer-detail-caption"></span></summary>
 <details id="optimizerDormSettings"><summary id="optimizerDormSummary">숙소 인테리어</summary><div class="optimizer-dorms" id="optimizerDorms"></div></details>
 <details id="optimizerClueSettings"><summary>응접실 · 미보유 단서 <span id="optimizerClueSummary" class="optimizer-detail-caption"></span></summary><p class="optimizer-note">보드와 보관함에 모두 없는 단서만 선택하세요. 획득 후에는 직접 갱신해야 합니다.</p><div id="optimizerMissingClues" class="optimizer-priority"></div></details>
-<div class="optimizer-section-grid optimizer-compute-settings"><label class="optimizer-field">비교할 생산량<select id="optimizerWindow"><option value="24h">첫 24시간</option><option value="cycle">첫 사이클</option></select></label><label class="optimizer-field">계산 시간<select id="optimizerSeconds"><option value="10">10초</option><option value="30">30초</option><option value="60">1분</option><option value="180">3분</option></select></label></div>
-<details class="optimizer-setting-help"><summary>설정 설명</summary><ul><li>첫 소진: 한 명이라도 컨디션이 0이 되면 교대합니다. 전원 소진: 근무조 모두의 컨디션이 0이 되면 교대합니다.</li><li>숙소 조작을 허용하면 근무 교대 사이에도 숙소 인원을 바꿀 수 있습니다.</li><li>첫 사이클은 모든 근무조가 한 번씩 근무를 마칠 때까지입니다. 계산 시간을 늘리면 더 많은 후보를 비교합니다.</li></ul></details>
-<details class="optimizer-assumptions"><summary>계산 가정과 지원 범위</summary><ul><li>보유 오퍼레이터의 현재 정예화·레벨에서 해금된 스킬을 사용합니다.</li><li>최초 풀 컨디션, 교대 때 수거, 재료 충분, 드론 미사용을 가정합니다.</li><li>사무실 연락과 응접실 단서는 수시로 사용·수거해 보관 상한에 막히지 않는 것으로 계산합니다.</li><li>정확한 단서 획득 확률과 크레딧 수익은 예측하지 않습니다. 미보유 단서 우선 오퍼레이터는 최대 1명 추천합니다.</li><li>숙소는 교대 없이 유지할 고정 지원자만 추천하며, 회복하러 입실하는 인원은 따로 표시하지 않습니다.</li><li>추천은 탐색 범위 안의 결과이며 전체 조합의 최고 효율을 보장하지 않습니다.</li></ul></details>
-<details class="optimizer-debug"><summary>개발·비교 설정</summary><label class="optimizer-field">계산 엔진<select id="optimizerEngine"><option value="integrated">특수 스킬 통합</option><option value="legacy">이전 엔진 비교</option></select></label><p class="optimizer-note">오리지늄 거래의 배치 비교는 이전 엔진에서 지원합니다.</p></details>
+
+
 </details>
 </div>
 <div class="optimizer-actions"><button type="button" class="optimizer-run" id="optimizerRun">배치 계산</button><button type="button" id="optimizerCancel" hidden>계산 취소</button></div>
@@ -37,7 +35,9 @@
 <details id="optimizerExport" class="optimizer-export" hidden><summary>결과 내보내기</summary><button type="button" id="optimizerDownload" hidden>JSON 파일 저장</button></details>
 </section>
 
-</main><dialog class="manufacture-dialog" id="manufactureDialog" aria-labelledby="manufactureTitle">
+</main><dialog id="optimizerHelp" class="zoot-dialog optimizer-help-dialog" aria-labelledby="optimizerHelpTitle"><div class="zoot-dialog-heading"><h2 id="optimizerHelpTitle">배치 계산 안내</h2><button type="button" class="zoot-icon" data-zoot-close aria-label="안내 닫기">×</button></div><section><h3>설정 설명</h3><ul><li>첫 소진: 한 명이라도 컨디션이 0이 되면 교대합니다. 전원 소진: 근무조 모두의 컨디션이 0이 되면 교대합니다.</li><li>숙소 조작을 허용하면 근무 교대 사이에도 숙소 인원을 바꿀 수 있습니다.</li><li>첫 사이클은 모든 근무조가 한 번씩 근무를 마칠 때까지입니다. 계산 시간을 늘리면 더 많은 후보를 비교합니다.</li></ul></section>
+<section><h3>계산 가정과 지원 범위</h3><ul><li>보유 오퍼레이터의 현재 정예화·레벨에서 해금된 스킬을 사용합니다.</li><li>최초 풀 컨디션, 교대 때 수거, 재료 충분, 드론 미사용을 가정합니다.</li><li>사무실 연락과 응접실 단서는 수시로 사용·수거해 보관 상한에 막히지 않는 것으로 계산합니다.</li><li>정확한 단서 획득 확률과 크레딧 수익은 예측하지 않습니다. 미보유 단서 우선 오퍼레이터는 최대 1명 추천합니다.</li><li>숙소는 교대 없이 유지할 고정 지원자만 추천하며, 회복하러 입실하는 인원은 따로 표시하지 않습니다.</li><li>추천은 탐색 범위 안의 결과이며 전체 조합의 최고 효율을 보장하지 않습니다.</li></ul></section>
+</dialog><dialog class="manufacture-dialog" id="manufactureDialog" aria-labelledby="manufactureTitle">
 <h2 id="manufactureTitle">제조소 생산 품목</h2>
 <nav class="manufacture-categories" aria-label="생산 품목 분류"></nav>
 <div class="manufacture-choices" aria-label="생산 품목"></div><p class="manufacture-feedback" role="alert"></p>
@@ -58,4 +58,4 @@
 </form>
 <div id="accountMessage" class="account-message" role="status" aria-live="polite"></div>
 <div class="account-actions"><button class="btn" id="accountApply" disabled>조회 결과 적용</button><button class="btn" id="accountUndo">가져오기 전으로 복원</button><button class="btn" id="accountClose">닫기</button></div>
-</dialog><script type="module" src="assets/js/base.mjs?v=87"></script><script src="assets/js/account-config.js"></script><script type="module" src="assets/js/base-optimizer-ui.mjs?v=10"></script><script type="module" src="assets/js/account-import.mjs?v=10"></script></body></html>
+</dialog><script type="module" src="assets/js/base.mjs?v=87"></script><script src="assets/js/account-config.js"></script><script type="module" src="assets/js/base-optimizer-ui.mjs?v=11"></script><script type="module" src="assets/js/account-import.mjs?v=10"></script></body></html>
