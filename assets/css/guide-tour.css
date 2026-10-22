@@ -1,0 +1,15 @@
+body dialog.zoot-tour{position:fixed;inset:0;margin:0;padding:0;border:0;width:100vw;height:100dvh;max-width:none;max-height:none;overflow:hidden;background:transparent;color:var(--z-text);box-sizing:border-box}
+body dialog.zoot-tour::backdrop{background:transparent;animation:none}
+.zoot-tour-shade{position:absolute;inset:0;width:100%;height:100%;pointer-events:auto}
+.zoot-tour-panel{position:absolute;box-sizing:border-box;width:min(360px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto;padding:20px;background:var(--z-popover);color:var(--z-text);border-top:3px solid var(--z-accent);box-shadow:0 8px 32px #0006;font:14px/1.6 Pretendard,system-ui,sans-serif}
+.zoot-tour-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--z-muted);font-size:12px}
+.zoot-tour-panel h2{font-size:19px;margin:14px 0 8px;color:var(--z-text)}
+.zoot-tour-panel p{margin:0 0 20px;font-size:14px;color:var(--z-muted)}
+.zoot-tour-panel button{min-height:40px;padding:8px 14px;border:0;background:var(--z-input);color:var(--z-text);font:600 14px/1.4 Pretendard,system-ui,sans-serif;cursor:pointer}
+.zoot-tour-panel button:hover{background:var(--z-hover)}
+.zoot-tour-heading button{padding:4px 8px;background:transparent;font-size:12px}
+.zoot-tour-actions{display:flex;justify-content:space-between;gap:12px}
+.zoot-tour-actions button[data-tour=next]{background:var(--z-accent);color:#172008}
+.zoot-tour-actions button[data-tour=next]:hover{background:var(--z-accent-hover)}
+.zoot-tour-actions button:disabled{opacity:.4;cursor:default}
+@media(max-height:480px){.zoot-tour-panel{padding:12px}.zoot-tour-panel h2{margin:8px 0}.zoot-tour-panel p{margin-bottom:12px}}
