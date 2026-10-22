@@ -7,6 +7,23 @@
 <title>Z.O.O.T. | Zeroth Order Oil Tank</title>
 <link rel="stylesheet" href="assets/css/zoot.css?v=10">
 <script src="assets/js/zoot.js?v=5"></script>
+<style>
+
+/* Accent highlights for the home screen. */
+.zoot-home{position:relative;isolation:isolate}
+.zoot-home::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 50% 30%,color-mix(in srgb,var(--z-accent) 8%,transparent),transparent 64%)}
+.zoot-home .brand h1{display:inline-block;position:relative;isolation:isolate}
+.zoot-home .brand h1::before{content:"";position:absolute;left:6%;right:2%;bottom:.12em;height:.14em;background:color-mix(in srgb,var(--z-accent) 30%,transparent);transform:skewX(-16deg);z-index:-1;pointer-events:none}
+.zoot-home .home-divider{height:2px;min-height:2px;background:linear-gradient(90deg,var(--z-border) 0 39%,var(--z-accent) 39% 61%,var(--z-border) 61% 100%)}
+.zoot-home .home-card{position:relative;background:linear-gradient(130deg,var(--z-panel) 60%,color-mix(in srgb,var(--z-accent) 9%,var(--z-panel)));isolation:isolate}
+.zoot-home .home-card::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:3px;background:var(--z-accent);pointer-events:none}
+.zoot-home .home-card::after{content:"";position:absolute;right:10px;bottom:10px;width:22px;height:3px;background:var(--z-accent);transform:skewX(-35deg);pointer-events:none}
+.zoot-home .home-card:hover,.zoot-home .home-card:focus-visible{background:var(--z-selected)}
+.zoot-home .home-card:hover::before,.zoot-home .home-card:focus-visible::before{width:5px}
+.zoot-home .home-card:hover::after,.zoot-home .home-card:focus-visible::after{width:38px}
+@media(max-width:600px){.zoot-home .home-card::after{width:16px;right:8px;bottom:8px}.zoot-home .home-card:hover::after,.zoot-home .home-card:focus-visible::after{width:26px}}
+@media(prefers-reduced-motion:no-preference){.zoot-home .home-card::before{transition:width .18s ease}.zoot-home .home-card::after{transition:width .18s ease}.zoot-home .home-card-shadow:hover{translate:0 -2px}.zoot-home .home-card-shadow{transition:filter .18s,translate .18s}}
+</style>
 </head>
 <body class="zoot-home">
 <main class="wrap">
