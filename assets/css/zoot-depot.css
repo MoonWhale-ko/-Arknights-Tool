@@ -1,0 +1,19 @@
+/* Original in-game rarity frames; item artwork and inventory data remain separate. */
+.zoot-depot [data-tier="1"]{--item-frame:url('../icons/items/frame-r1.png')}
+.zoot-depot [data-tier="2"]{--item-frame:url('../icons/items/frame-r2.png')}
+.zoot-depot [data-tier="3"]{--item-frame:url('../icons/items/frame-r3.png')}
+.zoot-depot [data-tier="4"]{--item-frame:url('../icons/items/frame-r4.png')}
+.zoot-depot [data-tier="5"]{--item-frame:url('../icons/items/frame-r5.png')}
+.zoot-depot [data-tier="6"]{--item-frame:url('../icons/items/frame-r6.png')}
+.zoot-depot .items{grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:20px 14px}
+.zoot-depot .item .item-art,.zoot-depot .detail-art{display:block;position:relative;aspect-ratio:1;background:var(--item-frame) center/contain no-repeat;isolation:isolate}
+.zoot-depot .item .item-art{width:100%}
+.zoot-depot .item-art>img,.zoot-depot .detail-art>img{display:block;position:absolute;left:11%;top:11%;width:78%;height:78%;object-fit:contain;z-index:1}
+.zoot-depot .item .quantity{position:absolute;left:auto;right:5%;bottom:7%;transform:none;max-width:calc(100% - 10px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:#20242ce8;color:#fff;box-shadow:none;padding:2px 7px;line-height:1.3;font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;z-index:2}
+.zoot-depot .item .item-name{margin-top:7px;font-size:12px;line-height:1.5;color:var(--z-text)}
+.zoot-depot .item[aria-pressed=true] .item-art{filter:drop-shadow(0 0 4px color-mix(in srgb,var(--z-accent) 65%,transparent))}
+.zoot-depot .item[aria-pressed=true] .item-name{text-decoration:underline;text-decoration-color:var(--z-link);text-decoration-thickness:2px;text-underline-offset:4px}
+.zoot-depot .item:hover .item-name{color:var(--z-link)}
+.zoot-depot .detail-art{width:min(100%,184px);margin:0 auto 18px}
+@media(max-width:1000px){.zoot-depot .items{grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:18px 10px}}
+@media(max-width:700px){.zoot-depot .items{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px 7px}.zoot-depot .item .quantity{font-size:12px;padding:2px 5px;right:2%;bottom:6%}.zoot-depot .item .item-name{font-size:11px}.zoot-depot .detail-art{width:148px}}
