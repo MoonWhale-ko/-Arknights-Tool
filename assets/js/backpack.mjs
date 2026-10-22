@@ -4,7 +4,7 @@ const $=id=>document.getElementById(id),esc=v=>String(v).replace(/[&<>"']/g,c=>(
 const categories={all:'전체',consumable:'소모 물품',basic:'기본 물품',growth:'육성 재료'};
 const kinds={material:'육성 재료',experience:'작전기록',chip:'정예화 칩',skill:'스킬개론',module:'모듈 재료',potential:'증표',currency:'재화'};
 const tabPaths={all:'<path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/>',consumable:'<path d="M14 3a9 9 0 1 0 7 14l-9-5 9-5a9 9 0 0 0-7-4Z"/><path d="m14 12 8-4v8Z"/>',basic:'<path d="m12 2 10 5v10l-10 5-10-5V7Zm0 3L5 8l7 4 7-4Zm-7 6v4l6 3v-4Zm9 3v4l5-3v-4Z"/>',growth:'<circle cx="8" cy="5" r="3"/><path d="m3 11 6-2 4 5 5-7 5 15H1Zm5 2-3 6h11l-6-6Z"/>'};
-let items=[],images={},inventory,metadata={},category='all',selected='',ownedOnly=false,storageError=false;
+let items=[],images={},inventory,metadata={},category='all',selected='',ownedOnly=true,storageError=false;
 const frameTier=item=>metadata.rarities?.[item.id]||Math.max(1,Math.min(6,Math.trunc(Number(tierOf(item)))||1));
 const gameCategory=item=>({CONSUME:'consumable',NORMAL:'basic',MATERIAL:'growth'}[metadata.classifyTypes?.[item.id]]||(item.id.startsWith('voucher_')?'consumable':categoryOf(item)==='currency'?'basic':'growth'));
 function quantity(n){if(n<10000)return n.toLocaleString('ko-KR');const unit=n>=1000000?1000000:1000;return (Math.floor(n/unit*10)/10).toLocaleString('en-US',{maximumFractionDigits:1})+(unit===1000000?'M':'K')}
