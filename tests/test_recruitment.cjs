@@ -6,7 +6,7 @@ const root=path.join(__dirname,'..');
 const html=fs.readFileSync(path.join(root,'recruitment.html'),'utf8');
 const source=html.split('<script>')[1].split('</script>')[0];
 const data=JSON.parse(fs.readFileSync(path.join(root,'data/operators.json'),'utf8'));
-function element(){return {value:'',hidden:false,innerHTML:'',textContent:'',checked:false,dataset:{},children:[],attrs:{},classList:{values:new Set(),toggle(k,on){if(on===undefined)on=!this.values.has(k);if(on)this.values.add(k);else this.values.delete(k);return on},contains(k){return this.values.has(k)},add(k){this.values.add(k)},remove(k){this.values.delete(k)}},setAttribute(k,v){this.attrs[k]=v},focus(){},appendChild(x){this.children.push(x)},insertAdjacentHTML(where,s){this.innerHTML+=s}}}
+function element(){return {value:'',hidden:false,innerHTML:'',textContent:'',checked:false,dataset:{},children:[],attrs:{},listeners:{},addEventListener(type,handler){this.listeners[type]=handler},classList:{values:new Set(),toggle(k,on){if(on===undefined)on=!this.values.has(k);if(on)this.values.add(k);else this.values.delete(k);return on},contains(k){return this.values.has(k)},add(k){this.values.add(k)},remove(k){this.values.delete(k)}},setAttribute(k,v){this.attrs[k]=v},focus(){},appendChild(x){this.children.push(x)},insertAdjacentHTML(where,s){this.innerHTML+=s}}}
 const ids=new Map(),tags=[],rarities=[],times=[];
 const doc={getElementById(id){if(!ids.has(id))ids.set(id,element());return ids.get(id)},createElement(){return element()},querySelectorAll(sel){if(sel==='.tag'){
  if(!tags.length){const groups=JSON.parse(vm.runInContext('JSON.stringify(groups)',context));for(const tag of Object.values(groups).flat()){const e=element();e.dataset.tag=tag;tags.push(e)}}return tags;
@@ -71,8 +71,11 @@ vm.runInContext(source,context);
  const originalCount=ids.get('count').textContent;
  ids.get('imageMode').value='portrait';ids.get('imageMode').onchange();
  assert.match(ids.get('results').innerHTML,/charavatars\/[^" ]+\.png/);
- assert.ok(!ids.get('results').innerHTML.includes('charportraits/'));
+ assert.ok(!/\ssrc="[^"]*charportraits\//.test(ids.get('results').innerHTML),'Portrait mode primary images must use avatars; illustration URLs may remain as failure fallbacks');
  assert.equal(JSON.parse(storage.akRecruitSettings).imageMode,'portrait');
+ assert.equal(vm.runInContext("imgUrl(operators.find(o=>o.name==='아렌'))",context),'assets/icons/recruitment/char_271_spikes.png');
+ assert.ok(fs.readFileSync(path.join(root,'assets/icons/recruitment/char_271_spikes.png')).subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])),'Arene avatar is bundled as a real PNG');
+ assert.equal(typeof ids.get('results').listeners.error,'function','Image failure fallback is registered');
  ids.get('imageMode').value='none';ids.get('imageMode').onchange();
  assert.ok(!ids.get('results').innerHTML.includes('<img'));
  assert.match(ids.get('results').innerHTML,/나이팅게일/);
