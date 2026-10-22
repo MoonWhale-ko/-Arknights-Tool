@@ -218,5 +218,12 @@ export function simulate(model,plan,{record=false}={}){
  if(!cycle&&!reason)reason='첫 사이클이 검사 상한 내에 완료되지 않았습니다.';
  return {status,reason,at24,cycle,cycleStatus:cycle?'completed':'unresolved',endHour:clock,endMorale:morale,events:record?events:undefined};
 }
-export function score(model,result){const p=model.input.options.rankingWindow==='cycle'?result.cycle:result.at24;if(result.status!=='ok'||!p)return null;const v=[p.hourly.office,p.missingSkillPolicyHours/p.hour,p.hourly.meeting,...model.input.options.priority.map(k=>p.hourly.products[k])];if(model.work.some(r=>r.type==='TRADING'))v.push(p.trade.hourlyLmd);return v;}
+export function score(model,result){
+ const p=model.input.options.rankingWindow==='cycle'?result.cycle:result.at24;if(result.status!=='ok'||!p)return null;
+ const products=model.input.options.priority.map(k=>p.hourly.products[k]);
+ const v=model.meetingLast?[p.hourly.office,...products]:[p.hourly.office,p.missingSkillPolicyHours/p.hour,p.hourly.meeting,...products];
+ if(model.work.some(r=>r.type==='TRADING'))v.push(p.trade.hourlyLmd);
+ if(model.meetingLast)v.push(p.hourly.meeting);
+ return v;
+}
 export function compare(a,b){for(let i=0;i<a.length;i++){if(Math.abs(a[i]-b[i])>1e-8)return Math.sign(a[i]-b[i]);}return 0;}

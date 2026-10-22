@@ -20,13 +20,13 @@ test('the same-origin production worker returns the integrated roster and 24h/cy
  const prepared=prepareIntegratedInput(catalog,base,example.progress,{},options);
  const url=new URL('../assets/js/base-integrated-worker.mjs',import.meta.url).href,source=`import {parentPort} from 'node:worker_threads';globalThis.self={postMessage:v=>parentPort.postMessage(v)};await import(${JSON.stringify(url)});parentPort.on('message',data=>self.onmessage({data}));parentPort.postMessage({type:'ready'});`;
  const w=new Worker(new URL('data:text/javascript,'+encodeURIComponent(source)),{type:'module'});
- try{const report=await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('worker timeout')),10000);w.on('error',reject);w.on('message',d=>{if(d.type==='ready')w.postMessage({catalog,...prepared,seconds:1});if(d.type==='error'){clearTimeout(timer);reject(Error(d.message));}if(d.type==='result'){clearTimeout(timer);resolve(d.result);}});});assert.equal(report.modelVersion,'terra27-time-simulator-3');assert.ok(report.best.at24);assert.ok(report.best.cycle);assert.equal(report.stats.evaluationErrors,0);assert.ok(report.rooms.some(r=>r.type==='TRAINING'));assert.ok(report.best.plan.groups.every(g=>g.room!=='training'||g.operators.length===0));assert.ok(report.best.events.every(e=>(e.rooms??[]).every(r=>r.id!=='training'||r.operators.length===0)));assert.equal(report.operators.char_486_takila.name,'테킬라');assert.equal(report.input.options.teams,2);assert.doesNotThrow(()=>JSON.parse(JSON.stringify(report)));}finally{await w.terminate();}
+ try{const report=await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('worker timeout')),10000);w.on('error',reject);w.on('message',d=>{if(d.type==='ready')w.postMessage({catalog,...prepared,seconds:1});if(d.type==='error'){clearTimeout(timer);reject(Error(d.message));}if(d.type==='result'){clearTimeout(timer);resolve(d.result);}});});assert.equal(report.modelVersion,'terra27-time-simulator-4');assert.ok(report.best.at24);assert.ok(report.best.cycle);assert.equal(report.stats.evaluationErrors,0);assert.ok(report.rooms.some(r=>r.type==='TRAINING'));assert.ok(report.best.plan.groups.every(g=>g.room!=='training'||g.operators.length===0));assert.ok(report.best.events.every(e=>(e.rooms??[]).every(r=>r.id!=='training'||r.operators.length===0)));assert.equal(report.operators.char_486_takila.name,'테킬라');assert.equal(report.input.options.teams,2);assert.doesNotThrow(()=>JSON.parse(JSON.stringify(report)));}finally{await w.terminate();}
 });
 
 test('meeting compares passive-only operators against skill holders in the actual rotation search',async()=>{
- const {createTerraModel,terra}=await import('../assets/js/infra-v2-terra-model.mjs?v=4');
- const {solveHeuristic}=await import('../assets/js/infra-v2-heuristic.mjs?v=3');
- const {simulate}=await import('../assets/js/infra-v2-core.mjs?v=3');
+ const {createTerraModel,terra}=await import('../assets/js/infra-v2-terra-model.mjs?v=5');
+ const {solveHeuristic}=await import('../assets/js/infra-v2-heuristic.mjs?v=4');
+ const {simulate}=await import('../assets/js/infra-v2-core.mjs?v=4');
  const high=terra.J.filter(o=>o.rarity===6&&!o.skills.some(s=>s.room==='MEETING')).slice(0,4).map(o=>o.id);
  const raw={base:{rooms:{meeting:{type:'MEETING',level:3},training:{type:'TRAINING',level:3}}},progress:Object.fromEntries([...high.map(id=>[id,{owned:true,elite:2,level:1}]),['char_009_12fce',{owned:true,elite:0,level:30}]]),options:{teams:2,rotation:'12h',maxHours:24,missingClues:[],optimizeDormSupport:false,priority:options.priority}};
  const model=createTerraModel(catalog,raw),task=model.tasks.find(t=>t.type==='MEETING');
@@ -42,7 +42,7 @@ test('meeting compares passive-only operators against skill holders in the actua
 });
 
 test('meeting adds facility, total dorm ambience, rarity and elite bonuses; exhausted passive bonus stops',async()=>{
- const {createTerraModel,terra}=await import('../assets/js/infra-v2-terra-model.mjs?v=4');
+ const {createTerraModel,terra}=await import('../assets/js/infra-v2-terra-model.mjs?v=5');
  const four=terra.J.find(o=>o.rarity===4&&!o.skills.some(s=>s.room==='MEETING')).id;
  const five=terra.J.find(o=>o.rarity===5&&!o.skills.some(s=>s.room==='MEETING')).id;
  const rate=(id,elite,level,ambience,morale=24)=>{
@@ -58,7 +58,7 @@ test('meeting adds facility, total dorm ambience, rarity and elite bonuses; exha
 });
 
 test('meeting has no missing-clue specialist limit when ownership preference is disabled',async()=>{
- const {meetingTeamAllowed}=await import('../assets/js/infra-v2-core.mjs?v=3');
+ const {meetingTeamAllowed}=await import('../assets/js/infra-v2-core.mjs?v=4');
  const passive={skills:[]},missing={skills:[{room:'MEETING',kind:'missing'}]};
  assert.ok(meetingTeamAllowed([passive,missing],{},true));assert.ok(meetingTeamAllowed([passive,passive],{},true));assert.ok(meetingTeamAllowed([missing,missing],{missingClues:[]},true));assert.equal(meetingTeamAllowed([missing,missing],{missingClues:[1]},true),false);
 });
@@ -69,4 +69,36 @@ test('site ignores previous clue ownership settings in every calculation',()=>{
  const cleared=prepareIntegratedInput(catalog,example.base,example.progress,{}, {...options,missingClues:[]});
  assert.deepEqual(old.input.options.missingClues,[]);assert.deepEqual(old,cleared);
  const html=fs.readFileSync(new URL('../base.html',import.meta.url),'utf8');assert.ok(!html.includes('optimizerClueSettings'));assert.ok(!html.includes('미보유 단서'));
+});
+
+test('production and trade income outrank reception efficiency in both comparison windows',async()=>{
+ const {score,compare}=await import('../assets/js/infra-v2-core.mjs?v=4');
+ const point=(office,exp,lmd,meeting)=>({hour:24,missingSkillPolicyHours:0,hourly:{office,meeting,products:{F_EXP:exp,F_GOLD:2,F_DIAMOND:1}},trade:{hourlyLmd:lmd}});
+ const model={meetingLast:true,input:{options:{priority:['F_EXP','F_GOLD','F_DIAMOND'],rankingWindow:'24h'}},work:[{type:'TRADING'}]};
+ for(const window of ['24h','cycle']){
+  model.input.options.rankingWindow=window;
+  const value=p=>score(model,{status:'ok',at24:p,cycle:p});
+  assert.deepEqual(value(point(1,3,100,9)),[1,3,2,1,100,9]);
+  assert.ok(compare(value(point(1,4,0,1)),value(point(1,3,1000,100)))>0);
+  assert.ok(compare(value(point(1,3,101,1)),value(point(1,3,100,100)))>0);
+  assert.ok(compare(value(point(1,3,100,2)),value(point(1,3,100,1)))>0);
+  assert.ok(compare(value(point(2,0,0,0)),value(point(1,1000,1000,1000)))>0);
+ }
+});
+
+test('Tragodia stays in EXP manufacturing before reception in exact and heuristic searches',async()=>{
+ const {createTerraModel}=await import('../assets/js/infra-v2-terra-model.mjs?v=5');
+ const {solveHeuristic}=await import('../assets/js/infra-v2-heuristic.mjs?v=4');
+ const {simulate,score,compare}=await import('../assets/js/infra-v2-core.mjs?v=4');
+ const raw={base:{rooms:{meeting:{type:'MEETING',level:3},factory:{type:'MANUFACTURE',level:1}}},progress:{char_1042_phatm2:{owned:true,elite:2,level:1},char_009_12fce:{owned:true,elite:0,level:30},char_500_noirc:{owned:true,elite:0,level:30}},products:{factory:'1'},options:{teams:2,rotation:'12h',maxHours:24,priority:['F_EXP','F_GOLD','F_DIAMOND'],optimizeDormSupport:false}};
+ for(const exactThreshold of [10000,0]){
+  const model=createTerraModel(catalog,raw),result=solveHeuristic(model,{maxMilliseconds:3000,exactThreshold,starts:2});
+  assert.ok(result.best);assert.equal(result.stats.evaluationErrors,0);
+  const factory=result.best.plan.groups.find(g=>g.room==='factory'&&g.operators.includes('char_1042_phatm2'));
+  assert.ok(factory,'Tragodia must be assigned to EXP manufacturing');
+  const alternate=structuredClone(result.best.plan),room=alternate.groups.find(g=>g.room==='meeting'&&g.team===factory.team);
+  alternate.groups.find(g=>g.room==='factory'&&g.team===factory.team).operators=[];room.operators=['char_1042_phatm2'];
+  const moved=simulate(model,alternate);assert.ok(result.best.at24.produced.F_EXP>moved.at24.produced.F_EXP);
+  assert.ok(compare(result.best.score,score(model,moved))>0);
+ }
 });

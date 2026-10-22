@@ -1,6 +1,6 @@
 // Independent implementation of a facility-greedy, seeded, local-improvement
 // search. The optional Terra adapter supplies third-party skill evaluation.
-import {Enumerator,simulate,score,compare,subsetCount,stable} from './infra-v2-core.mjs?v=3';
+import {Enumerator,simulate,score,compare,subsetCount,stable} from './infra-v2-core.mjs?v=4';
 import {snapshot} from './infra-v2-evaluator.mjs';
 
 export const HEURISTIC_VERSION='facility-seeded-search-1';
@@ -58,7 +58,7 @@ function proxy(model,selection,teamCache){
   out[out.length-1]+=(snap.roleMerit??0)/teams;
  }
  out[out.length-1]+=Object.values(support).reduce((n,ids)=>n+supportMerit(model,ids),0);
- return out;
+ return model.meetingLast?[out[0],...out.slice(3,-2),out[2],...out.slice(-2)]:out;
 }
 function heuristicWeight(model,task,id){
  const op=model.byId[id],ss=op.skills.filter(s=>s.room===task.type),prod=ss.reduce((n,s)=>n+(s.prod??0)+(s.amount??0)+(s.kind==='ramp'?s.max??0:0)+(s.cap??0)*.02,0);
@@ -154,8 +154,8 @@ export function solveHeuristic(model,{maxMilliseconds=10000,maxEvaluations=10000
    let selection=variant&&bestSelection?bestSelection.map(ids=>[...ids]):empty.map(()=>[]);
    if(variant&&variant%2===1)selection=empty.map(()=>[]);
    if(variant&&model.startingSelections?.length)selection=model.startingSelections[(variant-1)%model.startingSelections.length].map(ids=>[...ids]);
-   const types=variant%2?['CONTROL','HIRE','MEETING','MANUFACTURE','TRADING','POWER','TRAINING','WORKSHOP','DORMITORY']:['HIRE','MEETING','CONTROL','MANUFACTURE','TRADING','POWER','TRAINING','WORKSHOP','DORMITORY'];
-   const order=model.tasks.map((_,i)=>i).sort((a,b)=>types.indexOf(model.tasks[a].type)-types.indexOf(model.tasks[b].type)||(variant%3===2?model.tasks[b].team-model.tasks[a].team:model.tasks[a].team-model.tasks[b].team)||a-b);
+   const types=model.meetingLast?(variant%2?['CONTROL','HIRE','MANUFACTURE','TRADING','MEETING','POWER','WORKSHOP','DORMITORY']:['HIRE','CONTROL','MANUFACTURE','TRADING','MEETING','POWER','WORKSHOP','DORMITORY']):variant%2?['CONTROL','HIRE','MEETING','MANUFACTURE','TRADING','POWER','TRAINING','WORKSHOP','DORMITORY']:['HIRE','MEETING','CONTROL','MANUFACTURE','TRADING','POWER','TRAINING','WORKSHOP','DORMITORY'];
+   const order=model.tasks.map((_,i)=>i).sort((a,b)=>types.indexOf(model.tasks[a].type)-types.indexOf(model.tasks[b].type)||(model.meetingLast&&model.tasks[a].type==='MANUFACTURE'&&model.tasks[b].type==='MANUFACTURE'?model.input.options.priority.indexOf(model.catalog.recipes[model.tasks[a].recipe].category)-model.input.options.priority.indexOf(model.catalog.recipes[model.tasks[b].recipe].category):0)||(variant%3===2?model.tasks[b].team-model.tasks[a].team:model.tasks[a].team-model.tasks[b].team)||a-b);
    if(!variant)improvementOrder=order;
    for(const index of order){if(stoppedEvaluation())break;construct(selection,index,variant);evaluate(selection);}
    if(!timedOut()){evaluate(selection);stats.startsCompleted++;notify('constructed');}

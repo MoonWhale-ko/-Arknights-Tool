@@ -1,9 +1,9 @@
 import * as terra from './infra-v2-terra-engine.mjs';
-import {cleanInput,buildModel,meetingTeamAllowed} from './infra-v2-core.mjs?v=3';
+import {cleanInput,buildModel,meetingTeamAllowed} from './infra-v2-core.mjs?v=4';
 import {rule} from './infra-v2-rules.mjs';
 import {terraSnapshot} from './infra-v2-terra-snapshot.mjs';
 import {improveRest} from './infra-v2-terra-rest.mjs';
-export const INTEGRATED_VERSION='terra27-time-simulator-3';
+export const INTEGRATED_VERSION='terra27-time-simulator-4';
 export {terra};
 const point=s=>{const m=s.unlock.match(/정예화\s*(\d+)/);return {id:s.buffId,elite:m?Number(m[1]):0,level:m?1:Number(s.unlock.match(/\d+/)?.[0]??1)};};
 export function makeTerraCatalog(base){
@@ -27,11 +27,10 @@ export function createTerraModel(base,raw){
   return {...def,...state,terra:{...original,elite:state.elite,level:state.level,skills:rawSkills},skills:rawSkills.map(wrap)};
  }});
  model.restOptimizer=improveRest;
- model.engineVersion=INTEGRATED_VERSION;model.snapshotEvaluator=terraSnapshot;
+ model.engineVersion=INTEGRATED_VERSION;model.snapshotEvaluator=terraSnapshot;model.meetingLast=true;
  model.startingSelections=linkedSeeds(model);
  model.warnings=[
   '업로드한 테라아카이브 v27의 스킬 평가식을 시간 시뮬레이터에 연결한 버전입니다. 원본 A/B 가중치는 사용하지 않습니다.',
-  '사무실 → 미보유 단서 우대 → 응접실 속도 → 지정 생산물 순위 → 무역소 기대 수익 순으로 비교합니다. 종류별 단서 획득 확률은 계산하지 않습니다.',
   '무역소는 공개 관측 분포로 주문 시간·순금·용문폐 기댓값을 계산합니다. 품질 기본/성숙 시나리오 범위이며 초기 확률 곡선과 실제 수익의 보장 구간은 아닙니다. 관측 자료가 없는 조합은 기본 분포 사용을 결과에 명시합니다.',
   '연계 자원은 실제 시설 레벨·현재 배치·컨디션으로 다시 계산합니다. 재료 충분·교대 시 수거·드론 미사용을 가정합니다.',
   '제이는 실제 주문 상한·대기량을 적용하되 기대 주문 수를 사용하며, 시간 경과형 등 일부 특수 중첩은 추가 검증이 필요합니다. 숙소는 고정 지원자를 보존하고 다음 근무조의 회복을 우선하여 인원 이동·교환·순서를 제한 탐색합니다. 임의 단일 대상 회복은 배치 순서 모델이며 전역 최적성을 보장하지 않습니다. 응접실은 공개된 분위기·시설 레벨 표를 사용합니다.',
