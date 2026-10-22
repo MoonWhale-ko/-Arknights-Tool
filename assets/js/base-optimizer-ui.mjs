@@ -104,7 +104,9 @@ function renderIntegrated(report){
  const number=value=>value==null?'—':Number(value).toLocaleString('ko-KR',{maximumFractionDigits:2});
  const efficiency=(point,key)=>point?.hour>0&&Number.isFinite(point[key])?number(point[key]/point.hour*100)+'%':'—';
  const best=report.best,details=document.createElement('details');details.className='optimizer-result-details';
- const warnings=[...(report.warnings??[]),...(report.errors??[])];
+ // Engine implementation notes stay in exported reports, rather than user-facing warnings.
+ const implementationNotes=['업로드한 테라아카이브 v27','사무실 → 미보유 단서 우대','무역소는 공개 관측 분포로','연계 자원은 실제 시설 레벨','제이는 실제 주문 상한','첫 24시간과 첫 사이클을 계산합니다.'];
+ const warnings=[...(report.warnings??[]).filter(value=>!implementationNotes.some(prefix=>value.startsWith(prefix))),...(report.errors??[])];
  details.append(text('summary','계산 상세·지원 범위'+(warnings.length?' · '+warnings.length+'건':'')));
  if(!best){target.append(text('p','현재 조건에서 비교 가능한 배치를 찾지 못했습니다. 입력 설정이나 계산 시간을 확인해 주세요.'));for(const error of report.errors??[])target.append(text('p',error,'optimizer-result-notice'));}
  else{
