@@ -27,7 +27,7 @@ function start(){
  if(!steps.length)return;
  const previousFocus=document.activeElement,scroll={x:scrollX,y:scrollY};
  const dialog=document.createElement('dialog');dialog.className='zoot-tour';dialog.setAttribute('aria-labelledby','zootTourTitle');dialog.setAttribute('aria-describedby','zootTourDescription');
- dialog.innerHTML=`<svg class="zoot-tour-shade" aria-hidden="true"><defs><mask id="zootTourMask" maskUnits="userSpaceOnUse"><rect width="100%" height="100%" fill="white"/><rect id="zootTourHole" fill="black"/></mask></defs><rect width="100%" height="100%" fill="rgba(0,0,0,.76)" mask="url(#zootTourMask)"/><rect id="zootTourBorder" fill="none" stroke="var(--z-accent)" stroke-width="3"/></svg><section class="zoot-tour-panel"><div class="zoot-tour-heading"><span id="zootTourProgress" role="status" aria-live="polite"></span><button type="button" data-tour="close" aria-label="가이드 종료">종료 ×</button></div><h2 id="zootTourTitle"></h2><p id="zootTourDescription">상세 안내는 추후 추가됩니다.</p><div class="zoot-tour-actions"><button type="button" data-tour="previous">이전</button><button type="button" data-tour="next">다음</button></div></section>`;
+ dialog.innerHTML=`<svg class="zoot-tour-shade" aria-hidden="true"><defs><mask id="zootTourMask" maskUnits="userSpaceOnUse"><rect width="100%" height="100%" fill="white"/><rect id="zootTourHole" fill="black"/></mask></defs><rect width="100%" height="100%" fill="rgba(0,0,0,.76)" mask="url(#zootTourMask)"/><rect id="zootTourBorder" fill="none" stroke="var(--z-accent)" stroke-width="3"/></svg><section class="zoot-tour-panel"><div class="zoot-tour-heading"><span id="zootTourProgress" role="status" aria-live="polite"></span><button type="button" data-tour="close" aria-label="가이드 종료">종료 ×</button></div><h2 id="zootTourTitle"></h2><p id="zootTourDescription">상세 안내는 추후 추가됩니다.</p><p class="zoot-tour-hint">어두운 배경 클릭 · 왼쪽 이전 / 오른쪽 다음</p><div class="zoot-tour-actions"><button type="button" data-tour="previous">이전</button><button type="button" data-tour="next">다음</button></div></section>`;
  document.body.append(dialog);
  const panel=dialog.querySelector('.zoot-tour-panel'),hole=dialog.querySelector('#zootTourHole'),border=dialog.querySelector('#zootTourBorder'),previous=dialog.querySelector('[data-tour=previous]'),next=dialog.querySelector('[data-tour=next]');
  let index=0,target=null,frame=0,closed=false,observer=new ResizeObserver(schedule);
@@ -58,9 +58,22 @@ function start(){
  previous.addEventListener('click',()=>{if(index>0){index--;show();}});
  next.addEventListener('click',()=>{if(index===steps.length-1)finish();else{index++;show();}});
  dialog.addEventListener('cancel',event=>{event.preventDefault();finish();});
- // Outside the instruction card, clicking the dimmed screen exits the guide.
- let backgroundPress=false;dialog.addEventListener('pointerdown',e=>{backgroundPress=!panel.contains(e.target);});
- dialog.addEventListener('click',e=>{if(backgroundPress&&!panel.contains(e.target))finish();backgroundPress=false;});
+ // Navigate only on the dimmed background; the spotlight and card are excluded.
+ function backgroundSide(event){
+  if(event.button!==0||panel.contains(event.target))return null;
+  const r=hole.getBoundingClientRect();
+  if(event.clientX>=r.left&&event.clientX<=r.right&&event.clientY>=r.top&&event.clientY<=r.bottom)return null;
+  return event.clientX<innerWidth/2?'previous':'next';
+ }
+ let pressedSide=null;
+ dialog.addEventListener('pointerdown',event=>{pressedSide=backgroundSide(event);});
+ dialog.addEventListener('pointercancel',()=>{pressedSide=null;});
+ dialog.addEventListener('click',event=>{
+  const side=backgroundSide(event),pressed=pressedSide;pressedSide=null;
+  if(!side||side!==pressed)return;
+  if(side==='previous'){if(index>0){index--;show();}}
+  else if(index===steps.length-1)finish();else{index++;show();}
+ });
  window.addEventListener('resize',schedule);window.addEventListener('scroll',schedule,true);
  dialog.showModal();show();next.focus({preventScroll:true});
 }
