@@ -10,8 +10,8 @@
     "run_worker_first": true
   },
   "vars": {
-    "ACCESS_TEAM_DOMAIN": "",
-    "ACCESS_AUD": ""
+    "ADMIN_ORIGIN": "https://arknights-private-admin.jo625540.workers.dev",
+    "ADMIN_GITHUB_ID": "246121769"
   },
   "preview_urls": false,
   "observability": { "enabled": false }

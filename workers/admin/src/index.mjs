@@ -1,4 +1,4 @@
-import { AdminError, authenticate, assertMutation, readJSON } from './auth.mjs';
+import { AdminError, authenticate, assertMutation, readJSON, startLogin, finishLogin, logout, clearFlow } from './auth.mjs';
 import { githubClient, FILES } from './data.mjs';
 
 const security = {
@@ -15,13 +15,25 @@ function json(data, status = 200) {
 }
 
 // Dependency injection is used only by tests, never selected through an environment flag or route.
-export function createHandler({ resolveKeys, fetcher } = {}) {
+export function createHandler({ fetcher } = {}) {
   return async function handle(request, env) {
+    const path = new URL(request.url).pathname;
+    const secure = response => {
+      const headers = new Headers(response.headers);
+      for (const [key, value] of Object.entries(security)) headers.set(key, value);
+      return new Response(response.body, { status: response.status, headers });
+    };
     try {
-      const identity = await authenticate(request, env, resolveKeys);
-      const path = new URL(request.url).pathname;
+      if (request.method === 'GET' && path === '/auth/start') return secure(await startLogin(request, env));
+      if (request.method === 'GET' && path === '/auth/callback') return secure(await finishLogin(request, env, fetcher));
+      if (request.method === 'GET' && ['/login', '/login.css'].includes(path)) {
+        const url = new URL(request.url); if (path === '/login') url.pathname = '/login.html';
+        return secure(await env.ASSETS.fetch(new Request(url, request)));
+      }
+      const identity = await authenticate(request, env);
       if (!['GET', 'HEAD', 'POST'].includes(request.method)) throw new AdminError('method-not-allowed', 405);
       if (request.method === 'POST') assertMutation(request);
+      if (path === '/auth/logout' && request.method === 'POST') return secure(logout());
       if (path === '/api/session' && request.method === 'GET') return json({ ok: true, ...identity });
       const gh = githubClient(env, fetcher);
       const file = path.match(/^\/api\/files\/([a-z]+)$/)?.[1];
@@ -46,8 +58,12 @@ export function createHandler({ resolveKeys, fetcher } = {}) {
       for (const [key, value] of Object.entries(security)) headers.set(key, value);
       return new Response(response.body, { status: response.status, headers });
     } catch (error) {
+      if (error instanceof AdminError && error.message === 'login-required' && path === '/' && request.method === 'GET')
+        return secure(new Response(null, { status: 302, headers: { Location: '/login' } }));
       // Do not log tokens, emails, GitHub responses or account payloads.
-      return json({ ok: false, error: error instanceof AdminError ? error.message : 'internal-error' }, error instanceof AdminError ? error.status : 500);
+      const response = json({ ok: false, error: error instanceof AdminError ? error.message : 'internal-error' }, error instanceof AdminError ? error.status : 500);
+      if (path === '/auth/callback') response.headers.append('Set-Cookie', clearFlow());
+      return response;
     }
   };
 }

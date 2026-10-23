@@ -1,7 +1,7 @@
 const $ = id => document.getElementById(id);
 const state = { files: {}, selected: null, image: null, catalog: null, pending: null, busy: false, dirty: false };
 const messages = {
-  'auth-not-configured': '관리자 인증 설정이 필요합니다. Cloudflare에서 Access 팀 주소, 앱 AUD, 관리자 이메일을 설정하세요.',
+  'auth-not-configured': 'GitHub 로그인 설정이 필요합니다. Worker에 GITHUB_CLIENT_ID와 GITHUB_CLIENT_SECRET을 설정하세요.',
   'login-required': '로그인 시간이 만료되었거나 인증이 필요합니다. 페이지를 새로고침해 다시 로그인하세요.',
   'access-denied': '허용된 관리자 계정이 아닙니다.',
   'github-not-configured': 'Cloudflare에 GitHub 연결용 비밀값을 설정해야 합니다.',
@@ -148,6 +148,7 @@ $('operatorSearch').oninput = renderOperators; $('operatorFilter').onchange = re
 $('loadCatalog').onclick = () => task(async () => { const data = await api('/api/files/catalog'); state.catalog = data.doc; $('operatorSearch').value = ''; $('operatorFilter').value = 'new'; renderOperators(); status('신규 목록을 확인했습니다. 목록에 없는 최신 캐릭터는 데이터 갱신 후 확인할 수 있습니다.'); });
 $('refreshData').onclick = () => task(async () => { if (!discard()) return; await api('/api/refresh', 'POST', {}); status('최신 데이터 가져오기를 요청했습니다. 실행 기록이 표시되기까지 잠시 걸릴 수 있습니다.'); await runs(); });
 $('reloadRuns').onclick = () => task(runs);
+$('logout').onclick = () => task(async () => { if (!discard()) return; await api('/auth/logout', 'POST', {}); state.dirty = false; window.location.assign('/login'); });
 for (const id of ['closeReview', 'cancelReview']) $(id).onclick = () => { $('review').close(); state.pending = null; };
 $('review').onclick = event => { if (event.target !== $('review')) return; const r = $('review').getBoundingClientRect(); if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) $('review').close(); };
 $('confirmSave').onclick = save;
@@ -157,7 +158,7 @@ setTheme(theme === 'light' ? 'light' : 'dark');
 $('theme').onclick = () => { const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; setTheme(next); try { localStorage.setItem('zootAdminTheme', next); } catch {} };
 window.addEventListener('beforeunload', e => { if (state.dirty) { e.preventDefault(); e.returnValue = ''; } });
 task(async () => {
-  const session = await api('/api/session'); $('identity').textContent = session.email;
+  const session = await api('/api/session'); $('identity').textContent = session.login;
   const keys = ['operators', 'future', 'aliases', 'images'];
   const results = await Promise.allSettled(keys.map(async key => { state.files[key] = await api('/api/files/' + key); }));
   const failure = results.find(x => x.status === 'rejected'); if (failure) throw failure.reason;
