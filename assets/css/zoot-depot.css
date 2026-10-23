@@ -90,3 +90,9 @@ body.zoot-depot .toolbar .ownership-switch:hover{background:transparent;color:va
 .zoot-depot .ownership-switch[aria-checked=false] .ownership-all{color:var(--z-link);font-weight:700}
 @media(prefers-reduced-motion:no-preference){.zoot-depot .ownership-thumb{transition:transform .18s ease,background-color .18s ease}.zoot-depot .ownership-track{transition:background-color .18s ease}}
 @media(max-width:560px){body.zoot-depot .toolbar .ownership-switch{gap:6px;min-height:38px;padding:6px 0}}
+
+
+/* Keep ordinary item clicks, and use grab cursors for mouse scrolling. */
+.zoot-depot .items-viewport{user-select:none}
+.zoot-depot .items-viewport img{-webkit-user-drag:none;user-select:none}
+@media(hover:hover) and (pointer:fine){.zoot-depot .items-viewport,.zoot-depot .items-viewport .item{cursor:grab}.zoot-depot .items-viewport.is-dragging,.zoot-depot .items-viewport.is-dragging *{cursor:grabbing!important}}

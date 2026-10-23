@@ -1,3 +1,4 @@
+import {enableDragScroll} from './drag-scroll.mjs?v=1';
 import {INVENTORY_KEY,readInventory,countOf,saveCount,categoryOf,tierOf} from './inventory-state.mjs?v=6';
 import {compareDepotItems} from './depot-order.mjs?v=1';
 const $=id=>document.getElementById(id),esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -34,6 +35,7 @@ $('detailClose').addEventListener('click',()=>$('itemDialog').close());
 $('itemDialog').addEventListener('close',()=>{const id=selected;selected='';render();$('items').querySelector(`[data-id="${CSS.escape(id)}"]`)?.focus({preventScroll:true})});
 for(const id of ['search','subcategory'])$(id).addEventListener(id==='search'?'input':'change',()=>{$('itemViewport').scrollLeft=0;render()});
 $('ownedOnly').addEventListener('click',()=>{showOwned=!showOwned;$('ownedOnly').setAttribute('aria-checked',String(showOwned));$('ownedOnly').title=showOwned?'보유 아이템 표시 중 · 누르면 전체 아이템 표시':'전체 아이템 표시 중 · 누르면 보유 아이템 표시';$('itemViewport').scrollLeft=0;render()});
+enableDragScroll($('itemViewport'));
 $('itemViewport').addEventListener('wheel',e=>{const box=$('itemViewport');if(e.ctrlKey||e.shiftKey||Math.abs(e.deltaX)>=Math.abs(e.deltaY)||box.scrollWidth<=box.clientWidth)return;const direction=e.deltaY;if(direction>0&&box.scrollLeft>=box.scrollWidth-box.clientWidth-1||direction<0&&box.scrollLeft<=0)return;e.preventDefault();box.scrollLeft+=direction*(e.deltaMode===1?20:e.deltaMode===2?box.clientWidth:1)},{passive:false});
 function refreshInventory(){try{inventory=readInventory(localStorage);storageError=false;render();if($('itemDialog').open)detail();$('status').textContent='보유 재료 정보를 갱신했습니다.'}catch(error){storageError=true;$('status').textContent=error.message;if($('itemDialog').open){detail();$('detailStatus').textContent=error.message}}}
 window.addEventListener('account-import-applied',refreshInventory);
@@ -44,3 +46,4 @@ try{
  try{inventory=readInventory(localStorage)}catch(error){inventory={items:{}};storageError=true;$('status').textContent=error.message+' 기존 데이터 보호를 위해 수량 저장을 중지했습니다.'}
  items.sort((a,b)=>compareDepotItems(a,b,order.sortIds));render();
 }catch(error){$('items').classList.add('is-empty');$('items').textContent=error.message}
+

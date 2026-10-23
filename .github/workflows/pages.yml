@@ -34,7 +34,7 @@ jobs:
       - name: Validate growth costs and crafting
         run: node --test tests/test_growth.mjs
       - name: Validate backpack inventory
-        run: node --test tests/test_inventory.mjs
+        run: node --test tests/test_inventory.mjs tests/test_drag_scroll.mjs
       - name: Validate account import
         run: node --test tests/test_account_import.mjs workers/account/test/*.test.mjs
       - name: Validate base optimizer
@@ -48,4 +48,5 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
 
