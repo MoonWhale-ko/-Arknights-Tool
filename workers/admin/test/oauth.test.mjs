@@ -33,6 +33,17 @@ test('public login cannot expose private assets or accept spoofed identity heade
   assert.equal((await handler(request('/'), env)).headers.get('location'), '/login');
   for (const path of ['/api/session', '/app.js']) assert.equal((await handler(request(path, null, { headers: { 'Cf-Access-Authenticated-User-Email': 'owner@example.test' } }), env)).status, 401);
 });
+test('login uses the canonical asset URL instead of redirecting back to itself', async () => {
+  const canonicalAssets = { fetch(request) {
+    const path = new URL(request.url).pathname;
+    if (path === '/login.html') return new Response(null, { status: 307, headers: { Location: '/login' } });
+    assert.equal(path, '/login');
+    return new Response('GitHub login', { headers: { 'Content-Type': 'text/html' } });
+  } };
+  const response = await handler(request('/login'), { ...env, ASSETS: canonicalAssets });
+  assert.equal(response.status, 200); assert.equal(response.headers.get('location'), null);
+  assert.equal(await response.text(), 'GitHub login');
+});
 test('OAuth uses PKCE, random state and a secure cookie without requesting repository scopes', async () => {
   const one = await handler(request('/auth/start'), env), two = await handler(request('/auth/start'), env);
   const a = new URL(one.headers.get('location')), b = new URL(two.headers.get('location'));

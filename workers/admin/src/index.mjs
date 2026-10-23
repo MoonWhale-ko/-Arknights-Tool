@@ -27,8 +27,9 @@ export function createHandler({ fetcher } = {}) {
       if (request.method === 'GET' && path === '/auth/start') return secure(await startLogin(request, env));
       if (request.method === 'GET' && path === '/auth/callback') return secure(await finishLogin(request, env, fetcher));
       if (request.method === 'GET' && ['/login', '/login.css'].includes(path)) {
-        const url = new URL(request.url); if (path === '/login') url.pathname = '/login.html';
-        return secure(await env.ASSETS.fetch(new Request(url, request)));
+        // Assets resolves /login to login.html. Requesting /login.html instead would
+        // canonicalize back to /login, causing a self-redirect loop with run_worker_first.
+        return secure(await env.ASSETS.fetch(request));
       }
       const identity = await authenticate(request, env);
       if (!['GET', 'HEAD', 'POST'].includes(request.method)) throw new AdminError('method-not-allowed', 405);
