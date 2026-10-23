@@ -38,7 +38,7 @@ jobs:
       - name: Validate account import
         run: node --test tests/test_account_import.mjs workers/account/test/*.test.mjs
       - name: Validate base optimizer
-        run: node --test tests/test_base_optimizer.mjs tests/test_base_integrated.mjs
+        run: node --test tests/test_base_optimizer.mjs tests/test_base_integrated.mjs tests/test_guide_tour.mjs
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload site
@@ -48,3 +48,4 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
