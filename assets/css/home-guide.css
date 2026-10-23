@@ -13,3 +13,6 @@
 .zoot-guide-choice:hover{background:var(--z-selected);color:var(--z-on-selected);border-color:var(--z-accent)}
 #zootGuideFeature h3{font-size:18px;margin:0 0 16px}
 @media(max-width:360px){.zoot-guide-grid{grid-template-columns:1fr}}
+
+.zoot-home-controls{max-width:calc(100% - 32px);flex-wrap:wrap;justify-content:flex-end}
+.zoot-feedback-status{position:absolute;right:0;bottom:calc(100% + 12px);padding:12px 16px;background:var(--z-panel);color:var(--z-text);border:1px solid var(--z-border);box-shadow:var(--z-shadow);font-size:14px;white-space:nowrap}
