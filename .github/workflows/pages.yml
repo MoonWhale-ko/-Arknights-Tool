@@ -41,10 +41,15 @@ jobs:
         run: node --test tests/test_base_optimizer.mjs tests/test_base_integrated.mjs tests/test_guide_tour.mjs
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      - name: Prepare public site
+        run: |
+          mkdir -p _site
+          cp *.html _site/
+          cp -R assets data research _site/
       - name: Upload site
         uses: actions/upload-pages-artifact@v4
         with:
-          path: '.'
+          path: '_site'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

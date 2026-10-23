@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ko" data-theme="dark">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ZOOT · 관리자</title><link rel="stylesheet" href="/style.css"><script type="module" src="/app.js"></script></head>
+<body>
+<header><a class="brand" href="/">ZOOT <span>관리자</span></a><div class="header-actions"><span id="identity">인증 확인 중</span><button id="theme" aria-label="화면 테마 전환">라이트 모드</button><a href="/cdn-cgi/access/logout">로그아웃</a></div></header>
+<main>
+<section class="intro"><div><p class="eyebrow">PRIVATE WORKSPACE</p><h1>데이터 관리</h1><p>새로운 오퍼레이터와 사이트 정보를 한곳에서 관리합니다.</p></div><a class="button quiet" href="https://moonwhale-ko.github.io/-Arknights-Tool/" target="_blank" rel="noopener noreferrer">사이트 보기 ↗</a></section>
+<p id="status" role="status" aria-live="polite">관리 데이터를 불러오는 중입니다.</p>
+<div id="workspace" hidden>
+<section class="summary"><div><span>등록 오퍼레이터</span><strong id="operatorCount">—</strong></div><div><span>새로 추가할 수 있는 오퍼레이터</span><strong id="newCount">—</strong></div><div><span>한국 서버 데이터 기준</span><strong class="date" id="sourceDate">—</strong></div></section>
+<nav class="tabs" aria-label="관리 항목"><button data-tab="operators" aria-current="page">오퍼레이터</button><button data-tab="images">아이템 이미지</button><button data-tab="updates">데이터 갱신</button></nav>
+<section id="operators" class="panel">
+<div class="panel-heading"><div><h2>오퍼레이터</h2><p>한국 서버 공식 이름은 유지하며, 미래시 이름과 검색 별칭을 수정합니다.</p></div><button id="loadCatalog">신규 목록 확인</button></div>
+<div class="filters"><input id="operatorSearch" type="search" placeholder="이름, 별칭 또는 ID 검색" aria-label="오퍼레이터 검색"><select id="operatorFilter" aria-label="오퍼레이터 표시 범위"><option value="all">전체</option><option value="future">미래시</option><option value="new">추가 가능한 오퍼레이터</option></select></div>
+<div class="split"><div id="operatorList" class="record-list" aria-label="오퍼레이터 목록"></div><form id="operatorForm" class="editor"><p class="empty">목록에서 오퍼레이터를 선택하세요.</p></form></div>
+</section>
+<section id="images" class="panel" hidden>
+<div class="panel-heading"><div><h2>아이템 이미지</h2><p>이미지 주소를 입력하고 미리 본 뒤 저장합니다.</p></div></div>
+<input id="imageSearch" type="search" placeholder="아이템 이름 또는 ID 검색" aria-label="아이템 검색">
+<div class="split"><div id="imageList" class="record-list" aria-label="아이템 목록"></div><form id="imageForm" class="editor"><p class="empty">목록에서 아이템을 선택하세요.</p></form></div>
+</section>
+<section id="updates" class="panel" hidden>
+<div class="panel-heading"><div><h2>데이터 갱신</h2><p>게임 원본에서 신규 오퍼레이터·육성 재료·모듈 정보를 가져옵니다.</p></div><button id="refreshData" class="primary">최신 데이터 가져오기</button></div>
+<ol class="steps"><li><b>원본 가져오기</b><span>한국·중국 서버 데이터를 동일한 버전 기준으로 가져옵니다.</span></li><li><b>정보 검증</b><span>재료 참조와 데이터 구성을 검사합니다. 실패하면 생성 데이터를 반영하지 않습니다.</span></li><li><b>사이트 반영</b><span>검증된 변경을 저장하고 기존 사이트 배포를 실행합니다.</span></li></ol>
+<div class="panel-heading"><h3>최근 실행</h3><button id="reloadRuns">상태 새로고침</button></div><div id="runs" class="runs"></div>
+</section>
+</div>
+</main>
+<dialog id="review"><div class="dialog-heading"><h2>변경 내용 확인</h2><button id="closeReview" type="button" aria-label="닫기">×</button></div><p id="reviewDescription"></p><pre id="reviewText"></pre><p class="hint">저장한 정보는 사이트 이용자에게 공개됩니다. 개인 계정 정보는 입력하지 마세요.</p><div class="actions"><button id="cancelReview">취소</button><button id="confirmSave" class="primary">변경 저장</button></div></dialog>
+</body></html>

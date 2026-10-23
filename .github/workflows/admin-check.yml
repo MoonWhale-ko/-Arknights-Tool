@@ -1,0 +1,24 @@
+name: Validate private admin
+on:
+  push:
+    branches: [main]
+    paths: ['workers/admin/**', 'scripts/admin_refresh.py', 'tests/test_admin_refresh.py', '.github/workflows/admin-*.yml']
+  pull_request:
+    paths: ['workers/admin/**', 'scripts/admin_refresh.py', 'tests/test_admin_refresh.py', '.github/workflows/admin-*.yml']
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - run: npm ci
+        working-directory: workers/admin
+      - run: npm test
+        working-directory: workers/admin
+      - run: npm run check
+        working-directory: workers/admin
+      - run: python3 -m unittest discover -s tests -p test_admin_refresh.py -v

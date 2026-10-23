@@ -1,0 +1,49 @@
+name: Update game data from private admin
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['data/future-names.json']
+permissions:
+  contents: write
+  actions: write
+concurrency:
+  group: admin-game-data
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 1
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Prepare pinned snapshot
+        run: python3 scripts/admin_refresh.py
+      - name: Validate generated data
+        run: python3 -m unittest discover -s tests -v
+      - name: Validate users of generated data
+        run: |
+          node tests/test_operators.cjs
+          node tests/test_plans.cjs
+          node --test tests/test_growth.mjs tests/test_inventory.mjs tests/test_base_integrated.mjs tests/test_base_optimizer.mjs
+      - name: Save validated snapshot
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/operators.json data/items.json data/professions.json data/growth.json data/item-images.json data/account-characters.json data/account-favor.json data/base-optimizer.json data/admin-catalog.json data/operator-aliases.json data/token-image-sources.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Refresh validated game data from private admin'
+            git push origin HEAD:main
+          fi
+      - name: Deploy validated data
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --ref main
