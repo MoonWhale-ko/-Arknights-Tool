@@ -149,7 +149,7 @@ document.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => {
   if (state.busy || !discard()) return; state.dirty = false;
   if (state.selected) editOperator(state.selected); if (state.image) editImage(state.image);
   document.querySelectorAll('[data-tab]').forEach(x => x.removeAttribute('aria-current')); b.setAttribute('aria-current', 'page');
-  for (const id of ['operators', 'images', 'updates', 'account']) $(id).hidden = b.dataset.tab !== id;
+  for (const id of ['operators', 'images', 'updates', 'account', 'mining']) $(id).hidden = b.dataset.tab !== id;
   if (b.dataset.tab === 'updates') task(runs);
 });
 $('operatorSearch').oninput = renderOperators; $('operatorFilter').onchange = renderOperators; $('imageSearch').oninput = renderImages;
@@ -169,7 +169,7 @@ task(async () => {
   const session = await api('/api/session'); $('identity').textContent = session.login; $('workspace').hidden = false;
   const keys = ['operators', 'future', 'aliases', 'images'];
   const results = await Promise.allSettled(keys.map(async key => { state.files[key] = await api('/api/files/' + key); }));
-  const failure = results.find(x => x.status === 'rejected'); if (failure) { document.querySelectorAll('[data-tab]').forEach(b => { if (b.dataset.tab === 'account') b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); }); for (const id of ['operators','images','updates','account']) $(id).hidden = id !== 'account'; throw failure.reason; }
+  const failure = results.find(x => x.status === 'rejected'); if (failure) { document.querySelectorAll('[data-tab]').forEach(b => { if (b.dataset.tab === 'account') b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); }); for (const id of ['operators','images','updates','account','mining']) $(id).hidden = id !== 'account'; throw failure.reason; }
   $('sourceDate').textContent = new Date(state.files.operators.doc.source.updatedAt).toLocaleDateString('ko-KR');
   $('workspace').hidden = false; renderOperators(); renderImages(); status('관리자 인증이 완료되었습니다. 수정할 항목을 선택하세요.');
 });
@@ -177,7 +177,7 @@ task(async () => {
 // Private account data lives only in this page's memory. It is never part of a CMS save.
 let rawSnapshot = null;
 function clearRawAccount() {
-  rawSnapshot = null; $('rawPreview').textContent = ''; $('rawSummary').textContent = '';
+  rawSnapshot = null; window.dispatchEvent(new Event('mining-clear')); $('rawPreview').textContent = ''; $('rawSummary').textContent = '';
   $('rawSection').replaceChildren(); $('rawResult').hidden = true; $('rawCode').value = '';
 }
 function renderRawSection() {
@@ -219,3 +219,5 @@ $('rawDownload').onclick = () => {
   link.href = url; link.download = 'arknights-private-sync-' + new Date().toISOString().replace(/[:.]/g, '-') + '.json';
   document.body.append(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
 };
+
+window.addEventListener('mining-request-account', () => window.dispatchEvent(new CustomEvent('mining-account', { detail: rawSnapshot })));
