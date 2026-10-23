@@ -16,13 +16,16 @@ for sid,st in s['stages'].items():
  rows[sid]=dict(id=sid,code=st['code'],name=st['name'],zone=st['zoneId'],group=act.get('name') or zone.get('zoneNameSecond') or st['zoneId'],category=cat,mode='강습' if st['difficulty']=='FOUR_STAR' else 'H 스테이지' if st['code'].startswith('H') else st.get('diffGroup') if st.get('diffGroup') not in [None,'NONE'] else '일반',op=st['diamondOnceDrop'],story=st.get('isStoryOnly',False),start=v.get('startTs',act.get('startTime',0)),end=v.get('endTs',act.get('endTime',-1)))
 for sid,st in r['stageList'].items():
  if st.get('diamondOnceDrop',0)<=0:continue
- retro=r['retroActList'].get(r['zoneToRetro'].get(st['zoneId']),{});v=r['stageValidInfo'].get(sid,{})
- rows[sid]=dict(id=sid,code=st['code'],name=st['name'],zone=st['zoneId'],group=retro.get('name') or st['zoneId'],category='side',mode='강습' if st['difficulty']=='FOUR_STAR' else '일반',op=st['diamondOnceDrop'],story=st.get('isStoryOnly',False),start=v.get('startTs',retro.get('startTime',0)),end=v.get('endTs',-1))
+ retroId=r['zoneToRetro'].get(st['zoneId']);retro=r['retroActList'].get(retroId);v=r['stageValidInfo'].get(sid,{})
+ if not retro:continue
+ rows[sid]=dict(id=sid,code=st['code'],name=st['name'],zone=st['zoneId'],group=retro.get('name') or st['zoneId'],category='side',mode='강습' if st['difficulty']=='FOUR_STAR' else '일반',op=st['diamondOnceDrop'],story=st.get('isStoryOnly',False),retroId=retroId,start=max(v.get('startTs',0),retro.get('startTime',0)),end=v.get('endTs',-1))
+for row in rows.values():
+ row['weekdays']=z['weeklyAdditionInfo'].get(row['zone'],{}).get('daysOfWeek')
 rules=[]
 for medal in m['medalList']:
  p=medal.get('unlockParam',[])
  if medal.get('template')=='PassStageSome' and len(p)==3 and p[0] in ['3','4']:
   ids=p[1].split(';')
   if int(p[2])==len(ids): rules.append(dict(id=medal['medalId'],stages=ids,count=len(ids)))
-(root/'catalog.json').write_text(json.dumps(dict(version=1,source='ArknightsAssets/ArknightsGamedata KR',revision='db6f9ef8046ad17dbebe3ff1d0dd88844a5bc78c',stages=list(rows.values()),medals=rules),ensure_ascii=False,separators=(',',':')))
+(root/'catalog.json').write_text(json.dumps(dict(version=1,source='ArknightsAssets/ArknightsGamedata KR',revision='db6f9ef8046ad17dbebe3ff1d0dd88844a5bc78c',stages=list(rows.values()),medals=rules,forceOpen=list(s['forceOpenTable'].values())),ensure_ascii=False,separators=(',',':')))
 print('Catalog',len(rows),'stages',len(rules),'medal rules')

@@ -1,6 +1,6 @@
 import { calculate, totals, accountUser } from './engine.mjs';
 const $ = id => document.getElementById(id);
-const labels = {remaining:'미수령 확인',unknown:'확인 필요',claimed:'수령 완료'};
+const labels = {remaining:'미수령',unknown:'확인 필요',claimed:'수령 완료'};
 let catalog, data, rows=[], overrides={}, demo=false;
 const el = (tag,text,cls) => { const n=document.createElement(tag); if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n; };
 async function load() { if(!catalog) {const r=await fetch('/mining/catalog.json');if(!r.ok)throw new Error('스테이지 기준 데이터를 불러오지 못했습니다.');catalog=await r.json();} }
@@ -11,20 +11,20 @@ function render() {
   const total=totals(rows);
   $('mineResult').hidden=false;
   $('mineRemaining').textContent=total.remaining.toLocaleString();
-  $('mineUnknown').textContent=total.unknown.toLocaleString();
+  $('mineUnknown').textContent=rows.filter(s=>s.assumed).reduce((n,s)=>n+s.op,0).toLocaleString();
   $('mineClaimed').textContent=total.claimed.toLocaleString();
   $('mineSource').textContent=(demo?'예시 계정 · 실제 계정 결과가 아닙니다':'실제 계정 · '+(data.importedAt?new Date(data.importedAt).toLocaleString('ko-KR'):'JSON 가져오기'))+' · 현재 날짜 기준';
   const category=$('mineCategory').value, status=$('mineStatus').value, query=$('mineSearch').value.trim().toLowerCase();
   const filtered=rows.filter(s=>(!category||s.category===category)&&(!status||s.status===status)&&(!query||[s.code,s.name,s.group,s.mode,s.id].join(' ').toLowerCase().includes(query)));
   const groups=new Map(); for(const s of filtered){const key=s.category+'|'+s.group;if(!groups.has(key))groups.set(key,[]);groups.get(key).push(s);}
   const box=$('mineGroups'), opened=new Set([...box.querySelectorAll('details[open]')].map(n=>n.dataset.key));box.replaceChildren();
-  $('mineCount').textContent=`검색 결과 ${filtered.length}개 · 미수령 확인 ${totals(filtered).remaining}개`;
+  $('mineCount').textContent=`검색 결과 ${filtered.length}개 · 미수령 ${totals(filtered).remaining}개`;
   for(const stages of groups.values()) {
     const sum=totals(stages), detail=el('details',undefined,'mine-group'), summary=el('summary');detail.dataset.key=stages[0].category+'|'+stages[0].group;detail.open=opened.has(detail.dataset.key);
     summary.append(el('b',stages[0].group),el('span',`미수령 ${sum.remaining} · 확인 필요 ${sum.unknown} · 완료 ${sum.claimed}`));detail.append(summary);
     const list=el('div',undefined,'mine-stages');
     for(const stage of stages) {
-      const row=el('div',undefined,'mine-stage'),title=el('div'); title.append(el('strong',stage.code+' · '+stage.mode),el('small',stage.name));
+      const row=el('div',undefined,'mine-stage'),title=el('div'); title.append(el('strong',stage.code+' · '+stage.mode),el('small',stage.name+' · '+stage.access));
       const badge=el('span',labels[stage.status],'mine-status '+stage.status);badge.title=stage.reason;
       const select=el('select');select.setAttribute('aria-label',stage.code+' '+stage.mode+' 수령 여부');
       for(const [value,text]of [['','계정 판정'],['remaining','미수령으로 확인'],['claimed','수령 완료로 확인']]){const opt=el('option',text);opt.value=value;select.append(opt);}select.value=overrides[stage.id]||'';
@@ -34,7 +34,7 @@ function render() {
     detail.append(list);box.append(detail);
   }
   if(!groups.size)box.append(el('p','조건에 맞는 스테이지가 없습니다.','empty'));
-  message(demo?'예시 데이터를 표시 중입니다. 실제 결과는 계정 가져오기 또는 JSON 파일로 확인하세요.':'계정 기록으로 계산했습니다. 확인 필요 항목은 미수령 합계에 넣지 않습니다.');
+  message(demo?'예시 데이터를 표시 중입니다. 실제 결과는 계정 가져오기 또는 JSON 파일로 확인하세요.':'현재 개방된 콘텐츠를 계산했습니다. 기록이 없는 항목도 미완료로 간주해 합계에 포함합니다.');
 }
 async function accept(value,isDemo=false){await load();accountUser(value);data=value;demo=isDemo;overrides={};render();}
 $('mineFile').onchange=async event=>{try{const file=event.target.files[0];if(!file)return;if(file.size>30*1024*1024)throw new Error('30MB 이하의 계정 JSON을 선택하세요.');await accept(JSON.parse(await file.text()));}catch(e){message(e.message);}finally{event.target.value='';}};
