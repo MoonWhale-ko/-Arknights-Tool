@@ -4,6 +4,7 @@
   "account_id": "07837cee2afb94e5fd8a3b44486e1bc7",
   "main": "src/index.mjs",
   "compatibility_date": "2026-10-23",
+  "compatibility_flags": ["nodejs_compat"],
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",
@@ -13,6 +14,10 @@
     "ADMIN_ORIGIN": "https://arknights-private-admin.jo625540.workers.dev",
     "ADMIN_GITHUB_ID": "246121769"
   },
+  "ratelimits": [
+    { "name": "ACCOUNT_MAIL_LIMIT", "namespace_id": "1101", "simple": { "limit": 1, "period": 60 } },
+    { "name": "ACCOUNT_LOGIN_LIMIT", "namespace_id": "1102", "simple": { "limit": 5, "period": 60 } }
+  ],
   "preview_urls": false,
   "observability": { "enabled": false }
 }

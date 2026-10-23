@@ -103,3 +103,16 @@ test('cross-origin writes and oversized requests fail; same-origin logout clears
   const out = await handler(request('/auth/logout',session,{method:'POST',headers,body:'{}'}),env);
   assert.equal(out.status,200); assert.equal(out.headers.getSetCookie().length,2); assert.match(out.headers.get('set-cookie'),/Max-Age=0/);
 });
+test('raw account endpoints require the owner session, same-origin JSON, valid input and rate limiting', async () => {
+  const headers = { Origin: origin, 'Content-Type': 'application/json', 'X-Admin-Request': '1' };
+  const body = JSON.stringify({ server: 'kr', email: 'test@example.kr', code: '123456' });
+  for (const path of ['/api/account/send-code', '/api/account/sync']) {
+    assert.equal((await handler(request(path, null, { method: 'POST', headers, body }), env)).status, 401);
+    const { session } = await login();
+    assert.equal((await handler(request(path, session, { method: 'POST', body }), env)).status, 403);
+    assert.equal((await handler(request(path, session, { method: 'POST', headers, body }), env)).status, 503);
+    const limits = { limit: async () => ({ success: false }) };
+    assert.equal((await handler(request(path, session, { method: 'POST', headers, body }),
+      { ...env, ACCOUNT_MAIL_LIMIT: limits, ACCOUNT_LOGIN_LIMIT: limits })).status, 429);
+  }
+});

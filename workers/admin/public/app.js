@@ -4,6 +4,14 @@ const messages = {
   'auth-not-configured': 'GitHub 로그인 설정이 필요합니다. Worker에 GITHUB_CLIENT_ID와 GITHUB_CLIENT_SECRET을 설정하세요.',
   'login-required': '로그인 시간이 만료되었거나 인증이 필요합니다. 페이지를 새로고침해 다시 로그인하세요.',
   'access-denied': '허용된 관리자 계정이 아닙니다.',
+  'account-not-configured': '계정 조회 제한 설정이 필요합니다. 최신 Worker 배포를 확인하세요.',
+  'invalid-code': '이메일로 받은 6자리 인증번호를 입력하세요.',
+  'too-many': '요청이 많습니다. 잠시 후 다시 시도하세요.',
+  'authentication-failed': '이메일과 인증번호를 확인하세요.',
+  'captcha': '요스타에서 추가 인증을 요구하고 있습니다. 잠시 후 다시 시도하세요.',
+  'upstream-unavailable': '요스타 또는 게임 서버에 연결하지 못했습니다.',
+  'send-code-failed': '인증 메일을 발송하지 못했습니다.',
+  'sync-failed': '계정 동기화 응답을 가져오지 못했습니다.',
   'github-not-configured': 'Cloudflare에 GitHub 연결용 비밀값을 설정해야 합니다.',
   'github-permission': 'GitHub 연결 권한을 확인하세요. 저장소 Contents와 Actions 권한이 필요합니다.',
   'github-not-found': '필요한 데이터 파일 또는 갱신 워크플로를 찾지 못했습니다.',
@@ -141,7 +149,7 @@ document.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => {
   if (state.busy || !discard()) return; state.dirty = false;
   if (state.selected) editOperator(state.selected); if (state.image) editImage(state.image);
   document.querySelectorAll('[data-tab]').forEach(x => x.removeAttribute('aria-current')); b.setAttribute('aria-current', 'page');
-  for (const id of ['operators', 'images', 'updates']) $(id).hidden = b.dataset.tab !== id;
+  for (const id of ['operators', 'images', 'updates', 'account']) $(id).hidden = b.dataset.tab !== id;
   if (b.dataset.tab === 'updates') task(runs);
 });
 $('operatorSearch').oninput = renderOperators; $('operatorFilter').onchange = renderOperators; $('imageSearch').oninput = renderImages;
@@ -158,10 +166,56 @@ setTheme(theme === 'light' ? 'light' : 'dark');
 $('theme').onclick = () => { const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; setTheme(next); try { localStorage.setItem('zootAdminTheme', next); } catch {} };
 window.addEventListener('beforeunload', e => { if (state.dirty) { e.preventDefault(); e.returnValue = ''; } });
 task(async () => {
-  const session = await api('/api/session'); $('identity').textContent = session.login;
+  const session = await api('/api/session'); $('identity').textContent = session.login; $('workspace').hidden = false;
   const keys = ['operators', 'future', 'aliases', 'images'];
   const results = await Promise.allSettled(keys.map(async key => { state.files[key] = await api('/api/files/' + key); }));
-  const failure = results.find(x => x.status === 'rejected'); if (failure) throw failure.reason;
+  const failure = results.find(x => x.status === 'rejected'); if (failure) { document.querySelectorAll('[data-tab]').forEach(b => { if (b.dataset.tab === 'account') b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); }); for (const id of ['operators','images','updates','account']) $(id).hidden = id !== 'account'; throw failure.reason; }
   $('sourceDate').textContent = new Date(state.files.operators.doc.source.updatedAt).toLocaleDateString('ko-KR');
   $('workspace').hidden = false; renderOperators(); renderImages(); status('관리자 인증이 완료되었습니다. 수정할 항목을 선택하세요.');
 });
+
+// Private account data lives only in this page's memory. It is never part of a CMS save.
+let rawSnapshot = null;
+function clearRawAccount() {
+  rawSnapshot = null; $('rawPreview').textContent = ''; $('rawSummary').textContent = '';
+  $('rawSection').replaceChildren(); $('rawResult').hidden = true; $('rawCode').value = '';
+}
+function renderRawSection() {
+  if (!rawSnapshot) return;
+  const selected = $('rawSection').value;
+  let data = rawSnapshot.snapshot;
+  if (selected.startsWith('root:')) data = data[selected.slice(5)];
+  else if (selected.startsWith('user:')) data = data.user?.[selected.slice(5)];
+  const text = JSON.stringify(data, null, 2) ?? 'null';
+  $('rawPreview').textContent = text.length > 80000 ? text.slice(0, 80000) + '\n… 화면 표시만 생략되었습니다. 원본 JSON 다운로드에는 전체 데이터가 포함됩니다.' : text;
+}
+$('rawSendCode').onclick = () => task(async () => {
+  if (!$('rawEmail').reportValidity()) return;
+  await api('/api/account/send-code', 'POST', { server: 'kr', email: $('rawEmail').value.trim() });
+  status('인증 메일을 보냈습니다. 받은 인증번호를 아래에 입력하세요.');
+});
+$('rawAccountForm').onsubmit = event => {
+  event.preventDefault();
+  task(async () => {
+    if (!$('rawAccountForm').reportValidity()) return;
+    const body = { server: 'kr', email: $('rawEmail').value.trim(), code: $('rawCode').value.trim() };
+    $('rawCode').value = ''; clearRawAccount(); status('계정 동기화 원본을 가져오는 중입니다.');
+    const data = await api('/api/account/sync', 'POST', body);
+    rawSnapshot = { version: 1, importedAt: data.importedAt, server: data.server, source: data.source, snapshot: data.snapshot };
+    const selector = $('rawSection');
+    selector.append(new Option('전체 동기화 응답', 'all'));
+    for (const k of Object.keys(data.snapshot)) selector.append(new Option(k + ' (응답 최상위)', 'root:' + k));
+    for (const k of Object.keys(data.snapshot.user || {})) selector.append(new Option('user.' + k, 'user:' + k));
+    $('rawSummary').textContent = new Date(data.importedAt).toLocaleString('ko-KR') + ' 조회 · user 항목 ' + Object.keys(data.snapshot.user || {}).length + '개';
+    $('rawResult').hidden = false; renderRawSection(); status('전체 동기화 응답을 가져왔습니다. 항목을 선택하거나 원본 JSON을 내려받으세요.');
+  });
+};
+$('rawSection').onchange = renderRawSection;
+$('rawClear').onclick = () => { clearRawAccount(); status('계정 원본 데이터를 화면과 메모리에서 지웠습니다.'); };
+$('rawDownload').onclick = () => {
+  if (!rawSnapshot) return;
+  const blob = new Blob([JSON.stringify(rawSnapshot, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob), link = document.createElement('a');
+  link.href = url; link.download = 'arknights-private-sync-' + new Date().toISOString().replace(/[:.]/g, '-') + '.json';
+  document.body.append(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+};

@@ -2,9 +2,9 @@ name: Validate private admin
 on:
   push:
     branches: [main]
-    paths: ['workers/admin/**', 'scripts/admin_refresh.py', 'tests/test_admin_refresh.py', '.github/workflows/admin-*.yml']
+    paths: ['workers/admin/**', 'workers/account/src/game.mjs', 'assets/js/base-state.mjs', 'scripts/admin_refresh.py', 'tests/test_admin_refresh.py', '.github/workflows/admin-*.yml']
   pull_request:
-    paths: ['workers/admin/**', 'scripts/admin_refresh.py', 'tests/test_admin_refresh.py', '.github/workflows/admin-*.yml']
+    paths: ['workers/admin/**', 'workers/account/src/game.mjs', 'assets/js/base-state.mjs', 'scripts/admin_refresh.py', 'tests/test_admin_refresh.py', '.github/workflows/admin-*.yml']
 permissions:
   contents: read
 jobs:

@@ -1,5 +1,7 @@
 import { AdminError, authenticate, assertMutation, readJSON, startLogin, finishLogin, logout, clearFlow } from './auth.mjs';
 import { githubClient, FILES } from './data.mjs';
+import { accountRequest } from './account.mjs';
+import { AccountError } from '../../account/src/game.mjs';
 
 const security = {
   'Cache-Control': 'private, no-store',
@@ -36,6 +38,8 @@ export function createHandler({ fetcher } = {}) {
       if (request.method === 'POST') assertMutation(request);
       if (path === '/auth/logout' && request.method === 'POST') return secure(logout());
       if (path === '/api/session' && request.method === 'GET') return json({ ok: true, ...identity });
+      if (['/api/account/send-code', '/api/account/sync'].includes(path) && request.method === 'POST')
+        return json(await accountRequest(request, env, fetcher));
       const gh = githubClient(env, fetcher);
       const file = path.match(/^\/api\/files\/([a-z]+)$/)?.[1];
       if (file) {
@@ -59,6 +63,8 @@ export function createHandler({ fetcher } = {}) {
       for (const [key, value] of Object.entries(security)) headers.set(key, value);
       return new Response(response.body, { status: response.status, headers });
     } catch (error) {
+      if (error instanceof AccountError) return json({ ok: false, error: error.code,
+        ...(error.stage ? { stage: error.stage } : {}), ...(error.upstreamStatus ? { upstreamStatus: error.upstreamStatus } : {}) }, error.status);
       if (error instanceof AdminError && error.message === 'login-required' && path === '/' && request.method === 'GET')
         return secure(new Response(null, { status: 302, headers: { Location: '/login' } }));
       // Do not log tokens, emails, GitHub responses or account payloads.

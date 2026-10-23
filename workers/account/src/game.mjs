@@ -150,7 +150,7 @@ export function trustedUrl(value, role = "game") {
     throw new AccountError("upstream-format");
   return value.replace(/\/$/, "");
 }
-export async function getAccount(email, code, fetcher) {
+export async function getAccountSyncData(email, code, fetcher) {
   const auth = await sdk(
     "/yostar/get-auth",
     { Account: email, Code: code },
@@ -240,6 +240,10 @@ export async function getAccount(email, code, fetcher) {
   );
   if (data.result !== 0 || !data.user?.troop?.chars)
     throw new AccountError("sync-failed");
+  return data;
+}
+export async function getAccount(email, code, fetcher) {
+  const data = await getAccountSyncData(email, code, fetcher);
   return normalizeAccount(data.user);
 }
 export function normalizeAccount(user) {

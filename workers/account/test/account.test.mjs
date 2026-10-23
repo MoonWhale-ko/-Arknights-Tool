@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import worker from "../src/index.mjs";
 import {
   getAccount,
+  getAccountSyncData,
   sendCode,
   normalizeAccount,
   u8Sign,
@@ -159,6 +160,27 @@ test("full KR authentication sequence, signatures and session sequence", async (
   );
   assert.ok(!JSON.stringify(data).includes("token"));
   assert.ok(!JSON.stringify(data).includes("secret"));
+});
+test('admin sync export keeps all root and unknown user fields; public import remains normalized', async () => {
+  const snapshot = { result: 0, user: { ...user, dungeon: { stages: { 'main_00-01': { state: 2 } } },
+    mission: { progress: [1, 2] }, futureUnknownField: { nested: null, enabled: false, empty: [] } },
+    ts: 123456, unknownRoot: { preserve: true } };
+  function mock() {
+    const responses = [
+      { Code: 200, Data: { Token: 'mail-token' } },
+      { Code: 200, Data: { UserInfo: { ID: 'sdk-id', Token: 'sdk-token' } } },
+      { content: JSON.stringify({ funcVer: '1', configs: { 1: { network: {
+        gs: 'https://gs.arknights.kr', u8: 'https://as.arknights.kr/u8', hv: 'https://hv.arknights.kr/{0}' } } } }) },
+      { result: 0, uid: 'game-id', token: 'u8-token' },
+      { resVersion: 'res', clientVersion: 'client' },
+      { result: 0, secret: 'session-secret' }, snapshot,
+    ];
+    return async () => Response.json(responses.shift());
+  }
+  assert.deepEqual(await getAccountSyncData('test@example.kr', '123456', mock()), snapshot);
+  const publicData = await getAccount('test@example.kr', '123456', mock());
+  assert.equal(publicData.dungeon, undefined); assert.equal(publicData.unknownRoot, undefined);
+  assert.ok(!JSON.stringify(snapshot).includes('session-secret'));
 });
 test("HTTP success with SDK rejection must not report email sent", async () => {
   await assert.rejects(
