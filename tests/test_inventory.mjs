@@ -1,3 +1,4 @@
+import {createHash} from 'node:crypto';
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
 import {INVENTORY_KEY,readInventory,saveCount,countOf,categoryOf,tierOf,compareItems} from '../assets/js/inventory-state.mjs';
 const store=initial=>{const data=new Map(Object.entries(initial));return {getItem:k=>data.get(k)??null,setItem:(k,v)=>data.set(k,v),data}};
@@ -6,3 +7,17 @@ test('invalid counts and malformed storage do not write',()=>{const s=store({[IN
 test('all bundled items have matched icons and valid display groups',()=>{const items=JSON.parse(fs.readFileSync(new URL('../data/items.json',import.meta.url))).items;const images=JSON.parse(fs.readFileSync(new URL('../data/item-images.json',import.meta.url))).items;for(const item of Object.values(items)){assert.equal(images[item.id].name,item.name);if(item.nameLocale){assert.equal(images[item.id].iconId,item.iconId);assert.ok(images[item.id].url.endsWith('/'+item.iconId.toLowerCase()+'.png'))}else assert.ok(images[item.id].referenceUrl.startsWith('https://i.namu.wiki/'));assert.ok(tierOf(item)>=1&&tierOf(item)<=5)}assert.equal(categoryOf(items['3211']),'chip');assert.equal(categoryOf(items['4001']),'currency');assert.equal(categoryOf(items['3301']),'skill')});
 
 test('grade remains descending and similar items group only within each grade',()=>{const ids=['3213','30014','3303','3221','30011','30024','3211','30012','3301','3212','30021'];const result=ids.map(id=>({id})).sort(compareItems).map(i=>i.id);assert.deepEqual(result,['3213','30014','30024','3212','3211','3221','3301','3303','30012','30011','30021'])});
+
+test('bundled token images match game items and verified PNG checksums',()=>{
+ const sources=JSON.parse(fs.readFileSync(new URL('../data/token-image-sources.json',import.meta.url))).items;
+ const images=JSON.parse(fs.readFileSync(new URL('../data/item-images.json',import.meta.url))).items;
+ const tokens=JSON.parse(fs.readFileSync(new URL('../data/growth.json',import.meta.url))).tokenItems;
+ assert.equal(sources.length,43);assert.equal(new Set(sources.map(item=>item.id)).size,43);
+ for(const source of sources){
+  assert.equal(tokens[source.id].name,source.name);assert.equal(images[source.id].url,source.path);assert.equal(images[source.id].framed,true);
+  const png=fs.readFileSync(new URL('../'+source.path,import.meta.url));
+  assert.equal(png.subarray(0,8).toString('hex'),'89504e470d0a1a0a');assert.equal(png.length,source.bytes);
+  assert.equal(png.readUInt32BE(16),source.width);assert.equal(png.readUInt32BE(20),source.height);
+  assert.equal(createHash('sha256').update(png).digest('hex'),source.sha256);
+ }
+});

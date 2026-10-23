@@ -9,7 +9,7 @@ let items=[],images={},inventory,metadata={},category='all',selected='',showOwne
 const frameTier=item=>metadata.rarities?.[item.id]||Math.max(1,Math.min(6,Math.trunc(Number(tierOf(item)))||1));
 const gameCategory=item=>({CONSUME:'consumable',NORMAL:'basic',MATERIAL:'growth'}[metadata.classifyTypes?.[item.id]]||(item.id.startsWith('voucher_')?'consumable':categoryOf(item)==='currency'?'basic':'growth'));
 function quantity(n){if(n<10000)return n.toLocaleString('ko-KR');const unit=n>=1000000?1000000:1000;return (Math.floor(n/unit*10)/10).toLocaleString('en-US',{maximumFractionDigits:1})+(unit===1000000?'M':'K')}
-function image(item){return `<img src="${esc(images[item.id]?.url||fallback(item))}" data-fallback="${esc(fallback(item))}" alt="" data-framed="${String((images[item.id]?.url||fallback(item)).includes('/fexli/ArknightsResource/'))}" loading="lazy">`}
+function image(item){return `<img src="${esc(images[item.id]?.url||fallback(item))}" data-fallback="${esc(fallback(item))}" alt="" data-framed="${String(images[item.id]?.framed===true||(images[item.id]?.url||fallback(item)).includes('/fexli/ArknightsResource/'))}" loading="lazy">`}
 function fallback(item){return 'https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/'+encodeURIComponent(item.iconId)+'.png'}
 function bindImages(root){root.querySelectorAll('img').forEach(img=>img.addEventListener('error',()=>{if(img.dataset.fallback){img.dataset.framed='true';img.src=img.dataset.fallback;delete img.dataset.fallback}else{img.style.visibility='hidden';delete img.dataset.framed}}))}
 function render(){
@@ -46,4 +46,5 @@ try{
  try{inventory=readInventory(localStorage)}catch(error){inventory={items:{}};storageError=true;$('status').textContent=error.message+' 기존 데이터 보호를 위해 수량 저장을 중지했습니다.'}
  items.sort((a,b)=>compareDepotItems(a,b,order.sortIds));render();
 }catch(error){$('items').classList.add('is-empty');$('items').textContent=error.message}
+
 
