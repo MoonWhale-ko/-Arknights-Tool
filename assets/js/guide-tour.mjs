@@ -47,7 +47,7 @@ function start(){
  function box(element,rect){Object.assign(element.style,{left:rect.left+'px',top:rect.top+'px',width:rect.width+'px',height:rect.height+'px'});}
  function update(){
   frame=0;if(closed||!target)return;
-  const r=target.getBoundingClientRect(),width=innerWidth,height=innerHeight;
+  const r=target.getBoundingClientRect(),width=document.documentElement.clientWidth,height=innerHeight;
   const left=Math.max(0,Math.min(width,r.left-6)),top=Math.max(0,Math.min(height,r.top-6)),right=Math.max(left,Math.min(width,r.right+6)),bottom=Math.max(top,Math.min(height,r.bottom+6));
   for(const shape of [hole,border])for(const [attr,value] of Object.entries({x:left,y:top,width:right-left,height:bottom-top}))shape.setAttribute(attr,String(value));
   shadeRects({left,top,right,bottom},width,height).forEach((rect,i)=>box(shields[i],rect));
@@ -89,7 +89,7 @@ function start(){
  function goPrevious(){if(index>0){index--;show();}}
  $('[data-tour=close]').addEventListener('click',finish);previous.addEventListener('click',goPrevious);next.addEventListener('click',goNext);
  let pressedSide=null;
- const side=event=>event.button===0?(event.clientX<innerWidth/2?'previous':'next'):null;
+ const side=event=>event.button===0?(event.clientX<document.documentElement.clientWidth/2?'previous':'next'):null;
  for(const shield of shields){
   shield.addEventListener('pointerdown',event=>{pressedSide=side(event);});
   shield.addEventListener('pointercancel',()=>{pressedSide=null;});

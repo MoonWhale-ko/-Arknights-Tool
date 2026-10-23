@@ -1,4 +1,4 @@
-body .zoot-tour{position:fixed;inset:0;margin:0;padding:0;border:0;width:100vw;height:100dvh;max-width:none;max-height:none;overflow:hidden;background:transparent;color:var(--z-text);box-sizing:border-box;z-index:2147483000;pointer-events:none}
+body .zoot-tour{position:fixed;inset:0;margin:0;padding:0;border:0;width:100%;height:100dvh;max-width:none;max-height:none;overflow:hidden;background:transparent;color:var(--z-text);box-sizing:border-box;z-index:2147483000;pointer-events:none}
 .zoot-tour-shade{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .zoot-tour-panel{position:absolute;box-sizing:border-box;width:min(360px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto;padding:20px;background:var(--z-popover);color:var(--z-text);border-top:3px solid var(--z-accent);box-shadow:0 8px 32px #0006;font:14px/1.6 Pretendard,system-ui,sans-serif}
 .zoot-tour-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--z-muted);font-size:12px}
