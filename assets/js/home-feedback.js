@@ -6,7 +6,7 @@
  let timer;
  button.addEventListener('click',()=>{
   const url=button.dataset.feedbackUrl.trim();
-  if(url){location.href=url;return;}
+  if(url){window.open(url,'_blank','noopener,noreferrer');return;}
   clearTimeout(timer);status.textContent='준비 중입니다.';status.hidden=false;
   timer=setTimeout(()=>{status.hidden=true;},3000);
  });
