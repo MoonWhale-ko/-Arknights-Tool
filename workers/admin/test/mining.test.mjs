@@ -31,3 +31,19 @@ test('KR daily rotation and force-open periods use 04:00 KST reset',()=>{
  c.forceOpen=[{startTime:friday-100,endTime:friday+100,forceOpenList:['weekly']}];
  assert.equal(calculate(c,d,{now:friday-1}).length,1);
 });
+
+test('availability distinguishes ended PA, pending rerun, permanent access, future and missing metadata', async()=>{
+ const {audit}=await import('../public/mining/engine.mjs');
+ const c={medals:[],stages:[
+ stage('pa',{category:'event',routes:[{type:'event',start:1,end:10}]}),
+ stage('mt',{category:'event',routes:[{type:'event',start:1,end:10}],availabilityHint:'복각 대기'}),
+ stage('side',{routes:[{type:'event',start:1,end:10},{type:'permanent',start:20,end:-1}]}),
+ stage('future',{routes:[{type:'event',start:200,end:300}]}),
+ stage('missing',{routes:[]}),
+ stage('story',{kind:'스토리'}),stage('tr',{kind:'튜토리얼'}),stage('no-reward',{op:0}),
+ stage('story',{kind:'스토리'})]};
+ const result=audit(c,{user:{dungeon:{stages:{}}}},{now:100});
+ assert.deepEqual(result.included.map(s=>s.id),['side','story','tr']);
+ assert.deepEqual(result.excluded.map(s=>s.exclusion),['기간 종료','복각 대기','개방 예정','개방 정보 부족']);
+ assert.equal(totals(result.included).remaining,3);
+});
