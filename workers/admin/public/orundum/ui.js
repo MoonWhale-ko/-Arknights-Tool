@@ -5,9 +5,22 @@ let catalog,data,result;
 const message=text=>$('orMessage').textContent=text;
 async function load(){if(!catalog){const r=await fetch('/orundum/catalog.json');if(!r.ok)throw Error('합성옥 기준 데이터를 불러오지 못했습니다.');catalog=await r.json();}}
 function clear(){data=null;result=null;$('orResult').hidden=true;message('테스트 계정 데이터를 지웠습니다.');}
+function extraSection(result){
+ const extra=result.additional,box=$('orAdditional');box.replaceChildren();
+ $('orAdditionalTotal').textContent=extra.totals.remaining.toLocaleString();
+ $('orAdditionalUnknown').textContent=extra.totals.unknown.toLocaleString();
+ const groups=new Map();for(const r of extra.rewards){if(!groups.has(r.name))groups.set(r.name,[]);groups.get(r.name).push(r);}
+ for(const [name,rows]of groups){const d=node('details',undefined,'mine-group');d.append(node('summary',name));const body=node('div',undefined,'mine-excluded-body');
+  for(const r of rows){const n=node('div',undefined,'or-reward');n.append(node('strong',r.title),node('span',labels[r.status],'mine-status '+r.status),node('b',r.amount.toLocaleString()+' 합성옥'),node('p',r.access+' · '+r.condition),node('p',r.reason));body.append(n);}d.append(body);box.append(d);}
+ const shops=$('orShop');shops.replaceChildren();
+ for(const r of extra.shops){const n=node('div',undefined,'or-weekly');n.append(node('h3',r.name+' · '+r.title),node('strong',r.amount===null?'무제한':r.amount.toLocaleString()+'개'),node('p',r.condition+' · '+r.access),node('p',r.affordable===null?'현재 재화로 교환 가능한 양은 확인 필요':`해당 상품만 구매할 경우 현재 재화로 ${r.affordable.toLocaleString()}개 교환 가능`));shops.append(n);}
+ if(!extra.shops.length)shops.append(node('p','상품 목록을 함께 가져오면 잔여 교환량을 계산합니다. 기존 JSON은 계정을 다시 가져와 주세요.','hint'));
+ const random=$('orRandom');random.replaceChildren();for(const r of extra.random)random.append(node('p',r.name+' · '+r.condition+' · '+r.reason));
+ const notes=$('orAdditionalNotes');notes.replaceChildren();for(const text of extra.notes)notes.append(node('p',text));
+}
 function render(){
  if(!data)return;
- result=calculate(catalog,data);
+ result=calculate(catalog,data);extraSection(result);
  $('orResult').hidden=false;
  $('orRemaining').textContent=result.totals.remaining.toLocaleString();$('orClaimed').textContent=result.totals.claimed.toLocaleString();$('orUnknown').textContent=result.totals.unknown.toLocaleString();
  $('orSource').textContent='계정 조회 '+(data.importedAt?new Date(data.importedAt).toLocaleString('ko-KR'):'시각 미상')+' · 계산 '+new Date(result.calculatedAt).toLocaleString('ko-KR');
@@ -30,7 +43,7 @@ function render(){
  const excluded=$('orExcluded');excluded.replaceChildren();
  const reasons=new Map();for(const row of result.excluded){const key=row.exclusion;if(!reasons.has(key))reasons.set(key,[]);reasons.get(key).push(row);}
  for(const [reason,rows]of reasons){const d=node('details',undefined,'mine-group');d.append(node('summary',reason+' · '+rows.length+'개'),node('p',rows.map(r=>r.name).join(', '),'mine-excluded-body'));excluded.append(d);}
- message('역설은 보유 오퍼레이터만, 섬멸 최초 보상은 현재 개방된 맵만 계산했습니다. 주간 보상은 위 일회성 합계에 포함하지 않습니다.');
+ message('일회성 보상, 현재 기간의 임무·출석·월정액 보상, 상점 교환을 각각 계산했습니다. 주간 섬멸과 랜덤 보상도 별도로 표시합니다.');
 }
 async function accept(value){await load();calculate(catalog,value);data=value;render();}
 $('orUseAccount').onclick=()=>window.dispatchEvent(new Event('orundum-request-account'));

@@ -27,6 +27,29 @@ for sid,x in c['campaigns'].items():
  if not rewards:continue
  st=s.get(sid,{})
  annihilation.append(dict(id=sid,name=st.get('name') or sid,region=st.get('code') or '',rewards=rewards,windows=windows[sid]))
-out=dict(version=1,source='ArknightsAssets/ArknightsGamedata KR',revision='db6f9ef8046ad17dbebe3ff1d0dd88844a5bc78c',paradox=paradox,annihilation=annihilation)
+m=load('mission_table');a=load('activity_table');check=load('checkin_table')
+missionRewards=[]
+for source in ['periodicalRewards','weeklyRewards']:
+ groups={}
+ for row in m[source].values():groups.setdefault(row['groupId'],[]).append(row)
+ for gid,items in groups.items():
+  threshold=0
+  for row in sorted(items,key=lambda x:x['sortIndex']):
+   threshold+=row['periodicalPointCost']
+   missionRewards.append(dict(id=row['id'],group=gid,type=row['type'],cost=row['periodicalPointCost'],threshold=threshold,amount=sum(i['count']for i in row.get('rewards') or [] if i['id']=='4003'),start=row.get('beginTime',0),end=row.get('endTime',4102340399)))
+events=[]
+for aid,meta in a['basicInfo'].items():
+ typ=meta['type'];body=a['activity'].get(typ,{}).get(aid) or a['dynActs'].get(aid) or {}
+ rewards=[]
+ for key,row in (body.get('checkInList') or {}).items():
+  amount=sum(i['count']for i in row.get('itemList') or [] if i['id']=='4003')
+  if amount:rewards.append(dict(index=int(key),order=row['order'],amount=amount))
+ perDay=sum(i['count']for i in body.get('rewardItemPerDay') or [] if i['id']=='4003')
+ if rewards or perDay or typ in ['PRAY_ONLY','FLOAT_PARADE','BLESS_ONLY']:events.append(dict(id=aid,type=typ,name=meta['name'],start=meta['startTime'],end=meta['endTime'],rewardEnd=meta['rewardEndTime'],rewards=rewards,perDay=perDay,days=body.get('dayCount',body.get('constData',{}).get('dayCount',0)),random=typ in ['PRAY_ONLY','FLOAT_PARADE','BLESS_ONLY']))
+monthly=[]
+for gid,g in check['groups'].items():
+ rewards=[dict(index=i,amount=x['count'])for i,x in enumerate(g['items'])if x['itemId']=='4003']
+ if rewards:monthly.append(dict(id=gid,start=g['signStartTime'],end=g['signEndTime'],rewards=rewards))
+out=dict(version=2,source='ArknightsAssets/ArknightsGamedata KR',revision='db6f9ef8046ad17dbebe3ff1d0dd88844a5bc78c',paradox=paradox,annihilation=annihilation,missionRewards=missionRewards,dailyPeriods=m['dailyMissionPeriodInfo'],events=events,monthly=monthly,subscriptions=[v for rows in check['monthlySubItem'].values()for v in rows])
 (root/'workers/admin/public/orundum/catalog.json').write_text(json.dumps(out,ensure_ascii=False,separators=(',',':')))
 print('Built',len(paradox),'paradox and',len(annihilation),'annihilation maps')

@@ -1,5 +1,5 @@
 // KR protocol reference: ArkPRTS auth.py and neeia/ak-roster yostarAuth.ts.
-// Only authentication and account/syncData; no game actions or retained sessions.
+// Authentication, syncData, and optional owner inspection of read-only shop catalogs. No game actions or retained sessions.
 import { normalizeBuilding } from "../../../assets/js/base-state.mjs";
 import { createHash, createHmac, randomUUID } from "node:crypto";
 export class AccountError extends Error {
@@ -150,7 +150,7 @@ export function trustedUrl(value, role = "game") {
     throw new AccountError("upstream-format");
   return value.replace(/\/$/, "");
 }
-export async function getAccountSyncData(email, code, fetcher) {
+export async function getAccountSyncData(email, code, fetcher, options = {}) {
   const auth = await sdk(
     "/yostar/get-auth",
     { Account: email, Code: code },
@@ -240,7 +240,21 @@ export async function getAccountSyncData(email, code, fetcher) {
   );
   if (data.result !== 0 || !data.user?.troop?.chars)
     throw new AccountError("sync-failed");
-  return data;
+  if (!options.includeShops) return data;
+  const shops = {}, errors = {};
+  let seq = 3;
+  for (const [key,path] of [['LS','/shop/getLowGoodList'],['ES','/shop/getExtraGoodList']]) {
+    try {
+      const response = await jsonRequest(gs + path, {}, { uid: session.uid || token.uid, secret: session.secret, seqnum: String(seq++) }, fetcher);
+      if ((response.result !== undefined && response.result !== 0) || !Array.isArray(response.goodList)) throw new AccountError('upstream-format');
+      shops[key] = response;
+    } catch (error) {
+      errors[key] = error instanceof AccountError ? error.code : 'shop-query-failed';
+      // A failed request may leave the session sequence ambiguous; do not reuse it.
+      break;
+    }
+  }
+  return { snapshot: data, supplementary: { shops, shopErrors: errors } };
 }
 export async function getAccount(email, code, fetcher) {
   const data = await getAccountSyncData(email, code, fetcher);

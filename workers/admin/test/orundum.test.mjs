@@ -18,3 +18,13 @@ test('weekly Orundum stays separate and old-week snapshots never produce a curre
  const reset=Date.parse('2026-10-26T04:00:00+09:00')/1000;assert.notEqual(gameWeek(reset-1),gameWeek(reset));
 });
 test('invalid exports fail without treating all rewards as unclaimed',()=>{assert.throws(()=>calculate({paradox:[],annihilation:[]},{snapshot:{user:{}}}),/계정 원본/);});
+
+test('additional rewards keep mission receipts, expiring event days and conditional shop budgets distinct',async()=>{
+ const {additional,gameDay}=await import('../public/orundum/additional.mjs');
+ const d=data();d.user.mission={missionRewards:{dailyPoint:0,weeklyPoint:0,rewards:{DAILY:{tier:1},WEEKLY:{week:0}}}};
+ d.user.activity={CHECKIN_ACCESS:{event:{rewardsCount:1,currentStatus:0,lastTs:now}}};d.user.shop={LS:{curGroupId:'g1',info:[{id:'good',count:2}]},ES:{info:[]}};d.user.status={lggShard:80};
+ d.supplementary={shops:{LS:{groups:['g1','g2'],goodList:[{goodId:'good',groupId:'g1',availCount:6,price:40,item:{id:'4003',count:100}},{goodId:'unlimited',groupId:'g2',availCount:-1,price:50,item:{id:'4003',count:30}}]}}};
+ const c={missionRewards:[{id:'tier',type:'DAILY',group:'daily',cost:1,threshold:1,amount:100},{id:'week',type:'WEEKLY',group:'w',cost:1,threshold:1,amount:500,start:0,end:now+1}],dailyPeriods:[{startTime:0,endTime:now+1,periodList:[{period:[1,2,3,4,5,6,7],rewardGroupId:'daily'}]}],events:[{id:'event',name:'event',type:'CHECKIN_ACCESS',perDay:200,days:30,start:0,end:now+86400,rewardEnd:now+86400,rewards:[]},{id:'random',name:'random',type:'PRAY_ONLY',random:true,start:0,end:now+100,rewardEnd:now+100}],monthly:[],subscriptions:[]};
+ const r=additional(c,d,now);assert.equal(r.rewards.find(x=>x.id==='tier').status,'claimed');assert.equal(r.rewards.find(x=>x.id==='week').status,'remaining');assert.equal(r.rewards.find(x=>x.id==='event').amount,200);assert.equal(r.random.length,1);assert.equal(r.shops[0].amount,400);assert.equal(r.shops[0].affordable,200);assert.equal(r.shops[1].amount,null);assert.equal(r.shops[1].affordable,null);assert.equal(r.totals.remaining,700);
+ const stale=additional(c,{...d,importedAt:'2026-10-23T05:00:00Z'},now);assert.equal(stale.rewards.find(x=>x.id==='tier').status,'unknown');
+});

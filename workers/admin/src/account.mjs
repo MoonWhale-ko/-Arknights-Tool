@@ -15,5 +15,5 @@ export async function accountRequest(request, env, fetcher) {
   if (!login) { await sendCode(email, fetcher); return { ok: true }; }
   // Preserve every syncData field, including unknown fields and root metadata. Never write it to GitHub or a database.
   return { ok: true, importedAt: new Date().toISOString(), server: 'kr', source: '/account/syncData',
-    snapshot: await getAccountSyncData(email, String(body.code), fetcher) };
+    ...await getAccountSyncData(email, String(body.code), fetcher, { includeShops: true }) };
 }

@@ -1,3 +1,4 @@
+import { additional } from './additional.mjs';
 export function gameWeek(seconds) {
   const d=new Date((seconds+5*3600)*1000),weekday=d.getUTCDay()||7;
   d.setUTCDate(d.getUTCDate()-weekday+1);return d.toISOString().slice(0,10);
@@ -36,5 +37,5 @@ export function calculate(catalog,data,{now=Date.now()/1000}={}) {
   const stale=Number.isFinite(imported)?gameWeek(imported)!==gameWeek(now):true;
   const valid=Number.isFinite(campaign.campaignCurrentFee)&&Number.isFinite(campaign.campaignTotalFee)&&campaign.campaignCurrentFee>=0&&campaign.campaignTotalFee>=0&&campaign.campaignCurrentFee<=campaign.campaignTotalFee;
   const weekly={obtained:valid?campaign.campaignCurrentFee:null,cap:valid?campaign.campaignTotalFee:null,remaining:valid&&!stale?Math.max(0,campaign.campaignTotalFee-campaign.campaignCurrentFee):null,stale,week:gameWeek(now)};
-  return {rows,excluded,weekly,totals:summarize(rows),calculatedAt:new Date(now*1000).toISOString()};
+  return {additional:additional(catalog,data,now),rows,excluded,weekly,totals:summarize(rows),calculatedAt:new Date(now*1000).toISOString()};
 }
