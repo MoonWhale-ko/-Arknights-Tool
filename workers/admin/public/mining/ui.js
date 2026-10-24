@@ -8,6 +8,8 @@ function message(text) {$('mineMessage').textContent=text;}
 function render() {
   if(!data)return;
   const result=audit(catalog,data,{overrides});rows=result.included;excluded=result.excluded;
+  const progressBox=$('mineSimulation');progressBox.replaceChildren();
+  for(const g of result.simulation){const n=el('p',g.id.replace('main_','')+'지역 · '+(g.point??'?')+'P · 추가 별 합계 '+(g.derived??'확인 필요')+(g.mismatch?' · 기록 불일치: 계정 누적 포인트로 판정':''));progressBox.append(n);}
   const total=totals(rows);
   $('mineResult').hidden=false;
   $('mineRemaining').textContent=total.remaining.toLocaleString();
@@ -18,7 +20,7 @@ function render() {
   const filtered=rows.filter(s=>(!category||s.category===category)&&(!status||s.status===status)&&(!query||[s.code,s.name,s.group,s.mode,s.id].join(' ').toLowerCase().includes(query)));
   const groups=new Map(); for(const s of filtered){const key=s.category+'|'+s.group;if(!groups.has(key))groups.set(key,[]);groups.get(key).push(s);}
   const box=$('mineGroups'), opened=new Set([...box.querySelectorAll('details[open]')].map(n=>n.dataset.key));box.replaceChildren();
-  $('mineCount').textContent=`검색 결과 ${filtered.length}개 · 미수령 ${totals(filtered).remaining}개`;
+  $('mineCount').textContent=`검색 결과 ${filtered.length}항목 · 미수령 ${totals(filtered).remaining}개`;
   for(const stages of groups.values()) {
     const sum=totals(stages), detail=el('details',undefined,'mine-group'), summary=el('summary');detail.dataset.key=stages[0].category+'|'+stages[0].group;detail.open=opened.has(detail.dataset.key);
     summary.append(el('b',stages[0].group),el('span',`미수령 ${sum.remaining} · 확인 필요 ${sum.unknown} · 완료 ${sum.claimed}`));detail.append(summary);
@@ -37,7 +39,7 @@ function render() {
   const excludedGroups=new Map();
   const excludedFiltered=excluded.filter(s=>(!category||s.category===category)&&(!query||[s.code,s.name,s.group,s.mode,s.exclusion].join(' ').toLowerCase().includes(query)));
   for(const s of excludedFiltered){const key=s.exclusion+'|'+s.group;if(!excludedGroups.has(key))excludedGroups.set(key,[]);excludedGroups.get(key).push(s);}
-  $('mineExcludedCount').textContent=`계산에서 제외된 스테이지 · ${excludedFiltered.length}개`;
+  $('mineExcludedCount').textContent=`계산에서 제외된 항목 · ${excludedFiltered.length}개`;
   for(const list of excludedGroups.values()){
     const first=list[0],detail=el('details',undefined,'mine-group'),head=el('summary');
     head.append(el('b',first.group),el('span',first.exclusion+' · '+list.length+'개'));detail.append(head);
@@ -46,7 +48,7 @@ function render() {
     body.append(el('p',list.map(s=>s.code+' ('+s.mode+')').join(', ')));detail.append(body);excludedBox.append(detail);
   }
   if(!groups.size)box.append(el('p','조건에 맞는 스테이지가 없습니다.','empty'));
-  message(demo?'예시 데이터를 표시 중입니다. 실제 결과는 계정 가져오기 또는 JSON 파일로 확인하세요.':'현재 개방된 콘텐츠를 계산했습니다. 기록이 없는 항목도 미완료로 간주해 합계에 포함합니다.');
+  message(demo?'예시 데이터를 표시 중입니다. 실제 결과는 계정 가져오기 또는 JSON 파일로 확인하세요.':'초회·누적 보상을 계산했습니다. 선행 조건과 난이도 연동을 우선 확인하고, 근거가 없는 누락 기록만 미완료로 간주합니다.');
 }
 async function accept(value,isDemo=false){await load();accountUser(value);data=value;demo=isDemo;overrides={};render();}
 $('mineFile').onchange=async event=>{try{const file=event.target.files[0];if(!file)return;if(file.size>30*1024*1024)throw new Error('30MB 이하의 계정 JSON을 선택하세요.');await accept(JSON.parse(await file.text()));}catch(e){message(e.message);}finally{event.target.value='';}};

@@ -47,3 +47,28 @@ test('availability distinguishes ended PA, pending rerun, permanent access, futu
  assert.deepEqual(result.excluded.map(s=>s.exclusion),['기간 종료','복각 대기','개방 예정','개방 정보 부족']);
  assert.equal(totals(result.included).remaining,3);
 });
+
+test('prerequisite bounds distinguish locked stages and PASS from three-star proof',async()=>{
+ const {stageEvidence}=await import('../public/mining/evidence.mjs');
+ const c={graph:{a:{code:'A',requires:[]},b:{code:'B',requires:[{stageId:'a',completeState:'PASS'}]},c:{code:'C',requires:[{stageId:'b',completeState:'PASS'}]},p:{requires:[]},q:{requires:[{stageId:'p',completeState:'PASS'}]},x:{requires:[]},y:{requires:[{stageId:'x',completeState:'COMPLETE'}]}},medals:[]};
+ const b=stageEvidence(c,{dungeon:{stages:{a:{state:0},q:{state:3},y:{state:3}}}});
+ assert.equal(b.get('c').hi,0);assert.match(b.get('b').reason,/선행 A/);
+ assert.equal(b.get('p').lo,2);assert.equal(b.get('x').lo,3);
+});
+test('harder completions fold down once without granting normal-to-challenge rewards',async()=>{
+ const c={stages:[stage('normal'),stage('tough'),stage('easy',{op:0}),stage('challenge'),stage('shared-story')],medals:[],completionLinks:[['tough','normal'],['normal','easy']],graph:{}};
+ const rows=calculate(c,{user:{dungeon:{stages:{tough:{state:3},normal:{state:0},'shared-story':{state:3}}}}});
+ assert.equal(rows.find(s=>s.id==='normal').status,'claimed');
+ assert.equal(rows.find(s=>s.id==='challenge').status,'remaining');
+ assert.deepEqual(totals(rows),{claimed:3,remaining:1,unknown:0,total:4});
+});
+test('simulation first clears and milestone entitlements stay separate; repeated highest stars do not accumulate',async()=>{
+ const {audit}=await import('../public/mining/engine.mjs');
+ const c={stages:[stage('base'),stage('six')],medals:[],completionLinks:[['six','base']],graph:{},simulation:[{id:'g',stages:['six']}],milestones:[stage('m2',{idType:'milestone',groupId:'g',threshold:2}),stage('m12',{idType:'milestone',groupId:'g',threshold:12})]};
+ const user={dungeon:{stages:{six:{state:3,completeTimes:20}},sixStar:{stages:{six:{tagFinish:0}},groups:{g:{point:0,rewards:{m2:{state:0},m12:{state:0}}}}}}};
+ let r=audit(c,{user});assert.equal(r.simulation[0].point,0);assert.equal(totals(r.included).claimed,2);assert.equal(r.included.find(s=>s.id==='m2').ready,false);
+ user.dungeon.sixStar.stages.six.tagFinish=2;user.dungeon.sixStar.groups.g.point=2;
+ r=audit(c,{user});assert.equal(r.simulation[0].derived,2);assert.equal(r.included.find(s=>s.id==='m2').ready,true);assert.equal(totals(r.included).remaining,2);
+ user.dungeon.sixStar.groups.g.rewards.m2.state=2;r=audit(c,{user});assert.equal(totals(r.included).claimed,3);
+ user.dungeon.sixStar.groups.g.point=3;assert.equal(audit(c,{user}).simulation[0].mismatch,true);
+});
