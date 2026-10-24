@@ -39,6 +39,16 @@ for medal in m['medalList']:
 # Keep zero-OP prerequisites in the graph, but never in the reward total.
 definitions={**s['stages'],**r['stageList']}
 graph={sid:dict(code=st.get('code'),story=st.get('isStoryOnly',False),requires=st.get('unlockCondition') if isinstance(st.get('unlockCondition'),list) else []) for sid,st in definitions.items()}
+# Zone entry gates are negative evidence only: launch events may temporarily bypass them.
+for sid,node in graph.items():
+ original=s['stages'].get(sid,{})
+ zoneId=original.get('zoneId')
+ zone=z['mainlineAdditionInfo'].get(zoneId,{})
+ previous=z['mainlineAdditionInfo'].get(zone.get('preposedZoneId'),{})
+ if previous.get('endStageId'):
+  node['zoneRequires']=previous['endStageId']
+  activity=a['basicInfo'].get(a['zoneToActivity'].get(zoneId),{})
+  if activity.get('type')=='TYPE_MAINSS':node['entryWindow']=dict(start=activity['startTime'],end=activity['endTime'],requires='main_03-08')
 completionLinks=[]
 for group in s['diffGroupTable'].values():
  for higher,lower in [('toughId','normalId'),('normalId','easyId')]:

@@ -1,6 +1,6 @@
 // Client enum reference: AdoreJc/ArknightsDB 95ce0f0823f233389fa97e0d7fc9d1759e58464e, Torappu/PlayerSixStarTagFinishState.md.
 // Positive completion evidence is kept separate from the user's missing-record assumption.
-export function stageEvidence(catalog, user) {
+export function stageEvidence(catalog, user, now=Date.now()/1000) {
   const records=user.dungeon.stages, bounds=new Map(), graph=catalog.graph||{};
   const get=id=>{if(!bounds.has(id))bounds.set(id,{lo:0,hi:3,reason:''});return bounds.get(id);};
   const raise=(id,state,reason)=>{const b=get(id);if(b.lo>=state)return false;b.lo=state;b.hi=Math.max(b.hi,state);b.reason=reason;return true;};
@@ -26,6 +26,9 @@ export function stageEvidence(catalog, user) {
   while(changed){changed=false;
     for(const [id,node]of Object.entries(graph)) {
       const b=get(id);if(b.lo>0||b.hi===0||Object.hasOwn(records,id))continue;
+      const window=node.entryWindow, temporary=window&&window.start<=now&&now<window.end;
+      const gate=temporary?window.requires:node.zoneRequires;
+      if(gate&&get(gate).hi<2){b.hi=0;b.reason='에피소드 해금 조건: '+(graph[gate]?.code||gate)+' 미완료';changed=true;continue;}
       const blocked=(node.requires||[]).find(p=>{const req=p.completeState==='COMPLETE'?3:p.completeState==='PASS'?2:0;return req&&get(p.stageId).hi<req;});
       if(blocked){b.hi=0;b.reason='선행 '+(graph[blocked.stageId]?.code||blocked.stageId)+' 미완료 → 아직 해금되지 않음';changed=true;}
     }

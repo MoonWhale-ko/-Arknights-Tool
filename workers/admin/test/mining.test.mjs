@@ -72,3 +72,12 @@ test('simulation first clears and milestone entitlements stay separate; repeated
  user.dungeon.sixStar.groups.g.rewards.m2.state=2;r=audit(c,{user});assert.equal(totals(r.included).claimed,3);
  user.dungeon.sixStar.groups.g.point=3;assert.equal(audit(c,{user}).simulation[0].mismatch,true);
 });
+
+test('episode gates classify absent roots but temporary entry never proves the previous episode complete',async()=>{
+ const {stageEvidence}=await import('../public/mining/evidence.mjs');
+ const c={graph:{previous:{code:'7-20',requires:[]},root:{code:'R8-1',zoneRequires:'previous',requires:[]},child:{requires:[{stageId:'root',completeState:'PASS'}]},temp:{zoneRequires:'previous',entryWindow:{start:10,end:20,requires:'early'},requires:[]},early:{requires:[]}},medals:[]};
+ const u={dungeon:{stages:{previous:{state:0},early:{state:3}}}};
+ let b=stageEvidence(c,u,15);assert.equal(b.get('root').hi,0);assert.equal(b.get('child').hi,0);assert.match(b.get('root').reason,/에피소드 해금/);assert.equal(b.get('temp').hi,3);
+ b=stageEvidence(c,u,21);assert.equal(b.get('temp').hi,0);
+ u.dungeon.stages.temp={state:3};b=stageEvidence(c,u,15);assert.equal(b.get('previous').lo,0);assert.equal(b.get('temp').lo,3);
+});

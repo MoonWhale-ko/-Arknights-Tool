@@ -5,7 +5,7 @@ export function accountUser(data) {
   return user;
 }
 export function audit(catalog, data, { now = Date.now() / 1000, overrides = {} } = {}) {
-  const user = accountUser(data), records = user.dungeon.stages, evidence = stageEvidence(catalog,user);
+  const user = accountUser(data), records = user.dungeon.stages, evidence = stageEvidence(catalog,user,now);
   const simulation=simulationProgress(catalog,user), progress=new Map(simulation.map(g=>[g.id,g]));
   // KR resets at 04:00 KST. Calendar day in UTC+5 matches the game day.
   const weekday = new Date((now + 5 * 3600) * 1000).getUTCDay() || 7;
@@ -35,7 +35,10 @@ export function audit(catalog, data, { now = Date.now() / 1000, overrides = {} }
     if (status !== 'remaining' || overrides[s.id]) assumed = false;
     const block = user.retro?.block?.[s.retroId];
     const graphNode=catalog.graph?.[s.id];
-    const unmet=(graphNode?.requires||[]).some(p=>{const n=p.completeState==='COMPLETE'?3:2;return (evidence.get(p.stageId)?.lo??0)<n;});
+    const entry=graphNode?.entryWindow, tempEntry=entry&&entry.start<=now&&now<entry.end;
+    const zoneGate=tempEntry?entry.requires:graphNode?.zoneRequires;
+    const zoneBlocked=zoneGate&&(evidence.get(zoneGate)?.lo??0)<2;
+    const unmet=zoneBlocked||(graphNode?.requires||[]).some(p=>{const n=p.completeState==='COMPLETE'?3:2;return (evidence.get(p.stageId)?.lo??0)<n;});
     const gate=s.pointGate,gateMissing=gate&&(progress.get(gate.group)?.point??0)<gate.point;
     const access=s.idType==='milestone'?(ready?'수령 가능':'추가 별 달성 필요'):block?.locked===1?'콘텐츠 해금 필요':gateMissing?`누적 ${gate.point}P 필요`:unmet?'선행 스테이지 진행 필요':'개방 중';
     included.push({ ...s, status, reason, assumed, access, availability: availability.label, ready });
