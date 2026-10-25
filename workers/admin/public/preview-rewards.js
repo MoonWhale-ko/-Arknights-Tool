@@ -23,14 +23,13 @@ async function accept(value){
   account=value;
   rows=[...mine.included.map(r=>({...r,currency:'originite',amount:r.op,title:r.code+' · '+r.mode})),...or.rows.map(r=>({...r,currency:'orundum',group:r.category==='paradox'?'역설 시뮬레이션':r.name,title:r.category==='paradox'?r.name:r.title}))];
   $('rewardsOriginite').textContent=totals(mine.included).remaining.toLocaleString();$('rewardsOrundum').textContent=or.totals.remaining.toLocaleString();
-  const unknown=rows.filter(r=>r.status==='unknown').length;
-  $('rewardsMessage').textContent='가져온 계정의 일회성 보상을 계산했습니다.'+(unknown?` 수령 여부 확인 필요 ${unknown}개는 합계에서 제외했습니다.`:'');
-  $('rewardsSource').textContent='계정 조회 · '+(value.importedAt?new Date(value.importedAt).toLocaleString('ko-KR'):'시각 미상');$('rewardsResults').hidden=false;render();
- }catch(e){clear();$('rewardsMessage').textContent='보상 기록이 포함된 계정을 다시 가져와주세요. '+e.message;}
+  $('rewardsMessage').hidden=true;$('rewardsResults').hidden=false;render();
+ }catch(e){clear();showError('보상 기록이 포함된 계정을 다시 가져와주세요.');}
 }
-function clear(){account=null;rows=[];$('rewardsResults').hidden=true;$('rewardsOriginite').textContent='—';$('rewardsOrundum').textContent='—';$('rewardsSource').textContent='';$('rewardsMessage').textContent='계정을 가져오면 남은 일회성 보상을 자동으로 계산합니다.';}
+function clear(){account=null;rows=[];$('rewardsResults').hidden=true;$('rewardsOriginite').textContent='—';$('rewardsOrundum').textContent='—';$('rewardsMessage').hidden=true;}
 function fromStorage(){try{const saved=JSON.parse(localStorage.getItem(REWARDS_KEY)||'null');if(saved)accept(saved);else clear();}catch{clear();}}
-$('rewardsImport').onclick=()=>openAccountImport().catch(e=>{$('rewardsMessage').textContent=e.message;});
+function showError(text){$('rewardsMessage').textContent=text;$('rewardsMessage').hidden=false;}
+$('rewardsImport').onclick=()=>openAccountImport().catch(e=>showError(e.message));
 for(const id of ['rewardsSearch','rewardsCurrency','rewardsStatus'])$(id).addEventListener(id==='rewardsSearch'?'input':'change',render);
 window.addEventListener('arknights-account-updated',fromStorage);window.addEventListener('storage',e=>{if(e.key===REWARDS_KEY)fromStorage();});
 window.addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==parent)return;if(e.data?.type==='preview-account')accept(e.data.account);if(e.data?.type==='preview-clear')clear();});
