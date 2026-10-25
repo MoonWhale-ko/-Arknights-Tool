@@ -1,4 +1,5 @@
 import { BASE_KEY, prepareBase } from "./base-state.mjs?v=4";
+export const REWARDS_KEY = "arknightsOneTimeRewardsV1";
 export const INVENTORY_KEY = "arknightsInventoryV1";
 export const BACKUP_KEY = "arknightsAccountImportBackupV1";
 const CLASS_VARIANTS = {char_1001_amiya2:"char_002_amiya",char_1037_amiya3:"char_002_amiya"};
@@ -106,6 +107,7 @@ export function prepareImport(data, chars, previous, frames, characters = {}) {
   if(base){const imported=new Map(data.operators.map(op=>[op.id,op]));for(const room of Object.values(base.rooms)){if(room.type!=='PRIVATE')continue;room.trust={};for(const id of room.operators){const op=imported.get(id);if(op)room.trust[id]=trustPercent(op.favorPoint,frames);}}}
   return {
     state: next,
+    ...(data.rewards ? {rewards:{...data.rewards,importedAt:data.importedAt}} : {}),
     base,
     inventory: { version: 1, server: "kr", importedAt: data.importedAt, items },
     owned: new Set(data.operators.filter(op=>byId.has(op.id)).map(op=>CLASS_VARIANTS[op.id]||op.id)).size,
@@ -116,20 +118,22 @@ export function prepareImport(data, chars, previous, frames, characters = {}) {
 }
 function restoreValues(storage,values){for(const [key,value] of values)value===null?storage.removeItem(key):storage.setItem(key,value);}
 export function commitImport(storage,progressKey,prepared){
- const progress=storage.getItem(progressKey),inventory=storage.getItem(INVENTORY_KEY),base=storage.getItem(BASE_KEY);
- storage.setItem(BACKUP_KEY,JSON.stringify({version:1,savedAt:new Date().toISOString(),progress,inventory,base}));
+ const progress=storage.getItem(progressKey),inventory=storage.getItem(INVENTORY_KEY),base=storage.getItem(BASE_KEY),rewards=storage.getItem(REWARDS_KEY);
+ storage.setItem(BACKUP_KEY,JSON.stringify({version:1,savedAt:new Date().toISOString(),progress,inventory,base,rewards}));
  try{
+  if(prepared.rewards)storage.setItem(REWARDS_KEY,JSON.stringify(prepared.rewards));else storage.removeItem(REWARDS_KEY);
   storage.setItem(INVENTORY_KEY,JSON.stringify(prepared.inventory));
   if(prepared.base)storage.setItem(BASE_KEY,JSON.stringify(prepared.base));
   storage.setItem(progressKey,JSON.stringify(prepared.state));
- }catch(e){restoreValues(storage,[[progressKey,progress],[INVENTORY_KEY,inventory],[BASE_KEY,base]]);throw e;}
+ }catch(e){restoreValues(storage,[[progressKey,progress],[INVENTORY_KEY,inventory],[BASE_KEY,base],[REWARDS_KEY,rewards]]);throw e;}
 }
 export function restoreImport(storage,progressKey){
  const backup=JSON.parse(storage.getItem(BACKUP_KEY)||'null');
  if(backup?.version!==1||![backup.progress,backup.inventory].every(v=>v===null||typeof v==='string')||
   (Object.hasOwn(backup,'base')&&backup.base!==null&&typeof backup.base!=='string'))throw new Error('가져오기 전 백업이 없습니다.');
- const keys=[progressKey,INVENTORY_KEY,...(Object.hasOwn(backup,'base')?[BASE_KEY]:[])];
+ if(Object.hasOwn(backup,'rewards')&&backup.rewards!==null&&typeof backup.rewards!=='string')throw new Error('보상 백업 형식이 올바르지 않습니다.');
+ const keys=[REWARDS_KEY,progressKey,INVENTORY_KEY,...(Object.hasOwn(backup,'base')?[BASE_KEY]:[])];
  const old=keys.map(key=>[key,storage.getItem(key)]);
- try{restoreValues(storage,[[progressKey,backup.progress],[INVENTORY_KEY,backup.inventory],...(Object.hasOwn(backup,'base')?[[BASE_KEY,backup.base]]:[])]);}catch(e){restoreValues(storage,old);throw e;}
+ try{restoreValues(storage,[[REWARDS_KEY,backup.rewards??null],[progressKey,backup.progress],[INVENTORY_KEY,backup.inventory],...(Object.hasOwn(backup,'base')?[[BASE_KEY,backup.base]]:[])]);}catch(e){restoreValues(storage,old);throw e;}
  return JSON.parse(backup.progress||'{}');
 }

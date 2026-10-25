@@ -202,6 +202,7 @@ $('rawAccountForm').onsubmit = event => {
     $('rawCode').value = ''; clearRawAccount(); status('계정 동기화 원본을 가져오는 중입니다.');
     const data = await api('/api/account/sync', 'POST', body);
     rawSnapshot = { version: 1, importedAt: data.importedAt, server: data.server, source: data.source, snapshot: data.snapshot, supplementary: data.supplementary };
+    $('previewFrame')?.contentWindow?.postMessage({type:'preview-account',account:rawSnapshot},location.origin);
     const selector = $('rawSection');
     selector.append(new Option('전체 동기화 응답', 'all'));
     for (const k of Object.keys(data.snapshot)) selector.append(new Option(k + ' (응답 최상위)', 'root:' + k));

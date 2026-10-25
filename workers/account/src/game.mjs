@@ -260,6 +260,14 @@ export async function getAccount(email, code, fetcher) {
   const data = await getAccountSyncData(email, code, fetcher);
   return normalizeAccount(data.user);
 }
+export function rewardAccount(user) {
+  // Only progress required for one-time rewards; no identity or authentication fields.
+  const chars=Object.fromEntries(Object.entries(user.troop?.chars||{}).map(([key,c])=>[key,{charId:c.charId,evolvePhase:c.evolvePhase,level:c.level}]));
+  const addon=Object.fromEntries(Object.entries(user.troop?.addon||{}).map(([id,c])=>[id,{stage:c.stage}]));
+  return {user:{dungeon:{stages:user.dungeon?.stages,sixStar:user.dungeon?.sixStar},
+    medal:{medals:user.medal?.medals},retro:{block:user.retro?.block},
+    troop:{chars,addon},campaignsV2:{instances:user.campaignsV2?.instances}}};
+}
 export function normalizeAccount(user) {
   const operators = [];
   for (const value of Object.values(user.troop.chars)) {
@@ -300,6 +308,7 @@ export function normalizeAccount(user) {
     importedAt: new Date().toISOString(),
     operators,
     inventory,
+    rewards: rewardAccount(user),
     // Includes per-account corridor/elevator construction flags as well as facility staff.
     building: normalizeBuilding(user.building,user.troop.chars),
   };

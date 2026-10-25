@@ -3,7 +3,7 @@ import {
   commitImport,
   restoreImport,
   BACKUP_KEY,
-} from "./account-state.mjs?v=8";
+} from "./account-state.mjs?v=9";
 const $ = (id) => document.getElementById(id),
   dialog = $("accountDialog");
 let preview = null,
@@ -187,6 +187,7 @@ $("accountApply").onclick = () =>
     const adapter = await accountAdapter();
     commitImport(localStorage, adapter.key, preview);
     adapter.replace(preview.state);
+    window.dispatchEvent(new Event("arknights-account-updated"));
     const excluded = preview.skippedOperators.map(o=>`${o.name || "이름 확인 불가"} (${o.id})`).join("\n");
     const baseApplied=Boolean(preview.base);
     preview = null;
@@ -196,6 +197,7 @@ $("accountUndo").onclick = () =>
   action(async () => {
     const adapter = await accountAdapter();
     adapter.replace(restoreImport(localStorage, adapter.key));
+    window.dispatchEvent(new Event("arknights-account-updated"));
     preview = null;
     status("가져오기 전 육성 상태와 재료·기반시설을 복원했습니다.");
   });

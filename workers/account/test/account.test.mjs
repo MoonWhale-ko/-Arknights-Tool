@@ -233,3 +233,13 @@ test('account response includes sanitized facility snapshot with no account iden
  assert.equal(JSON.stringify(data).includes('private-building-id'),false);assert.equal(JSON.stringify(data.building).includes('charInstIds'),false);
  assert.equal(normalizeAccount(user).building,null);
 });
+
+test('public reward progress excludes identity and keeps one-time completion evidence',async()=>{
+ const {rewardAccount}=await import('../src/game.mjs');
+ const result=rewardAccount({status:{uid:'private-user',name:'private-name'},secret:'private-secret',dungeon:{stages:{main_01:{state:3}},sixStar:{groups:{g:{point:2}}}},troop:{chars:{1:{charId:'char_1',evolvePhase:2,level:1,voiceLan:'private-extra'}},addon:{char_1:{stage:{mem_1:{state:3}}}}},campaignsV2:{instances:{camp_1:{maxKills:400,rewardStatus:[1,0]}},campaignCurrentFee:100}});
+ assert.equal(result.user.dungeon.stages.main_01.state,3);
+ assert.equal(result.user.troop.addon.char_1.stage.mem_1.state,3);
+ assert.deepEqual(result.user.troop.chars['1'],{charId:'char_1',evolvePhase:2,level:1});
+ assert.equal(result.user.campaignsV2.campaignCurrentFee,undefined);
+ assert.ok(!JSON.stringify(result).includes('private-'));
+});

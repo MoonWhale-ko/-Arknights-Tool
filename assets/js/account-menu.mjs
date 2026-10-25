@@ -14,7 +14,7 @@ async function prepare(){
  dialog.classList.add('zoot-account-dialog');
  if(typeof trigger.onclick!=='function'){
   await import('./account-config.js');
-  await import('./account-import.mjs?v=10');
+  await import('./account-import.mjs?v=11');
  }
  if(typeof trigger.onclick!=='function')throw Error('Account importer unavailable');
  return {trigger,dialog};

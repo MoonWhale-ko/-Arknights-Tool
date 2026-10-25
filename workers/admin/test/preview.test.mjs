@@ -12,5 +12,5 @@ test('preview builds the exact public pages and assets, with unpublished rewards
  const layout=readFileSync(new URL('../public/preview/home-preview.css',import.meta.url),'utf8');
  assert.match(layout,/repeat\(3,minmax/);assert.match(layout,/@media\(max-width:600px\).*repeat\(2,minmax/s);
  const rewards=readFileSync(new URL('../public/preview/rewards.html',import.meta.url),'utf8');
- assert.match(rewards,/assets\/css\/zoot.css/);assert.match(rewards,/id="mineResult"/);assert.match(rewards,/id="orGrandTotal"/);
+ assert.match(rewards,/assets\/css\/zoot.css/);assert.match(rewards,/id="rewardsOriginite"/);assert.match(rewards,/id="rewardsOrundum"/);assert.doesNotMatch(rewards,/type="file"|data-reward=|id="orWeekly"/);
 });

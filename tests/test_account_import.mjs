@@ -315,5 +315,15 @@ test('base page opens its own complete account dialog',()=>{
  const html=readFileSync(new URL('../base.html',import.meta.url),'utf8');
  assert.match(html,/<button[^>]*id="gameImport"/);assert.doesNotMatch(html,/<a[^>]*href="operators.html"[^>]*>게임 계정 가져오기/);
  for(const id of ['accountDialog','accountForm','accountEmail','accountCode','accountSend','accountFetch','accountApply','accountUndo','accountClose'])assert.ok(html.includes(`id="${id}"`));
- assert.ok(html.includes('account-import.mjs?v=10'));
+ assert.ok(html.includes('account-import.mjs?v=11'));
+});
+
+test('one-time reward progress follows account apply, rollback and undo',()=>{
+ const store=new Map(),storage={getItem:k=>store.get(k)??null,setItem:(k,v)=>store.set(k,v),removeItem:k=>store.delete(k)};
+ storage.setItem('arknightsOneTimeRewardsV1',JSON.stringify({user:{old:true}}));
+ const reward={user:{dungeon:{stages:{s:{state:3}}}}};
+ commitImport(storage,'progress',{state:{},inventory:{items:{}},rewards:reward});
+ assert.deepEqual(JSON.parse(storage.getItem('arknightsOneTimeRewardsV1')),reward);
+ restoreImport(storage,'progress');assert.deepEqual(JSON.parse(storage.getItem('arknightsOneTimeRewardsV1')),{user:{old:true}});
+ commitImport(storage,'progress',{state:{},inventory:{items:{}}});assert.equal(storage.getItem('arknightsOneTimeRewardsV1'),null);
 });
