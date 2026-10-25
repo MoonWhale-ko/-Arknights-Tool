@@ -5,6 +5,9 @@ const publicDir=fileURLToPath(new URL('../public/',import.meta.url)),out=publicD
 await rm(out,{recursive:true,force:true});await mkdir(out,{recursive:true});
 for(const entry of await readdir(root))if(entry.endsWith('.html'))await cp(root+entry,out+entry);
 for(const dir of ['assets','data','research'])await cp(root+dir,out+dir,{recursive:true});
+// Proposed navigation is private until the rewards page is published.
+const home=await readFile(out+'index.html','utf8');
+await writeFile(out+'index.html',home.replace('</nav>','<div class="home-card-shadow"><a class="home-card" href="rewards.html"><img class="icon" style="filter:none" src="https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/DIAMOND_SHD.png" width="70" height="70" alt="" aria-hidden="true"><h2>광산</h2></a></div></nav>'));
 const admin=await readFile(publicDir+'index.html','utf8');
 const sections=['mining','orundum'].map(id=>admin.match(new RegExp('<section id="'+id+'"[\\s\\S]*?</section>'))[0].replace(' hidden',''));
 const html=`<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>보상 확인 · Z.O.O.T.</title><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="assets/css/zoot.css"><link rel="stylesheet" href="rewards.css"><script src="assets/js/zoot.js"></script><script type="module" src="/mining/ui.js"></script><script type="module" src="/orundum/ui.js"></script><script type="module" src="rewards.js"></script></head><body class="zoot-page"><main class="reward-wrap"><p class="eyebrow">ACCOUNT REWARDS</p><h1>남은 보상</h1><p>계정에 남아 있는 순오리지늄과 합성옥을 확인하세요.</p><nav class="reward-tabs" aria-label="보상 종류"><button data-reward="mining" aria-pressed="true">순오리지늄</button><button data-reward="orundum" aria-pressed="false">합성옥</button></nav>${sections.join('')}</main></body></html>`;
