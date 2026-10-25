@@ -61,6 +61,10 @@ export function createHandler({ fetcher } = {}) {
       const response = await env.ASSETS.fetch(request);
       const headers = new Headers(response.headers);
       for (const [key, value] of Object.entries(security)) headers.set(key, value);
+      if(path.startsWith('/preview/')){
+        headers.set('X-Frame-Options','SAMEORIGIN');
+        headers.set('Content-Security-Policy',"default-src 'self'; script-src 'self' https: 'unsafe-inline'; style-src 'self' https: 'unsafe-inline'; img-src 'self' https: data: blob:; font-src 'self' https: data:; connect-src 'self' https:; worker-src 'self' blob:; frame-ancestors 'self'; base-uri 'self'; form-action 'self'");
+      }
       return new Response(response.body, { status: response.status, headers });
     } catch (error) {
       if (error instanceof AccountError) return json({ ok: false, error: error.code,

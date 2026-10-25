@@ -116,3 +116,15 @@ test('raw account endpoints require the owner session, same-origin JSON, valid i
       { ...env, ACCOUNT_MAIL_LIMIT: limits, ACCOUNT_LOGIN_LIMIT: limits })).status, 429);
   }
 });
+
+test('site preview stays private and only its assets allow same-origin framing', async()=>{
+  assert.equal((await handler(request('/preview/rewards.html'),env)).status,401);
+  const {session}=await login();
+  const preview=await handler(request('/preview/rewards.html',session),env);
+  assert.equal(preview.status,200);
+  assert.equal(preview.headers.get('X-Frame-Options'),'SAMEORIGIN');
+  assert.match(preview.headers.get('Content-Security-Policy'),/frame-ancestors 'self'/);
+  assert.equal(preview.headers.get('Cache-Control'),'private, no-store');
+  const admin=await handler(request('/',session),env);
+  assert.equal(admin.headers.get('X-Frame-Options'),'DENY');
+});

@@ -6,8 +6,13 @@
     "test": "node --test test/*.test.mjs",
     "dev": "wrangler dev",
     "check": "wrangler deploy --dry-run",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy",
+    "build:preview": "node scripts/build-preview.mjs"
   },
-  "dependencies": { "jose": "^6.1.0" },
-  "devDependencies": { "wrangler": "^4.36.0" }
+  "dependencies": {
+    "jose": "^6.1.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.36.0"
+  }
 }
