@@ -32,7 +32,7 @@ function positionStagePanel(grid){
 }
 window.addEventListener('resize',()=>{const grid=document.querySelector('.reward-content-grid');if(grid)positionStagePanel(grid);});
 function render(){
- const query=$('rewardsSearch').value.trim().toLowerCase(),currency=$('rewardsCurrency').value,status=$('rewardsStatus').value;
+ const query=$('rewardsSearch').value.trim().toLowerCase(),currency=$('rewardsCurrency').value,status='remaining';
  const filtered=rows.filter(r=>(!currency||r.currency===currency)&&(!status||r.status===status)&&(!query||[r.storyLabel,r.group,r.title,r.name,r.id].join(' ').toLowerCase().includes(query)));
  const box=$('rewardsGroups'),open=new Set([...box.querySelectorAll('details[open]')].map(d=>d.dataset.key));box.replaceChildren();
  const groups=new Map();for(const row of filtered){const key=row.currency+'|'+row.group;if(!groups.has(key))groups.set(key,[]);groups.get(key).push(row);}
@@ -62,7 +62,7 @@ function render(){
   for(const r of list){const base=r.id.replace(/#s$/,'');const paired=r.currency==='originite'&&adverse.has(base)&&['일반','험지 작전'].includes(r.mode);const k=paired?'stage|'+base:'single|'+r.id;if(!entries.has(k))entries.set(k,{r,paired,base});}
   for(const {r,paired,base} of entries.values()){
    if(!paired){stageList.append(rewardRow(r,open));continue;}
-   const variants=rows.filter(v=>v.currency===r.currency&&v.group===r.group&&v.id.replace(/#s$/,'')===base&&['일반','험지 작전'].includes(v.mode)).sort((a,b)=>(a.mode==='험지 작전')-(b.mode==='험지 작전'));
+   const variants=rows.filter(v=>v.status==='remaining'&&v.currency===r.currency&&v.group===r.group&&v.id.replace(/#s$/,'')===base&&['일반','험지 작전'].includes(v.mode)).sort((a,b)=>(a.mode==='험지 작전')-(b.mode==='험지 작전'));
    const state=variants.every(v=>v.status==='claimed')?'claimed':variants.some(v=>v.status==='remaining')?'remaining':'unknown';
    const row=n('details',undefined,'reward-item reward-stage '+state);row.dataset.key='stage|'+r.currency+'|'+base;row.dataset.stage=base;row.open=open.has(row.dataset.key);
    const summary=n('summary'),identity=n('div',undefined,'reward-item-identity'),name=n('div',undefined,'reward-item-name');name.append(n('strong',r.code),n('small',r.name));identity.append(name);
@@ -96,7 +96,7 @@ function clear(){account=null;rows=[];$('rewardsResults').hidden=true;$('rewards
 function fromStorage(){try{const saved=JSON.parse(localStorage.getItem(REWARDS_KEY)||'null');if(saved)accept(saved);else clear();}catch{clear();}}
 function showError(text){$('rewardsMessage').textContent=text;$('rewardsMessage').hidden=false;}
 $('rewardsImport').onclick=()=>openAccountImport().catch(e=>showError(e.message));
-for(const id of ['rewardsSearch','rewardsCurrency','rewardsStatus'])$(id).addEventListener(id==='rewardsSearch'?'input':'change',render);
+for(const id of ['rewardsSearch','rewardsCurrency'])$(id).addEventListener(id==='rewardsSearch'?'input':'change',render);
 window.addEventListener('arknights-account-updated',fromStorage);window.addEventListener('storage',e=>{if(e.key===REWARDS_KEY)fromStorage();});
 window.addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==parent)return;if(e.data?.type==='preview-account')accept(e.data.account);if(e.data?.type==='preview-clear')clear();});
 fromStorage();if(parent!==window)parent.postMessage({type:'preview-account-request'},location.origin);
