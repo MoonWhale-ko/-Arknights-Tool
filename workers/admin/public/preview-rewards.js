@@ -20,13 +20,23 @@ function rewardRow(r,open,nested=false){
    summary.append(identity,badges,value,n('span',undefined,'reward-chevron'));row.append(summary);
    const detail=n('div',undefined,'reward-item-detail');if(r.modeDescription)detail.append(n('p',r.modeDescription));for(const text of r.unlockDetails||[])detail.append(n('p',text));detail.append(n('p',r.reason));if(r.condition)detail.append(n('p',r.condition));row.append(detail);return row;
 }
+function positionStagePanel(grid){
+ const headers=[...grid.querySelectorAll(':scope > .reward-group')],columns=window.innerWidth<=600?1:3;
+ const selected=headers.findIndex(card=>card.open),selectedRow=selected<0?-1:Math.floor(selected/columns)+1;
+ for(const [index,card]of headers.entries()){
+  const row=Math.floor(index/columns)+1;card.style.gridColumn=String(index%columns+1);card.style.gridRow=String(row+(selectedRow>0&&row>selectedRow?1:0));
+  const panel=document.getElementById(card.querySelector('summary').getAttribute('aria-controls'));
+  if(panel){panel.hidden=!card.open;if(card.open)panel.style.gridRow=String(selectedRow+1);}
+ }
+}
+window.addEventListener('resize',()=>{const grid=document.querySelector('.reward-content-grid');if(grid)positionStagePanel(grid);});
 function render(){
  const query=$('rewardsSearch').value.trim().toLowerCase(),currency=$('rewardsCurrency').value,status=$('rewardsStatus').value;
  const filtered=rows.filter(r=>(!currency||r.currency===currency)&&(!status||r.status===status)&&(!query||[r.group,r.title,r.name,r.id].join(' ').toLowerCase().includes(query)));
  const box=$('rewardsGroups'),open=new Set([...box.querySelectorAll('details[open]')].map(d=>d.dataset.key));box.replaceChildren();
  const groups=new Map();for(const row of filtered){const key=row.currency+'|'+row.group;if(!groups.has(key))groups.set(key,[]);groups.get(key).push(row);}
  $('rewardsCount').textContent=`${groups.size.toLocaleString()}개 콘텐츠 · ${filtered.length.toLocaleString()}개 보상`;
- const headerGrid=n('div',undefined,'reward-content-grid'),panels=n('div',undefined,'reward-content-panels');box.append(headerGrid,panels);
+ const headerGrid=n('div',undefined,'reward-content-grid'),panels=[];box.append(headerGrid);
  let groupIndex=0;
  for(const [key,list] of groups){
   const d=n('details',undefined,'reward-group');d.dataset.key=key;d.open=open.has(key);
@@ -51,13 +61,15 @@ function render(){
    summary.append(identity,n('div',undefined,'reward-item-badges'),value,n('span',undefined,'reward-chevron'));row.append(summary);
    const children=n('div',undefined,'reward-stage-variants');for(const variant of variants)children.append(rewardRow(variant,open,true));row.append(children);stageList.append(row);
   }
-  headerGrid.append(d);panels.append(panel);
+  headerGrid.append(d,panel);panels.push(panel);
   d.addEventListener('toggle',()=>{
    if(!d.isConnected)return;
    panel.hidden=!d.open;h.setAttribute('aria-expanded',String(d.open));
-   if(d.open){for(const other of headerGrid.querySelectorAll('.reward-group'))if(other!==d){other.open=false;other.querySelector('summary').setAttribute('aria-expanded','false');}for(const other of panels.children)if(other!==panel)other.hidden=true;}
+   if(d.open){for(const other of headerGrid.querySelectorAll('.reward-group'))if(other!==d){other.open=false;other.querySelector('summary').setAttribute('aria-expanded','false');}for(const other of panels)if(other!==panel)other.hidden=true;}
+   positionStagePanel(headerGrid);
   });
  }
+ positionStagePanel(headerGrid);
  if(!groups.size)box.append(n('p','조건에 맞는 보상이 없습니다.','reward-empty'));
 }
 async function accept(value){
