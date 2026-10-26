@@ -57,3 +57,5 @@ for(const [id,direction]of [['wardrobePrev',-1],['wardrobeNext',1]])$(id).onclic
 let startX=null;$('wardrobeGrid').addEventListener('pointerdown',e=>{startX=e.clientX;});window.addEventListener('pointerup',e=>{if(startX!==null&&Math.abs(e.clientX-startX)>35){$(e.clientX<startX?'wardrobeNext':'wardrobePrev').click();}startX=null;});
 
 $('wardrobeZoom').onclick=()=>{const art=$('wardrobeArt');if(art.requestFullscreen)art.requestFullscreen().catch(()=>{});};
+function fitCollection(){const detail=$('wardrobeDetail'),wrap=$('wardrobe');if(detail.hidden){wrap.style.removeProperty('--collection-height');return;}const scale=wrap.clientWidth/1535;detail.style.setProperty('--collection-scale',String(scale));wrap.style.setProperty('--collection-height',`${862*scale}px`);}
+new ResizeObserver(fitCollection).observe($('wardrobe'));new MutationObserver(fitCollection).observe($('wardrobeDetail'),{attributes:true,attributeFilter:['hidden']});fitCollection();
