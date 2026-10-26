@@ -22,3 +22,5 @@
 .reward-group-heading .reward-story-label{color:var(--z-link);font-size:11px;margin:0 0 5px;line-height:1.5}.reward-stage-panel-title{margin-bottom:0}
 
 .reward-title-suffix{font-size:11px;font-weight:400;line-height:1.5;color:var(--z-link);letter-spacing:normal}
+
+.reward-visibility{display:flex;flex-wrap:wrap;gap:8px 18px;border:0;padding:0;margin:0 0 16px;min-width:0}.reward-visibility legend{font-size:12px;color:var(--z-muted);margin-bottom:10px}.reward-visibility label{display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;color:var(--z-text)}.reward-visibility input{accent-color:var(--z-accent);width:16px;height:16px;margin:0;border-radius:0}.reward-filters input{width:100%;background:var(--z-input);color:var(--z-text)}
