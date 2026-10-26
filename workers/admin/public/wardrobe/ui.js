@@ -1,4 +1,4 @@
-import {showSD,clearSD} from './sd.js?v=2';
+import {showSD,clearSD} from './sd.js?v=3';
 const $=id=>document.getElementById(id),make=(tag,text)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=text;return el;};
 let catalog,owned=null,selectedChar=null,selectedSkin=null,characters=[];
 const asset=(folder,id)=>`https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/dyn/arts/${folder}/${encodeURIComponent(id)}.png`;
