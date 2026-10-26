@@ -20,3 +20,5 @@
 .reward-content-grid>.reward-stage-panel{grid-column:1/-1;margin-top:0;min-width:0}.reward-content-grid>.reward-stage-panel{border-top-color:var(--z-accent)}
 
 .reward-group-heading .reward-story-label{color:var(--z-link);font-size:11px;margin:0 0 5px;line-height:1.5}.reward-stage-panel-title{margin-bottom:0}
+
+.reward-title-suffix{font-size:11px;font-weight:400;line-height:1.5;color:var(--z-link);letter-spacing:normal}

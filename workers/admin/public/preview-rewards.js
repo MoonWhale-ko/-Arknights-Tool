@@ -44,12 +44,12 @@ function render(){
   const index=groupIndex++,panel=n('section',undefined,'reward-stage-panel');panel.id='reward-stage-panel-'+index;panel.hidden=!d.open;
   const h=n('summary'),heading=n('div',undefined,'reward-group-heading');h.id='reward-content-heading-'+index;h.setAttribute('aria-controls',panel.id);h.setAttribute('aria-expanded',String(d.open));panel.setAttribute('aria-labelledby',h.id);
   const suffix=list[0].storyLabel?.replace(/^(?:메인 스토리|사이드 스토리)\s*/,'')||'';
-  const title=list[0].group+(suffix?' '+suffix:'');
-  heading.append(n('b',title),n('small',`${list.length.toLocaleString()}개 보상`));
+  const titleNode=n('b',list[0].group);if(suffix)titleNode.append(n('span',' '+suffix,'reward-title-suffix'));
+  heading.append(titleNode,n('small',`${list.length.toLocaleString()}개 보상`));
   const sum=list.filter(r=>r.status===(status||'remaining')).reduce((a,r)=>a+r.amount,0),amount=n('div',undefined,'reward-group-amount');
   amount.append(n('small',labels[status||'remaining']),currencyIcon(list[0].currency),n('strong',sum.toLocaleString()));amount.setAttribute('aria-label',`${labels[status||'remaining']} ${unit(list[0])} ${sum}`);
   h.append(heading,amount,n('span',undefined,'reward-chevron'));d.append(h);
-  panel.append(n('h2',title,'reward-stage-panel-title'));
+  const panelTitle=n('h2',list[0].group,'reward-stage-panel-title');if(suffix)panelTitle.append(n('span',' '+suffix,'reward-title-suffix'));panel.append(panelTitle);
   const stageList=n('div',undefined,'reward-stage-list');panel.append(stageList);
   const entries=new Map();
   const adverse=new Set(rows.filter(r=>r.currency==='originite'&&r.mode==='험지 작전').map(r=>r.id.replace(/#s$/,'')));
