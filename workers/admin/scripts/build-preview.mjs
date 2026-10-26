@@ -7,4 +7,5 @@ await rm(out,{recursive:true,force:true});await mkdir(out,{recursive:true});
 for(const entry of await readdir(root))if(entry.endsWith('.html'))await cp(root+entry,out+entry);
 for(const dir of ['assets','data','research'])await cp(root+dir,out+dir,{recursive:true});
 await buildRewards(out);
+await cp(new URL('../public/wardrobe/preview.html',import.meta.url),out+'wardrobe.html');
 console.log('Private preview uses the exact public site sources and reward build.');
