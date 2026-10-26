@@ -1,7 +1,7 @@
 const $=id=>document.getElementById(id),make=(tag,text)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=text;return el;};
 let catalog,owned=null;
 const asset=(folder,id)=>`https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/dyn/arts/${folder}/${encodeURIComponent(id)}.png`;
-export function ownedSkins(data){const skins=(data?.snapshot?.user??data?.user)?.skin?.characterSkins;if(!skins||typeof skins!=='object')return null;return new Set(Object.entries(skins).filter(([,value])=>Number(value)>0).map(([id])=>id));}
+export function ownedSkins(data){const skins=(data?.snapshot?.user??data?.user??data?.rewards?.user)?.skin?.characterSkins;if(!skins||typeof skins!=='object')return null;return new Set(Object.entries(skins).filter(([,value])=>Number(value)>0).map(([id])=>id));}
 async function accept(data){if(!data)return;owned=ownedSkins(data);if(owned){try{localStorage.setItem('zootAdminWardrobeSkins',JSON.stringify([...owned]));}catch{}}if(!owned){$('wardrobeMessage').textContent='스킨 보유 정보가 없습니다. 관리자 계정을 다시 가져와 주세요.';$('wardrobeGrid').replaceChildren();$('wardrobeCount').textContent='';return;}try{if(!catalog){const r=await fetch('/wardrobe/catalog.json');if(!r.ok)throw Error();catalog=(await r.json()).skins;}render();}catch{$('wardrobeMessage').textContent='스킨 목록을 불러오지 못했습니다. 다시 적용해 주세요.';}}
 function render(){if(!catalog||!owned)return;const query=$('wardrobeSearch').value.trim().toLocaleLowerCase(),all=$('wardrobeAll').checked,known=new Set(catalog.map(s=>s.id));const unknown=[...owned].filter(id=>!known.has(id)).map(id=>({id,operator:id.split('@')[0],name:'이름 확인 필요',brand:'게임 목록 미등록'}));const rows=[...catalog,...unknown].filter(s=>(all||owned.has(s.id))&&[s.operator,s.name,s.brand,s.id].join(' ').toLocaleLowerCase().includes(query)).sort((a,b)=>Number(owned.has(b.id))-Number(owned.has(a.id))||a.operator.localeCompare(b.operator,'ko')||a.name.localeCompare(b.name,'ko'));
 $('wardrobeMessage').textContent=`보유 스킨 ${owned.size}종 · 기본·정예화 외형 제외`;$('wardrobeCount').textContent=`${rows.length}종 표시`;
@@ -13,3 +13,6 @@ document.querySelector('[data-tab="wardrobe"]')?.addEventListener('click',()=>wi
 window.addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==parent)return;if(e.data?.type==='preview-account')accept(e.data.account);if(e.data?.type==='preview-clear')window.dispatchEvent(new Event('mining-clear'));});if(parent!==window)parent.postMessage({type:'preview-account-request'},location.origin);
 
 try{const ids=JSON.parse(localStorage.getItem('zootAdminWardrobeSkins')||'null');if(Array.isArray(ids))accept({user:{skin:{characterSkins:Object.fromEntries(ids.filter(id=>typeof id==='string').map(id=>[id,1]))}}});}catch{}
+
+function readImportedSkins(){try{const data=JSON.parse(localStorage.getItem('arknightsOneTimeRewardsV1')||'null');if(ownedSkins(data))accept(data);}catch{}}
+window.addEventListener('arknights-account-updated',readImportedSkins);window.addEventListener('storage',e=>{if(e.key==='arknightsOneTimeRewardsV1'||e.key==='zootAdminWardrobeSkins')readImportedSkins();});readImportedSkins();
