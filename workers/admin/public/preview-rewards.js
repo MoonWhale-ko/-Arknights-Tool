@@ -1,5 +1,6 @@
 import {audit,totals} from '/mining/engine.mjs';
 import {calculate} from '/orundum/engine.mjs';
+import {storyLabel} from '/mining/story-labels.mjs';
 import {REWARDS_KEY} from './assets/js/account-state.mjs?v=9';
 import {openAccountImport} from './assets/js/account-menu.mjs';
 const $=id=>document.getElementById(id),labels={remaining:'미수령',claimed:'수령 완료',unknown:'확인 필요'};
@@ -32,7 +33,7 @@ function positionStagePanel(grid){
 window.addEventListener('resize',()=>{const grid=document.querySelector('.reward-content-grid');if(grid)positionStagePanel(grid);});
 function render(){
  const query=$('rewardsSearch').value.trim().toLowerCase(),currency=$('rewardsCurrency').value,status=$('rewardsStatus').value;
- const filtered=rows.filter(r=>(!currency||r.currency===currency)&&(!status||r.status===status)&&(!query||[r.group,r.title,r.name,r.id].join(' ').toLowerCase().includes(query)));
+ const filtered=rows.filter(r=>(!currency||r.currency===currency)&&(!status||r.status===status)&&(!query||[r.storyLabel,r.group,r.title,r.name,r.id].join(' ').toLowerCase().includes(query)));
  const box=$('rewardsGroups'),open=new Set([...box.querySelectorAll('details[open]')].map(d=>d.dataset.key));box.replaceChildren();
  const groups=new Map();for(const row of filtered){const key=row.currency+'|'+row.group;if(!groups.has(key))groups.set(key,[]);groups.get(key).push(row);}
  $('rewardsCount').textContent=`${groups.size.toLocaleString()}개 콘텐츠 · ${filtered.length.toLocaleString()}개 보상`;
@@ -42,11 +43,12 @@ function render(){
   const d=n('details',undefined,'reward-group');d.dataset.key=key;d.open=open.has(key);
   const index=groupIndex++,panel=n('section',undefined,'reward-stage-panel');panel.id='reward-stage-panel-'+index;panel.hidden=!d.open;
   const h=n('summary'),heading=n('div',undefined,'reward-group-heading');h.id='reward-content-heading-'+index;h.setAttribute('aria-controls',panel.id);h.setAttribute('aria-expanded',String(d.open));panel.setAttribute('aria-labelledby',h.id);
+  if(list[0].storyLabel)heading.append(n('small',list[0].storyLabel,'reward-story-label'));
   heading.append(n('b',list[0].group),n('small',`${list.length.toLocaleString()}개 보상`));
   const sum=list.filter(r=>r.status===(status||'remaining')).reduce((a,r)=>a+r.amount,0),amount=n('div',undefined,'reward-group-amount');
   amount.append(n('small',labels[status||'remaining']),currencyIcon(list[0].currency),n('strong',sum.toLocaleString()));amount.setAttribute('aria-label',`${labels[status||'remaining']} ${unit(list[0])} ${sum}`);
   h.append(heading,amount,n('span',undefined,'reward-chevron'));d.append(h);
-  panel.append(n('h2',list[0].group+' · 세부 보상','reward-stage-panel-title'));
+  panel.append(n('h2',list[0].group,'reward-stage-panel-title'));
   const stageList=n('div',undefined,'reward-stage-list');panel.append(stageList);
   const entries=new Map();
   const adverse=new Set(rows.filter(r=>r.currency==='originite'&&r.mode==='험지 작전').map(r=>r.id.replace(/#s$/,'')));
@@ -78,7 +80,7 @@ async function accept(value){
   if(!catalogs)catalogs=await Promise.all(['/mining/catalog.json','/orundum/catalog.json'].map(async url=>{const r=await fetch(url);if(!r.ok)throw Error('보상 기준 데이터를 불러오지 못했습니다.');return r.json();}));
   const mine=audit(catalogs[0],value),or=calculate(catalogs[1],value);
   account=value;
-  rows=[...mine.included.map(r=>({...r,currency:'originite',amount:r.op,title:r.code+' · '+r.mode})),...or.rows.map(r=>({...r,currency:'orundum',group:r.category==='paradox'?'역설 시뮬레이션':r.name,title:r.category==='paradox'?r.name:r.title}))];
+  rows=[...mine.included.map(r=>({...r,currency:'originite',amount:r.op,storyLabel:storyLabel(r),title:r.code+' · '+r.mode})),...or.rows.map(r=>({...r,currency:'orundum',group:r.category==='paradox'?'역설 시뮬레이션':r.name,title:r.category==='paradox'?r.name:r.title}))];
   $('rewardsOriginite').textContent=totals(mine.included).remaining.toLocaleString();$('rewardsOrundum').textContent=or.totals.remaining.toLocaleString();
   $('rewardsMessage').hidden=true;$('rewardsResults').hidden=false;render();
  }catch(e){clear();showError('보상 기록이 포함된 계정을 다시 가져와주세요.');}
