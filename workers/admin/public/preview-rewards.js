@@ -33,18 +33,19 @@ function render(){
   const sum=list.filter(r=>r.status===(status||'remaining')).reduce((a,r)=>a+r.amount,0),amount=n('div',undefined,'reward-group-amount');
   amount.append(n('small',labels[status||'remaining']),currencyIcon(list[0].currency),n('strong',sum.toLocaleString()));amount.setAttribute('aria-label',`${labels[status||'remaining']} ${unit(list[0])} ${sum}`);
   h.append(heading,amount,n('span',undefined,'reward-chevron'));d.append(h);
+  const stageList=n('div',undefined,'reward-stage-list');d.append(stageList);
   const entries=new Map();
   const adverse=new Set(rows.filter(r=>r.currency==='originite'&&r.mode==='험지 작전').map(r=>r.id.replace(/#s$/,'')));
   for(const r of list){const base=r.id.replace(/#s$/,'');const paired=r.currency==='originite'&&adverse.has(base)&&['일반','험지 작전'].includes(r.mode);const k=paired?'stage|'+base:'single|'+r.id;if(!entries.has(k))entries.set(k,{r,paired,base});}
   for(const {r,paired,base} of entries.values()){
-   if(!paired){d.append(rewardRow(r,open));continue;}
+   if(!paired){stageList.append(rewardRow(r,open));continue;}
    const variants=rows.filter(v=>v.currency===r.currency&&v.group===r.group&&v.id.replace(/#s$/,'')===base&&['일반','험지 작전'].includes(v.mode)).sort((a,b)=>(a.mode==='험지 작전')-(b.mode==='험지 작전'));
    const state=variants.every(v=>v.status==='claimed')?'claimed':variants.some(v=>v.status==='remaining')?'remaining':'unknown';
    const row=n('details',undefined,'reward-item reward-stage '+state);row.dataset.key='stage|'+r.currency+'|'+base;row.dataset.stage=base;row.open=open.has(row.dataset.key);
    const summary=n('summary'),identity=n('div',undefined,'reward-item-identity'),name=n('div',undefined,'reward-item-name');name.append(n('strong',r.code),n('small',r.name));identity.append(name);
    const value=n('div',undefined,'reward-item-value'),sum=variants.filter(v=>v.status===(status||'remaining')).reduce((n,v)=>n+v.amount,0);value.append(currencyIcon(r.currency),n('b',sum.toLocaleString()));value.setAttribute('aria-label',`${labels[status||'remaining']} ${unit(r)} ${sum}`);
    summary.append(identity,n('div',undefined,'reward-item-badges'),value,n('span',undefined,'reward-chevron'));row.append(summary);
-   const children=n('div',undefined,'reward-stage-variants');for(const variant of variants)children.append(rewardRow(variant,open,true));row.append(children);d.append(row);
+   const children=n('div',undefined,'reward-stage-variants');for(const variant of variants)children.append(rewardRow(variant,open,true));row.append(children);stageList.append(row);
   }
   box.append(d);
  }
