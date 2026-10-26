@@ -52,7 +52,7 @@ test('prerequisite bounds distinguish locked stages and PASS from three-star pro
  const {stageEvidence}=await import('../public/mining/evidence.mjs');
  const c={graph:{a:{code:'A',requires:[]},b:{code:'B',requires:[{stageId:'a',completeState:'PASS'}]},c:{code:'C',requires:[{stageId:'b',completeState:'PASS'}]},p:{requires:[]},q:{requires:[{stageId:'p',completeState:'PASS'}]},x:{requires:[]},y:{requires:[{stageId:'x',completeState:'COMPLETE'}]}},medals:[]};
  const b=stageEvidence(c,{dungeon:{stages:{a:{state:0},q:{state:3},y:{state:3}}}});
- assert.equal(b.get('c').hi,0);assert.match(b.get('b').reason,/직전 해금 조건: A/);
+ assert.equal(b.get('c').hi,0);assert.match(b.get('b').reason,/해금 조건: A/);
  assert.equal(b.get('p').lo,2);assert.equal(b.get('x').lo,3);
 });
 test('harder completions fold down once without granting normal-to-challenge rewards',async()=>{

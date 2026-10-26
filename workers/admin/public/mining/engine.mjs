@@ -42,7 +42,7 @@ export function audit(catalog, data, { now = Date.now() / 1000, overrides = {} }
     const prerequisites=(graphNode?.requires||[]).map(describe);
     const missing=prerequisites.filter(p=>!p.satisfied);
     const unlockDetails=[];
-    if(prerequisites.length)unlockDetails.push('직전 해금 조건: '+prerequisites.map(p=>`${p.code} ${p.requirement} (${p.satisfied?'충족':'미충족'})`).join(' + '));
+    if(prerequisites.length)unlockDetails.push('해금 조건: '+prerequisites.map(p=>`${p.code} ${p.requirement} (${p.satisfied?'충족':'미충족'})`).join(' + '));
     // Zero-reward tutorials still occupy a real step in the progression route.
     for(const p of prerequisites){const parent=catalog.graph?.[p.stageId];if(!parent?.code?.startsWith('TR-'))continue;const before=(parent.requires||[]).map(describe);if(before.length)unlockDetails.push('진행 순서: '+before.map(x=>x.code).join(' + ')+' → '+p.code+' → '+s.code);}
     if(zoneGate)unlockDetails.push('에피소드 진입 조건: '+(catalog.graph?.[zoneGate]?.code||zoneGate)+' 완료 ('+(zoneBlocked?'미충족':'충족')+')');
