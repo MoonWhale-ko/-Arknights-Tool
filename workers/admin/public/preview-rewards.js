@@ -39,7 +39,12 @@ function render(){
  $('rewardsCount').textContent=`${groups.size.toLocaleString()}개 콘텐츠 · ${filtered.length.toLocaleString()}개 보상`;
  const headerGrid=n('div',undefined,'reward-content-grid'),panels=[];box.append(headerGrid);
  let groupIndex=0;
- for(const [key,list] of groups){
+ const orderedGroups=[...groups].map((entry,index)=>({entry,index,episode:entry[1].map(r=>r.storyLabel?.match(/^메인 스토리 · (\d+)지역$/)).find(Boolean)?.[1]})).sort((a,b)=>{
+  if(a.episode!==undefined&&b.episode!==undefined)return Number(a.episode)-Number(b.episode);
+  if(a.episode!==undefined)return -1;if(b.episode!==undefined)return 1;
+  return a.index-b.index;
+ });
+ for(const {entry:[key,list]} of orderedGroups){
   const d=n('details',undefined,'reward-group');d.dataset.key=key;d.open=open.has(key);
   const index=groupIndex++,panel=n('section',undefined,'reward-stage-panel');panel.id='reward-stage-panel-'+index;panel.hidden=!d.open;
   const h=n('summary'),heading=n('div',undefined,'reward-group-heading');h.id='reward-content-heading-'+index;h.setAttribute('aria-controls',panel.id);h.setAttribute('aria-expanded',String(d.open));panel.setAttribute('aria-labelledby',h.id);
