@@ -13,7 +13,7 @@ for sid,st in s['stages'].items():
  cat='event' if st['stageType']=='ACTIVITY' else 'main' if st['stageType'] in ['MAIN','SUB'] else 'other'
  if cat=='event' and not act:continue
  v=s['stageValidInfo'].get(sid,{})
- rows[sid]=dict(id=sid,code=st['code'],name=st['name'],zone=st['zoneId'],group=act.get('name') or zone.get('zoneNameSecond') or st['zoneId'],category=cat,mode='추가 조건 작전' if st['difficulty']=='SIX_STAR' else '강습' if st['difficulty']=='FOUR_STAR' else 'H 스테이지' if st['code'].startswith('H') else st.get('diffGroup') if st.get('diffGroup') not in [None,'NONE'] else '일반',op=st['diamondOnceDrop'],story=st.get('isStoryOnly',False),start=v.get('startTs',act.get('startTime',0)),end=v.get('endTs',act.get('endTime',-1)))
+ rows[sid]=dict(id=sid,code=st['code'],name=st['name'],zone=st['zoneId'],group=act.get('name') or zone.get('zoneNameSecond') or st['zoneId'],category=cat,mode='험지 작전' if st['difficulty']=='SIX_STAR' else '강습' if st['difficulty']=='FOUR_STAR' else 'H 스테이지' if st['code'].startswith('H') else st.get('diffGroup') if st.get('diffGroup') not in [None,'NONE'] else '일반',op=st['diamondOnceDrop'],story=st.get('isStoryOnly',False),start=v.get('startTs',act.get('startTime',0)),end=v.get('endTs',act.get('endTime',-1)))
 for row in rows.values():
  row['routes']=[dict(type='event' if row['category']=='event' else 'permanent',start=row['start'],end=row['end'])]
 for sid,st in r['stageList'].items():
@@ -22,7 +22,7 @@ for sid,st in r['stageList'].items():
  if not retro:continue
  previous=rows.get(sid,{})
  routes=previous.get('routes',[])+[dict(type='permanent',start=max(v.get('startTs',0),retro.get('startTime',0)),end=v.get('endTs',-1))]
- rows[sid]=dict(id=sid,code=st['code'],name=st['name'],zone=st['zoneId'],group=retro.get('name') or st['zoneId'],category='main' if retroId.startswith('permanent_main_') else 'side',mode='추가 조건 작전' if st['difficulty']=='SIX_STAR' else 'H 스테이지' if st['code'].startswith('H') and not st['code'].startswith('HS') else '강습' if st['difficulty']=='FOUR_STAR' else '일반',op=st['diamondOnceDrop'],story=st.get('isStoryOnly',False),routes=routes,retroId=retroId,start=max(v.get('startTs',0),retro.get('startTime',0)),end=v.get('endTs',-1))
+ rows[sid]=dict(id=sid,code=st['code'],name=st['name'],zone=st['zoneId'],group=retro.get('name') or st['zoneId'],category='main' if retroId.startswith('permanent_main_') else 'side',mode='험지 작전' if st['difficulty']=='SIX_STAR' else 'H 스테이지' if st['code'].startswith('H') and not st['code'].startswith('HS') else '강습' if st['difficulty']=='FOUR_STAR' else '일반',op=st['diamondOnceDrop'],story=st.get('isStoryOnly',False),routes=routes,retroId=retroId,start=max(v.get('startTs',0),retro.get('startTime',0)),end=v.get('endTs',-1))
 for row in rows.values():
  row['kind']='스토리' if row['story'] else '튜토리얼' if '-TR-' in row['code'] or row['code'].startswith('TR-') else '전투'
  if row['id'].startswith('act42side_'):

@@ -52,7 +52,7 @@ test('prerequisite bounds distinguish locked stages and PASS from three-star pro
  const {stageEvidence}=await import('../public/mining/evidence.mjs');
  const c={graph:{a:{code:'A',requires:[]},b:{code:'B',requires:[{stageId:'a',completeState:'PASS'}]},c:{code:'C',requires:[{stageId:'b',completeState:'PASS'}]},p:{requires:[]},q:{requires:[{stageId:'p',completeState:'PASS'}]},x:{requires:[]},y:{requires:[{stageId:'x',completeState:'COMPLETE'}]}},medals:[]};
  const b=stageEvidence(c,{dungeon:{stages:{a:{state:0},q:{state:3},y:{state:3}}}});
- assert.equal(b.get('c').hi,0);assert.match(b.get('b').reason,/선행 A/);
+ assert.equal(b.get('c').hi,0);assert.match(b.get('b').reason,/직전 해금 조건: A/);
  assert.equal(b.get('p').lo,2);assert.equal(b.get('x').lo,3);
 });
 test('harder completions fold down once without granting normal-to-challenge rewards',async()=>{
@@ -80,4 +80,19 @@ test('episode gates classify absent roots but temporary entry never proves the p
  let b=stageEvidence(c,u,15);assert.equal(b.get('root').hi,0);assert.equal(b.get('child').hi,0);assert.match(b.get('root').reason,/에피소드 해금/);assert.equal(b.get('temp').hi,3);
  b=stageEvidence(c,u,21);assert.equal(b.get('temp').hi,0);
  u.dungeon.stages.temp={state:3};b=stageEvidence(c,u,15);assert.equal(b.get('previous').lo,0);assert.equal(b.get('temp').lo,3);
+});
+
+test('direct unlock requirements stay distinct from chapter entry and retain tutorial steps',()=>{
+ const catalog={stages:[stage('target',{code:'16-3',mode:'추가 조건 작전'})],graph:{chapter:{code:'15-21',requires:[]},previous:{code:'16-2',requires:[],zoneRequires:'chapter'},tutorial:{code:'TR-27',requires:[{stageId:'previous',completeState:'PASS'}],zoneRequires:'chapter'},target:{code:'16-3',requires:[{stageId:'tutorial',completeState:'PASS'}],zoneRequires:'chapter'}},medals:[]};
+ const data={user:{dungeon:{stages:{chapter:{state:0}}}}};
+ let row=calculate(catalog,data,{now:100})[0];
+ assert.equal(row.access,'TR-27 클리어 필요');
+ assert.match(row.reason,/TR-27/);
+ assert.ok(row.unlockDetails.some(s=>s.includes('16-2 → TR-27 → 16-3')));
+ assert.ok(row.unlockDetails.some(s=>s.includes('에피소드 진입 조건: 15-21')));
+ assert.equal(row.mode,'험지 작전');
+ data.user.dungeon.stages.tutorial={state:2};
+ row=calculate(catalog,data,{now:100})[0];assert.match(row.access,/15-21.*에피소드 진입/);
+ data.user.dungeon.stages.chapter={state:2};row=calculate(catalog,data,{now:100})[0];assert.equal(row.access,'개방 중');
+ catalog.graph.target.requires=[{stageId:'tutorial',completeState:'COMPLETE'}];row=calculate(catalog,data,{now:100})[0];assert.equal(row.access,'TR-27 3성 클리어 필요');
 });

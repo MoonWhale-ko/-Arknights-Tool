@@ -38,10 +38,19 @@ export function audit(catalog, data, { now = Date.now() / 1000, overrides = {} }
     const entry=graphNode?.entryWindow, tempEntry=entry&&entry.start<=now&&now<entry.end;
     const zoneGate=tempEntry?entry.requires:graphNode?.zoneRequires;
     const zoneBlocked=zoneGate&&(evidence.get(zoneGate)?.lo??0)<2;
-    const unmet=zoneBlocked||(graphNode?.requires||[]).some(p=>{const n=p.completeState==='COMPLETE'?3:2;return (evidence.get(p.stageId)?.lo??0)<n;});
+    const describe=p=>{const node=catalog.graph?.[p.stageId];return {stageId:p.stageId,code:node?.code||p.stageId,requirement:p.completeState==='COMPLETE'?'3성 클리어':node?.story?'완료':'클리어',satisfied:(evidence.get(p.stageId)?.lo??0)>=(p.completeState==='COMPLETE'?3:2)};};
+    const prerequisites=(graphNode?.requires||[]).map(describe);
+    const missing=prerequisites.filter(p=>!p.satisfied);
+    const unlockDetails=[];
+    if(prerequisites.length)unlockDetails.push('직전 해금 조건: '+prerequisites.map(p=>`${p.code} ${p.requirement} (${p.satisfied?'충족':'미충족'})`).join(' + '));
+    // Zero-reward tutorials still occupy a real step in the progression route.
+    for(const p of prerequisites){const parent=catalog.graph?.[p.stageId];if(!parent?.code?.startsWith('TR-'))continue;const before=(parent.requires||[]).map(describe);if(before.length)unlockDetails.push('진행 순서: '+before.map(x=>x.code).join(' + ')+' → '+p.code+' → '+s.code);}
+    if(zoneGate)unlockDetails.push('에피소드 진입 조건: '+(catalog.graph?.[zoneGate]?.code||zoneGate)+' 완료 ('+(zoneBlocked?'미충족':'충족')+')');
     const gate=s.pointGate,gateMissing=gate&&(progress.get(gate.group)?.point??0)<gate.point;
-    const access=s.idType==='milestone'?(ready?'수령 가능':'추가 별 달성 필요'):block?.locked===1?'콘텐츠 해금 필요':gateMissing?`누적 ${gate.point}P 필요`:unmet?'선행 스테이지 진행 필요':'개방 중';
-    included.push({ ...s, status, reason, assumed, access, availability: availability.label, ready });
+    if(gate)unlockDetails.push(`추가 해금 조건: 누적 ${gate.point}P (현재 ${progress.get(gate.group)?.point??'미확인'}P)`);
+    const access=s.idType==='milestone'?(ready?'수령 가능':'추가 별 달성 필요'):gateMissing?`누적 ${gate.point}P 필요`:missing.length?missing.map(p=>p.code+' '+p.requirement).join(' + ')+' 필요':zoneBlocked?(catalog.graph?.[zoneGate]?.code||zoneGate)+' 완료 필요 (에피소드 진입)':block?.locked===1?'콘텐츠 해금 필요':'개방 중';
+    const adverse=s.mode==='추가 조건 작전'||s.mode==='험지 작전';
+    included.push({ ...s,mode:adverse?'험지 작전':s.mode,modeDescription:adverse?'일반 작전에 제한 조건이 추가되는 난이도입니다. 추가 별 점수를 얻는 모의 훈련과는 별개입니다.':undefined, prerequisites,unlockDetails,status, reason, assumed, access, availability: availability.label, ready });
   }
   return { included, excluded, simulation, calculatedAt: new Date(now * 1000).toISOString() };
 }

@@ -31,7 +31,7 @@ function render(){
    else if(r.access&&!['개방 중','바로 도전 가능'].includes(r.access))badges.append(n('span',r.access==='육성 후 도전 가능'?'육성 필요':r.access,'reward-tag'));
    const value=n('div',undefined,'reward-item-value');value.append(currencyIcon(r.currency),n('b',r.amount.toLocaleString()));value.setAttribute('aria-label',`${unit(r)} ${r.amount}`);
    summary.append(identity,badges,value,n('span',undefined,'reward-chevron'));row.append(summary);
-   const detail=n('div',undefined,'reward-item-detail');detail.append(n('p',r.reason));if(r.condition)detail.append(n('p',r.condition));row.append(detail);d.append(row);
+   const detail=n('div',undefined,'reward-item-detail');if(r.modeDescription)detail.append(n('p',r.modeDescription));for(const text of r.unlockDetails||[])detail.append(n('p',text));detail.append(n('p',r.reason));if(r.condition)detail.append(n('p',r.condition));row.append(detail);d.append(row);
   }
   box.append(d);
  }

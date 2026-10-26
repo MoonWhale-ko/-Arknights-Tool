@@ -33,6 +33,12 @@ export function stageEvidence(catalog, user, now=Date.now()/1000) {
       if(blocked){b.hi=0;b.reason='선행 '+(graph[blocked.stageId]?.code||blocked.stageId)+' 미완료 → 아직 해금되지 않음';changed=true;}
     }
   }
+  // Present the nearest prerequisite separately from episode entry, without changing bounds.
+  for(const [id,node]of Object.entries(graph)){
+    const b=bounds.get(id);if(!b||b.hi!==0||Object.hasOwn(records,id))continue;
+    const blocked=(node.requires||[]).find(p=>{const n=p.completeState==='COMPLETE'?3:p.completeState==='PASS'?2:0;return n&&(bounds.get(p.stageId)?.hi??3)<n;});
+    if(blocked)b.reason='직전 해금 조건: '+(graph[blocked.stageId]?.code||blocked.stageId)+' '+(blocked.completeState==='COMPLETE'?'3성 클리어':'완료')+' 필요';
+  }
   return bounds;
 }
 export function simulationProgress(catalog,user) {
