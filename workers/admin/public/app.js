@@ -177,6 +177,7 @@ task(async () => {
 // Private account data lives only in this page's memory. It is never part of a CMS save.
 let rawSnapshot = null;
 function clearRawAccount() {
+  try { localStorage.removeItem('zootAdminWardrobeSkins'); } catch {}
   rawSnapshot = null; window.dispatchEvent(new Event('orundum-clear')); window.dispatchEvent(new Event('mining-clear')); $('rawPreview').textContent = ''; $('rawSummary').textContent = '';
   $('rawSection').replaceChildren(); $('rawResult').hidden = true; $('rawCode').value = '';
 }
@@ -202,6 +203,8 @@ $('rawAccountForm').onsubmit = event => {
     $('rawCode').value = ''; clearRawAccount(); status('계정 동기화 원본을 가져오는 중입니다.');
     const data = await api('/api/account/sync', 'POST', body);
     rawSnapshot = { version: 1, importedAt: data.importedAt, server: data.server, source: data.source, snapshot: data.snapshot, supplementary: data.supplementary };
+    const skins=data.snapshot?.user?.skin?.characterSkins;
+    if(skins)try{localStorage.setItem('zootAdminWardrobeSkins',JSON.stringify(Object.entries(skins).filter(([,v])=>Number(v)>0).map(([id])=>id)));}catch{}
     $('previewFrame')?.contentWindow?.postMessage({type:'preview-account',account:rawSnapshot},location.origin);
     const selector = $('rawSection');
     selector.append(new Option('전체 동기화 응답', 'all'));
