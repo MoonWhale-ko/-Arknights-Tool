@@ -99,6 +99,11 @@ function fromStorage(){try{const saved=JSON.parse(localStorage.getItem(REWARDS_K
 function showError(text){$('rewardsMessage').textContent=text;$('rewardsMessage').hidden=false;}
 $('rewardsImport').onclick=()=>openAccountImport().catch(e=>showError(e.message));
 $('rewardsSearch').addEventListener('input',render);
+const picker=$('rewardsPicker'),pickerPanel=$('rewardsPickerPanel');
+function closePicker(){pickerPanel.hidden=true;picker.setAttribute('aria-expanded','false');}
+picker.addEventListener('click',()=>{pickerPanel.hidden=!pickerPanel.hidden;picker.setAttribute('aria-expanded',String(!pickerPanel.hidden));});
+document.addEventListener('click',e=>{if(!e.target.closest('.reward-picker'))closePicker();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!pickerPanel.hidden){closePicker();picker.focus();}});
 const categoryInputs=[...document.querySelectorAll('[name=rewardCategory]')];
 try{const saved=JSON.parse(localStorage.getItem('zootRewardVisibility')||'null');if(Array.isArray(saved))for(const input of categoryInputs)input.checked=saved.includes(input.value);}catch{}
 for(const input of categoryInputs)input.addEventListener('change',()=>{try{localStorage.setItem('zootRewardVisibility',JSON.stringify(categoryInputs.filter(input=>input.checked).map(input=>input.value)));}catch{}render();});
