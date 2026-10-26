@@ -7,6 +7,19 @@ const n=(tag,text,cls)=>{const e=document.createElement(tag);if(text!==undefined
 let account,rows=[],catalogs;
 const unit=r=>r.currency==='originite'?'순오리지늄':'합성옥';
 function currencyIcon(currency){const img=n('img');img.src='https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/'+(currency==='originite'?'DIAMOND':'DIAMOND_SHD')+'.png';img.alt='';img.setAttribute('aria-hidden','true');img.width=28;img.height=28;img.loading='lazy';return img;}
+function rewardRow(r,open,nested=false){
+   const row=n('details',undefined,'reward-item '+r.status+(nested?' reward-mode':''));row.dataset.key='item|'+r.currency+'|'+r.id;row.open=open.has(row.dataset.key);
+   const summary=n('summary'),identity=n('div',undefined,'reward-item-identity');
+   if(r.charId){const img=n('img',undefined,'reward-avatar');img.src=`https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/dyn/arts/charavatars/${encodeURIComponent(r.charId)}.png`;img.alt='';img.loading='lazy';img.width=40;img.height=40;img.addEventListener('error',()=>img.replaceWith(n('span',r.name?.slice(0,1)||'·','reward-avatar reward-avatar-fallback')),{once:true});identity.append(img);}
+   const name=n('div',undefined,'reward-item-name');name.append(n('strong',nested?(r.mode==='험지 작전'?'험지 작전':'기본 작전'):(r.code||r.title)));if(!nested&&r.code&&r.name)name.append(n('small',r.name));identity.append(name);
+   const badges=n('div',undefined,'reward-item-badges');
+   if(!nested&&r.mode&&r.mode!=='일반')badges.append(n('span',r.mode,'reward-tag'));
+   if(r.status!=='remaining')badges.append(n('span',labels[r.status],'reward-tag '+r.status));
+   else if(r.access&&!['개방 중','바로 도전 가능'].includes(r.access))badges.append(n('span',r.access==='육성 후 도전 가능'?'육성 필요':r.access,'reward-tag'));
+   const value=n('div',undefined,'reward-item-value');value.append(currencyIcon(r.currency),n('b',r.amount.toLocaleString()));value.setAttribute('aria-label',`${unit(r)} ${r.amount}`);
+   summary.append(identity,badges,value,n('span',undefined,'reward-chevron'));row.append(summary);
+   const detail=n('div',undefined,'reward-item-detail');if(r.modeDescription)detail.append(n('p',r.modeDescription));for(const text of r.unlockDetails||[])detail.append(n('p',text));detail.append(n('p',r.reason));if(r.condition)detail.append(n('p',r.condition));row.append(detail);return row;
+}
 function render(){
  const query=$('rewardsSearch').value.trim().toLowerCase(),currency=$('rewardsCurrency').value,status=$('rewardsStatus').value;
  const filtered=rows.filter(r=>(!currency||r.currency===currency)&&(!status||r.status===status)&&(!query||[r.group,r.title,r.name,r.id].join(' ').toLowerCase().includes(query)));
@@ -20,18 +33,18 @@ function render(){
   const sum=list.filter(r=>r.status===(status||'remaining')).reduce((a,r)=>a+r.amount,0),amount=n('div',undefined,'reward-group-amount');
   amount.append(n('small',labels[status||'remaining']),currencyIcon(list[0].currency),n('strong',sum.toLocaleString()));amount.setAttribute('aria-label',`${labels[status||'remaining']} ${unit(list[0])} ${sum}`);
   h.append(heading,amount,n('span',undefined,'reward-chevron'));d.append(h);
-  for(const r of list){
-   const row=n('details',undefined,'reward-item '+r.status);row.dataset.key='item|'+r.currency+'|'+r.id;row.open=open.has(row.dataset.key);
-   const summary=n('summary'),identity=n('div',undefined,'reward-item-identity');
-   if(r.charId){const img=n('img',undefined,'reward-avatar');img.src=`https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/dyn/arts/charavatars/${encodeURIComponent(r.charId)}.png`;img.alt='';img.loading='lazy';img.width=40;img.height=40;img.addEventListener('error',()=>img.replaceWith(n('span',r.name?.slice(0,1)||'·','reward-avatar reward-avatar-fallback')),{once:true});identity.append(img);}
-   const name=n('div',undefined,'reward-item-name');name.append(n('strong',r.code||r.title));if(r.code&&r.name)name.append(n('small',r.name));identity.append(name);
-   const badges=n('div',undefined,'reward-item-badges');
-   if(r.mode&&r.mode!=='일반')badges.append(n('span',r.mode,'reward-tag'));
-   if(r.status!=='remaining')badges.append(n('span',labels[r.status],'reward-tag '+r.status));
-   else if(r.access&&!['개방 중','바로 도전 가능'].includes(r.access))badges.append(n('span',r.access==='육성 후 도전 가능'?'육성 필요':r.access,'reward-tag'));
-   const value=n('div',undefined,'reward-item-value');value.append(currencyIcon(r.currency),n('b',r.amount.toLocaleString()));value.setAttribute('aria-label',`${unit(r)} ${r.amount}`);
-   summary.append(identity,badges,value,n('span',undefined,'reward-chevron'));row.append(summary);
-   const detail=n('div',undefined,'reward-item-detail');if(r.modeDescription)detail.append(n('p',r.modeDescription));for(const text of r.unlockDetails||[])detail.append(n('p',text));detail.append(n('p',r.reason));if(r.condition)detail.append(n('p',r.condition));row.append(detail);d.append(row);
+  const entries=new Map();
+  const adverse=new Set(rows.filter(r=>r.currency==='originite'&&r.mode==='험지 작전').map(r=>r.id.replace(/#s$/,'')));
+  for(const r of list){const base=r.id.replace(/#s$/,'');const paired=r.currency==='originite'&&adverse.has(base)&&['일반','험지 작전'].includes(r.mode);const k=paired?'stage|'+base:'single|'+r.id;if(!entries.has(k))entries.set(k,{r,paired,base});}
+  for(const {r,paired,base} of entries.values()){
+   if(!paired){d.append(rewardRow(r,open));continue;}
+   const variants=rows.filter(v=>v.currency===r.currency&&v.group===r.group&&v.id.replace(/#s$/,'')===base&&['일반','험지 작전'].includes(v.mode)).sort((a,b)=>(a.mode==='험지 작전')-(b.mode==='험지 작전'));
+   const state=variants.every(v=>v.status==='claimed')?'claimed':variants.some(v=>v.status==='remaining')?'remaining':'unknown';
+   const row=n('details',undefined,'reward-item reward-stage '+state);row.dataset.key='stage|'+r.currency+'|'+base;row.dataset.stage=base;row.open=open.has(row.dataset.key);
+   const summary=n('summary'),identity=n('div',undefined,'reward-item-identity'),name=n('div',undefined,'reward-item-name');name.append(n('strong',r.code),n('small',r.name));identity.append(name);
+   const value=n('div',undefined,'reward-item-value'),sum=variants.filter(v=>v.status===(status||'remaining')).reduce((n,v)=>n+v.amount,0);value.append(currencyIcon(r.currency),n('b',sum.toLocaleString()));value.setAttribute('aria-label',`${labels[status||'remaining']} ${unit(r)} ${sum}`);
+   summary.append(identity,n('div',undefined,'reward-item-badges'),value,n('span',undefined,'reward-chevron'));row.append(summary);
+   const children=n('div',undefined,'reward-stage-variants');for(const variant of variants)children.append(rewardRow(variant,open,true));row.append(children);d.append(row);
   }
   box.append(d);
  }
