@@ -203,6 +203,7 @@ $('rawAccountForm').onsubmit = event => {
     $('rawCode').value = ''; clearRawAccount(); status('계정 동기화 원본을 가져오는 중입니다.');
     const data = await api('/api/account/sync', 'POST', body);
     rawSnapshot = { version: 1, importedAt: data.importedAt, server: data.server, source: data.source, snapshot: data.snapshot, supplementary: data.supplementary };
+    try{localStorage.setItem('zootAdminWardrobeCharacters',JSON.stringify(Object.values(data.snapshot?.user?.troop?.chars||{}).map(c=>({charId:c.charId,skin:c.skin,elite:c.evolvePhase??0}))));}catch{}
     const skins=data.snapshot?.user?.skin?.characterSkins;
     if(skins)try{localStorage.setItem('zootAdminWardrobeSkins',JSON.stringify(Object.entries(skins).filter(([,v])=>Number(v)>0).map(([id])=>id)));}catch{}
     $('previewFrame')?.contentWindow?.postMessage({type:'preview-account',account:rawSnapshot},location.origin);

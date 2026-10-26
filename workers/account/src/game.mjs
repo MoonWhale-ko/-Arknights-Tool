@@ -262,7 +262,7 @@ export async function getAccount(email, code, fetcher) {
 }
 export function rewardAccount(user) {
   // Only progress required for one-time rewards; no identity or authentication fields.
-  const chars=Object.fromEntries(Object.entries(user.troop?.chars||{}).map(([key,c])=>[key,{charId:c.charId,evolvePhase:c.evolvePhase,level:c.level}]));
+  const chars=Object.fromEntries(Object.entries(user.troop?.chars||{}).map(([key,c])=>[key,{charId:c.charId,evolvePhase:c.evolvePhase,level:c.level,...(typeof c.skin==='string'?{skin:c.skin}:{})}]));
   const addon=Object.fromEntries(Object.entries(user.troop?.addon||{}).map(([id,c])=>[id,{stage:c.stage}]));
   return {user:{skin:{characterSkins:user.skin?.characterSkins},dungeon:{stages:user.dungeon?.stages,sixStar:user.dungeon?.sixStar},
     medal:{medals:user.medal?.medals},retro:{block:user.retro?.block},
