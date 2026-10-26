@@ -5,11 +5,11 @@ import {REWARDS_KEY} from './assets/js/account-state.mjs?v=9';
 import {openAccountImport} from './assets/js/account-menu.mjs';
 const $=id=>document.getElementById(id),labels={remaining:'미수령',claimed:'수령 완료',unknown:'확인 필요'};
 const n=(tag,text,cls)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;};
-let account,rows=[],catalogs;
+let account,rows=[],catalogs,operatorRarities=new Map();
 const unit=r=>r.currency==='originite'?'순오리지늄':'합성옥';
 function currencyIcon(currency){const img=n('img');img.src='https://raw.githubusercontent.com/fexli/ArknightsResource/main/items/'+(currency==='originite'?'DIAMOND':'DIAMOND_SHD')+'.png';img.alt='';img.setAttribute('aria-hidden','true');img.width=28;img.height=28;img.loading='lazy';return img;}
 function rewardRow(r,open,nested=false){
-   const row=n('details',undefined,'reward-item '+r.status+(nested?' reward-mode':''));row.dataset.key='item|'+r.currency+'|'+r.id;row.open=open.has(row.dataset.key);
+   const row=n('details',undefined,'reward-item '+r.status+(nested?' reward-mode':''));row.dataset.key='item|'+r.currency+'|'+r.id;row.open=open.has(row.dataset.key);if(r.category==='paradox'){row.dataset.rarity=String(r.rarity);row.dataset.unlocked=String(r.access==='바로 도전 가능');}
    const summary=n('summary'),identity=n('div',undefined,'reward-item-identity');
    if(r.charId){const img=n('img',undefined,'reward-avatar');img.src=`https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/dyn/arts/charavatars/${encodeURIComponent(r.charId)}.png`;img.alt='';img.loading='lazy';img.width=40;img.height=40;img.addEventListener('error',()=>img.replaceWith(n('span',r.name?.slice(0,1)||'·','reward-avatar reward-avatar-fallback')),{once:true});identity.append(img);}
    const name=n('div',undefined,'reward-item-name');name.append(n('strong',nested?(r.mode==='험지 작전'?'험지 작전':'기본 작전'):(r.code||r.title)));if(!nested&&r.code&&r.name)name.append(n('small',r.name));identity.append(name);
@@ -45,6 +45,7 @@ function render(){
   return a.index-b.index;
  });
  for(const {entry:[key,list]} of orderedGroups){
+  if(list[0].category==='paradox')list.sort((a,b)=>Number(b.access==='바로 도전 가능')-Number(a.access==='바로 도전 가능')||b.rarity-a.rarity||a.name.localeCompare(b.name,'ko',{numeric:true}));
   const d=n('details',undefined,'reward-group');d.dataset.key=key;d.open=open.has(key);
   const index=groupIndex++,panel=n('section',undefined,'reward-stage-panel');panel.id='reward-stage-panel-'+index;panel.hidden=!d.open;
   const h=n('summary'),heading=n('div',undefined,'reward-group-heading');h.id='reward-content-heading-'+index;h.setAttribute('aria-controls',panel.id);h.setAttribute('aria-expanded',String(d.open));panel.setAttribute('aria-labelledby',h.id);
@@ -83,10 +84,10 @@ function render(){
 async function accept(value){
  if(!value)return;
  try{
-  if(!catalogs)catalogs=await Promise.all(['/mining/catalog.json','/orundum/catalog.json'].map(async url=>{const r=await fetch(url);if(!r.ok)throw Error('보상 기준 데이터를 불러오지 못했습니다.');return r.json();}));
+  if(!catalogs){const loaded=await Promise.all(['/mining/catalog.json','/orundum/catalog.json','data/operators.json'].map(async url=>{const r=await fetch(url);if(!r.ok)throw Error('보상 기준 데이터를 불러오지 못했습니다.');return r.json();}));catalogs=loaded.slice(0,2);operatorRarities=new Map(loaded[2].operators.map(op=>[op.id,Number(op.rarity)]));}
   const mine=audit(catalogs[0],value),or=calculate(catalogs[1],value);
   account=value;
-  rows=[...mine.included.map(r=>({...r,currency:'originite',amount:r.op,storyLabel:storyLabel(r),title:r.code+' · '+r.mode})),...or.rows.map(r=>({...r,currency:'orundum',group:r.category==='paradox'?'역설 시뮬레이션':r.name,title:r.category==='paradox'?r.name:r.title}))];
+  rows=[...mine.included.map(r=>({...r,currency:'originite',amount:r.op,storyLabel:storyLabel(r),title:r.code+' · '+r.mode})),...or.rows.map(r=>({...r,rarity:operatorRarities.get(r.charId)||0,currency:'orundum',group:r.category==='paradox'?'역설 시뮬레이션':r.name,title:r.category==='paradox'?r.name:r.title}))];
   $('rewardsOriginite').textContent=totals(mine.included).remaining.toLocaleString();$('rewardsOrundum').textContent=or.totals.remaining.toLocaleString();
   $('rewardsMessage').hidden=true;$('rewardsResults').hidden=false;render();
  }catch(e){clear();showError('보상 기록이 포함된 계정을 다시 가져와주세요.');}
