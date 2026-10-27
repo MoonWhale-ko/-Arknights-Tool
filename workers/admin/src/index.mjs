@@ -39,7 +39,7 @@ export function createHandler({ fetcher } = {}) {
         '/wardrobe/style.css', '/wardrobe/ui.js', '/wardrobe/sd.js', '/wardrobe/btn-back.png',
         '/wardrobe/original-layout.js', '/wardrobe/catalog.json',
         '/wardrobe/sd-models.json', '/wardrobe/native-scene.json.gz',
-        '/preview/assets/css/zoot.css',
+        '/preview/assets/css/zoot.css', '/preview/assets/js/zoot.js',
       ]);
       if (['GET', 'HEAD'].includes(request.method) && (path === '/wardrobe-demo' || wardrobeAssets.has(path))) {
         const assetRequest = path === '/wardrobe-demo'
@@ -48,7 +48,7 @@ export function createHandler({ fetcher } = {}) {
         const headers = new Headers(response.headers);
         for (const [key, value] of Object.entries(security)) headers.set(key, value);
         if (path === '/wardrobe-demo') {
-          headers.set('Content-Security-Policy', "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://raw.githubusercontent.com https://fonts.gstatic.com; img-src 'self' https://raw.githubusercontent.com data: blob:; connect-src 'self' https://raw.githubusercontent.com; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'");
+          headers.set('Content-Security-Policy', "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' https://fonts.googleapis.com https://cdn.jsdelivr.net 'unsafe-inline'; font-src 'self' https://raw.githubusercontent.com https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' https://raw.githubusercontent.com data: blob:; connect-src 'self' https://raw.githubusercontent.com; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'");
           headers.set('Content-Type', 'text/html; charset=utf-8');
           headers.delete('Content-Length'); headers.delete('Content-Encoding'); headers.delete('ETag');
           const html = (await response.text())

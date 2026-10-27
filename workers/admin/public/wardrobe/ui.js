@@ -115,3 +115,12 @@ if(demo){
   if($('wardrobeGrid').children.length){$('wardrobeRoster').hidden=true;$('wardrobeDetail').hidden=false;render();}
  }catch{$('wardrobeMessage').textContent='테스트 화면을 불러오지 못했습니다.';}})();
 }
+
+// The same shared top bar as the public pages; keep preview navigation intentional.
+function connectSiteNavigation(){
+ const root=demo?'https://moonwhale-ko.github.io/-Arknights-Tool/':'/preview/';
+ for(const link of document.querySelectorAll('.zoot-topbar a,.zoot-drawer nav a'))link.href=root+link.getAttribute('href');
+ for(const img of document.querySelectorAll('.zoot-drawer nav img'))img.src='https://raw.githubusercontent.com/MoonWhale-ko/-Arknights-Tool/main/'+img.getAttribute('src');
+ if(demo){const account=$('zootAccountImport');account?.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();location.href=root+'operators.html';},true);}
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',connectSiteNavigation);else connectSiteNavigation();

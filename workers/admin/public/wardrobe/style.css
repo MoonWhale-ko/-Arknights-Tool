@@ -84,3 +84,8 @@
 #wardrobeDetail.native-layout .native-card-content>img{position:absolute;max-width:none;max-height:none;border:0;pointer-events:none}
 
 .wardrobe-native-outgoing{pointer-events:none!important}
+
+/* Shared navigation occupies its own row above the native canvas. */
+body.zoot-page{padding-top:var(--z-bar,60px)}
+body.zoot-page>main{max-width:none;margin:0;padding:0;animation:none}
+#wardrobeDetail{font-family:"NotoSansHans-Medium","Noto Sans KR",Arial,sans-serif}
