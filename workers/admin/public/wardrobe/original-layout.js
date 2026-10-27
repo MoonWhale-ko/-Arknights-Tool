@@ -6,14 +6,14 @@ const referenceArts={"illust_char_2023_ling_1":[0.348239,33.17,-24.38],"illust_c
 export function nativeIllustrationRect(metric,width,height,node){
  const offset=metric.skinOffset,sz=offset?.enableSize?offset.size:metric.size;
  const pos=offset?.enablePos?offset.position:metric.position;
- const fullW=sz.x,fullH=sz.y,canvas=metric.sprite.rect,crop=metric.sprite.textureRect;
+ const fullW=sz.x*(metric.scale?.x??1),fullH=sz.y*(metric.scale?.y??1),canvas=metric.sprite.rect,crop=metric.sprite.textureRect;
  const fullImage=width===Math.round(canvas.width)&&height===Math.round(canvas.height);
  const x=fullImage?0:metric.sprite.textureRectOffset.x,y=fullImage?0:canvas.height-metric.sprite.textureRectOffset.y-crop.height;
  const w=fullImage?canvas.width:crop.width,h=fullImage?canvas.height:crop.height;
  return {width:fullW*w/canvas.width,height:fullH*h/canvas.height,left:node.w/2+pos.x-fullW*metric.pivot.x+fullW*x/canvas.width,top:node.h/2-pos.y-fullH*(1-metric.pivot.y)+fullH*y/canvas.height};
 }
 export function illustrationRect(id,width,height,node,sceneScale,metric){
- if(metric?.sprite&&metric.skinOffset)return nativeIllustrationRect(metric,width,height,node);
+ if(metric?.sprite&&metric.size&&metric.position&&metric.pivot)return nativeIllustrationRect(metric,width,height,node);
  const ref=referenceArts[id],sx=node.scale.x,sy=node.scale.y;
  if(ref){const ratio=1535/1280/sceneScale;return {width:width*ref[0]*ratio/sx,height:height*ref[0]*ratio/sy,left:node.w/2+(ref[1]*ratio-node.x-node.w/2)/sx,top:node.h/2+(ref[2]*ratio-node.y-node.h/2)/sy};}
  // Keep uncalibrated static art within the collection viewport, with its PNG aspect ratio.
@@ -63,7 +63,7 @@ export function applyOriginalLayout(skin){
  }
  for(const kind of ['avatar','portrait'])if(bindings[kind]){const img=live[kind];bindings[kind].el.append(img);img.classList.add('native-live-image');img.removeAttribute('style');img.style.objectFit=bindings[kind].node.preserveAspect?'contain':'fill';}
  if(bindings.spine){bindings.spine.el.append(live.spine);live.spine.removeAttribute('style');}
- if(bindings.illustration){const b=bindings.illustration,img=live.illustration;b.el.append(img);img.classList.add('native-live-art');img.removeAttribute('style');const fit=()=>{if(!img.naturalWidth||!img.naturalHeight)return;const metric=source.illustrations[skin.illustration];img.dataset.layoutSource=metric?.skinOffset?'native-skin-offset':'reference-fallback';const rect=illustrationRect(skin.illustration,img.naturalWidth,img.naturalHeight,{...b,scale:b.node.scale},scale,metric);for(const [key,value]of Object.entries(rect))img.style[key]=value+'px';};img.onload=fit;}
+ if(bindings.illustration){const b=bindings.illustration,img=live.illustration;b.el.append(img);img.classList.add('native-live-art');img.removeAttribute('style');const fit=()=>{if(!img.naturalWidth||!img.naturalHeight)return;const metric=source.illustrations[skin.illustration];img.dataset.layoutSource=metric?.sprite&&metric.size&&metric.position&&metric.pivot?'native-prefab':'reference-fallback';const rect=illustrationRect(skin.illustration,img.naturalWidth,img.naturalHeight,{...b,scale:b.node.scale},scale,metric);for(const [key,value]of Object.entries(rect))img.style[key]=value+'px';};img.onload=fit;}
 
  // Selection controls use a separate standalone game presentation.
  const back=pageNode('btn_topmenu_back');if(back)putRect($('wardrobeBack'),back.rect);

@@ -33,3 +33,18 @@ test('all three purchased Ling skins use source skin offsets and preserve sprite
   if(w!==Math.round(metric.sprite.rect.width)){assert.ok(r.left>=full.left);assert.ok(r.top>=full.top);assert.ok(r.width<=full.width);}
  }
 });
+
+test('native basic skins retain prefab size when the custom-size override is disabled',()=>{
+ for(const id of ['illust_char_502_nblade_1','illust_char_503_rang_1','illust_char_500_noirc_1']){
+  const m=native.illustrations[id];assert.equal(m.skinOffset.enableSize,0);
+  const r=illustrationRect(id,m.sprite.rect.width,m.sprite.rect.height,node,scale,m);
+  assert.equal(r.width,m.size.x*m.scale.x);assert.equal(r.height,m.size.y*m.scale.y);
+  assert.equal(r.left,node.w/2+m.skinOffset.position.x-r.width*m.pivot.x);
+ }
+});
+test('provided Amiya variants each resolve their own prefab rather than inheriting Ling calibration',()=>{
+ for(const id of ['illust_char_002_amiya_1','illust_char_002_amiya_1+','illust_char_002_amiya_2']){
+  const m=native.illustrations[id];assert.ok(m.sourceAsset.endsWith(id+'.prefab'));
+  assert.deepEqual(illustrationRect(id,1340,1340,node,scale,m),nativeIllustrationRect(m,1340,1340,node));
+ }
+});
