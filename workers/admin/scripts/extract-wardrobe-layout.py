@@ -29,7 +29,7 @@ def lz4ak(data,size):
 CompressionHelper.DECOMPRESSION_MAP[4]=lz4ak
 folder,skinpath,out=map(Path,sys.argv[1:4])
 def bundle(name):return UnityPy.load(str(folder/name))
-pack=bundle('[pack]skinres.ab');external={o.path_id:o.read_typetree()['m_Name'] for o in pack.objects if o.type.name=='Sprite'}
+pack=bundle('[pack]skinres.ab');externalSprites={o.path_id:o.read_typetree() for o in pack.objects if o.type.name=='Sprite'};external={i:t['m_Name'] for i,t in externalSprites.items()}
 e=bundle('skin_groups.ab');objects={o.path_id:o for o in e.objects};cache={}
 def data(i):
  if i not in cache:cache[i]=objects[i].read_typetree()
@@ -81,6 +81,7 @@ for path,root in e.container.items():
    if 'm_Sprite' in t:
     sp=t['m_Sprite'];name=(data(sp['m_PathID']).get('m_Name') if sp['m_FileID']==0 and sp['m_PathID'] in objects else external.get(sp['m_PathID']))
     if name:node['image']={'folder':'skin' if sp['m_FileID']==0 else '[pack]skinres','name':name}
+    if name and sp['m_FileID'] and sp['m_PathID'] in externalSprites:node['image'].update(type=t.get('m_Type',0),border=externalSprites[sp['m_PathID']]['m_Border'])
     node['preserveAspect']=bool(t.get('m_PreserveAspect',False))
    if 'm_Text' in t:node['text']=t.get('m_Text','');node['font']=t.get('m_FontData',{})
    if 'm_Alpha' in t:node['alpha']=show.get((hsh,zlib.crc32(b'm_Alpha')),[t['m_Alpha']])[0]
@@ -113,6 +114,10 @@ def pagewalk(gid,parent,route=''):
  px,py,pw,ph=parent;a=rt['m_AnchorMin'];b=rt['m_AnchorMax'];p=rt['m_Pivot'];pos=rt['m_AnchoredPosition'];sz=rt['m_SizeDelta'];w=pw*(b['x']-a['x'])+sz['x'];h=ph*(b['y']-a['y'])+sz['y'];x=px+pw*(a['x']+(b['x']-a['x'])*p['x'])+pos['x']-p['x']*w;y=py+ph*(a['y']+(b['y']-a['y'])*p['y'])+pos['y']-p['y']*h
  if not route:x,y,w,h=0,0,1535*810/862,810
  pageNodes[route]={'name':g['m_Name'],'rect':[v*862/810 for v in (x,810-y-h,w,h)]}
+ for c in g['m_Component']:
+  t=pdat(c['component']['m_PathID'])
+  if 'm_Text' in t:pageNodes[route].update(font=t.get('m_FontData',{}),text=t['m_Text'])
+  if '_fontName' in t:pageNodes[route]['fontName']=t['_fontName']
  for c in rt['m_Children']:
   child=pdat(c['m_PathID'])['m_GameObject']['m_PathID'];name=pdat(child)['m_Name'];pagewalk(child,(x,y,w,h),route+'/'+name if route else name)
 pagewalk(pe.container['dyn/ui/pages/skin_select_page.prefab'].path_id,(0,0,1535*810/862,810))
@@ -128,7 +133,7 @@ def cardwalk(gid,parent,route=''):
  for c in rt['m_Children']:
   child=pdat(c['m_PathID'])['m_GameObject']['m_PathID'];cardwalk(child,(x,y,w,h),route+'/'+pdat(child)['m_Name'])
 cardwalk(pe.container['dyn/ui/skinselect/skin_select_obj.prefab'].path_id,(0,0,154.4,394))
-result={'cardNodes':cardNodes,'cardSize':card_rt['m_SizeDelta'],'source':'User supplied PC KR skin_groups.ab, skin_select_page.ab, char_2023_ling.ab; SkinAllShow settled channels evaluated. Unity relative anchors and scales are retained.','nativeHeight':810,'layouts':layouts,'skins':skins,'illustrations':illustrations,'page':pageNodes}
+result={'canvas':{'referenceResolution':{'x':1280,'y':720},'matchWidthOrHeight':1,'nativeHeight':810},'cardNodes':cardNodes,'cardSize':card_rt['m_SizeDelta'],'source':'User supplied PC KR skin_groups.ab, skin_select_page.ab, char_2023_ling.ab; SkinAllShow settled channels evaluated. Unity relative anchors and scales are retained.','nativeHeight':810,'layouts':layouts,'skins':skins,'illustrations':illustrations,'page':pageNodes}
 # Round serialized float noise, without discarding prefab-specific layouts.
 result=json.loads(json.dumps(result,ensure_ascii=False),parse_float=lambda x:round(float(x),5))
 out.write_text(json.dumps(result,ensure_ascii=False,separators=(',',':')))

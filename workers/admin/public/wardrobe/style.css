@@ -101,3 +101,7 @@
 
 /* Preserve the original banner silhouette and fixed collection color strip. */
 #wardrobeDetail.native-layout .wardrobe-outfit-badge{clip-path:none;mask-image:url('https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/dyn/ui/pages/skin_select_page/white_decro.png');mask-size:100% 100%;mask-repeat:no-repeat}
+
+/* Banner children use the native RectTransforms and typography. */
+#wardrobeDetail.native-layout .wardrobe-outfit-badge{padding:0;overflow:visible}
+#wardrobeDetail.native-layout .wardrobe-outfit-badge small,#wardrobeDetail.native-layout .wardrobe-outfit-badge b{box-sizing:border-box;text-align:center;letter-spacing:normal}
