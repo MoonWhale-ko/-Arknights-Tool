@@ -1,6 +1,3 @@
-// Static PNGs have different trim/size from the Unity illustration prefab.
-// Calibrated against the five supplied 1280x720 in-game screenshots; not AB coordinates.
-const referenceArts={"illust_char_2023_ling_1":[0.348239,33.17,-24.38],"illust_char_2023_ling_2":[0.316717,11.58,26.42],"illust_char_2023_ling_nian#12":[0.278246,72.01,-12.87],"illust_char_2023_ling_nian#9":[0.421893,-35.24,-76.52],"illust_char_2023_ling_ncg#1":[0.318546,-11.66,-5.78]};
 // Unity child RectTransform: parent centre + anchored position, with Y flipped for CSS.
 // Trimmed PNGs occupy only textureRect inside the original sprite canvas.
 export function nativeIllustrationRect(metric,width,height,node){
@@ -14,9 +11,8 @@ export function nativeIllustrationRect(metric,width,height,node){
 }
 export function illustrationRect(id,width,height,node,sceneScale,metric){
  if(metric?.sprite&&metric.size&&metric.position&&metric.pivot)return nativeIllustrationRect(metric,width,height,node);
- const ref=referenceArts[id],sx=node.scale.x,sy=node.scale.y;
- if(ref){const ratio=1535/1280/sceneScale;return {width:width*ref[0]*ratio/sx,height:height*ref[0]*ratio/sy,left:node.w/2+(ref[1]*ratio-node.x-node.w/2)/sx,top:node.h/2+(ref[2]*ratio-node.y-node.h/2)/sy};}
- // Keep uncalibrated static art within the collection viewport, with its PNG aspect ratio.
+ const sx=node.scale.x,sy=node.scale.y;
+ // Provisional fit only when a purchased illustration has no supplied native prefab.
  const ratio=Math.min(810*.95/height,(962/sceneScale)*.98/width);
  const w=width*ratio/sx,h=height*ratio/sy;return {width:w,height:h,left:(node.w-w)/2,top:(node.h-h)/2};
 }

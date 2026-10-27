@@ -2,14 +2,14 @@ import test from 'node:test';import assert from 'node:assert/strict';
 import {illustrationRect} from '../public/wardrobe/original-layout.js';
 const scale=862/810,viewport=1280/1535;
 const node={w:100,h:100,x:397.28376,y:335.4,scale:{x:.68068,y:.68068}};
-test('Ling E2 static PNG matches the supplied game screenshot scale rather than raw texture pixels',()=>{
- const r=illustrationRect('illust_char_2023_ling_2',2275,2125,node,scale);
- const screenWidth=r.width*node.scale.x*scale*viewport;
- assert.ok(Math.abs(screenWidth-720.53)<1);
- const x=(node.x+50+(r.left-50)*node.scale.x)*scale*viewport;
- const y=(node.y+50+(r.top-50)*node.scale.y)*scale*viewport;
- assert.ok(Math.abs(x-11.58)<.01);assert.ok(Math.abs(y-26.42)<.01);
- assert.ok(Math.abs(r.width/r.height-2275/2125)<.00001);
+test('Ling E2 uses the original prefab instead of screenshot calibration',()=>{
+ const m=native.illustrations.illust_char_2023_ling_2;
+ assert.equal(m.sourceCategory,'chararts');
+ const r=illustrationRect('illust_char_2023_ling_2',2275,2125,node,scale,m);
+ assert.deepEqual(r,nativeIllustrationRect(m,2275,2125,node));
+ const full=illustrationRect('illust_char_2023_ling_2',m.sprite.rect.width,m.sprite.rect.height,node,scale,m);
+ assert.equal(full.width,m.skinOffset.size.x*m.scale.x);
+ assert.equal(full.left,node.w/2+m.skinOffset.position.x-full.width/2);
 });
 test('uncalibrated art stays inside the viewport at large texture resolutions without distortion',()=>{
  for(const [w,h]of [[4096,4096],[1800,3000],[6000,2000]]){
@@ -46,5 +46,17 @@ test('provided Amiya variants each resolve their own prefab rather than inheriti
  for(const id of ['illust_char_002_amiya_1','illust_char_002_amiya_1+','illust_char_002_amiya_2']){
   const m=native.illustrations[id];assert.ok(m.sourceAsset.endsWith(id+'.prefab'));
   assert.deepEqual(illustrationRect(id,1340,1340,node,scale,m),nativeIllustrationRect(m,1340,1340,node));
+ }
+});
+
+const catalog=JSON.parse(readFileSync(new URL('../public/wardrobe/catalog.json',import.meta.url))).skins;
+test('every catalogued basic or evolved appearance has its own usable native layout',()=>{
+ const basic=catalog.filter(s=>s.charId.startsWith('char_')&&s.basic);assert.equal(basic.length,833);
+ for(const skin of basic){
+  const m=native.illustrations[skin.illustration];assert.ok(m?.sprite,skin.id);
+  for(const [w,h]of [[m.sprite.rect.width,m.sprite.rect.height],[Math.round(m.sprite.textureRect.width),Math.round(m.sprite.textureRect.height)]]){
+   const rect=illustrationRect(skin.illustration,w,h,node,scale,m);
+   assert.ok(Object.values(rect).every(Number.isFinite),skin.id);assert.ok(rect.width>0&&rect.height>0,skin.id);
+  }
  }
 });

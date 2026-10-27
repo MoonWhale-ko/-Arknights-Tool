@@ -15,9 +15,10 @@
   https://typography.synthview.com/free-quality-fonts.php
   Current free family version 3.001 must not be described as the game's verified 2.001 binary.
 
-The first two default Ling illustrations still use screenshot calibration because
-this supplied Ling bundle includes purchased illustrations only. Purchased
-illustrations use the native `_skinOffset` and sprite trimming metadata.
+All 833 catalogued basic/evolved illustrations now resolve native prefab metrics
+from the supplied chararts bundles. Purchased illustrations retain provisional
+fitting unless their own skinpack prefab is supplied. Exact counts are recorded
+in ../../reports/wardrobe-layout-coverage.json. No screenshot calibration remains.
 
 - `OpenSans-Semibold`: additionally found on the native collection template text components.
   Loaded from the official Google Fonts repository:
