@@ -45,7 +45,7 @@ function show(s){
  $('wardrobeBrandWord').textContent=s.brandTitle||'DEFAULT';$('wardrobeBadge').textContent=s.brand||'기본 복장';$('wardrobeCollection').replaceChildren(make('strong',s.operator),document.createTextNode('의 컬렉션'));$('wardrobeCredits').textContent=(s.model||s.operator)+(s.artist?' / '+s.artist:'');$('wardrobeDescription').textContent=s.content||'';
  const portrait=$('wardrobePortrait');portrait.hidden=false;portrait.src='https://raw.githubusercontent.com/yuanyan3060/ArknightsGameResource/main/portrait/'+encodeURIComponent(s.portrait)+'.png';portrait.onerror=()=>{portrait.hidden=true;};
  const face=$('wardrobeFace');face.hidden=false;face.onerror=()=>{face.hidden=true;};face.src='https://raw.githubusercontent.com/yuanyan3060/ArknightsGameResource/main/avatar/'+encodeURIComponent(s.avatar||s.charId)+'.png';
-applyOriginalLayout(s);$('wardrobeNativeScene')?.append($('wardrobeArtStatus'));if(!$('wardrobeDetail').hidden)showSD(s);$('wardrobeBrand').textContent=s.brand;$('wardrobeOperatorName').textContent=s.operator;$('wardrobeTitle').textContent=s.name;updateWear(s);const img=$('wardrobeArt');img.hidden=false;img.alt=`${s.operator} · ${s.name}`;$('wardrobeArtStatus').textContent='';img.onerror=()=>{img.hidden=true;$('wardrobeArtStatus').textContent='일러스트를 불러오지 못했습니다.';};if(s.illustration){img.src=asset('characters/'+s.charId,s.illustration.replace(/^illust_/,''));$('wardrobe').style.setProperty('--wardrobe-backdrop',`url("${img.src}")`);if(img.complete&&img.naturalWidth)img.onload?.();}else{img.hidden=true;$('wardrobeArtStatus').textContent='등록된 일러스트가 없습니다.';}}
+applyOriginalLayout(s);$('wardrobeNativeScene')?.append($('wardrobeArtStatus'));if(!$('wardrobeDetail').hidden)showSD(s);renderSidebar(s);$('wardrobeBrand').textContent=s.brand;$('wardrobeOperatorName').textContent=s.operator;$('wardrobeTitle').textContent=s.name;updateWear(s);const img=$('wardrobeArt');img.hidden=false;img.alt=`${s.operator} · ${s.name}`;$('wardrobeArtStatus').textContent='';img.onerror=()=>{img.hidden=true;$('wardrobeArtStatus').textContent='일러스트를 불러오지 못했습니다.';};if(s.illustration){img.src=asset('characters/'+s.charId,s.illustration.replace(/^illust_/,''));$('wardrobe').style.setProperty('--wardrobe-backdrop',`url("${img.src}")`);if(img.complete&&img.naturalWidth)img.onload?.();}else{img.hidden=true;$('wardrobeArtStatus').textContent='등록된 일러스트가 없습니다.';}}
 $('wardrobeOperator').onclick=()=>{$('wardrobeDialog').showModal();$('wardrobeSearch').focus();};
 $('wardrobeClose').onclick=()=>$('wardrobeDialog').close();$('wardrobeDialog').addEventListener('click',e=>{if(e.target===$('wardrobeDialog')){const r=e.target.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)e.target.close();}});
 document.querySelector('[data-tab="wardrobe"]')?.addEventListener('click',()=>window.dispatchEvent(new Event('wardrobe-request-account')));if(!demo)window.addEventListener('wardrobe-account',e=>accept(e.detail));if(!demo)window.addEventListener('mining-clear',()=>{try{localStorage.removeItem('zootAdminWardrobeSkins');localStorage.removeItem('zootAdminWardrobeCharacters');}catch{}clearSD();owned=null;characters=[];$('wardrobeRosterGrid').replaceChildren();$('wardrobeDetail').hidden=true;$('wardrobeRoster').hidden=false;$('wardrobeGrid').replaceChildren();$('wardrobeCount').textContent='';$('wardrobeMessage').textContent='계정 데이터를 지웠습니다.';$('wardrobeDialog').close();});$('wardrobeSearch').oninput=render;$('wardrobeAll').onchange=render;
@@ -106,7 +106,7 @@ function fitCollection(){
  const detail=$('wardrobeDetail'),wrap=$('wardrobe');
  if(detail.hidden){wrap.style.removeProperty('--collection-height');detail.style.removeProperty('left');return;}
  const barBottom=document.querySelector('.zoot-topbar')?.getBoundingClientRect().bottom||0;
- const available=Math.max(1,(window.visualViewport?.height??window.innerHeight)-barBottom);
+ const fullHeight=Math.max(1,(window.visualViewport?.height??window.innerHeight)-barBottom);const side=$('wardrobeSidebar');const available=Math.max(1,fullHeight-(window.matchMedia('(max-width:900px)').matches?side.getBoundingClientRect().height:0));
  const scale=Math.min(wrap.clientWidth/1535,available/862);
  detail.style.setProperty('--collection-scale',String(scale));
  detail.style.left='0px';
@@ -136,3 +136,33 @@ function connectSiteNavigation(){
  if(demo){const account=$('zootAccountImport');account?.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();location.href=root+'operators.html';},true);}
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',connectSiteNavigation);else connectSiteNavigation();
+
+function isSkinOwned(s){const character=characters.find(c=>c.charId===s.charId);return s.basic?!!character&&(character.elite??0)>=(s.elite??0):owned?.has(s.id)===true;}
+function jumpToSkin(s){
+ $('wardrobeAll').checked=true;$('wardrobeSearch').value='';
+ if(selectedChar===s.charId&&[...$('wardrobeGrid').children].some(b=>b.dataset.skin===s.id)){selectCard(s.id,NATIVE_MOTION.clickFrames);return;}
+ selectedChar=s.charId;selectedSkin=s.id;$('wardrobeRoster').hidden=true;$('wardrobeDetail').hidden=false;render();
+}
+function skinThumb(s,compact=false){
+ const button=make('button');button.type='button';button.className='wardrobe-skin-tile';button.setAttribute('aria-label',s.operator+' · '+s.name);button.setAttribute('aria-pressed',String(s.id===selectedSkin));
+ const image=make('img');image.alt='';image.loading='lazy';image.src='https://raw.githubusercontent.com/yuanyan3060/ArknightsGameResource/main/portrait/'+encodeURIComponent(s.portrait)+'.png';image.onerror=()=>{image.hidden=true;};
+ const text=make('span');if(compact)text.append(make('small',s.operator));text.append(make('strong',s.basic?(s.elite>=2?'2정예화':'기본 복장'):s.name),make('small',isSkinOwned(s)?'보유':'미보유'));button.append(image,text);button.onclick=()=>jumpToSkin(s);return button;
+}
+function renderSeries(){
+ const id=$('wardrobeSeriesSelect').value,missing=$('wardrobeSeriesMissing').checked,all=catalog.filter(s=>s.charId.startsWith('char_')&&!s.basic&&s.brandId===id).sort((a,b)=>a.operator.localeCompare(b.operator,'ko')||compareSkinOrder(a,b)),rows=all.filter(s=>!missing||!isSkinOwned(s));
+ $('wardrobeSeriesCount').textContent=all.length?rows.length+'종':'';const list=$('wardrobeSeriesSkins');list.replaceChildren(...rows.map(s=>skinThumb(s,true)));const empty=$('wardrobeSeriesEmpty');empty.hidden=rows.length>0;empty.textContent=!id?'시리즈를 선택해 주세요.':missing?'이 시리즈에 미보유 스킨이 없습니다.':'등록된 스킨이 없습니다.';
+}
+function renderSidebar(s){
+ $('wardrobeSideOperator').textContent=s.operator;$('wardrobeSideName').textContent=s.basic?(s.elite>=2?'2정예화':'기본 복장'):s.name;$('wardrobeSideBrand').textContent=s.brand;
+ const owned=isSkinOwned(s),status=$('wardrobeSideOwned');status.textContent=owned?'보유':'미보유';status.classList.toggle('is-owned',owned);
+ $('wardrobeSidePrice').textContent=s.basic?'기본 제공':s.price?(s.price.amount===0?'무료 배포':s.price.currency+' '+s.price.amount):s.obtain&&!s.obtain.includes('구매센터')?'보상·교환 획득':'가격 확인 필요';
+ const source=$('wardrobePriceSource');source.hidden=!s.price?.source;if(s.price?.source)source.href=s.price.source;
+ $('wardrobeSideObtain').textContent=s.obtain||'획득 경로 확인 필요';$('wardrobeSideArtist').textContent=s.artist||'정보 없음';
+ // Original content contains in-game color tags; show the text without markup.
+ const plain=text=>String(text||'').replace(/<[^>]*>/g,'');$('wardrobeSideContent').textContent=plain(s.content);$('wardrobeSideUsage').textContent=plain(s.usage);$('wardrobeSideDescription').textContent=plain(s.description);$('wardrobeSideDescription').hidden=!s.description;
+ const skins=catalog.filter(v=>v.charId===s.charId).sort(compareSkinOrder);$('wardrobeSideCount').textContent=skins.filter(isSkinOwned).length+'/'+skins.length;$('wardrobeSideSkins').replaceChildren(...skins.map(v=>skinThumb(v)));
+ const selector=$('wardrobeSeriesSelect');if(!selector.options.length){selector.append(new Option('시리즈 선택',''));const brands=new Map();for(const skin of catalog)if(!skin.basic&&skin.charId.startsWith('char_'))brands.set(skin.brandId,skin.brand?.split('/')[0]||skin.brandTitle);for(const [id,name]of [...brands].sort((a,b)=>a[1].localeCompare(b[1],'ko')))selector.append(new Option(name,id));}
+ selector.value=s.basic?'':s.brandId;renderSeries();
+}
+$('wardrobeSideChoose').onclick=()=>{$('wardrobeDialog').showModal();$('wardrobeSearch').focus();};
+$('wardrobeSeriesSelect').onchange=renderSeries;$('wardrobeSeriesMissing').onchange=renderSeries;
