@@ -48,7 +48,7 @@ export function createHandler({ fetcher } = {}) {
         const headers = new Headers(response.headers);
         for (const [key, value] of Object.entries(security)) headers.set(key, value);
         if (path === '/wardrobe-demo') {
-          headers.set('Content-Security-Policy', "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' https://raw.githubusercontent.com data: blob:; connect-src 'self' https://raw.githubusercontent.com; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'");
+          headers.set('Content-Security-Policy', "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://raw.githubusercontent.com https://fonts.gstatic.com; img-src 'self' https://raw.githubusercontent.com data: blob:; connect-src 'self' https://raw.githubusercontent.com; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'");
           headers.set('Content-Type', 'text/html; charset=utf-8');
           headers.delete('Content-Length'); headers.delete('Content-Encoding'); headers.delete('ETag');
           const html = (await response.text())

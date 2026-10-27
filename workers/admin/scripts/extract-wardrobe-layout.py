@@ -84,6 +84,7 @@ for path,root in e.container.items():
     if name and sp['m_FileID'] and sp['m_PathID'] in externalSprites:node['image'].update(type=t.get('m_Type',0),border=externalSprites[sp['m_PathID']]['m_Border'])
     node['preserveAspect']=bool(t.get('m_PreserveAspect',False))
    if 'm_Text' in t:node['text']=t.get('m_Text','');node['font']=t.get('m_FontData',{})
+   if '_fontName' in t:node['fontName']=t['_fontName']
    if 'm_Alpha' in t:node['alpha']=show.get((hsh,zlib.crc32(b'm_Alpha')),[t['m_Alpha']])[0]
   index=len(nodes);nodes.append(node)
   for c in rt['m_Children']:
@@ -100,6 +101,9 @@ for path,root in ling.container.items():
  for c in g['m_Component']:
   o=lo[c['component']['m_PathID']];t=o.read_typetree()
   if o.type.name=='RectTransform':metric.update(size=t['m_SizeDelta'],position=t['m_AnchoredPosition'],pivot=t['m_Pivot'],scale=t['m_LocalScale'])
+  if '_skinOffset' in t:metric['skinOffset']=t['_skinOffset']
+  if t.get('m_Sprite',{}).get('m_PathID'):
+   st=lo[t['m_Sprite']['m_PathID']].read_typetree();metric['sprite']={'rect':st['m_Rect'],'textureRect':st['m_RD']['textureRect'],'textureRectOffset':st['m_RD']['textureRectOffset']}
   if '_values' in t:metric['values']={v['key']:v['value'] for v in t['_values']}
  illustrations[path.rsplit('/',1)[1][:-7]]=metric
 # Resolve the selection page against the same full canvas, ignoring its cached
