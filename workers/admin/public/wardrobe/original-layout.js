@@ -1,3 +1,13 @@
+// Static PNGs have different trim/size from the Unity illustration prefab.
+// Calibrated against the five supplied 1280x720 in-game screenshots; not AB coordinates.
+const referenceArts={"illust_char_2023_ling_1":[0.348239,33.17,-24.38],"illust_char_2023_ling_2":[0.316717,11.58,26.42],"illust_char_2023_ling_nian#12":[0.278246,72.01,-12.87],"illust_char_2023_ling_nian#9":[0.421893,-35.24,-76.52],"illust_char_2023_ling_ncg#1":[0.318546,-11.66,-5.78]};
+export function illustrationRect(id,width,height,node,sceneScale){
+ const ref=referenceArts[id],sx=node.scale.x,sy=node.scale.y;
+ if(ref){const ratio=1535/1280/sceneScale;return {width:width*ref[0]*ratio/sx,height:height*ref[0]*ratio/sy,left:node.w/2+(ref[1]*ratio-node.x-node.w/2)/sx,top:node.h/2+(ref[2]*ratio-node.y-node.h/2)/sy};}
+ // Keep uncalibrated static art within the collection viewport, with its PNG aspect ratio.
+ const ratio=Math.min(810*.95/height,(962/sceneScale)*.98/width);
+ const w=width*ratio/sx,h=height*ratio/sy;return {width:w,height:h,left:(node.w-w)/2,top:(node.h-h)/2};
+}
 let source;
 const $=id=>document.getElementById(id);
 const art=(folder,name)=>{const base='https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/dyn/';const path=folder==='skin'?'ui/skin/':'arts/ui/'+encodeURIComponent(folder)+'/';return base+path+(name==='black_back'?'bkgs/':'')+encodeURIComponent(name.toLowerCase())+'.png';};
@@ -24,11 +34,12 @@ export function applyOriginalLayout(skin){
   const tint=/^#[\da-f]{6,8}$/i.test(row?.colors?.[n.colorSlot]||'')?row.colors[n.colorSlot]:rgba(n.color);
   if(n.image){const img=document.createElement('img');img.className='native-graphic';img.src=art(n.image.folder,n.image.name);img.alt='';img.style.width='100%';img.style.height='100%';img.style.objectFit=n.preserveAspect?'contain':'fill';const hex=tint.startsWith('#')?tint.slice(1):null,c=hex?[0,2,4].map(i=>parseInt(hex.slice(i,i+2),16)/255).concat(hex.length===8?parseInt(hex.slice(6,8),16)/255:1):[n.color?.r??1,n.color?.g??1,n.color?.b??1,n.color?.a??1];if(c.some(v=>v!==1)){const f=document.createElementNS(svgNS,'filter'),id='native-tint-'+filterIndex++;f.id=id;f.setAttribute('color-interpolation-filters','sRGB');const transfer=document.createElementNS(svgNS,'feComponentTransfer');for(const [i,channel]of ['R','G','B','A'].entries()){const func=document.createElementNS(svgNS,'feFunc'+channel);func.setAttribute('type','linear');func.setAttribute('slope',c[i]);transfer.append(func);}f.append(transfer);defs.append(f);img.style.filter=`url(#${id})`;}el.append(img);} 
   if(n.text!==undefined){const text=document.createElement('div');text.className='native-text';const f=n.font||{};text.style.fontSize=(f.m_FontSize||14)+'px';text.style.lineHeight=Math.max(1.25,Number(f.m_LineSpacing)||1);text.style.fontWeight=f.m_FontStyle===1||f.m_FontStyle===3?'700':'400';text.style.fontStyle=f.m_FontStyle===2||f.m_FontStyle===3?'italic':'normal';text.style.color=tint;const align=f.m_Alignment||0;text.style.textAlign=['left','center','right'][align%3];text.style.justifyContent=['flex-start','center','flex-end'][Math.floor(align/3)];const value=n.binding==='content'?row?.content||skin.content:n.binding==='model'?row?.model||skin.model||skin.operator:n.binding==='drawer'?row?.drawer||skin.artist:n.text;const block=document.createElement('div');fillText(block,value||'');text.append(block);el.append(text);}
-  if(n.binding)bindings[n.binding]={el,node:n,w,h};
+  if(n.binding)bindings[n.binding]={el,node:n,w,h,x,y};
  }
  for(const kind of ['avatar','portrait'])if(bindings[kind]){const img=live[kind];bindings[kind].el.append(img);img.classList.add('native-live-image');img.removeAttribute('style');}
  if(bindings.spine){bindings.spine.el.append(live.spine);live.spine.removeAttribute('style');}
- if(bindings.illustration){const b=bindings.illustration,img=live.illustration; b.el.append(img);img.classList.add('native-live-art');img.removeAttribute('style');const fit=()=>{const metric=source.illustrations[skin.illustration],w=metric?.size.x||img.naturalWidth,h=metric?.size.y||img.naturalHeight;if(!w||!h)return;const p=metric?.pivot||{x:.5,y:.5},offset=metric?.position||{x:0,y:0};Object.assign(img.style,{width:w+'px',height:h+'px',left:(b.w/2+offset.x-p.x*w)+'px',top:(b.h/2-offset.y-(1-p.y)*h)+'px'});};img.onload=fit;if(img.complete)fit();}
+ if(bindings.illustration){const b=bindings.illustration,img=live.illustration;b.el.append(img);img.classList.add('native-live-art');img.removeAttribute('style');const fit=()=>{if(!img.naturalWidth||!img.naturalHeight)return;const rect=illustrationRect(skin.illustration,img.naturalWidth,img.naturalHeight,{...b,scale:b.node.scale},scale);for(const [key,value]of Object.entries(rect))img.style[key]=value+'px';};img.onload=fit;}
+
  // The right selection controls retain the site's read-only ownership behavior.
  const back=pageNode('btn_topmenu_back');if(back)putRect($('wardrobeBack'),back.rect);
  const scroll=pageNode('scroll_obj'),cardWidth=source.cardSize.x*scale,cardHeight=source.cardSize.y*scale;
