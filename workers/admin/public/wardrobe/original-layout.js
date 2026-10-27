@@ -1,34 +1,43 @@
 let source;
-const art=(folder,name)=>`https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/dyn/arts/ui/${folder}/${encodeURIComponent(name)}.png`;
-export async function loadOriginalLayouts(){if(!source){const r=await fetch('/wardrobe/original-layout.json');if(!r.ok)throw Error('Original layout');source=await r.json();}}
-const rgba=c=>c?`rgba(${Math.round(c.r*255)},${Math.round(c.g*255)},${Math.round(c.b*255)},${c.a})`:'#fff';
+const $=id=>document.getElementById(id);
+const art=(folder,name)=>`https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/dyn/arts/ui/${encodeURIComponent(folder)}/${encodeURIComponent(name)}.png`;
+export async function loadOriginalLayouts(){if(source)return;const r=await fetch('/wardrobe/native-scene.json.gz');if(!r.ok)throw Error('Native scene');const bytes=new Uint8Array(await r.arrayBuffer());const raw=bytes[0]===31&&bytes[1]===139?await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text():new TextDecoder().decode(bytes);source=JSON.parse(raw);}
+const rgba=c=>`rgba(${Math.round((c?.r??1)*255)},${Math.round((c?.g??1)*255)},${Math.round((c?.b??1)*255)},${c?.a??1})`;
+function fillText(el,text){const parts=String(text).split(/(<\/?color(?:\s+name=[^>]+)?>)/g);let target=el;for(const part of parts){const match=part.match(/^<color\s+name=(#[\da-f]{6,8})>$/i);if(match){const span=document.createElement('span');span.style.color=match[1];target.append(span);target=span;}else if(part==='</color>')target=el;else if(!part.startsWith('<color'))target.append(document.createTextNode(part));}}
+function putRect(el,rect){const [x,y,w,h]=rect;Object.assign(el.style,{left:x+'px',top:y+'px',width:w+'px',height:h+'px'});}
+function pageNode(name){return Object.values(source.page).find(n=>n.name===name);}
 export function applyOriginalLayout(skin){
- const row=source?.skins[skin.id],group=row?.group||'illust_2',layout=source?.layouts[source.groups[group]??source.groups.illust_2];if(!layout)return;
- const detail=document.getElementById('wardrobeDetail'),stage=detail.querySelector('.wardrobe-stage');detail.classList.add('original-layout');
- const color=node=>/^#[0-9a-f]{6}$/i.test(row?.colors?.[node?.colorSlot]||'')?row.colors[node.colorSlot]:rgba(node?.color);
- const place=(el,node)=>{if(!node)return;const [x,y,w,h]=node.rect;Object.assign(el.style,{left:x+'px',top:y+'px',width:w+'px',height:h+'px'});};
- let ornaments=document.getElementById('wardrobeOriginalOrnaments');if(!ornaments){ornaments=document.createElement('div');ornaments.id='wardrobeOriginalOrnaments';stage.append(ornaments);}ornaments.replaceChildren();
- for(const [path,name,flip] of [['/spine_part/color_1','spine_left_up',false],['/spine_part/color_2','spine_left_up',true],['/left_up_part/tri_for_round','left_deco',false]]){
-  const node=layout[path];if(!node)continue;const el=document.createElement('div');el.className='original-ornament';place(el,node);el.style.backgroundColor=color(node);el.style.maskImage=`url("${art('%5Bpack%5Dskinres',name)}")`;if(flip)el.style.transform='rotate(180deg)';ornaments.append(el);
+ if(!source)return;const row=source.skins[skin.id],group=row?.group||'illust_2',nodes=source.layouts[group]||source.layouts.illust_2;
+ const detail=$('wardrobeDetail'),stage=detail.querySelector('.wardrobe-stage');detail.classList.add('native-layout');
+ // Preserve the live image/canvas elements while replacing a template.
+ const live={illustration:$('wardrobeArt'),avatar:$('wardrobeFace'),portrait:$('wardrobePortrait'),spine:$('wardrobeSD')};for(const el of Object.values(live))stage.append(el);
+ let scene=$('wardrobeNativeScene');if(!scene){scene=document.createElement('div');scene.id='wardrobeNativeScene';stage.append(scene);}scene.replaceChildren();
+ const dimensions=[],elements=[],bindings={};
+ const svgNS='http://www.w3.org/2000/svg',svg=document.createElementNS(svgNS,'svg'),defs=document.createElementNS(svgNS,'defs');svg.setAttribute('width','0');svg.setAttribute('height','0');svg.append(defs);scene.append(svg);let filterIndex=0;const nativeHeight=source.nativeHeight,scale=862/nativeHeight;
+ for(const [index,n]of nodes.entries()){
+  const parent=n.parent===null?scene:elements[n.parent];const [pw,ph]=n.parent===null?[962/scale,nativeHeight]:dimensions[n.parent];
+  const w=n.parent===null?pw:pw*(n.anchorMax.x-n.anchorMin.x)+n.size.x,h=n.parent===null?ph:ph*(n.anchorMax.y-n.anchorMin.y)+n.size.y;
+  const x=n.parent===null?0:pw*(n.anchorMin.x+(n.anchorMax.x-n.anchorMin.x)*n.pivot.x)+n.position.x-n.pivot.x*w;
+  const y=n.parent===null?0:ph-(ph*(n.anchorMin.y+(n.anchorMax.y-n.anchorMin.y)*n.pivot.y)+n.position.y+(1-n.pivot.y)*h);
+  const el=document.createElement('div');el.className='native-node';el.dataset.path=n.path;putRect(el,[x,y,w,h]);el.style.transformOrigin=`${n.pivot.x*100}% ${(1-n.pivot.y)*100}%`;el.style.transform=`rotate(${-n.rotation}deg) scale(${n.scale.x},${n.scale.y})`;el.style.opacity=n.alpha??1;el.hidden=!n.active;
+  if(n.name==='content_scroll')el.style.overflow='hidden';parent.append(el);dimensions[index]=[w,h];elements[index]=el;
+  const tint=/^#[\da-f]{6,8}$/i.test(row?.colors?.[n.colorSlot]||'')?row.colors[n.colorSlot]:rgba(n.color);
+  if(n.image){const img=document.createElement('img');img.className='native-graphic';img.src=art(n.image.folder,n.image.name);img.alt='';img.style.width='100%';img.style.height='100%';img.style.objectFit=n.preserveAspect?'contain':'fill';const hex=tint.startsWith('#')?tint.slice(1):null,c=hex?[0,2,4].map(i=>parseInt(hex.slice(i,i+2),16)/255).concat(hex.length===8?parseInt(hex.slice(6,8),16)/255:1):[n.color?.r??1,n.color?.g??1,n.color?.b??1,n.color?.a??1];if(c.some(v=>v!==1)){const f=document.createElementNS(svgNS,'filter'),id='native-tint-'+filterIndex++;f.id=id;f.setAttribute('color-interpolation-filters','sRGB');const transfer=document.createElementNS(svgNS,'feComponentTransfer');for(const [i,channel]of ['R','G','B','A'].entries()){const func=document.createElementNS(svgNS,'feFunc'+channel);func.setAttribute('type','linear');func.setAttribute('slope',c[i]);transfer.append(func);}f.append(transfer);defs.append(f);img.style.filter=`url(#${id})`;}el.append(img);} 
+  if(n.text!==undefined){const text=document.createElement('div');text.className='native-text';const f=n.font||{};text.style.fontSize=(f.m_FontSize||14)+'px';text.style.lineHeight=f.m_LineSpacing||1;text.style.fontWeight=f.m_FontStyle===1||f.m_FontStyle===3?'700':'400';text.style.fontStyle=f.m_FontStyle===2||f.m_FontStyle===3?'italic':'normal';text.style.color=tint;const align=f.m_Alignment||0;text.style.textAlign=['left','center','right'][align%3];text.style.justifyContent=['flex-start','center','flex-end'][Math.floor(align/3)];const value=n.binding==='content'?row?.content||skin.content:n.binding==='model'?row?.model||skin.model||skin.operator:n.binding==='drawer'?row?.drawer||skin.artist:n.text;fillText(text,value||'');el.append(text);}
+  if(n.binding)bindings[n.binding]={el,node:n,w,h};
  }
- const bg=layout['/back_static'];if(bg){stage.style.setProperty('--original-back-top',bg.rect[1]+'px');stage.style.setProperty('--original-back-height',bg.rect[3]+'px');}
- const sd=document.getElementById('wardrobeSD'),back=layout['/spine_part/Image'],holder=layout['/spine_part/spine_holder'];place(sd,back);
- if(back&&holder){const [x,y,w,h]=holder.rect;sd.style.setProperty('--sd-canvas-left',(x+w/2-back.rect[0]-256)+'px');sd.style.setProperty('--sd-canvas-top',(y+h/2-back.rect[1]-384)+'px');}
- detail.querySelector('.wardrobe-closeups').style.display='contents';place(document.getElementById('wardrobeFace'),layout['/right_up_part/Image']);place(document.getElementById('wardrobePortrait'),layout['/right_up_part/Image (1)']);
- const info=detail.querySelector('.wardrobe-info'),panel=layout['/right_down_part/panel_content_block/text_back_all'];
- if(panel){place(info,panel);const deco=layout['/right_down_part/panel_content_block/text_deco'];info.style.width=(panel.rect[2]+(deco?.rect[2]||0))+'px';info.style.backgroundColor=color(panel);}
- let heading=document.getElementById('wardrobeOriginalHeading');if(!heading){heading=document.createElement('img');heading.id='wardrobeOriginalHeading';info.prepend(heading);}const header=layout['/right_down_part/panel_content_block/deco'];heading.src=header?.sprite?art('skin',header.sprite):art('%5Bpack%5Dskinres','default_logo');heading.alt=skin.brandTitle||'DEFAULT OUTFIT';
- heading.onerror=()=>{heading.hidden=true;};heading.hidden=false;
- if(panel&&header){place(heading,{rect:[header.rect[0]-panel.rect[0],header.rect[1]-panel.rect[1],header.rect[2],header.rect[3]]});}else Object.assign(heading.style,{left:'0px',top:'0px',width:panel?.rect[2]+'px',height:'77px'});
- if(panel){
-  const relative=node=>({rect:[node.rect[0]-panel.rect[0],node.rect[1]-panel.rect[1],node.rect[2],node.rect[3]]});
-  const content=layout['/right_down_part/panel_content_block/content_scroll'];if(content)place(document.getElementById('wardrobeDescription'),relative(content));
-  document.getElementById('wardrobeCredits').hidden=true;
-  for(const [kind,text]of [['model',skin.model||skin.operator],['drawer',skin.artist||'']]){
-   let el=document.getElementById('wardrobeOriginal'+kind);if(!el){el=document.createElement('span');el.id='wardrobeOriginal'+kind;el.className='original-credit';info.append(el);}el.textContent=text;
-   const node=layout['/right_down_part/panel_content_block/text_pure_'+kind];el.hidden=!node;if(node)place(el,relative(node));
-   const icon=layout['/right_down_part/panel_content_block/icon_'+kind];if(icon){const img=document.createElement('img');img.className='original-ornament original-credit-icon';img.alt='';img.src=art('%5Bpack%5Dskinres','icon_'+kind);place(img,icon);ornaments.append(img);}
-  }
- }
- const logo=layout['/left_up_part/icon'];detail.querySelector('.wardrobe-brand-mark').hidden=!logo?.sprite;if(logo?.sprite){const el=document.getElementById('wardrobeBrandLogo');el.src=art('skin',logo.sprite);el.style.filter='none';}
+ for(const kind of ['avatar','portrait'])if(bindings[kind]){const img=live[kind];bindings[kind].el.append(img);img.classList.add('native-live-image');img.removeAttribute('style');}
+ if(bindings.spine){bindings.spine.el.append(live.spine);live.spine.removeAttribute('style');}
+ if(bindings.illustration){const b=bindings.illustration,img=live.illustration; b.el.append(img);img.classList.add('native-live-art');const fit=()=>{const metric=source.illustrations[skin.illustration],w=metric?.size.x||img.naturalWidth,h=metric?.size.y||img.naturalHeight;if(!w||!h)return;const p=metric?.pivot||{x:.5,y:.5},offset=metric?.position||{x:0,y:0};Object.assign(img.style,{width:w+'px',height:h+'px',left:(b.w/2+offset.x-p.x*w)+'px',top:(b.h/2-offset.y-(1-p.y)*h)+'px'});};img.onload=fit;if(img.complete)fit();}
+ // The right selection controls retain the site's read-only ownership behavior.
+ const back=pageNode('btn_topmenu_back');if(back)putRect($('wardrobeBack'),back.rect);
+ const scroll=pageNode('scroll_obj'),cardWidth=source.cardSize.x*scale,cardHeight=source.cardSize.y*scale;
+ if(scroll){const [cx,y,,h]=scroll.rect;putRect($('wardrobeGrid'),[cx-250,y,500,h]);detail.style.setProperty('--native-card-width',cardWidth+'px');detail.style.setProperty('--native-card-height',cardHeight+'px');}
+ const title=pageNode('char_name');if(title)putRect(detail.querySelector('.wardrobe-strip-heading'),title.rect);
+ const button=pageNode('cloth_button');if(button)putRect($('wardrobeOwned'),button.rect);
+ for(const [id,name]of [['wardrobePrev','left_arrow'],['wardrobeNext','right_arrow']]){const n=pageNode(name);if(n){detail.append($(id));putRect($(id),n.rect);}}
+ const brand=source.page['skin_select_state/right_part/scroll_container/building_item/brand_name'];if(brand){const rect=brand.rect;const badge=detail.querySelector('.wardrobe-outfit-badge');badge.style.left=(rect[0]-8)+'px';badge.style.width=(rect[2]+16)+'px';}
+ detail.style.setProperty('--outfit-accent',row?.colors?.[2]||skin.accent||'#4384aa');
+ // Match the original group logo inside each portrait card.
+ for(const card of $('wardrobeGrid').children){const data=source.skins[card.dataset.skin],template=source.layouts[data?.group]||source.layouts.illust_2;const image=template.find(n=>n.path==='left_up_part/icon')?.image;let mark=card.querySelector('.native-card-logo');if(!mark){mark=document.createElement('img');mark.className='native-card-logo';mark.alt='';card.append(mark);}mark.hidden=!image;if(image)mark.src=art(image.folder,image.name);card.querySelector('small').hidden=true;}
 }
