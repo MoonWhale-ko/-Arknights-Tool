@@ -1,0 +1,308 @@
+{
+  "SkinAllHide": [
+    {
+      "path": "left_up_part/tri_for_round",
+      "attribute": 4,
+      "value": [
+        0.0,
+        0.0,
+        -29.90999984741211
+      ]
+    },
+    {
+      "path": "right_down_part",
+      "attribute": "m_AnchoredPosition.x",
+      "value": [
+        486.0
+      ]
+    },
+    {
+      "path": "right_up_part",
+      "attribute": "m_AnchoredPosition.x",
+      "value": [
+        155.5999755859375
+      ]
+    },
+    {
+      "path": "spine_part/color_1",
+      "attribute": "m_AnchoredPosition.x",
+      "value": [
+        -74.5
+      ]
+    },
+    {
+      "path": "spine_part/color_1",
+      "attribute": "m_AnchoredPosition.y",
+      "value": [
+        114.19999694824219
+      ]
+    },
+    {
+      "path": "spine_part/color_2",
+      "attribute": "m_AnchoredPosition.x",
+      "value": [
+        137.60000610351562
+      ]
+    },
+    {
+      "path": "spine_part/color_2",
+      "attribute": "m_AnchoredPosition.y",
+      "value": [
+        -105.9000015258789
+      ]
+    },
+    {
+      "path": "spine_part/color_2",
+      "attribute": "m_Color.a",
+      "value": [
+        0.0
+      ]
+    },
+    {
+      "path": "spine_part/color_1",
+      "attribute": "m_Color.a",
+      "value": [
+        0.0
+      ]
+    },
+    {
+      "path": "illustration",
+      "attribute": "m_AnchoredPosition.y",
+      "value": [
+        -674.0
+      ]
+    },
+    {
+      "path": "const_image",
+      "attribute": "m_AnchoredPosition.y",
+      "value": [
+        -234.3000030517578
+      ]
+    },
+    {
+      "path": "const_image",
+      "attribute": "m_Color.a",
+      "value": [
+        0.0
+      ]
+    },
+    {
+      "path": "left_up_part/icon",
+      "attribute": "m_AnchoredPosition.x",
+      "value": [
+        -361.0
+      ]
+    },
+    {
+      "path": "back_changeable",
+      "attribute": "m_Color.a",
+      "value": [
+        0.0
+      ]
+    },
+    {
+      "path": "back_static",
+      "attribute": "m_Color.a",
+      "value": [
+        0.0
+      ]
+    },
+    {
+      "path": "spine_part/Image",
+      "attribute": "m_Color.a",
+      "value": [
+        0.0
+      ]
+    },
+    {
+      "path": "",
+      "attribute": "m_Alpha",
+      "value": [
+        0.0
+      ]
+    },
+    {
+      "path": "spine_part/spine_holder",
+      "attribute": "m_AnchoredPosition.x",
+      "value": [
+        -468.0
+      ]
+    },
+    {
+      "path": "spine_part/spine_holder",
+      "attribute": "m_AnchoredPosition.y",
+      "value": [
+        -580.0
+      ]
+    }
+  ],
+  "SkinAllShow": [
+    {
+      "path": "left_up_part/tri_for_round",
+      "attribute": 4,
+      "value": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "path": "const_image",
+      "attribute": "m_AnchoredPosition.y",
+      "value": [
+        17.200000762939453
+      ]
+    },
+    {
+      "path": "const_image",
+      "attribute": "m_Color.a",
+      "value": [
+        1.0
+      ]
+    },
+    {
+      "path": "illustration",
+      "attribute": "m_AnchoredPosition.y",
+      "value": [
+        19.600000381469727
+      ]
+    },
+    {
+      "path": "right_down_part",
+      "attribute": "m_AnchoredPosition.x",
+      "value": [
+        176.5
+      ]
+    },
+    {
+      "path": "right_up_part",
+      "attribute": "m_AnchoredPosition.x",
+      "value": [
+        -153.89999389648438
+      ]
+    },
+    {
+      "path": "spine_part/color_1",
+      "attribute": "m_AnchoredPosition.x",
+      "value": [
+        -24.5
+      ]
+    },
+    {
+      "path": "spine_part/color_1",
+      "attribute": "m_AnchoredPosition.y",
+      "value": [
+        64.19999694824219
+      ]
+    },
+    {
+      "path": "spine_part/color_1",
+      "attribute": "m_Color.a",
+      "value": [
+        1.0
+      ]
+    },
+    {
+      "path": "spine_part/color_2",
+      "attribute": "m_AnchoredPosition.x",
+      "value": [
+        87.5999984741211
+      ]
+    },
+    {
+      "path": "spine_part/color_2",
+      "attribute": "m_AnchoredPosition.y",
+      "value": [
+        -55.900001525878906
+      ]
+    },
+    {
+      "path": "spine_part/color_2",
+      "attribute": "m_Color.a",
+      "value": [
+        1.0
+      ]
+    },
+    {
+      "path": "right_down_part",
+      "attribute": "m_SizeDelta.x",
+      "value": [
+        -353.0
+      ]
+    },
+    {
+      "path": "left_up_part/icon",
+      "attribute": "m_AnchoredPosition.x",
+      "value": [
+        -104.0
+      ]
+    },
+    {
+      "path": "back_changeable",
+      "attribute": "m_Color.a",
+      "value": [
+        1.0
+      ]
+    },
+    {
+      "path": "back_static",
+      "attribute": "m_Color.a",
+      "value": [
+        1.0
+      ]
+    },
+    {
+      "path": "spine_part/Image",
+      "attribute": "m_Color.a",
+      "value": [
+        1.0
+      ]
+    },
+    {
+      "path": "",
+      "attribute": "m_Alpha",
+      "value": [
+        1.0
+      ]
+    },
+    {
+      "path": "spine_part/spine_holder",
+      "attribute": "m_AnchoredPosition.x",
+      "value": [
+        32.0
+      ]
+    },
+    {
+      "path": "spine_part/spine_holder",
+      "attribute": "m_AnchoredPosition.y",
+      "value": [
+        -80.0
+      ]
+    },
+    {
+      "path": "left_up_part/icon",
+      "attribute": "m_AnchoredPosition.y",
+      "value": [
+        -26.0
+      ]
+    }
+  ],
+  "runtime": {
+    "function": "SkinGroupCommonView.ApplyState",
+    "address": "0x18138b0a0",
+    "blendParameter": "Blend",
+    "blendValue": "(scrollState - viewIndex)^2",
+    "animatorCall": "Animator.SetFloat(string, float) at 0x185e73c70",
+    "controller": "skin_animator_common",
+    "blendThresholds": [
+      0,
+      1
+    ],
+    "clips": [
+      "SkinAllShow",
+      "SkinAllHide"
+    ],
+    "currentImplementationGap": "applyOriginalLayout rebuilds one template at settled Show channels; simultaneous outgoing/incoming template blending is missing",
+    "smoothingFinding": "General scroll state coroutine is linear per frame. No additional generic easing found in the inspected paths. Left layout appearance is nonlinear because distance is squared before blend evaluation."
+  }
+}

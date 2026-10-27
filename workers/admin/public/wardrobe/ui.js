@@ -1,9 +1,10 @@
-import {loadOriginalLayouts,applyOriginalLayout,compareSkinOrder,NATIVE_MOTION,nativeCardFrames,nativeDragState} from './original-layout.js?v=17';
-import {showSD,clearSD} from './sd.js?v=9';
+import {loadOriginalLayouts,applyOriginalLayout,compareSkinOrder,NATIVE_MOTION,nativeCardFrames,nativeDragState,applyLeftMotion} from './original-layout.js?v=18';
+import {showSD,clearSD,releaseSD} from './sd.js?v=10';
 const $=id=>document.getElementById(id),make=(tag,text)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=text;return el;};
 const demo=document.body.dataset.wardrobeDemo==='true';
 const previewEquipped=new Map();
 let catalog,owned=null,selectedChar=null,selectedSkin=null,characters=[];
+let sceneLayers=[];
 let cardState=0,motionFrame=0,motionVersion=0,drag=null;
 function stopCardMotion(){cancelAnimationFrame(motionFrame);motionVersion++;}
 
@@ -22,11 +23,21 @@ function render(){
  const skins=(chars.get(selectedChar)||[]).sort(compareSkinOrder);
  $('wardrobeCount').textContent=`${chars.size}명 · ${rows.length}종`;
  $('wardrobeOperator').textContent=skins[0]?.operator||'오퍼레이터 선택';
- const grid=$('wardrobeGrid');stopCardMotion();drag=null;grid.replaceChildren();
+ const grid=$('wardrobeGrid');stopCardMotion();drag=null;clearOldScenes();grid.replaceChildren();
  if(!skins.length){clearSD();if($('wardrobeNativeScene'))$('wardrobeNativeScene').hidden=true;$('wardrobeArt').hidden=true;$('wardrobeArt').removeAttribute('src');$('wardrobeArtStatus').textContent='조건에 맞는 스킨이 없습니다.';for(const id of ['wardrobeBrand','wardrobeOperatorName','wardrobeTitle','wardrobeOwned'])$(id).textContent='';return;}
  if(!skins.some(s=>s.id===selectedSkin))selectedSkin=skins[0].id;
  for(const skin of skins){const card=make('button');card.type='button';card.className='wardrobe-card'+(skin.basic||owned.has(skin.id)?'':' unowned');card.dataset.skin=skin.id;card.dataset.basic=String(!!skin.basic);card.dataset.elite=String(skin.elite||0);card.setAttribute('aria-label',skin.basic?(skin.elite>=2?'2정예화':'기본 복장'):skin.name);card.setAttribute('aria-pressed',String(skin.id===selectedSkin));const img=make('img');img.alt='';img.loading='lazy';if(skin.portrait)img.src='https://raw.githubusercontent.com/yuanyan3060/ArknightsGameResource/main/portrait/'+encodeURIComponent(skin.portrait)+'.png';img.onerror=()=>{img.hidden=true;};card.append(img,make('span',skin.name),make('small',skin.brandTitle||'DEFAULT'));card.onclick=()=>selectCard(skin.id,NATIVE_MOTION.clickFrames);grid.append(card);}
  show(skins.find(s=>s.id===selectedSkin));layoutCards();
+}
+function clearOldScenes(){for(const layer of sceneLayers){if(layer.el.id!=='wardrobeNativeScene'){releaseSD(layer.sd);layer.el.remove();}}sceneLayers=[];}
+function retainLeftScene(){
+ const el=$('wardrobeNativeScene');if(!el)return;const ids=['wardrobeArt','wardrobeFace','wardrobePortrait','wardrobeSD','wardrobeArtStatus'];const live=ids.map(id=>$(id));const sd=$('wardrobeSD'),status=$('wardrobeSDStatus');
+ // Preserve the actual outgoing DOM and live SD renderer, not a flat screenshot.
+ const fresh=live.map(node=>node.cloneNode(false));const freshStatus=status.cloneNode(false);freshStatus.textContent='';fresh[3].append(freshStatus);
+ for(const n of [el,...el.querySelectorAll('[id]')]){if(n.id.startsWith('native-tint-'))continue;n.removeAttribute('id');}
+ el.classList.add('wardrobe-native-outgoing');el.setAttribute('aria-hidden','true');el.inert=true;
+ const layer=sceneLayers.find(v=>v.el===el);if(layer)layer.sd=sd;else sceneLayers.push({el,sd,index:cardState});
+ for(const node of fresh)$('wardrobeDetail').querySelector('.wardrobe-stage').append(node);
 }
 function show(s){
  const detail=$('wardrobeDetail');detail.style.setProperty('--outfit-accent',/^#[0-9a-f]{6}$/i.test(s.accent||'')?s.accent:'#351dc4');
@@ -54,6 +65,7 @@ if(!demo)try{characters=JSON.parse(localStorage.getItem('zootAdminWardrobeCharac
 
 function updateWear(s){const character=characters.find(c=>c.charId===s.charId);const equipped=previewEquipped.get(s.charId)||character?.skin||catalog.find(v=>v.charId===s.charId&&v.basic&&v.elite===(character?.elite>=2?2:0))?.id;const allowed=owned.has(s.id)||s.basic&&(character?.elite??0)>=(s.elite||0);const current=equipped===s.id,button=$('wardrobeOwned');button.textContent=current?'현재 복장':allowed?'변경':'미보유';button.disabled=current||!allowed;button.classList.toggle('is-equipped',current);button.onclick=()=>{if(!allowed||current)return;previewEquipped.set(s.charId,s.id);updateWear(s);renderRoster();};}
 function paintCards(){
+ for(const layer of sceneLayers)applyLeftMotion(layer.el,cardState-layer.index);
  const buttons=[...$('wardrobeGrid').children],scale=862/810,fullWidth=154.39999*scale;
  for(const frame of nativeCardFrames(cardState,buttons.length)){
   const button=buttons[frame.index],visible=frame.weight>0;
@@ -69,14 +81,20 @@ function paintCards(){
  $('wardrobeGrid').dataset.motionState=String(cardState);
 }
 function updateCardArrows(){const buttons=[...$('wardrobeGrid').children],selected=buttons.findIndex(b=>b.dataset.skin===selectedSkin);for(const [id,off]of [['wardrobePrev',-1],['wardrobeNext',1]]){const button=$(id);button.disabled=!buttons[selected+off];button.hidden=button.disabled;}}
-function layoutCards(){stopCardMotion();cardState=[...$('wardrobeGrid').children].findIndex(b=>b.dataset.skin===selectedSkin);paintCards();updateCardArrows();}
-function animateCards(target,frames){stopCardMotion();const version=motionVersion,start=cardState;let step=0;const tick=()=>{if(version!==motionVersion)return;cardState=start+(target-start)*(++step/frames);paintCards();if(step<frames)motionFrame=requestAnimationFrame(tick);};motionFrame=requestAnimationFrame(tick);}
-function selectCard(id,frames){const buttons=[...$('wardrobeGrid').children],target=buttons.findIndex(b=>b.dataset.skin===id);if(target<0)return;const skin=catalog.find(s=>s.id===id);if(!skin)return;selectedSkin=id;show(skin);for(const b of buttons)b.setAttribute('aria-pressed',String(b.dataset.skin===id));updateCardArrows();animateCards(target,frames);}
+function layoutCards(){stopCardMotion();cardState=[...$('wardrobeGrid').children].findIndex(b=>b.dataset.skin===selectedSkin);sceneLayers=[{el:$('wardrobeNativeScene'),sd:$('wardrobeSD'),index:cardState}];paintCards();updateCardArrows();}
+function finishLeftMotion(){const current=$('wardrobeNativeScene');for(const layer of sceneLayers)if(layer.el!==current){releaseSD(layer.sd);layer.el.remove();}sceneLayers=sceneLayers.filter(layer=>layer.el===current);}
+function animateCards(target,frames){stopCardMotion();const version=motionVersion,start=cardState;let step=0;const tick=()=>{if(version!==motionVersion)return;cardState=start+(target-start)*(++step/frames);paintCards();if(step<frames)motionFrame=requestAnimationFrame(tick);else finishLeftMotion();};motionFrame=requestAnimationFrame(tick);}
+function switchLeftSkin(id,target){if(selectedSkin===id)return;const skin=catalog.find(s=>s.id===id);if(!skin)return;
+ // A rapid reversal may revisit a still-outgoing template: discard only that stale copy.
+ for(const layer of sceneLayers.filter(l=>l.index===target&&l.el.id!=='wardrobeNativeScene')){releaseSD(layer.sd);layer.el.remove();sceneLayers=sceneLayers.filter(l=>l!==layer);}
+ retainLeftScene();selectedSkin=id;show(skin);sceneLayers.push({el:$('wardrobeNativeScene'),sd:$('wardrobeSD'),index:target});
+ for(const b of $('wardrobeGrid').children)b.setAttribute('aria-pressed',String(b.dataset.skin===id));updateCardArrows();paintCards();}
+function selectCard(id,frames){const buttons=[...$('wardrobeGrid').children],target=buttons.findIndex(b=>b.dataset.skin===id);if(target<0)return;switchLeftSkin(id,target);animateCards(target,frames);}
 for(const [id,direction]of [['wardrobePrev',-1],['wardrobeNext',1]])$(id).onclick=()=>{const buttons=[...$('wardrobeGrid').children],i=buttons.findIndex(b=>b.dataset.skin===selectedSkin);if(buttons[i+direction])selectCard(buttons[i+direction].dataset.skin,NATIVE_MOTION.clickFrames);};
 let suppressSwipeClick=false;const strip=$('wardrobeGrid');
 strip.addEventListener('pointerdown',e=>{if(e.button!==0||drag)return;stopCardMotion();drag={id:e.pointerId,x:e.clientX,state:cardState,moved:false};});
 strip.addEventListener('click',e=>{if(suppressSwipeClick){e.preventDefault();e.stopImmediatePropagation();}},true);
-window.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;const scale=$('wardrobeDetail').getBoundingClientRect().width/1535,dx=(e.clientX-drag.x)/scale;if(Math.abs(dx)>5)drag.moved=true;if(drag.moved){cardState=nativeDragState(drag.state,dx,strip.children.length);paintCards();}});
+window.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;const scale=$('wardrobeDetail').getBoundingClientRect().width/1535,dx=(e.clientX-drag.x)/scale;if(Math.abs(dx)>5)drag.moved=true;if(drag.moved){cardState=nativeDragState(drag.state,dx,strip.children.length);const nearest=Math.round(cardState),card=strip.children[nearest];if(card&&card.dataset.skin!==selectedSkin)switchLeftSkin(card.dataset.skin,nearest);paintCards();}});
 function endCardDrag(e,cancelled=false){if(!drag||drag.id!==e.pointerId)return;const moved=drag.moved;drag=null;if(moved){suppressSwipeClick=true;setTimeout(()=>{suppressSwipeClick=false;},0);const target=cancelled?[...strip.children].findIndex(b=>b.dataset.skin===selectedSkin):Math.round(cardState);if(strip.children[target])selectCard(strip.children[target].dataset.skin,NATIVE_MOTION.snapFrames);}else animateCards([...strip.children].findIndex(b=>b.dataset.skin===selectedSkin),NATIVE_MOTION.snapFrames);}
 window.addEventListener('pointerup',e=>endCardDrag(e));window.addEventListener('pointercancel',e=>endCardDrag(e,true));
 window.addEventListener('blur',()=>{if(drag)endCardDrag({pointerId:drag.id},true);});
