@@ -1,11 +1,11 @@
 {
   "operatorCount": 444,
   "skinCount": 1319,
-  "nativeIllustrationCount": 836,
+  "nativeIllustrationCount": 1319,
   "basicSkinCount": 833,
   "nativeBasicCount": 833,
   "purchasedSkinCount": 486,
-  "nativePurchasedCount": 3,
+  "nativePurchasedCount": 486,
   "nativeTemplateCount": 1319,
   "imports": {
     "chararts/char_003_kalts.ab": 4,
@@ -451,7 +451,356 @@
     "chararts/char_614_acsupo.ab": 1,
     "chararts/char_615_acspec.ab": 1,
     "chararts/char_616_pithst.ab": 2,
-    "chararts/char_617_sharp2.ab": 2
+    "chararts/char_617_sharp2.ab": 2,
+    "skinpack/char_002_amiya.ab": 6,
+    "skinpack/char_003_kalts.ab": 4,
+    "skinpack/char_010_chen.ab": 4,
+    "skinpack/char_017_huang.ab": 4,
+    "skinpack/char_1001_amiya2.ab": 2,
+    "skinpack/char_1011_lava2.ab": 4,
+    "skinpack/char_1012_skadi2.ab": 4,
+    "skinpack/char_1013_chen2.ab": 4,
+    "skinpack/char_1014_nearl2.ab": 2,
+    "skinpack/char_1016_agoat2.ab": 2,
+    "skinpack/char_1019_siege2.ab": 2,
+    "skinpack/char_101_sora.ab": 4,
+    "skinpack/char_1020_reed2.ab": 6,
+    "skinpack/char_1021_kroos2.ab": 4,
+    "skinpack/char_1023_ghost2.ab": 2,
+    "skinpack/char_1024_hbisc2.ab": 2,
+    "skinpack/char_1026_gvial2.ab": 2,
+    "skinpack/char_1027_greyy2.ab": 4,
+    "skinpack/char_1028_texas2.ab": 4,
+    "skinpack/char_102_texas.ab": 4,
+    "skinpack/char_1031_slent2.ab": 2,
+    "skinpack/char_1032_excu2.ab": 4,
+    "skinpack/char_1033_swire2.ab": 2,
+    "skinpack/char_1034_jesca2.ab": 2,
+    "skinpack/char_1035_wisdel.ab": 2,
+    "skinpack/char_1036_fang2.ab": 2,
+    "skinpack/char_1037_amiya3.ab": 2,
+    "skinpack/char_1038_whitw2.ab": 2,
+    "skinpack/char_1039_thorn2.ab": 2,
+    "skinpack/char_103_angel.ab": 6,
+    "skinpack/char_1040_blaze2.ab": 2,
+    "skinpack/char_1041_angel2.ab": 2,
+    "skinpack/char_1043_leizi2.ab": 2,
+    "skinpack/char_106_franka.ab": 2,
+    "skinpack/char_107_liskam.ab": 4,
+    "skinpack/char_108_silent.ab": 4,
+    "skinpack/char_109_fmout.ab": 2,
+    "skinpack/char_110_deepcl.ab": 2,
+    "skinpack/char_112_siege.ab": 4,
+    "skinpack/char_113_cqbw.ab": 2,
+    "skinpack/char_115_headbr.ab": 4,
+    "skinpack/char_117_myrrh.ab": 2,
+    "skinpack/char_118_yuki.ab": 2,
+    "skinpack/char_120_hibisc.ab": 2,
+    "skinpack/char_121_lava.ab": 2,
+    "skinpack/char_122_beagle.ab": 2,
+    "skinpack/char_123_fang.ab": 2,
+    "skinpack/char_124_kroos.ab": 4,
+    "skinpack/char_126_shotst.ab": 4,
+    "skinpack/char_127_estell.ab": 2,
+    "skinpack/char_128_plosis.ab": 4,
+    "skinpack/char_129_bluep.ab": 4,
+    "skinpack/char_130_doberm.ab": 2,
+    "skinpack/char_131_flameb.ab": 4,
+    "skinpack/char_133_mm.ab": 2,
+    "skinpack/char_134_ifrit.ab": 6,
+    "skinpack/char_135_halo.ab": 2,
+    "skinpack/char_136_hsguma.ab": 4,
+    "skinpack/char_137_brownb.ab": 2,
+    "skinpack/char_140_whitew.ab": 2,
+    "skinpack/char_141_nights.ab": 2,
+    "skinpack/char_143_ghost.ab": 2,
+    "skinpack/char_144_red.ab": 2,
+    "skinpack/char_145_prove.ab": 4,
+    "skinpack/char_147_shining.ab": 2,
+    "skinpack/char_148_nearl.ab": 2,
+    "skinpack/char_149_scave.ab": 2,
+    "skinpack/char_1502_crosly.ab": 2,
+    "skinpack/char_150_snakek.ab": 4,
+    "skinpack/char_151_myrtle.ab": 6,
+    "skinpack/char_154_morgan.ab": 2,
+    "skinpack/char_155_tiger.ab": 2,
+    "skinpack/char_158_milu.ab": 4,
+    "skinpack/char_159_peacok.ab": 2,
+    "skinpack/char_163_hpsts.ab": 2,
+    "skinpack/char_164_nightm.ab": 4,
+    "skinpack/char_166_skfire.ab": 2,
+    "skinpack/char_171_bldsk.ab": 4,
+    "skinpack/char_172_svrash.ab": 6,
+    "skinpack/char_173_slchan.ab": 4,
+    "skinpack/char_174_slbell.ab": 2,
+    "skinpack/char_179_cgbird.ab": 4,
+    "skinpack/char_180_amgoat.ab": 4,
+    "skinpack/char_181_flower.ab": 4,
+    "skinpack/char_183_skgoat.ab": 2,
+    "skinpack/char_185_frncat.ab": 4,
+    "skinpack/char_187_ccheal.ab": 2,
+    "skinpack/char_188_helage.ab": 2,
+    "skinpack/char_190_clour.ab": 1,
+    "skinpack/char_192_falco.ab": 2,
+    "skinpack/char_193_frostl.ab": 2,
+    "skinpack/char_195_glassb.ab": 2,
+    "skinpack/char_196_sunbr.ab": 2,
+    "skinpack/char_197_poca.ab": 4,
+    "skinpack/char_198_blackd.ab": 4,
+    "skinpack/char_199_yak.ab": 2,
+    "skinpack/char_2012_typhon.ab": 4,
+    "skinpack/char_2013_cerber.ab": 4,
+    "skinpack/char_2014_nian.ab": 4,
+    "skinpack/char_2015_dusk.ab": 4,
+    "skinpack/char_201_moeshd.ab": 4,
+    "skinpack/char_2024_chyue.ab": 4,
+    "skinpack/char_2025_shu.ab": 2,
+    "skinpack/char_2026_yu.ab": 2,
+    "skinpack/char_202_demkni.ab": 6,
+    "skinpack/char_204_platnm.ab": 2,
+    "skinpack/char_206_gnosis.ab": 2,
+    "skinpack/char_208_melan.ab": 2,
+    "skinpack/char_209_ardign.ab": 4,
+    "skinpack/char_210_stward.ab": 2,
+    "skinpack/char_211_adnach.ab": 2,
+    "skinpack/char_212_ansel.ab": 4,
+    "skinpack/char_213_mostma.ab": 4,
+    "skinpack/char_214_kafka.ab": 2,
+    "skinpack/char_215_mantic.ab": 4,
+    "skinpack/char_218_cuttle.ab": 2,
+    "skinpack/char_219_meteo.ab": 2,
+    "skinpack/char_220_grani.ab": 2,
+    "skinpack/char_222_bpipe.ab": 6,
+    "skinpack/char_225_haak.ab": 4,
+    "skinpack/char_226_hmau.ab": 2,
+    "skinpack/char_230_savage.ab": 6,
+    "skinpack/char_235_jesica.ab": 6,
+    "skinpack/char_236_rope.ab": 4,
+    "skinpack/char_237_gravel.ab": 2,
+    "skinpack/char_240_wyvern.ab": 2,
+    "skinpack/char_241_panda.ab": 4,
+    "skinpack/char_242_otter.ab": 2,
+    "skinpack/char_243_waaifu.ab": 2,
+    "skinpack/char_245_cello.ab": 2,
+    "skinpack/char_248_mgllan.ab": 2,
+    "skinpack/char_249_mlyss.ab": 4,
+    "skinpack/char_250_phatom.ab": 4,
+    "skinpack/char_252_bibeak.ab": 2,
+    "skinpack/char_253_greyy.ab": 4,
+    "skinpack/char_254_vodfox.ab": 4,
+    "skinpack/char_258_podego.ab": 2,
+    "skinpack/char_260_durnar.ab": 2,
+    "skinpack/char_261_sddrag.ab": 2,
+    "skinpack/char_263_skadi.ab": 4,
+    "skinpack/char_264_f12yin.ab": 4,
+    "skinpack/char_265_sophia.ab": 2,
+    "skinpack/char_271_spikes.ab": 4,
+    "skinpack/char_272_strong.ab": 2,
+    "skinpack/char_274_astesi.ab": 6,
+    "skinpack/char_275_breeze.ab": 2,
+    "skinpack/char_277_sqrrel.ab": 2,
+    "skinpack/char_278_orchid.ab": 2,
+    "skinpack/char_279_excu.ab": 2,
+    "skinpack/char_281_popka.ab": 2,
+    "skinpack/char_282_catap.ab": 2,
+    "skinpack/char_283_midn.ab": 2,
+    "skinpack/char_284_spot.ab": 2,
+    "skinpack/char_285_medic2.ab": 2,
+    "skinpack/char_286_cast3.ab": 2,
+    "skinpack/char_289_gyuki.ab": 2,
+    "skinpack/char_290_vigna.ab": 4,
+    "skinpack/char_291_aglina.ab": 4,
+    "skinpack/char_293_thorns.ab": 4,
+    "skinpack/char_294_ayer.ab": 2,
+    "skinpack/char_297_hamoni.ab": 4,
+    "skinpack/char_298_susuro.ab": 4,
+    "skinpack/char_300_phenxi.ab": 4,
+    "skinpack/char_301_cutter.ab": 2,
+    "skinpack/char_302_glaze.ab": 2,
+    "skinpack/char_304_zebra.ab": 2,
+    "skinpack/char_306_leizi.ab": 2,
+    "skinpack/char_308_swire.ab": 2,
+    "skinpack/char_311_mudrok.ab": 6,
+    "skinpack/char_322_lmlee.ab": 6,
+    "skinpack/char_325_bison.ab": 2,
+    "skinpack/char_326_glacus.ab": 2,
+    "skinpack/char_328_cammou.ab": 2,
+    "skinpack/char_332_archet.ab": 4,
+    "skinpack/char_333_sidero.ab": 2,
+    "skinpack/char_336_folivo.ab": 2,
+    "skinpack/char_337_utage.ab": 4,
+    "skinpack/char_338_iris.ab": 2,
+    "skinpack/char_340_shwaz.ab": 4,
+    "skinpack/char_341_sntlla.ab": 2,
+    "skinpack/char_343_tknogi.ab": 4,
+    "skinpack/char_344_beewax.ab": 4,
+    "skinpack/char_345_folnic.ab": 2,
+    "skinpack/char_346_aosta.ab": 2,
+    "skinpack/char_347_jaksel.ab": 2,
+    "skinpack/char_348_ceylon.ab": 2,
+    "skinpack/char_349_chiave.ab": 2,
+    "skinpack/char_350_surtr.ab": 6,
+    "skinpack/char_355_ethan.ab": 2,
+    "skinpack/char_356_broca.ab": 2,
+    "skinpack/char_358_lisa.ab": 6,
+    "skinpack/char_362_saga.ab": 2,
+    "skinpack/char_365_aprl.ab": 2,
+    "skinpack/char_366_acdrop.ab": 4,
+    "skinpack/char_367_swllow.ab": 2,
+    "skinpack/char_369_bena.ab": 2,
+    "skinpack/char_373_lionhd.ab": 4,
+    "skinpack/char_376_therex.ab": 1,
+    "skinpack/char_377_gdglow.ab": 6,
+    "skinpack/char_378_asbest.ab": 2,
+    "skinpack/char_379_sesa.ab": 2,
+    "skinpack/char_381_bubble.ab": 2,
+    "skinpack/char_383_snsant.ab": 2,
+    "skinpack/char_385_finlpp.ab": 2,
+    "skinpack/char_388_mint.ab": 4,
+    "skinpack/char_391_rosmon.ab": 4,
+    "skinpack/char_4000_jnight.ab": 2,
+    "skinpack/char_4004_pudd.ab": 2,
+    "skinpack/char_4006_melnte.ab": 2,
+    "skinpack/char_4009_irene.ab": 4,
+    "skinpack/char_400_weedy.ab": 4,
+    "skinpack/char_4010_etlchi.ab": 2,
+    "skinpack/char_4011_lessng.ab": 2,
+    "skinpack/char_4013_kjera.ab": 2,
+    "skinpack/char_4014_lunacu.ab": 2,
+    "skinpack/char_4016_kazema.ab": 2,
+    "skinpack/char_4017_puzzle.ab": 4,
+    "skinpack/char_4019_ncdeer.ab": 2,
+    "skinpack/char_401_elysm.ab": 4,
+    "skinpack/char_4023_rfalcn.ab": 1,
+    "skinpack/char_4025_aprot2.ab": 2,
+    "skinpack/char_4027_heyak.ab": 4,
+    "skinpack/char_402_tuye.ab": 2,
+    "skinpack/char_4032_provs.ab": 4,
+    "skinpack/char_4036_forcer.ab": 2,
+    "skinpack/char_4039_horn.ab": 2,
+    "skinpack/char_4040_rockr.ab": 2,
+    "skinpack/char_4041_chnut.ab": 2,
+    "skinpack/char_4042_lumen.ab": 4,
+    "skinpack/char_4043_erato.ab": 2,
+    "skinpack/char_4045_heidi.ab": 2,
+    "skinpack/char_4046_ebnhlz.ab": 2,
+    "skinpack/char_4047_pianst.ab": 2,
+    "skinpack/char_4048_doroth.ab": 2,
+    "skinpack/char_4052_surfer.ab": 2,
+    "skinpack/char_4054_malist.ab": 2,
+    "skinpack/char_4055_bgsnow.ab": 4,
+    "skinpack/char_4058_pepe.ab": 2,
+    "skinpack/char_405_absin.ab": 2,
+    "skinpack/char_4062_totter.ab": 2,
+    "skinpack/char_4063_quartz.ab": 2,
+    "skinpack/char_4064_mlynar.ab": 4,
+    "skinpack/char_4065_judge.ab": 4,
+    "skinpack/char_4066_highmo.ab": 4,
+    "skinpack/char_4071_peper.ab": 2,
+    "skinpack/char_4072_ironmn.ab": 4,
+    "skinpack/char_4077_palico.ab": 2,
+    "skinpack/char_4078_bdhkgt.ab": 2,
+    "skinpack/char_4079_haini.ab": 2,
+    "skinpack/char_4080_lin.ab": 4,
+    "skinpack/char_4081_warmy.ab": 2,
+    "skinpack/char_4082_qiubai.ab": 4,
+    "skinpack/char_4083_chimes.ab": 2,
+    "skinpack/char_4087_ines.ab": 4,
+    "skinpack/char_4088_hodrer.ab": 2,
+    "skinpack/char_4091_ulika.ab": 2,
+    "skinpack/char_4098_vvana.ab": 2,
+    "skinpack/char_4100_caper.ab": 2,
+    "skinpack/char_4102_threye.ab": 2,
+    "skinpack/char_4104_coldst.ab": 2,
+    "skinpack/char_4105_almond.ab": 2,
+    "skinpack/char_4106_bryota.ab": 2,
+    "skinpack/char_4107_vrdant.ab": 2,
+    "skinpack/char_4109_baslin.ab": 2,
+    "skinpack/char_4114_harold.ab": 2,
+    "skinpack/char_4116_blkkgt.ab": 2,
+    "skinpack/char_4117_ray.ab": 2,
+    "skinpack/char_4119_wanqin.ab": 2,
+    "skinpack/char_411_tomimi.ab": 2,
+    "skinpack/char_4121_zuole.ab": 4,
+    "skinpack/char_4122_grabds.ab": 2,
+    "skinpack/char_4123_ela.ab": 2,
+    "skinpack/char_4124_iana.ab": 2,
+    "skinpack/char_4125_rdoc.ab": 2,
+    "skinpack/char_4130_luton.ab": 2,
+    "skinpack/char_4131_odda.ab": 2,
+    "skinpack/char_4132_ascln.ab": 2,
+    "skinpack/char_4133_logos.ab": 2,
+    "skinpack/char_4134_cetsyr.ab": 2,
+    "skinpack/char_4136_phonor.ab": 1,
+    "skinpack/char_4137_udflow.ab": 2,
+    "skinpack/char_4138_narant.ab": 2,
+    "skinpack/char_4139_papyrs.ab": 2,
+    "skinpack/char_4140_lasher.ab": 2,
+    "skinpack/char_4141_marcil.ab": 2,
+    "skinpack/char_4145_ulpia.ab": 2,
+    "skinpack/char_4146_nymph.ab": 4,
+    "skinpack/char_4147_mitm.ab": 2,
+    "skinpack/char_4148_philae.ab": 2,
+    "skinpack/char_4151_tinman.ab": 2,
+    "skinpack/char_4155_talr.ab": 2,
+    "skinpack/char_415_flint.ab": 2,
+    "skinpack/char_4163_rosesa.ab": 1,
+    "skinpack/char_416_zumama.ab": 2,
+    "skinpack/char_4172_xingzh.ab": 2,
+    "skinpack/char_4173_nowell.ab": 2,
+    "skinpack/char_4177_brigid.ab": 2,
+    "skinpack/char_4179_monstr.ab": 2,
+    "skinpack/char_4182_oblvns.ab": 2,
+    "skinpack/char_4183_mortis.ab": 2,
+    "skinpack/char_4184_dolris.ab": 2,
+    "skinpack/char_4185_amoris.ab": 2,
+    "skinpack/char_4186_tmoris.ab": 2,
+    "skinpack/char_4187_graceb.ab": 2,
+    "skinpack/char_4193_lemuen.ab": 2,
+    "skinpack/char_4195_radian.ab": 2,
+    "skinpack/char_4202_haruka.ab": 2,
+    "skinpack/char_420_flamtl.ab": 2,
+    "skinpack/char_421_crow.ab": 2,
+    "skinpack/char_422_aurora.ab": 2,
+    "skinpack/char_423_blemsh.ab": 2,
+    "skinpack/char_426_billro.ab": 4,
+    "skinpack/char_427_vigil.ab": 2,
+    "skinpack/char_430_fartth.ab": 2,
+    "skinpack/char_431_ashlok.ab": 2,
+    "skinpack/char_436_whispr.ab": 4,
+    "skinpack/char_437_mizuki.ab": 4,
+    "skinpack/char_440_pinecn.ab": 4,
+    "skinpack/char_445_wscoot.ab": 2,
+    "skinpack/char_446_aroma.ab": 2,
+    "skinpack/char_449_glider.ab": 4,
+    "skinpack/char_450_necras.ab": 4,
+    "skinpack/char_451_robin.ab": 2,
+    "skinpack/char_452_bstalk.ab": 4,
+    "skinpack/char_455_nothin.ab": 2,
+    "skinpack/char_456_ash.ab": 2,
+    "skinpack/char_459_tachak.ab": 2,
+    "skinpack/char_464_cement.ab": 2,
+    "skinpack/char_466_qanik.ab": 2,
+    "skinpack/char_469_indigo.ab": 2,
+    "skinpack/char_472_pasngr.ab": 2,
+    "skinpack/char_473_mberry.ab": 4,
+    "skinpack/char_474_glady.ab": 4,
+    "skinpack/char_475_akafyu.ab": 2,
+    "skinpack/char_476_blkngt.ab": 4,
+    "skinpack/char_478_kirara.ab": 2,
+    "skinpack/char_479_sleach.ab": 4,
+    "skinpack/char_484_robrta.ab": 4,
+    "skinpack/char_485_pallas.ab": 4,
+    "skinpack/char_486_takila.ab": 4,
+    "skinpack/char_487_bobb.ab": 2,
+    "skinpack/char_488_buildr.ab": 2,
+    "skinpack/char_489_serum.ab": 2,
+    "skinpack/char_491_humus.ab": 2,
+    "skinpack/char_492_quercu.ab": 4,
+    "skinpack/char_496_wildmn.ab": 2,
+    "skinpack/char_497_ctable.ab": 4,
+    "skinpack/char_498_inside.ab": 2,
+    "skinpack/char_499_kaitou.ab": 2
   },
   "unresolvedSprites": [
     "illust_char_4031_liesel_1b"
@@ -463,7 +812,7 @@
       "operator": "아미야",
       "illustration": "illust_char_002_amiya_winter#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -472,7 +821,7 @@
       "operator": "퍼퓨머",
       "illustration": "illust_char_181_flower_daily#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -481,7 +830,7 @@
       "operator": "아미야",
       "illustration": "illust_char_002_amiya_epoque#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -490,7 +839,7 @@
       "operator": "아미야",
       "illustration": "illust_char_002_amiya_test#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -499,7 +848,7 @@
       "operator": "사리아",
       "illustration": "illust_char_202_demkni_test#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -508,7 +857,7 @@
       "operator": "팬텀",
       "illustration": "illust_char_250_phatom_sale#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -517,7 +866,7 @@
       "operator": "아드나키엘",
       "illustration": "illust_char_211_adnach_sale#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -526,7 +875,7 @@
       "operator": "스튜어드",
       "illustration": "illust_char_210_stward_sale#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -535,7 +884,7 @@
       "operator": "미즈키",
       "illustration": "illust_char_437_mizuki_sale#7",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -544,7 +893,7 @@
       "operator": "엑시아",
       "illustration": "illust_char_103_angel_sale#8",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -553,7 +902,7 @@
       "operator": "사가",
       "illustration": "illust_char_362_saga_sale#9",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -562,7 +911,7 @@
       "operator": "라바",
       "illustration": "illust_char_121_lava_sale#9",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -571,7 +920,7 @@
       "operator": "첸",
       "illustration": "illust_char_010_chen_sale#10",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -580,7 +929,7 @@
       "operator": "틴맨",
       "illustration": "illust_char_4151_tinman_sale#11",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -589,7 +938,7 @@
       "operator": "비르투오사",
       "illustration": "illust_char_245_cello_sale#12",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -598,7 +947,7 @@
       "operator": "이그제큐터 디 엑스 포에데레",
       "illustration": "illust_char_1032_excu2_sale#12",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -607,7 +956,7 @@
       "operator": "아미야",
       "illustration": "illust_char_1037_amiya3_sale#13",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -616,7 +965,7 @@
       "operator": "크루스",
       "illustration": "illust_char_124_kroos_sale#14",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -625,7 +974,7 @@
       "operator": "위셔델",
       "illustration": "illust_char_1035_wisdel_sale#14",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -634,7 +983,7 @@
       "operator": "아르케토",
       "illustration": "illust_char_332_archet_sale#14",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -643,7 +992,7 @@
       "operator": "켈시",
       "illustration": "illust_char_003_kalts_sale#14",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -652,7 +1001,7 @@
       "operator": "라플란드 더 데카덴차",
       "illustration": "illust_char_1038_whitw2_sale#15",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -661,7 +1010,7 @@
       "operator": "아미야",
       "illustration": "illust_char_1001_amiya2_sale#16",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -670,7 +1019,7 @@
       "operator": "로즈몬티스",
       "illustration": "illust_char_391_rosmon_sale#16",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -679,7 +1028,7 @@
       "operator": "좌락",
       "illustration": "illust_char_4121_zuole_sale#16",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -688,7 +1037,7 @@
       "operator": "새비지",
       "illustration": "illust_char_230_savage_sale#17",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -697,7 +1046,7 @@
       "operator": "멜란사",
       "illustration": "illust_char_208_melan_epoque#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -706,7 +1055,7 @@
       "operator": "기타노",
       "illustration": "illust_char_109_fmout_epoque#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -715,7 +1064,7 @@
       "operator": "가비알",
       "illustration": "illust_char_187_ccheal_epoque#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -724,7 +1073,7 @@
       "operator": "프틸롭시스",
       "illustration": "illust_char_128_plosis_epoque#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -733,7 +1082,7 @@
       "operator": "맨티코어",
       "illustration": "illust_char_215_mantic_epoque#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -742,7 +1091,7 @@
       "operator": "나이트메어",
       "illustration": "illust_char_164_nightm_epoque#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -751,7 +1100,7 @@
       "operator": "모스티마",
       "illustration": "illust_char_213_mostma_epoque#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -760,7 +1109,7 @@
       "operator": "아스테시아",
       "illustration": "illust_char_274_astesi_epoque#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -769,7 +1118,7 @@
       "operator": "그라니",
       "illustration": "illust_char_220_grani_epoque#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -778,7 +1127,7 @@
       "operator": "W",
       "illustration": "illust_char_113_cqbw_epoque#7",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -787,7 +1136,7 @@
       "operator": "텍사스",
       "illustration": "illust_char_102_texas_epoque#7",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -796,7 +1145,7 @@
       "operator": "도베르만",
       "illustration": "illust_char_130_doberm_epoque#7",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -805,7 +1154,7 @@
       "operator": "에단",
       "illustration": "illust_char_355_ethan_epoque#7",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -814,7 +1163,7 @@
       "operator": "그레이",
       "illustration": "illust_char_253_greyy_epoque#8",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -823,7 +1172,7 @@
       "operator": "비즈왁스",
       "illustration": "illust_char_344_beewax_epoque#9",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -832,7 +1181,7 @@
       "operator": "츠키노기",
       "illustration": "illust_char_343_tknogi_epoque#9",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -841,7 +1190,7 @@
       "operator": "퍼퓨머",
       "illustration": "illust_char_181_flower_epoque#9",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -850,7 +1199,7 @@
       "operator": "포덴코",
       "illustration": "illust_char_258_podego_epoque#9",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -859,7 +1208,7 @@
       "operator": "메테오",
       "illustration": "illust_char_126_shotst_epoque#10",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -868,7 +1217,7 @@
       "operator": "위슬래시",
       "illustration": "illust_char_265_sophia_epoque#11",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -877,7 +1226,7 @@
       "operator": "머틀",
       "illustration": "illust_char_151_myrtle_epoque#12",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -886,7 +1235,7 @@
       "operator": "팔라스",
       "illustration": "illust_char_485_pallas_epoque#12",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -895,7 +1244,7 @@
       "operator": "로사",
       "illustration": "illust_char_197_poca_epoque#12",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -904,7 +1253,7 @@
       "operator": "안드레아나",
       "illustration": "illust_char_218_cuttle_epoque#12",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -913,7 +1262,7 @@
       "operator": "로빈",
       "illustration": "illust_char_451_robin_epoque#13",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -922,7 +1271,7 @@
       "operator": "사일라흐",
       "illustration": "illust_char_479_sleach_epoque#14",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -931,7 +1280,7 @@
       "operator": "멀베리",
       "illustration": "illust_char_473_mberry_epoque#14",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -940,7 +1289,7 @@
       "operator": "총웨",
       "illustration": "illust_char_2024_chyue_nian#10",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -949,7 +1298,7 @@
       "operator": "린",
       "illustration": "illust_char_4080_lin_nian#10",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -958,7 +1307,7 @@
       "operator": "하이모어",
       "illustration": "illust_char_4066_highmo_nian#10",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -967,7 +1316,7 @@
       "operator": "허니베리",
       "illustration": "illust_char_449_glider_nian#10",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -976,7 +1325,7 @@
       "operator": "퓨어스트림",
       "illustration": "illust_char_385_finlpp_nian#11",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -985,7 +1334,7 @@
       "operator": "슈",
       "illustration": "illust_char_2025_shu_nian#11",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -994,7 +1343,7 @@
       "operator": "좌락",
       "illustration": "illust_char_4121_zuole_nian#11",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1012,7 +1361,7 @@
       "operator": "시",
       "illustration": "illust_char_2015_dusk_nian#12",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1021,7 +1370,7 @@
       "operator": "위",
       "illustration": "illust_char_2026_yu_nian#12",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1030,7 +1379,7 @@
       "operator": "서퍼",
       "illustration": "illust_char_4052_surfer_nian#12",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1039,7 +1388,7 @@
       "operator": "필라에",
       "illustration": "illust_char_4148_philae_nian#12",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1048,7 +1397,7 @@
       "operator": "투예",
       "illustration": "illust_char_402_tuye_epoque#14",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1057,7 +1406,7 @@
       "operator": "우타게",
       "illustration": "illust_char_337_utage_epoque#15",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1066,7 +1415,7 @@
       "operator": "마운틴",
       "illustration": "illust_char_264_f12yin_epoque#15",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1075,7 +1424,7 @@
       "operator": "아카후유",
       "illustration": "illust_char_475_akafyu_epoque#15",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1084,7 +1433,7 @@
       "operator": "와일드메인",
       "illustration": "illust_char_496_wildmn_epoque#16",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1093,7 +1442,7 @@
       "operator": "패신저",
       "illustration": "illust_char_472_pasngr_epoque#17",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1102,7 +1451,7 @@
       "operator": "니어 더 래디언트 나이트",
       "illustration": "illust_char_1014_nearl2_epoque#17",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1111,7 +1460,7 @@
       "operator": "로즈몬티스",
       "illustration": "illust_char_391_rosmon_epoque#17",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1120,7 +1469,7 @@
       "operator": "허니베리",
       "illustration": "illust_char_449_glider_epoque#17",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1129,7 +1478,7 @@
       "operator": "소라",
       "illustration": "illust_char_101_sora_epoque#17",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1138,7 +1487,7 @@
       "operator": "퀘르쿠스",
       "illustration": "illust_char_492_quercu_epoque#17",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1147,7 +1496,7 @@
       "operator": "쉐라",
       "illustration": "illust_char_4013_kjera_epoque#18",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1156,7 +1505,7 @@
       "operator": "팔라스",
       "illustration": "illust_char_485_pallas_epoque#19",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1165,7 +1514,7 @@
       "operator": "맨티코어",
       "illustration": "illust_char_215_mantic_epoque#19",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1174,7 +1523,7 @@
       "operator": "인포서",
       "illustration": "illust_char_4036_forcer_epoque#20",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1183,7 +1532,7 @@
       "operator": "스즈란",
       "illustration": "illust_char_358_lisa_epoque#22",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1192,7 +1541,7 @@
       "operator": "민트",
       "illustration": "illust_char_388_mint_epoque#22",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1201,7 +1550,7 @@
       "operator": "씬",
       "illustration": "illust_char_336_folivo_epoque#22",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1210,7 +1559,7 @@
       "operator": "아스테시아",
       "illustration": "illust_char_274_astesi_epoque#23",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1219,7 +1568,7 @@
       "operator": "혼",
       "illustration": "illust_char_4039_horn_epoque#24",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1228,7 +1577,7 @@
       "operator": "하이디",
       "illustration": "illust_char_4045_heidi_epoque#24",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1237,7 +1586,7 @@
       "operator": "아르모니",
       "illustration": "illust_char_297_hamoni_epoque#24",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1246,7 +1595,7 @@
       "operator": "아스트젠",
       "illustration": "illust_char_135_halo_epoque#25",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1255,7 +1604,7 @@
       "operator": "카디건",
       "illustration": "illust_char_209_ardign_epoque#26",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1264,7 +1613,7 @@
       "operator": "비질",
       "illustration": "illust_char_427_vigil_epoque#27",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1273,7 +1622,7 @@
       "operator": "메테오",
       "illustration": "illust_char_126_shotst_epoque#28",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1282,7 +1631,7 @@
       "operator": "무에나",
       "illustration": "illust_char_4064_mlynar_epoque#28",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1291,7 +1640,7 @@
       "operator": "백파이프",
       "illustration": "illust_char_222_bpipe_epoque#28",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1300,7 +1649,7 @@
       "operator": "압생트",
       "illustration": "illust_char_405_absin_epoque#28",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1309,7 +1658,7 @@
       "operator": "애쉬락",
       "illustration": "illust_char_431_ashlok_epoque#28",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1318,7 +1667,7 @@
       "operator": "퍼즐",
       "illustration": "illust_char_4017_puzzle_epoque#29",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1327,7 +1676,7 @@
       "operator": "안셀",
       "illustration": "illust_char_212_ansel_epoque#29",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1336,7 +1685,7 @@
       "operator": "리드 더 플레임 섀도우",
       "illustration": "illust_char_1020_reed2_epoque#30",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1345,7 +1694,7 @@
       "operator": "민트",
       "illustration": "illust_char_388_mint_epoque#30",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1354,7 +1703,7 @@
       "operator": "어스스피릿",
       "illustration": "illust_char_183_skgoat_epoque#30",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1363,7 +1712,7 @@
       "operator": "치우바이",
       "illustration": "illust_char_4082_qiubai_epoque#31",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1372,7 +1721,7 @@
       "operator": "코로세럼",
       "illustration": "illust_char_489_serum_epoque#31",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1381,7 +1730,7 @@
       "operator": "시멘트",
       "illustration": "illust_char_464_cement_epoque#31",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1390,7 +1739,7 @@
       "operator": "파인콘",
       "illustration": "illust_char_440_pinecn_epoque#31",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1399,7 +1748,7 @@
       "operator": "사일런스 더 패러디그매틱",
       "illustration": "illust_char_1031_slent2_epoque#32",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1408,7 +1757,7 @@
       "operator": "글래디아",
       "illustration": "illust_char_474_glady_epoque#33",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1417,7 +1766,7 @@
       "operator": "페넌스",
       "illustration": "illust_char_4065_judge_epoque#33",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1426,7 +1775,7 @@
       "operator": "멜라나이트",
       "illustration": "illust_char_4006_melnte_epoque#33",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1435,7 +1784,7 @@
       "operator": "에이야퍄들라 더 크비트 아스카",
       "illustration": "illust_char_1016_agoat2_epoque#34",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1444,7 +1793,7 @@
       "operator": "폰사이러스",
       "illustration": "illust_char_488_buildr_epoque#34",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1453,7 +1802,7 @@
       "operator": "브라이오피타",
       "illustration": "illust_char_4106_bryota_epoque#34",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1462,7 +1811,7 @@
       "operator": "텍사스 디 오메르토사",
       "illustration": "illust_char_1028_texas2_epoque#36",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1471,7 +1820,7 @@
       "operator": "디아만테",
       "illustration": "illust_char_499_kaitou_epoque#37",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1480,7 +1829,7 @@
       "operator": "아몬드",
       "illustration": "illust_char_4105_almond_epoque#38",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1489,7 +1838,7 @@
       "operator": "베나",
       "illustration": "illust_char_369_bena_epoque#38",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1498,7 +1847,7 @@
       "operator": "쿼츠",
       "illustration": "illust_char_4063_quartz_epoque#39",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1507,7 +1856,7 @@
       "operator": "비비아나",
       "illustration": "illust_char_4098_vvana_epoque#40",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1516,7 +1865,7 @@
       "operator": "백파이프",
       "illustration": "illust_char_222_bpipe_epoque#40",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1525,7 +1874,7 @@
       "operator": "마토이마루",
       "illustration": "illust_char_289_gyuki_epoque#40",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1534,7 +1883,7 @@
       "operator": "완칭",
       "illustration": "illust_char_4119_wanqin_epoque#41",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1543,7 +1892,7 @@
       "operator": "님프",
       "illustration": "illust_char_4146_nymph_epoque#42",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1552,7 +1901,7 @@
       "operator": "발라크빈",
       "illustration": "illust_char_4102_threye_epoque#42",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1561,7 +1910,7 @@
       "operator": "듀나",
       "illustration": "illust_char_260_durnar_epoque#42",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1570,7 +1919,7 @@
       "operator": "버메일",
       "illustration": "illust_char_190_clour_epoque#43",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1579,7 +1928,7 @@
       "operator": "칸타빌레",
       "illustration": "illust_char_497_ctable_epoque#44",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1588,7 +1937,7 @@
       "operator": "루실라",
       "illustration": "illust_char_4079_haini_epoque#45",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1597,7 +1946,7 @@
       "operator": "하이모어",
       "illustration": "illust_char_4066_highmo_epoque#45",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1606,7 +1955,7 @@
       "operator": "언더플로우",
       "illustration": "illust_char_4137_udflow_epoque#46",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1615,7 +1964,7 @@
       "operator": "모건",
       "illustration": "illust_char_154_morgan_epoque#47",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1624,7 +1973,7 @@
       "operator": "울피아누스",
       "illustration": "illust_char_4145_ulpia_epoque#48",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1633,7 +1982,7 @@
       "operator": "윈드스쿠트",
       "illustration": "illust_char_445_wscoot_epoque#49",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1642,7 +1991,7 @@
       "operator": "시빌라이트 에테르나",
       "illustration": "illust_char_4134_cetsyr_epoque#50",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1651,7 +2000,7 @@
       "operator": "비나 빅토리아",
       "illustration": "illust_char_1019_siege2_epoque#50",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1660,7 +2009,7 @@
       "operator": "오올헤약",
       "illustration": "illust_char_4027_heyak_epoque#50",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1669,7 +2018,7 @@
       "operator": "에스텔",
       "illustration": "illust_char_127_estell_epoque#50",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1678,7 +2027,7 @@
       "operator": "싱주",
       "illustration": "illust_char_4172_xingzh_epoque#51",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1687,7 +2036,7 @@
       "operator": "그레이",
       "illustration": "illust_char_253_greyy_epoque#515",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1696,7 +2045,7 @@
       "operator": "케스트럴",
       "illustration": "illust_char_4023_rfalcn_epoque#52",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1705,7 +2054,7 @@
       "operator": "브리지드",
       "illustration": "illust_char_4177_brigid_epoque#53",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1714,7 +2063,7 @@
       "operator": "아로마",
       "illustration": "illust_char_446_aroma_epoque#54",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1723,7 +2072,7 @@
       "operator": "히비스커스",
       "illustration": "illust_char_120_hibisc_nian#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1732,7 +2081,7 @@
       "operator": "첸",
       "illustration": "illust_char_010_chen_nian#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1741,7 +2090,7 @@
       "operator": "스와이어",
       "illustration": "illust_char_308_swire_nian#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1750,7 +2099,7 @@
       "operator": "리스캄",
       "illustration": "illust_char_107_liskam_nian#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1759,7 +2108,7 @@
       "operator": "제시카",
       "illustration": "illust_char_235_jesica_nian#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1768,7 +2117,7 @@
       "operator": "호시구마",
       "illustration": "illust_char_136_hsguma_nian#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1777,7 +2126,7 @@
       "operator": "니엔",
       "illustration": "illust_char_2014_nian_nian#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1786,7 +2135,7 @@
       "operator": "아",
       "illustration": "illust_char_225_haak_nian#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1795,7 +2144,7 @@
       "operator": "훔",
       "illustration": "illust_char_226_hmau_nian#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1804,7 +2153,7 @@
       "operator": "위스퍼레인",
       "illustration": "illust_char_436_whispr_nian#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1813,7 +2162,7 @@
       "operator": "아",
       "illustration": "illust_char_225_haak_nian#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1822,7 +2171,7 @@
       "operator": "라바 더 퍼거토리",
       "illustration": "illust_char_1011_lava2_nian#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1831,7 +2180,7 @@
       "operator": "시",
       "illustration": "illust_char_2015_dusk_nian#7",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1840,7 +2189,7 @@
       "operator": "우요우",
       "illustration": "illust_char_455_nothin_nian#7",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1849,7 +2198,7 @@
       "operator": "에프이터",
       "illustration": "illust_char_241_panda_nian#7",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1858,7 +2207,7 @@
       "operator": "인디고",
       "illustration": "illust_char_469_indigo_nian#7",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1867,7 +2216,7 @@
       "operator": "크루스 더 킨 글린트",
       "illustration": "illust_char_1021_kroos2_nian#8",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1876,7 +2225,7 @@
       "operator": "블랙나이트",
       "illustration": "illust_char_476_blkngt_nian#8",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1894,7 +2243,7 @@
       "operator": "칸타빌레",
       "illustration": "illust_char_497_ctable_nian#9",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1903,7 +2252,7 @@
       "operator": "멀베리",
       "illustration": "illust_char_473_mberry_nian#9",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1912,7 +2261,7 @@
       "operator": "케오베",
       "illustration": "illust_char_2013_cerber_whirlwind#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1921,7 +2270,7 @@
       "operator": "와이후",
       "illustration": "illust_char_243_waaifu_whirlwind#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1930,7 +2279,7 @@
       "operator": "재키",
       "illustration": "illust_char_347_jaksel_whirlwind#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1939,7 +2288,7 @@
       "operator": "아스베스토스",
       "illustration": "illust_char_378_asbest_whirlwind#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1948,7 +2297,7 @@
       "operator": "애시드드롭",
       "illustration": "illust_char_366_acdrop_whirlwind#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1957,7 +2306,7 @@
       "operator": "파투스",
       "illustration": "illust_char_430_fartth_whirlwind#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1966,7 +2315,7 @@
       "operator": "샬렘",
       "illustration": "illust_char_4025_aprot2_whirlwind#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1975,7 +2324,7 @@
       "operator": "파프리카",
       "illustration": "illust_char_4071_peper_whirlwind#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1984,7 +2333,7 @@
       "operator": "플레임브링어",
       "illustration": "illust_char_131_flameb_whirlwind#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -1993,7 +2342,7 @@
       "operator": "레싱",
       "illustration": "illust_char_4011_lessng_whirlwind#7",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2002,7 +2351,7 @@
       "operator": "오다",
       "illustration": "illust_char_4131_odda_whirlwind#8",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2011,7 +2360,7 @@
       "operator": "라바 더 퍼거토리",
       "illustration": "illust_char_1011_lava2_whirlwind#9",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2020,7 +2369,7 @@
       "operator": "리",
       "illustration": "illust_char_322_lmlee_whirlwind#10",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2029,7 +2378,7 @@
       "operator": "샤이닝",
       "illustration": "illust_char_147_shining_summer#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2038,7 +2387,7 @@
       "operator": "스카이파이어",
       "illustration": "illust_char_166_skfire_summer#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2047,7 +2396,7 @@
       "operator": "비그나",
       "illustration": "illust_char_290_vigna_summer#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2056,7 +2405,7 @@
       "operator": "안셀",
       "illustration": "illust_char_212_ansel_summer#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2065,7 +2414,7 @@
       "operator": "이프리트",
       "illustration": "illust_char_134_ifrit_summer#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2074,7 +2423,7 @@
       "operator": "소라",
       "illustration": "illust_char_101_sora_summer#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2083,7 +2432,7 @@
       "operator": "굼",
       "illustration": "illust_char_196_sunbr_summer#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2092,7 +2441,7 @@
       "operator": "마터호른",
       "illustration": "illust_char_199_yak_summer#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2101,7 +2450,7 @@
       "operator": "Castle-3",
       "illustration": "illust_char_286_cast3_summer#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2110,7 +2459,7 @@
       "operator": "스카디",
       "illustration": "illust_char_263_skadi_summer#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2119,7 +2468,7 @@
       "operator": "플룸",
       "illustration": "illust_char_192_falco_marthe#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2128,7 +2477,7 @@
       "operator": "프로방스",
       "illustration": "illust_char_145_prove_summer#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2137,7 +2486,7 @@
       "operator": "플래티넘",
       "illustration": "illust_char_204_platnm_summer#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2146,7 +2495,7 @@
       "operator": "니어",
       "illustration": "illust_char_148_nearl_summer#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2155,7 +2504,7 @@
       "operator": "로프",
       "illustration": "illust_char_236_rope_summer#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2164,7 +2513,7 @@
       "operator": "실버애쉬",
       "illustration": "illust_char_172_svrash_summer#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2173,7 +2522,7 @@
       "operator": "케오베",
       "illustration": "illust_char_2013_cerber_summer#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2182,7 +2531,7 @@
       "operator": "크루아상",
       "illustration": "illust_char_201_moeshd_summer#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2191,7 +2540,7 @@
       "operator": "우타게",
       "illustration": "illust_char_337_utage_summer#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2200,7 +2549,7 @@
       "operator": "에이야퍄들라",
       "illustration": "illust_char_180_amgoat_summer#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2209,7 +2558,7 @@
       "operator": "안젤리나",
       "illustration": "illust_char_291_aglina_summer#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2218,7 +2567,7 @@
       "operator": "토미미",
       "illustration": "illust_char_411_tomimi_summer#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2227,7 +2576,7 @@
       "operator": "수수로",
       "illustration": "illust_char_298_susuro_summer#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2236,7 +2585,7 @@
       "operator": "레드",
       "illustration": "illust_char_144_red_summer#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2245,7 +2594,7 @@
       "operator": "머드락",
       "illustration": "illust_char_311_mudrok_summer#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2254,7 +2603,7 @@
       "operator": "시데로카",
       "illustration": "illust_char_333_sidero_summer#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2263,7 +2612,7 @@
       "operator": "제이",
       "illustration": "illust_char_272_strong_summer#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2272,7 +2621,7 @@
       "operator": "와파린",
       "illustration": "illust_char_171_bldsk_summer#7",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2281,7 +2630,7 @@
       "operator": "카넬리안",
       "illustration": "illust_char_426_billro_summer#8",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2290,7 +2639,7 @@
       "operator": "플레임브링어",
       "illustration": "illust_char_131_flameb_summer#8",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2299,7 +2648,7 @@
       "operator": "블랙나이트",
       "illustration": "illust_char_476_blkngt_summer#8",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2308,7 +2657,7 @@
       "operator": "수르트",
       "illustration": "illust_char_350_surtr_summer#9",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2317,7 +2666,7 @@
       "operator": "라 플루마",
       "illustration": "illust_char_421_crow_summer#9",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2326,7 +2675,7 @@
       "operator": "엘리시움",
       "illustration": "illust_char_401_elysm_summer#9",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2335,7 +2684,7 @@
       "operator": "로베르타",
       "illustration": "illust_char_484_robrta_summer#10",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2344,7 +2693,7 @@
       "operator": "사일라흐",
       "illustration": "illust_char_479_sleach_summer#11",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2353,7 +2702,7 @@
       "operator": "스테인리스",
       "illustration": "illust_char_4072_ironmn_summer#11",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2362,7 +2711,7 @@
       "operator": "비즈왁스",
       "illustration": "illust_char_344_beewax_summer#11",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2371,7 +2720,7 @@
       "operator": "엠브리엘",
       "illustration": "illust_char_302_glaze_summer#11",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2380,7 +2729,7 @@
       "operator": "가비알 디 인빈서블",
       "illustration": "illust_char_1026_gvial2_summer#12",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2389,7 +2738,7 @@
       "operator": "골든글로우",
       "illustration": "illust_char_377_gdglow_summer#12",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2398,7 +2747,7 @@
       "operator": "머틀",
       "illustration": "illust_char_151_myrtle_summer#12",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2407,7 +2756,7 @@
       "operator": "체스트넛",
       "illustration": "illust_char_4041_chnut_summer#12",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2416,7 +2765,7 @@
       "operator": "실론",
       "illustration": "illust_char_348_ceylon_summer#13",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2425,7 +2774,7 @@
       "operator": "미니멀리스트",
       "illustration": "illust_char_4054_malist_summer#14",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2434,7 +2783,7 @@
       "operator": "산탈라",
       "illustration": "illust_char_341_sntlla_summer#15",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2443,7 +2792,7 @@
       "operator": "호시구마",
       "illustration": "illust_char_136_hsguma_summer#16",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2452,7 +2801,7 @@
       "operator": "캐터펄트",
       "illustration": "illust_char_282_catap_summer#17",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2461,7 +2810,7 @@
       "operator": "리드 더 플레임 섀도우",
       "illustration": "illust_char_1020_reed2_summer#17",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2470,7 +2819,7 @@
       "operator": "티폰",
       "illustration": "illust_char_2012_typhon_summer#17",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2479,7 +2828,7 @@
       "operator": "프로바이조",
       "illustration": "illust_char_4032_provs_summer#17",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2488,7 +2837,7 @@
       "operator": "토터",
       "illustration": "illust_char_4062_totter_summer#17",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2497,7 +2846,7 @@
       "operator": "케이퍼",
       "illustration": "illust_char_4100_caper_summer#18",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2506,7 +2855,7 @@
       "operator": "린",
       "illustration": "illust_char_4080_lin_summer#19",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2515,7 +2864,7 @@
       "operator": "첸 더 홀룽데이",
       "illustration": "illust_char_1013_chen2_summer#20",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2524,7 +2873,7 @@
       "operator": "네크라스",
       "illustration": "illust_char_450_necras_summer#20",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2533,7 +2882,7 @@
       "operator": "메이",
       "illustration": "illust_char_133_mm_summer#20",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2542,7 +2891,7 @@
       "operator": "애시드드롭",
       "illustration": "illust_char_366_acdrop_summer#21",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2551,7 +2900,7 @@
       "operator": "에프이터",
       "illustration": "illust_char_241_panda_marthe#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2560,7 +2909,7 @@
       "operator": "지마",
       "illustration": "illust_char_115_headbr_marthe#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2569,7 +2918,7 @@
       "operator": "블루포이즌",
       "illustration": "illust_char_129_bluep_marthe#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2578,7 +2927,7 @@
       "operator": "브로카",
       "illustration": "illust_char_356_broca_marthe#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2587,7 +2936,7 @@
       "operator": "스카디",
       "illustration": "illust_char_263_skadi_marthe#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2596,7 +2945,7 @@
       "operator": "THRM-EX",
       "illustration": "illust_char_376_therex_marthe#7",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2605,7 +2954,7 @@
       "operator": "커터",
       "illustration": "illust_char_301_cutter_marthe#8",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2614,7 +2963,7 @@
       "operator": "쏜즈 더 로드스타",
       "illustration": "illust_char_1039_thorn2_marthe#9",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2623,7 +2972,7 @@
       "operator": "휴머스",
       "illustration": "illust_char_491_humus_marthe#10",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2632,7 +2981,7 @@
       "operator": "버블",
       "illustration": "illust_char_381_bubble_marthe#11",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2641,7 +2990,7 @@
       "operator": "무스",
       "illustration": "illust_char_185_frncat_marthe#12",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2650,7 +2999,7 @@
       "operator": "나이팅게일",
       "illustration": "illust_char_179_cgbird_witch#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2659,7 +3008,7 @@
       "operator": "와파린",
       "illustration": "illust_char_171_bldsk_witch#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2668,7 +3017,7 @@
       "operator": "로프",
       "illustration": "illust_char_236_rope_witch#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2677,7 +3026,7 @@
       "operator": "크루스",
       "illustration": "illust_char_124_kroos_witch#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2686,7 +3035,7 @@
       "operator": "블레미샤인",
       "illustration": "illust_char_423_blemsh_witch#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2695,7 +3044,7 @@
       "operator": "샤마르",
       "illustration": "illust_char_254_vodfox_witch#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2704,7 +3053,7 @@
       "operator": "스노우상트",
       "illustration": "illust_char_383_snsant_witch#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2713,7 +3062,7 @@
       "operator": "클릭",
       "illustration": "illust_char_328_cammou_witch#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2722,7 +3071,7 @@
       "operator": "리",
       "illustration": "illust_char_322_lmlee_witch#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2731,7 +3080,7 @@
       "operator": "아이리스",
       "illustration": "illust_char_338_iris_witch#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2740,7 +3089,7 @@
       "operator": "카제마루",
       "illustration": "illust_char_4016_kazema_witch#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2749,7 +3098,7 @@
       "operator": "팽",
       "illustration": "illust_char_123_fang_winter#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2758,7 +3107,7 @@
       "operator": "텍사스",
       "illustration": "illust_char_102_texas_winter#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2767,7 +3116,7 @@
       "operator": "스펙터",
       "illustration": "illust_char_143_ghost_winter#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2776,7 +3125,7 @@
       "operator": "쿠리어",
       "illustration": "illust_char_198_blackd_winter#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2785,7 +3134,7 @@
       "operator": "바이비크",
       "illustration": "illust_char_252_bibeak_winter#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2794,7 +3143,7 @@
       "operator": "아렌",
       "illustration": "illust_char_271_spikes_winter#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2803,7 +3152,7 @@
       "operator": "그라벨",
       "illustration": "illust_char_237_gravel_winter#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2812,7 +3161,7 @@
       "operator": "사일런스",
       "illustration": "illust_char_108_silent_winter#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2821,7 +3170,7 @@
       "operator": "딥컬러",
       "illustration": "illust_char_110_deepcl_winter#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2830,7 +3179,7 @@
       "operator": "워미",
       "illustration": "illust_char_4081_warmy_winter#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2839,7 +3188,7 @@
       "operator": "수수로",
       "illustration": "illust_char_298_susuro_winter#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2848,7 +3197,7 @@
       "operator": "엔텔레키아",
       "illustration": "illust_char_4010_etlchi_winter#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2857,7 +3206,7 @@
       "operator": "블레이즈 디 이그나이팅 스파크",
       "illustration": "illust_char_1040_blaze2_winter#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2866,7 +3215,7 @@
       "operator": "슈바르츠",
       "illustration": "illust_char_340_shwaz_snow#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2875,7 +3224,7 @@
       "operator": "실버애쉬",
       "illustration": "illust_char_172_svrash_snow#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2884,7 +3233,7 @@
       "operator": "프라마닉스",
       "illustration": "illust_char_174_slbell_snow#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2893,7 +3242,7 @@
       "operator": "카디건",
       "illustration": "illust_char_209_ardign_snow#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2902,7 +3251,7 @@
       "operator": "위디",
       "illustration": "illust_char_400_weedy_snow#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2911,7 +3260,7 @@
       "operator": "엘리시움",
       "illustration": "illust_char_401_elysm_snow#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2920,7 +3269,7 @@
       "operator": "파이어워치",
       "illustration": "illust_char_158_milu_snow#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2929,7 +3278,7 @@
       "operator": "카넬리안",
       "illustration": "illust_char_426_billro_snow#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2938,7 +3287,7 @@
       "operator": "레온하르트",
       "illustration": "illust_char_373_lionhd_snow#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2947,7 +3296,7 @@
       "operator": "카프카",
       "illustration": "illust_char_214_kafka_snow#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2956,7 +3305,7 @@
       "operator": "빈스토크",
       "illustration": "illust_char_452_bstalk_snow#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2965,7 +3314,7 @@
       "operator": "골든글로우",
       "illustration": "illust_char_377_gdglow_snow#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2974,7 +3323,7 @@
       "operator": "에라토",
       "illustration": "illust_char_4043_erato_snow#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2983,7 +3332,7 @@
       "operator": "그레이 더 라이트닝베어러",
       "illustration": "illust_char_1027_greyy2_snow#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -2992,7 +3341,7 @@
       "operator": "푸딩",
       "illustration": "illust_char_4004_pudd_snow#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3001,7 +3350,7 @@
       "operator": "페넌스",
       "illustration": "illust_char_4065_judge_snow#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3010,7 +3359,7 @@
       "operator": "츠키노기",
       "illustration": "illust_char_343_tknogi_snow#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3019,7 +3368,7 @@
       "operator": "카니팔라트",
       "illustration": "illust_char_466_qanik_snow#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3028,7 +3377,7 @@
       "operator": "해럴드",
       "illustration": "illust_char_4114_harold_snow#7",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3037,7 +3386,7 @@
       "operator": "리드 더 플레임 섀도우",
       "illustration": "illust_char_1020_reed2_snow#8",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3046,7 +3395,7 @@
       "operator": "팽 더 파이어 샤픈드",
       "illustration": "illust_char_1036_fang2_snow#8",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3055,7 +3404,7 @@
       "operator": "엑시아",
       "illustration": "illust_char_103_angel_wild#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3064,7 +3413,7 @@
       "operator": "클리프하트",
       "illustration": "illust_char_173_slchan_wild#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3073,7 +3422,7 @@
       "operator": "쿠오라",
       "illustration": "illust_char_150_snakek_wild#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3082,7 +3431,7 @@
       "operator": "미르",
       "illustration": "illust_char_117_myrrh_wild#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3091,7 +3440,7 @@
       "operator": "파이어워치",
       "illustration": "illust_char_158_milu_wild#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3100,7 +3449,7 @@
       "operator": "제시카",
       "illustration": "illust_char_235_jesica_wild#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3109,7 +3458,7 @@
       "operator": "시즈",
       "illustration": "illust_char_112_siege_wild#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3118,7 +3467,7 @@
       "operator": "스즈란",
       "illustration": "illust_char_358_lisa_wild#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3127,7 +3476,7 @@
       "operator": "레온하르트",
       "illustration": "illust_char_373_lionhd_wild#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3136,7 +3485,7 @@
       "operator": "에이프릴",
       "illustration": "illust_char_365_aprl_wild#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3145,7 +3494,7 @@
       "operator": "폴리닉",
       "illustration": "illust_char_345_folnic_wild#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3154,7 +3503,7 @@
       "operator": "프로방스",
       "illustration": "illust_char_145_prove_wild#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3163,7 +3512,7 @@
       "operator": "헤비레인",
       "illustration": "illust_char_304_zebra_wild#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3172,7 +3521,7 @@
       "operator": "파죰카",
       "illustration": "illust_char_4055_bgsnow_wild#7",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3181,7 +3530,7 @@
       "operator": "프로바이조",
       "illustration": "illust_char_4032_provs_wild#7",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3190,7 +3539,7 @@
       "operator": "무스",
       "illustration": "illust_char_185_frncat_wild#7",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3199,7 +3548,7 @@
       "operator": "체르니",
       "illustration": "illust_char_4047_pianst_wild#8",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3208,7 +3557,7 @@
       "operator": "티폰",
       "illustration": "illust_char_2012_typhon_wild#9",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3217,7 +3566,7 @@
       "operator": "머드락",
       "illustration": "illust_char_311_mudrok_wild#10",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3226,7 +3575,7 @@
       "operator": "메테오라이트",
       "illustration": "illust_char_219_meteo_sweep#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3235,7 +3584,7 @@
       "operator": "사일런스",
       "illustration": "illust_char_108_silent_sweep#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3244,7 +3593,7 @@
       "operator": "제시카",
       "illustration": "illust_char_235_jesica_sweep#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3253,7 +3602,7 @@
       "operator": "스카디 더 커럽팅 하트",
       "illustration": "illust_char_1012_skadi2_boc#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3262,7 +3611,7 @@
       "operator": "노시스",
       "illustration": "illust_char_206_gnosis_boc#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3271,7 +3620,7 @@
       "operator": "오로라",
       "illustration": "illust_char_422_aurora_boc#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3280,7 +3629,7 @@
       "operator": "Lancet-2",
       "illustration": "illust_char_285_medic2_boc#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3289,7 +3638,7 @@
       "operator": "프로스트리프",
       "illustration": "illust_char_193_frostl_boc#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3298,7 +3647,7 @@
       "operator": "글래디아",
       "illustration": "illust_char_474_glady_boc#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3307,7 +3656,7 @@
       "operator": "켈시",
       "illustration": "illust_char_003_kalts_boc#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3316,7 +3665,7 @@
       "operator": "스펙터 디 언체인드",
       "illustration": "illust_char_1023_ghost2_boc#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3325,7 +3674,7 @@
       "operator": "첸 더 홀룽데이",
       "illustration": "illust_char_1013_chen2_boc#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3334,7 +3683,7 @@
       "operator": "에벤홀츠",
       "illustration": "illust_char_4046_ebnhlz_boc#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3343,7 +3692,7 @@
       "operator": "오키드",
       "illustration": "illust_char_278_orchid_boc#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3352,7 +3701,7 @@
       "operator": "저스티스 나이트",
       "illustration": "illust_char_4000_jnight_boc#7",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3361,7 +3710,7 @@
       "operator": "뮤엘시스",
       "illustration": "illust_char_249_mlyss_boc#8",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3370,7 +3719,7 @@
       "operator": "이네스",
       "illustration": "illust_char_4087_ines_boc#8",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3379,7 +3728,7 @@
       "operator": "쏜즈",
       "illustration": "illust_char_293_thorns_boc#8",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3388,7 +3737,7 @@
       "operator": "새비지",
       "illustration": "illust_char_230_savage_boc#8",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3397,7 +3746,7 @@
       "operator": "피아메타",
       "illustration": "illust_char_300_phenxi_boc#9",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3406,7 +3755,7 @@
       "operator": "PhonoR-0",
       "illustration": "illust_char_4136_phonor_boc#9",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3415,7 +3764,7 @@
       "operator": "벌컨",
       "illustration": "illust_char_163_hpsts_boc#10",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3424,7 +3773,7 @@
       "operator": "Mon3tr",
       "illustration": "illust_char_4179_monstr_boc#11",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3433,7 +3782,7 @@
       "operator": "그레이스베어러",
       "illustration": "illust_char_4187_graceb_boc#11",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3442,7 +3791,7 @@
       "operator": "엑시아",
       "illustration": "illust_char_103_angel_kfc#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3451,7 +3800,7 @@
       "operator": "이프리트",
       "illustration": "illust_char_134_ifrit_kfc#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3460,7 +3809,7 @@
       "operator": "크루아상",
       "illustration": "illust_char_201_moeshd_kfc#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3469,7 +3818,7 @@
       "operator": "클리프하트",
       "illustration": "illust_char_173_slchan_wwf#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3478,7 +3827,7 @@
       "operator": "사리아",
       "illustration": "illust_char_202_demkni_boc#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3487,7 +3836,7 @@
       "operator": "안젤리나",
       "illustration": "illust_char_291_aglina_boc#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3496,7 +3845,7 @@
       "operator": "라플란드",
       "illustration": "illust_char_140_whitew_boc#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3505,7 +3854,7 @@
       "operator": "이그제큐터",
       "illustration": "illust_char_279_excu_boc#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3514,7 +3863,7 @@
       "operator": "그레이스롯",
       "illustration": "illust_char_367_swllow_boc#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3523,7 +3872,7 @@
       "operator": "미드나이트",
       "illustration": "illust_char_283_midn_boc#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3532,7 +3881,7 @@
       "operator": "비글",
       "illustration": "illust_char_122_beagle_boc#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3541,7 +3890,7 @@
       "operator": "헬라그",
       "illustration": "illust_char_188_helage_boc#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3550,7 +3899,7 @@
       "operator": "시라유키",
       "illustration": "illust_char_118_yuki_boc#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3559,7 +3908,7 @@
       "operator": "마운틴",
       "illustration": "illust_char_264_f12yin_boc#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3568,7 +3917,7 @@
       "operator": "유넥티스",
       "illustration": "illust_char_416_zumama_boc#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3577,7 +3926,7 @@
       "operator": "에이어스카르페",
       "illustration": "illust_char_294_ayer_boc#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3586,7 +3935,7 @@
       "operator": "플린트",
       "illustration": "illust_char_415_flint_boc#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3595,7 +3944,7 @@
       "operator": "스팟",
       "illustration": "illust_char_284_spot_boc#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3604,7 +3953,7 @@
       "operator": "마젤란",
       "illustration": "illust_char_248_mgllan_kitchen#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3613,7 +3962,7 @@
       "operator": "이스티나",
       "illustration": "illust_char_195_glassb_kitchen#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3622,7 +3971,7 @@
       "operator": "비헌터",
       "illustration": "illust_char_137_brownb_kitchen#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3631,7 +3980,7 @@
       "operator": "인사이더",
       "illustration": "illust_char_498_inside_kitchen#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3640,7 +3989,7 @@
       "operator": "새비지",
       "illustration": "illust_char_230_savage_kitchen#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3649,7 +3998,7 @@
       "operator": "보빙",
       "illustration": "illust_char_487_bobb_kitchen#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3658,7 +4007,7 @@
       "operator": "팬텀",
       "illustration": "illust_char_250_phatom_ghost#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3667,7 +4016,7 @@
       "operator": "메이어",
       "illustration": "illust_char_242_otter_ghost#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3676,7 +4025,7 @@
       "operator": "글라우쿠스",
       "illustration": "illust_char_326_glacus_ghost#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3685,7 +4034,7 @@
       "operator": "쇼",
       "illustration": "illust_char_277_sqrrel_ghost#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3694,7 +4043,7 @@
       "operator": "백파이프",
       "illustration": "illust_char_222_bpipe_race#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3703,7 +4052,7 @@
       "operator": "키아베",
       "illustration": "illust_char_349_chiave_race#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3712,7 +4061,7 @@
       "operator": "Ash",
       "illustration": "illust_char_456_ash_rainbow6#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3721,7 +4070,7 @@
       "operator": "Tachanka",
       "illustration": "illust_char_459_tachak_rainbow6#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3730,7 +4079,7 @@
       "operator": "Ela",
       "illustration": "illust_char_4123_ela_rainbow6#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3739,7 +4088,7 @@
       "operator": "Doc",
       "illustration": "illust_char_4125_rdoc_rainbow6#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3748,7 +4097,7 @@
       "operator": "Iana",
       "illustration": "illust_char_4124_iana_rainbow6#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3757,7 +4106,7 @@
       "operator": "슈바르츠",
       "illustration": "illust_char_340_shwaz_striker#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3766,7 +4115,7 @@
       "operator": "리스캄",
       "illustration": "illust_char_107_liskam_striker#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3775,7 +4124,7 @@
       "operator": "시즈",
       "illustration": "illust_char_112_siege_striker#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3784,7 +4133,7 @@
       "operator": "인드라",
       "illustration": "illust_char_155_tiger_striker#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3793,7 +4142,7 @@
       "operator": "스캐빈저",
       "illustration": "illust_char_149_scave_striker#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3802,7 +4151,7 @@
       "operator": "콜드샷",
       "illustration": "illust_char_4104_coldst_striker#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3811,7 +4160,7 @@
       "operator": "블레이즈",
       "illustration": "illust_char_017_huang_as#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3820,7 +4169,7 @@
       "operator": "쿠리어",
       "illustration": "illust_char_198_blackd_as#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3829,7 +4178,7 @@
       "operator": "비그나",
       "illustration": "illust_char_290_vigna_as#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3838,7 +4187,7 @@
       "operator": "머드락",
       "illustration": "illust_char_311_mudrok_ambienceSynesthesia#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3847,7 +4196,7 @@
       "operator": "테킬라",
       "illustration": "illust_char_486_takila_ambienceSynesthesia#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3856,7 +4205,7 @@
       "operator": "리드",
       "illustration": "illust_char_261_sddrag_ambienceSynesthesia#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3865,7 +4214,7 @@
       "operator": "루멘",
       "illustration": "illust_char_4042_lumen_ambienceSynesthesia#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3874,7 +4223,7 @@
       "operator": "아이린",
       "illustration": "illust_char_4009_irene_ambienceSynesthesia#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3883,7 +4232,7 @@
       "operator": "로베르타",
       "illustration": "illust_char_484_robrta_ambienceSynesthesia#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3892,7 +4241,7 @@
       "operator": "실버애쉬",
       "illustration": "illust_char_172_svrash_ambienceSynesthesia#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3901,7 +4250,7 @@
       "operator": "오올헤약",
       "illustration": "illust_char_4027_heyak_ambienceSynesthesia#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3910,7 +4259,7 @@
       "operator": "스와이어 디 엘리건트 위트",
       "illustration": "illust_char_1033_swire2_ambienceSynesthesia#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3919,7 +4268,7 @@
       "operator": "이네스",
       "illustration": "illust_char_4087_ines_ambienceSynesthesia#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3928,7 +4277,7 @@
       "operator": "스테인리스",
       "illustration": "illust_char_4072_ironmn_ambienceSynesthesia#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3937,7 +4286,7 @@
       "operator": "뮤엘시스",
       "illustration": "illust_char_249_mlyss_ambienceSynesthesia#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3946,7 +4295,7 @@
       "operator": "로고스",
       "illustration": "illust_char_4133_logos_ambienceSynesthesia#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3955,7 +4304,7 @@
       "operator": "모스티마",
       "illustration": "illust_char_213_mostma_ambienceSynesthesia#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3964,7 +4313,7 @@
       "operator": "수르트",
       "illustration": "illust_char_350_surtr_ambienceSynesthesia#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3973,7 +4322,7 @@
       "operator": "님프",
       "illustration": "illust_char_4146_nymph_ambienceSynesthesia#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3982,7 +4331,7 @@
       "operator": "사리아",
       "illustration": "illust_char_202_demkni_ambienceSynesthesia#7",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -3991,7 +4340,7 @@
       "operator": "르무엔",
       "illustration": "illust_char_4193_lemuen_ambienceSynesthesia#7",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4000,7 +4349,7 @@
       "operator": "네크라스",
       "illustration": "illust_char_450_necras_ambienceSynesthesia#7",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4009,7 +4358,7 @@
       "operator": "쏜즈",
       "illustration": "illust_char_293_thorns_it#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4018,7 +4367,7 @@
       "operator": "수르트",
       "illustration": "illust_char_350_surtr_it#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4027,7 +4376,7 @@
       "operator": "지마",
       "illustration": "illust_char_115_headbr_it#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4036,7 +4385,7 @@
       "operator": "스즈란",
       "illustration": "illust_char_358_lisa_lxh#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4045,7 +4394,7 @@
       "operator": "락락",
       "illustration": "illust_char_4040_rockr_lxh#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4054,7 +4403,7 @@
       "operator": "테라 대륙 조사단",
       "illustration": "illust_char_4077_palico_mh#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4063,7 +4412,7 @@
       "operator": "리",
       "illustration": "illust_char_322_lmlee_sanrio#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4072,7 +4421,7 @@
       "operator": "골든글로우",
       "illustration": "illust_char_377_gdglow_sanrio#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4081,7 +4430,7 @@
       "operator": "U-Official",
       "illustration": "illust_char_4091_ulika_sanrio#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4090,7 +4439,7 @@
       "operator": "에이야퍄들라",
       "illustration": "illust_char_180_amgoat_sanrio#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4099,7 +4448,7 @@
       "operator": "이그제큐터 디 엑스 포에데레",
       "illustration": "illust_char_1032_excu2_sanrio#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4108,7 +4457,7 @@
       "operator": "루멘",
       "illustration": "illust_char_4042_lumen_sanrio#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4117,7 +4466,7 @@
       "operator": "아르케토",
       "illustration": "illust_char_332_archet_shining#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4126,7 +4475,7 @@
       "operator": "아스테시아",
       "illustration": "illust_char_274_astesi_shining#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4135,7 +4484,7 @@
       "operator": "파인콘",
       "illustration": "illust_char_440_pinecn_shining#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4144,7 +4493,7 @@
       "operator": "테킬라",
       "illustration": "illust_char_486_takila_shining#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4153,7 +4502,7 @@
       "operator": "레이",
       "illustration": "illust_char_4117_ray_shining#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4162,7 +4511,7 @@
       "operator": "퍼즐",
       "illustration": "illust_char_4017_puzzle_shining#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4171,7 +4520,7 @@
       "operator": "컨빅션",
       "illustration": "illust_char_159_peacok_game#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4180,7 +4529,7 @@
       "operator": "플레임테일",
       "illustration": "illust_char_420_flamtl_game#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4189,7 +4538,7 @@
       "operator": "아오스타",
       "illustration": "illust_char_346_aosta_game#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4198,7 +4547,7 @@
       "operator": "키라라",
       "illustration": "illust_char_478_kirara_game#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4207,7 +4556,7 @@
       "operator": "레이즈",
       "illustration": "illust_char_306_leizi_game#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4216,7 +4565,7 @@
       "operator": "아이린",
       "illustration": "illust_char_4009_irene_game#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4225,7 +4574,7 @@
       "operator": "크루스 더 킨 글린트",
       "illustration": "illust_char_1021_kroos2_game#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4234,7 +4583,7 @@
       "operator": "바닐라",
       "illustration": "illust_char_240_wyvern_game#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4243,7 +4592,7 @@
       "operator": "세사",
       "illustration": "illust_char_379_sesa_game#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4252,7 +4601,7 @@
       "operator": "미즈키",
       "illustration": "illust_char_437_mizuki_game#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4261,7 +4610,7 @@
       "operator": "로즈솔트",
       "illustration": "illust_char_4163_rosesa_game#7",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4270,7 +4619,7 @@
       "operator": "레이즈 더 썬더브링어",
       "illustration": "illust_char_1043_leizi2_game#8",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4279,7 +4628,7 @@
       "operator": "라이디언",
       "illustration": "illust_char_4195_radian_game#8",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4288,7 +4637,7 @@
       "operator": "파피루스",
       "illustration": "illust_char_4139_papyrs_game#8",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4306,7 +4655,7 @@
       "operator": "치우바이",
       "illustration": "illust_char_4082_qiubai_ncg#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4315,7 +4664,7 @@
       "operator": "프란카",
       "illustration": "illust_char_106_franka_ncg#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4324,7 +4673,7 @@
       "operator": "나인컬러드 디어",
       "illustration": "illust_char_4019_ncdeer_ncdeer#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4333,7 +4682,7 @@
       "operator": "지에윈",
       "illustration": "illust_char_4078_bdhkgt_yun#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4342,7 +4691,7 @@
       "operator": "루나컵",
       "illustration": "illust_char_4014_lunacu_yun#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4351,7 +4700,7 @@
       "operator": "그레인버즈",
       "illustration": "illust_char_4122_grabds_yun#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4360,7 +4709,7 @@
       "operator": "프틸롭시스",
       "illustration": "illust_char_128_plosis_yun#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4369,7 +4718,7 @@
       "operator": "윈드차임스",
       "illustration": "illust_char_4083_chimes_yun#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4378,7 +4727,7 @@
       "operator": "루토나다",
       "illustration": "illust_char_4130_luton_yun#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4387,7 +4736,7 @@
       "operator": "파죰카",
       "illustration": "illust_char_4055_bgsnow_yun#7",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4396,7 +4745,7 @@
       "operator": "바이슨",
       "illustration": "illust_char_325_bison_yun#7",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4405,7 +4754,7 @@
       "operator": "쿠오라",
       "illustration": "illust_char_150_snakek_yun#7",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4414,7 +4763,7 @@
       "operator": "샤마르",
       "illustration": "illust_char_254_vodfox_yun#8",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4423,7 +4772,7 @@
       "operator": "피구리노",
       "illustration": "illust_char_4155_talr_yun#9",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4432,7 +4781,7 @@
       "operator": "도로시",
       "illustration": "illust_char_4048_doroth_witch#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4441,7 +4790,7 @@
       "operator": "피아메타",
       "illustration": "illust_char_300_phenxi_witch#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4450,7 +4799,7 @@
       "operator": "퀘르쿠스",
       "illustration": "illust_char_492_quercu_witch#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4459,7 +4808,7 @@
       "operator": "위스퍼레인",
       "illustration": "illust_char_436_whispr_witch#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4468,7 +4817,7 @@
       "operator": "데겐블레허",
       "illustration": "illust_char_4116_blkkgt_witch#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4477,7 +4826,7 @@
       "operator": "블레이즈",
       "illustration": "illust_char_017_huang_witch#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4486,7 +4835,7 @@
       "operator": "베이스라인",
       "illustration": "illust_char_4109_baslin_witch#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4495,7 +4844,7 @@
       "operator": "포푸카",
       "illustration": "illust_char_281_popka_witch#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4504,7 +4853,7 @@
       "operator": "텍사스 디 오메르토사",
       "illustration": "illust_char_1028_texas2_iteration#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4513,7 +4862,7 @@
       "operator": "스카디 더 커럽팅 하트",
       "illustration": "illust_char_1012_skadi2_iteration#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4522,7 +4871,7 @@
       "operator": "블루포이즌",
       "illustration": "illust_char_129_bluep_iteration#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4531,7 +4880,7 @@
       "operator": "무에나",
       "illustration": "illust_char_4064_mlynar_iteration#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4540,7 +4889,7 @@
       "operator": "아스카론",
       "illustration": "illust_char_4132_ascln_iteration#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4549,7 +4898,7 @@
       "operator": "크라운슬레이어",
       "illustration": "illust_char_1502_crosly_iteration#5",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4558,7 +4907,7 @@
       "operator": "엑시아 더 뉴 커버넌트",
       "illustration": "illust_char_1041_angel2_iteration#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4567,7 +4916,7 @@
       "operator": "하루카",
       "illustration": "illust_char_4202_haruka_iteration#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4576,7 +4925,7 @@
       "operator": "노웰",
       "illustration": "illust_char_4173_nowell_iteration#6",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4585,7 +4934,7 @@
       "operator": "아르모니",
       "illustration": "illust_char_297_hamoni_unveiling#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4594,7 +4943,7 @@
       "operator": "아렌",
       "illustration": "illust_char_271_spikes_unveiling#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4603,7 +4952,7 @@
       "operator": "나이트메어",
       "illustration": "illust_char_164_nightm_unveiling#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4612,7 +4961,7 @@
       "operator": "히비스커스 더 퓨리파이어",
       "illustration": "illust_char_1024_hbisc2_unveiling#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4621,7 +4970,7 @@
       "operator": "버던트",
       "illustration": "illust_char_4107_vrdant_unveiling#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4630,7 +4979,7 @@
       "operator": "브리즈",
       "illustration": "illust_char_275_breeze_unveiling#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4639,7 +4988,7 @@
       "operator": "빈스토크",
       "illustration": "illust_char_452_bstalk_unveiling#4",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4648,7 +4997,7 @@
       "operator": "나이팅게일",
       "illustration": "illust_char_179_cgbird_sightseer#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4657,7 +5006,7 @@
       "operator": "외드레르",
       "illustration": "illust_char_4088_hodrer_sightseer#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4666,7 +5015,7 @@
       "operator": "위디",
       "illustration": "illust_char_400_weedy_sightseer#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4675,7 +5024,7 @@
       "operator": "페페",
       "illustration": "illust_char_4058_pepe_sightseer#2",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4684,7 +5033,7 @@
       "operator": "샌드레코너",
       "illustration": "illust_char_4140_lasher_sightseer#3",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4693,7 +5042,7 @@
       "operator": "마르실",
       "illustration": "illust_char_4141_marcil_dungeon#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4702,7 +5051,7 @@
       "operator": "제시카 더 리버레이티드",
       "illustration": "illust_char_1034_jesca2_cfa#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4711,7 +5060,7 @@
       "operator": "니엔",
       "illustration": "illust_char_2014_nian_cfa#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4720,7 +5069,7 @@
       "operator": "총웨",
       "illustration": "illust_char_2024_chyue_cfa#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4729,7 +5078,7 @@
       "operator": "머틀",
       "illustration": "illust_char_151_myrtle_taiko#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4738,7 +5087,7 @@
       "operator": "토가와 사키코",
       "illustration": "illust_char_4182_oblvns_avemujica#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4747,7 +5096,7 @@
       "operator": "야하타 우미리",
       "illustration": "illust_char_4186_tmoris_avemujica#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4756,7 +5105,7 @@
       "operator": "미스미 우이카",
       "illustration": "illust_char_4184_dolris_avemujica#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4765,7 +5114,7 @@
       "operator": "유텐지 냐무",
       "illustration": "illust_char_4185_amoris_avemujica#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4774,7 +5123,7 @@
       "operator": "와카바 무츠미",
       "illustration": "illust_char_4183_mortis_avemujica#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4783,7 +5132,7 @@
       "operator": "나란투야",
       "illustration": "illust_char_4138_narant_breaker#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4792,7 +5141,7 @@
       "operator": "미틈",
       "illustration": "illust_char_4147_mitm_breaker#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4801,7 +5150,7 @@
       "operator": "그레이 더 라이트닝베어러",
       "illustration": "illust_char_1027_greyy2_breaker#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4810,7 +5159,7 @@
       "operator": "헤이즈",
       "illustration": "illust_char_141_nights_breaker#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4819,7 +5168,7 @@
       "operator": "로사",
       "illustration": "illust_char_197_poca_rilakkuma#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {
@@ -4828,7 +5177,7 @@
       "operator": "이프리트",
       "illustration": "illust_char_134_ifrit_rilakkuma#1",
       "basic": false,
-      "nativeIllustration": false,
+      "nativeIllustration": true,
       "nativeTemplate": true
     },
     {

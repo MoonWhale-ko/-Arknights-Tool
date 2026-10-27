@@ -16,8 +16,8 @@
   Current free family version 3.001 must not be described as the game's verified 2.001 binary.
 
 All 833 catalogued basic/evolved illustrations now resolve native prefab metrics
-from the supplied chararts bundles. Purchased illustrations retain provisional
-fitting unless their own skinpack prefab is supplied. Exact counts are recorded
+from the supplied chararts bundles. All 486 catalogued purchased appearances now resolve their own skinpack prefab
+metrics as well. Unknown future appearances retain provisional fitting. Exact counts are recorded
 in ../../reports/wardrobe-layout-coverage.json. No screenshot calibration remains.
 
 - `OpenSans-Semibold`: additionally found on the native collection template text components.

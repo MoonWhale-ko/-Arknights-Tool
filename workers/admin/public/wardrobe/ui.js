@@ -4,7 +4,7 @@ const $=id=>document.getElementById(id),make=(tag,text)=>{const el=document.crea
 const demo=document.body.dataset.wardrobeDemo==='true';
 const previewEquipped=new Map();
 let catalog,owned=null,selectedChar=null,selectedSkin=null,characters=[];
-const asset=(folder,id)=>`https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/dyn/arts/${folder}/${encodeURIComponent(id)}.png`;
+const asset=(folder,id)=>`https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/dyn/arts/${folder}/${encodeURIComponent(id.toLowerCase())}.png`;
 export function ownedSkins(data){const skins=(data?.snapshot?.user??data?.user??data?.rewards?.user)?.skin?.characterSkins;if(!skins||typeof skins!=='object')return null;return new Set(Object.entries(skins).filter(([,value])=>Number(value)>0).map(([id])=>id));}
 async function accept(data){if(!data)return;owned=ownedSkins(data);const user=data?.snapshot?.user??data?.user??data?.rewards?.user;if(user?.troop?.chars){characters=Object.values(user.troop.chars).map(c=>({charId:c.charId,skin:c.skin??c.skinId,elite:c.evolvePhase??0}));if(!demo)try{localStorage.setItem('zootAdminWardrobeCharacters',JSON.stringify(characters));}catch{}}if(owned&&!demo){try{localStorage.setItem('zootAdminWardrobeSkins',JSON.stringify([...owned]));}catch{}}if(!owned){$('wardrobeMessage').textContent='스킨 보유 정보가 없습니다. 관리자 계정을 다시 가져와 주세요.';$('wardrobeGrid').replaceChildren();$('wardrobeCount').textContent='';return;}try{if(!catalog){const r=await fetch('/wardrobe/catalog.json');if(!r.ok)throw Error();catalog=(await r.json()).skins;}await loadOriginalLayouts();renderRoster();render();}catch{$('wardrobeMessage').textContent='스킨 목록을 불러오지 못했습니다. 다시 적용해 주세요.';}}
 function render(){

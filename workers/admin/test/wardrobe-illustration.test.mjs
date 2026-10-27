@@ -60,3 +60,13 @@ test('every catalogued basic or evolved appearance has its own usable native lay
   }
  }
 });
+
+test('all catalogued purchased skins resolve native placement, including case-normalized music skins',()=>{
+ const purchased=catalog.filter(s=>s.charId.startsWith('char_')&&!s.basic);assert.equal(purchased.length,486);
+ for(const skin of purchased){
+  const m=native.illustrations[skin.illustration];assert.ok(m?.sprite,skin.id);
+  assert.equal(m.sourceAsset.toLowerCase().endsWith(skin.illustration.toLowerCase()+'.prefab'),true,skin.id);
+  const r=illustrationRect(skin.illustration,Math.round(m.sprite.textureRect.width),Math.round(m.sprite.textureRect.height),node,scale,m);
+  assert.ok(Object.values(r).every(Number.isFinite),skin.id);assert.ok(r.width>0&&r.height>0,skin.id);
+ }
+});
