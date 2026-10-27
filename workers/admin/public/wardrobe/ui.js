@@ -59,8 +59,8 @@ if(!demo){window.addEventListener('arknights-account-updated',readImportedSkins)
 
 $('wardrobeLoad').addEventListener('click',async()=>{if(demo)return;try{const {openAccountImport}=await import('/preview/assets/js/account-menu.mjs');await openAccountImport();}catch{$('wardrobeMessage').textContent='계정 가져오기를 열지 못했습니다. 새로고침 후 다시 시도해 주세요.';}});
 
-function renderRoster(){if(!catalog||!owned)return;const grid=$('wardrobeRosterGrid');grid.replaceChildren();const list=characters.length?characters:[...new Set(catalog.filter(s=>owned.has(s.id)).map(s=>s.charId))].map(charId=>({charId}));const query=$('wardrobeRosterSearch').value.trim().toLowerCase();for(const c of list){const skins=catalog.filter(s=>s.charId===c.charId),name=skins[0]?.operator||c.charId;if(!name.toLowerCase().includes(query))continue;const current=skins.find(s=>s.id===(previewEquipped.get(c.charId)||c.skin))||skins.find(s=>s.basic&&s.elite===(c.elite>=2?2:0))||skins[0];const button=make('button');button.type='button';const img=make('img');img.alt='';img.loading='lazy';if(current?.portrait)img.src='https://raw.githubusercontent.com/yuanyan3060/ArknightsGameResource/main/portrait/'+encodeURIComponent(current.portrait)+'.png';img.onerror=()=>{img.hidden=true;};button.append(img,make('strong',name),make('small',`${skins.filter(s=>owned.has(s.id)).length}종 보유`));button.onclick=()=>{selectedChar=c.charId;selectedSkin=current?.id;$('wardrobeSearch').value='';$('wardrobeRoster').hidden=true;$('wardrobeDetail').hidden=false;render();};grid.append(button);}}
-$('wardrobeBack').onclick=()=>{clearSD();$('wardrobeRoster').hidden=false;$('wardrobeDetail').hidden=true;};$('wardrobeRosterSearch').oninput=renderRoster;
+function renderRoster(){if(!catalog||!owned)return;const grid=$('wardrobeRosterGrid');grid.replaceChildren();const list=characters.length?characters:[...new Set(catalog.filter(s=>owned.has(s.id)).map(s=>s.charId))].map(charId=>({charId}));const query=$('wardrobeRosterSearch').value.trim().toLowerCase();for(const c of list.filter(c=>c.charId.startsWith('char_'))){const skins=catalog.filter(s=>s.charId===c.charId),name=skins[0]?.operator||c.charId;if(!name.toLowerCase().includes(query))continue;const current=skins.find(s=>s.id===(previewEquipped.get(c.charId)||c.skin))||skins.find(s=>s.basic&&s.elite===(c.elite>=2?2:0))||skins[0];const button=make('button');button.type='button';const img=make('img');img.alt='';img.loading='lazy';if(current?.portrait)img.src='https://raw.githubusercontent.com/yuanyan3060/ArknightsGameResource/main/portrait/'+encodeURIComponent(current.portrait)+'.png';img.onerror=()=>{img.hidden=true;};button.append(img,make('strong',name),make('small',`${skins.filter(s=>owned.has(s.id)).length}종 보유`));button.onclick=()=>{selectedChar=c.charId;selectedSkin=current?.id;$('wardrobeSearch').value='';$('wardrobeRoster').hidden=true;$('wardrobeDetail').hidden=false;render();};grid.append(button);}}
+$('wardrobeBack').onclick=()=>{stopCardMotion();cancelAnimationFrame(dragFrame);dragFrame=0;drag=null;clearOldScenes();clearSD();$('wardrobeRoster').hidden=false;$('wardrobeDetail').hidden=true;};$('wardrobeRosterSearch').oninput=renderRoster;
 if(!demo)try{characters=JSON.parse(localStorage.getItem('zootAdminWardrobeCharacters')||'[]');}catch{}
 
 function updateWear(s){const character=characters.find(c=>c.charId===s.charId);const equipped=previewEquipped.get(s.charId)||character?.skin||catalog.find(v=>v.charId===s.charId&&v.basic&&v.elite===(character?.elite>=2?2:0))?.id;const allowed=owned.has(s.id)||s.basic&&(character?.elite??0)>=(s.elite||0);const current=equipped===s.id,button=$('wardrobeOwned');button.textContent=current?'현재 복장':allowed?'변경':'미보유';button.disabled=current||!allowed;button.classList.toggle('is-equipped',current);button.onclick=()=>{if(!allowed||current)return;previewEquipped.set(s.charId,s.id);updateWear(s);renderRoster();};}
@@ -113,7 +113,7 @@ function fitCollection(){
  wrap.style.setProperty('--collection-height',available+'px');
 }
 new ResizeObserver(fitCollection).observe($('wardrobe'));
-new MutationObserver(fitCollection).observe($('wardrobeDetail'),{attributes:true,attributeFilter:['hidden']});
+new MutationObserver(()=>{fitCollection();syncWardrobeBackButton();}).observe($('wardrobeDetail'),{attributes:true,attributeFilter:['hidden']});
 window.addEventListener('resize',fitCollection);window.visualViewport?.addEventListener('resize',fitCollection);fitCollection();
 
 
@@ -135,7 +135,7 @@ function connectSiteNavigation(){
  for(const img of document.querySelectorAll('.zoot-drawer nav img'))img.src='https://raw.githubusercontent.com/MoonWhale-ko/-Arknights-Tool/main/'+img.getAttribute('src');
  if(demo){const account=$('zootAccountImport');account?.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();location.href=root+'operators.html';},true);}
 }
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',connectSiteNavigation);else connectSiteNavigation();
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{connectSiteNavigation();syncWardrobeBackButton();});else{connectSiteNavigation();syncWardrobeBackButton();}
 
 function isSkinOwned(s){const character=characters.find(c=>c.charId===s.charId);return s.basic?!!character&&(character.elite??0)>=(s.elite??0):owned?.has(s.id)===true;}
 function jumpToSkin(s){
@@ -165,3 +165,9 @@ function renderSidebar(s){
 }
 $('wardrobeSideChoose').onclick=()=>{$('wardrobeDialog').showModal();$('wardrobeSearch').focus();};
 $('wardrobeSeriesSelect').onchange=renderSeries;$('wardrobeSeriesMissing').onchange=renderSeries;
+
+function syncWardrobeBackButton(){
+ const home=document.querySelector('.zoot-topbar a[aria-label="홈"]');if(!home)return;
+ let back=$('wardrobeHeaderBack');if(!back){back=make('button');back.id='wardrobeHeaderBack';back.type='button';back.className='zoot-icon';back.setAttribute('aria-label','이전');back.title='오퍼레이터 목록으로';back.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg>';back.onclick=()=>{$('wardrobeBack').click();};home.before(back);}
+ const detailOpen=!$('wardrobeDetail').hidden;home.hidden=detailOpen;back.hidden=!detailOpen;
+}
