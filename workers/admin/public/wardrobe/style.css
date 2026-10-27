@@ -49,10 +49,10 @@
 #wardrobeDetail.native-layout .native-card-portrait{object-fit:fill;z-index:0}
 #wardrobeDetail.native-layout .native-card-reflection{object-fit:fill;opacity:.698039;z-index:1}
 #wardrobeDetail.native-layout .native-card-mask{object-fit:fill;filter:brightness(0);z-index:2}
-#wardrobeDetail.native-layout .native-card-logo{object-fit:contain;filter:brightness(0) invert(1);z-index:3;transition:opacity .2s}
+#wardrobeDetail.native-layout .native-card-logo{object-fit:contain;filter:brightness(0) invert(1);z-index:3}
 #wardrobeDetail.native-layout .native-card-faction{left:68%;top:81%;width:24%;height:12%;object-fit:contain;filter:brightness(0) invert(1);z-index:3}
-#wardrobeDetail.native-layout .native-card-name{position:absolute;bottom:auto;padding:0;background:transparent;color:#fff;line-height:1.15;text-align:center;white-space:nowrap;text-overflow:clip;font-weight:600;z-index:3;transition:opacity .2s}
-#wardrobeDetail.native-layout .native-card-wash{position:absolute;inset:0;background:#fff;opacity:0;z-index:4;pointer-events:none;transition:opacity .2s}
+#wardrobeDetail.native-layout .native-card-name{position:absolute;bottom:auto;padding:0;background:transparent;color:#fff;line-height:1.15;text-align:center;white-space:nowrap;text-overflow:clip;font-weight:600;z-index:3}
+#wardrobeDetail.native-layout .native-card-wash{position:absolute;inset:0;background:#fff;opacity:0;z-index:4;pointer-events:none}
 #wardrobeDetail.native-layout .wardrobe-card:not([aria-pressed=true]) .native-card-wash{opacity:.4}
 #wardrobeDetail.native-layout .wardrobe-card:not([aria-pressed=true]) .native-card-logo,#wardrobeDetail.native-layout .wardrobe-card:not([aria-pressed=true]) .native-card-name,#wardrobeDetail.native-layout .wardrobe-card:not([aria-pressed=true]) .native-card-faction{opacity:0}
 #wardrobeDetail.native-layout #wardrobePrev,#wardrobeDetail.native-layout #wardrobeNext{font-size:0}
@@ -77,3 +77,8 @@
 /* Native btn_back includes its arrow, cut corners and shadow in the source sprite. */
 #wardrobeDetail.native-layout #wardrobeBack{background:transparent url('/wardrobe/btn-back.png') center/100% 100% no-repeat;box-shadow:none;border:0}
 #wardrobeDetail.native-layout #wardrobeBack:before{display:none}
+
+/* Per-frame original state controls opacity and bound width; no CSS easing. */
+#wardrobeDetail.native-layout .wardrobe-card .native-card-wash{opacity:var(--native-wash,0)}
+#wardrobeDetail.native-layout .native-card-content{pointer-events:none}
+#wardrobeDetail.native-layout .native-card-content>img{position:absolute;max-width:none;max-height:none;border:0;pointer-events:none}

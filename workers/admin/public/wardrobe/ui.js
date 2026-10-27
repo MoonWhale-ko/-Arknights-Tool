@@ -1,9 +1,12 @@
-import {loadOriginalLayouts,applyOriginalLayout,compareSkinOrder} from './original-layout.js?v=16';
+import {loadOriginalLayouts,applyOriginalLayout,compareSkinOrder,NATIVE_MOTION,nativeCardFrames,nativeDragState} from './original-layout.js?v=17';
 import {showSD,clearSD} from './sd.js?v=9';
 const $=id=>document.getElementById(id),make=(tag,text)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=text;return el;};
 const demo=document.body.dataset.wardrobeDemo==='true';
 const previewEquipped=new Map();
 let catalog,owned=null,selectedChar=null,selectedSkin=null,characters=[];
+let cardState=0,motionFrame=0,motionVersion=0,drag=null;
+function stopCardMotion(){cancelAnimationFrame(motionFrame);motionVersion++;}
+
 const asset=(folder,id)=>`https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/dyn/arts/${folder}/${encodeURIComponent(id.toLowerCase())}.png`;
 export function ownedSkins(data){const skins=(data?.snapshot?.user??data?.user??data?.rewards?.user)?.skin?.characterSkins;if(!skins||typeof skins!=='object')return null;return new Set(Object.entries(skins).filter(([,value])=>Number(value)>0).map(([id])=>id));}
 async function accept(data){if(!data)return;owned=ownedSkins(data);const user=data?.snapshot?.user??data?.user??data?.rewards?.user;if(user?.troop?.chars){characters=Object.values(user.troop.chars).map(c=>({charId:c.charId,skin:c.skin??c.skinId,elite:c.evolvePhase??0}));if(!demo)try{localStorage.setItem('zootAdminWardrobeCharacters',JSON.stringify(characters));}catch{}}if(owned&&!demo){try{localStorage.setItem('zootAdminWardrobeSkins',JSON.stringify([...owned]));}catch{}}if(!owned){$('wardrobeMessage').textContent='스킨 보유 정보가 없습니다. 관리자 계정을 다시 가져와 주세요.';$('wardrobeGrid').replaceChildren();$('wardrobeCount').textContent='';return;}try{if(!catalog){const r=await fetch('/wardrobe/catalog.json');if(!r.ok)throw Error();catalog=(await r.json()).skins;}await loadOriginalLayouts();renderRoster();render();}catch{$('wardrobeMessage').textContent='스킨 목록을 불러오지 못했습니다. 다시 적용해 주세요.';}}
@@ -19,10 +22,10 @@ function render(){
  const skins=(chars.get(selectedChar)||[]).sort(compareSkinOrder);
  $('wardrobeCount').textContent=`${chars.size}명 · ${rows.length}종`;
  $('wardrobeOperator').textContent=skins[0]?.operator||'오퍼레이터 선택';
- const grid=$('wardrobeGrid');grid.replaceChildren();
+ const grid=$('wardrobeGrid');stopCardMotion();drag=null;grid.replaceChildren();
  if(!skins.length){clearSD();if($('wardrobeNativeScene'))$('wardrobeNativeScene').hidden=true;$('wardrobeArt').hidden=true;$('wardrobeArt').removeAttribute('src');$('wardrobeArtStatus').textContent='조건에 맞는 스킨이 없습니다.';for(const id of ['wardrobeBrand','wardrobeOperatorName','wardrobeTitle','wardrobeOwned'])$(id).textContent='';return;}
  if(!skins.some(s=>s.id===selectedSkin))selectedSkin=skins[0].id;
- for(const skin of skins){const card=make('button');card.type='button';card.className='wardrobe-card'+(skin.basic||owned.has(skin.id)?'':' unowned');card.dataset.skin=skin.id;card.dataset.basic=String(!!skin.basic);card.dataset.elite=String(skin.elite||0);card.setAttribute('aria-label',skin.basic?(skin.elite>=2?'2정예화':'기본 복장'):skin.name);card.setAttribute('aria-pressed',String(skin.id===selectedSkin));const img=make('img');img.alt='';img.loading='lazy';if(skin.portrait)img.src='https://raw.githubusercontent.com/yuanyan3060/ArknightsGameResource/main/portrait/'+encodeURIComponent(skin.portrait)+'.png';img.onerror=()=>{img.hidden=true;};card.append(img,make('span',skin.name),make('small',skin.brandTitle||'DEFAULT'));card.onclick=()=>{selectedSkin=skin.id;show(skin);for(const button of grid.children)button.setAttribute('aria-pressed',String(button.dataset.skin===selectedSkin));layoutCards();};grid.append(card);}
+ for(const skin of skins){const card=make('button');card.type='button';card.className='wardrobe-card'+(skin.basic||owned.has(skin.id)?'':' unowned');card.dataset.skin=skin.id;card.dataset.basic=String(!!skin.basic);card.dataset.elite=String(skin.elite||0);card.setAttribute('aria-label',skin.basic?(skin.elite>=2?'2정예화':'기본 복장'):skin.name);card.setAttribute('aria-pressed',String(skin.id===selectedSkin));const img=make('img');img.alt='';img.loading='lazy';if(skin.portrait)img.src='https://raw.githubusercontent.com/yuanyan3060/ArknightsGameResource/main/portrait/'+encodeURIComponent(skin.portrait)+'.png';img.onerror=()=>{img.hidden=true;};card.append(img,make('span',skin.name),make('small',skin.brandTitle||'DEFAULT'));card.onclick=()=>selectCard(skin.id,NATIVE_MOTION.clickFrames);grid.append(card);}
  show(skins.find(s=>s.id===selectedSkin));layoutCards();
 }
 function show(s){
@@ -50,10 +53,33 @@ $('wardrobeBack').onclick=()=>{clearSD();$('wardrobeRoster').hidden=false;$('war
 if(!demo)try{characters=JSON.parse(localStorage.getItem('zootAdminWardrobeCharacters')||'[]');}catch{}
 
 function updateWear(s){const character=characters.find(c=>c.charId===s.charId);const equipped=previewEquipped.get(s.charId)||character?.skin||catalog.find(v=>v.charId===s.charId&&v.basic&&v.elite===(character?.elite>=2?2:0))?.id;const allowed=owned.has(s.id)||s.basic&&(character?.elite??0)>=(s.elite||0);const current=equipped===s.id,button=$('wardrobeOwned');button.textContent=current?'현재 복장':allowed?'변경':'미보유';button.disabled=current||!allowed;button.classList.toggle('is-equipped',current);button.onclick=()=>{if(!allowed||current)return;previewEquipped.set(s.charId,s.id);updateWear(s);renderRoster();};}
-function layoutCards(){const buttons=[...$('wardrobeGrid').children],selected=buttons.findIndex(b=>b.dataset.skin===selectedSkin);for(const [i,button]of buttons.entries()){const offset=i-selected;button.style.setProperty('--card-offset',String(Math.max(-3,Math.min(3,offset))));button.style.zIndex=String(10-Math.abs(offset));button.style.opacity=Math.abs(offset)>2?'0':'1';button.style.pointerEvents=Math.abs(offset)>2?'none':'auto';}for(const [id,off]of [['wardrobePrev',-1],['wardrobeNext',1]]){const button=$(id);button.disabled=!buttons[selected+off];button.hidden=button.disabled;}}
-for(const [id,direction]of [['wardrobePrev',-1],['wardrobeNext',1]])$(id).onclick=()=>{const buttons=[...$('wardrobeGrid').children],i=buttons.findIndex(b=>b.dataset.skin===selectedSkin);buttons[i+direction]?.click();};
-
-let startX=null,suppressSwipeClick=false;const strip=$('wardrobeGrid');strip.addEventListener('pointerdown',e=>{if(e.button!==0)return;startX=e.clientX;});strip.addEventListener('click',e=>{if(suppressSwipeClick){e.preventDefault();e.stopImmediatePropagation();}},true);window.addEventListener('pointerup',e=>{if(startX!==null&&Math.abs(e.clientX-startX)>35){$(e.clientX<startX?'wardrobeNext':'wardrobePrev').click();suppressSwipeClick=true;setTimeout(()=>{suppressSwipeClick=false;},0);}startX=null;});window.addEventListener('pointercancel',()=>{startX=null;});
+function paintCards(){
+ const buttons=[...$('wardrobeGrid').children],scale=862/810,fullWidth=154.39999*scale;
+ for(const frame of nativeCardFrames(cardState,buttons.length)){
+  const button=buttons[frame.index],visible=frame.weight>0;
+  Object.assign(button.style,{width:frame.width*scale+'px',left:`calc(50% + ${frame.x*scale-frame.width*scale/2}px)`,transform:'none',opacity:String(frame.opacity),zIndex:String(100-Math.round(Math.abs(frame.index-cardState)*10)),pointerEvents:visible?'auto':'none'});
+  button.dataset.motionWeight=String(frame.weight);
+  // Keep portrait pixels at native size while the enclosing bound narrows.
+  let content=button.querySelector('.native-card-content');
+  if(!content){content=make('div');content.className='native-card-content';content.append(...button.childNodes);button.append(content);}
+  Object.assign(content.style,{position:'absolute',top:'0',left:'50%',width:fullWidth+'px',height:'100%',transform:'translateX(-50%)'});
+  for(const el of button.querySelectorAll('.native-card-logo,.native-card-name'))el.style.opacity=String(frame.detailOpacity);
+  const wash=button.querySelector('.native-card-wash');if(wash)wash.style.opacity=String(frame.wash);
+ }
+ $('wardrobeGrid').dataset.motionState=String(cardState);
+}
+function updateCardArrows(){const buttons=[...$('wardrobeGrid').children],selected=buttons.findIndex(b=>b.dataset.skin===selectedSkin);for(const [id,off]of [['wardrobePrev',-1],['wardrobeNext',1]]){const button=$(id);button.disabled=!buttons[selected+off];button.hidden=button.disabled;}}
+function layoutCards(){stopCardMotion();cardState=[...$('wardrobeGrid').children].findIndex(b=>b.dataset.skin===selectedSkin);paintCards();updateCardArrows();}
+function animateCards(target,frames){stopCardMotion();const version=motionVersion,start=cardState;let step=0;const tick=()=>{if(version!==motionVersion)return;cardState=start+(target-start)*(++step/frames);paintCards();if(step<frames)motionFrame=requestAnimationFrame(tick);};motionFrame=requestAnimationFrame(tick);}
+function selectCard(id,frames){const buttons=[...$('wardrobeGrid').children],target=buttons.findIndex(b=>b.dataset.skin===id);if(target<0)return;const skin=catalog.find(s=>s.id===id);if(!skin)return;selectedSkin=id;show(skin);for(const b of buttons)b.setAttribute('aria-pressed',String(b.dataset.skin===id));updateCardArrows();animateCards(target,frames);}
+for(const [id,direction]of [['wardrobePrev',-1],['wardrobeNext',1]])$(id).onclick=()=>{const buttons=[...$('wardrobeGrid').children],i=buttons.findIndex(b=>b.dataset.skin===selectedSkin);if(buttons[i+direction])selectCard(buttons[i+direction].dataset.skin,NATIVE_MOTION.clickFrames);};
+let suppressSwipeClick=false;const strip=$('wardrobeGrid');
+strip.addEventListener('pointerdown',e=>{if(e.button!==0||drag)return;stopCardMotion();drag={id:e.pointerId,x:e.clientX,state:cardState,moved:false};});
+strip.addEventListener('click',e=>{if(suppressSwipeClick){e.preventDefault();e.stopImmediatePropagation();}},true);
+window.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;const scale=$('wardrobeDetail').getBoundingClientRect().width/1535,dx=(e.clientX-drag.x)/scale;if(Math.abs(dx)>5)drag.moved=true;if(drag.moved){cardState=nativeDragState(drag.state,dx,strip.children.length);paintCards();}});
+function endCardDrag(e,cancelled=false){if(!drag||drag.id!==e.pointerId)return;const moved=drag.moved;drag=null;if(moved){suppressSwipeClick=true;setTimeout(()=>{suppressSwipeClick=false;},0);const target=cancelled?[...strip.children].findIndex(b=>b.dataset.skin===selectedSkin):Math.round(cardState);if(strip.children[target])selectCard(strip.children[target].dataset.skin,NATIVE_MOTION.snapFrames);}else animateCards([...strip.children].findIndex(b=>b.dataset.skin===selectedSkin),NATIVE_MOTION.snapFrames);}
+window.addEventListener('pointerup',e=>endCardDrag(e));window.addEventListener('pointercancel',e=>endCardDrag(e,true));
+window.addEventListener('blur',()=>{if(drag)endCardDrag({pointerId:drag.id},true);});
 
 $('wardrobeZoom').onclick=()=>{const art=$('wardrobeArt');if(art.requestFullscreen)art.requestFullscreen().catch(()=>{});};
 function fitCollection(){const detail=$('wardrobeDetail'),wrap=$('wardrobe');if(detail.hidden){wrap.style.removeProperty('--collection-height');return;}const scale=wrap.clientWidth/1535;detail.style.setProperty('--collection-scale',String(scale));wrap.style.setProperty('--collection-height',`${862*scale}px`);}

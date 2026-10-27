@@ -1,0 +1,41 @@
+{
+  "scope": "Static analysis of uploaded IL2CPP build; no live runtime or hotfix verification",
+  "clickTransitionFrames": 15,
+  "dragSnapFrames": 5,
+  "yieldType": "UnityEngine.WaitForEndOfFrame",
+  "stateInterpolation": "linear per frame; start + (target-start)*(frame+1)/frameCount",
+  "cardStateWeights": [
+    0,
+    0,
+    0.3,
+    0.5,
+    1,
+    0.5,
+    0.3,
+    0,
+    0
+  ],
+  "cardWeightInterpolation": "linear between neighboring lookup entries",
+  "cardOpacity": "sqrt(weight)",
+  "secondaryOpacity": "(weight - 0.9) * 10; UI rendering may clamp",
+  "whiteMaskAlpha": "(1-weight)*0.4",
+  "dragStateDelta": "-3e-6 * dx * abs(dx), clamped to dragStartState +/- 2",
+  "evidence": {
+    "TweenToState": "0x1813b0750",
+    "ApplyCardState": "0x1813aece0",
+    "CardWeightStaticConstructor": "0x1813af210",
+    "TransitionCoroutine": "0x1813b51d0",
+    "SpecialTransitionCoroutine": "0x1813b5010",
+    "OnDrag": "0x1813aff90",
+    "weightMetadataDataIndex": 216768,
+    "weightBackingField": "F03F23975638E86FEB46D4B9C13CAD59C5CB0D22A86591639DB2E05544B05CF8"
+  },
+  "limitations": [
+    "Hotfix dispatch exists; active Lua hotfix behavior not verified.",
+    "Special transition branch and complete container sorting/position semantics need further review.",
+    "15 frames is approximately 250 ms only at 60 fps; 5 frames approximately 83.3 ms only at 60 fps.",
+    "Click/snap frames, card weights, bound width and opacity applied in preview; live hotfix and special branch not verified."
+  ],
+  "cardBoundWidth": "_boundPerLenth * weight via RectTransform.set_sizeDelta.x",
+  "prefabBoundPerLength": 153.89999389648438
+}

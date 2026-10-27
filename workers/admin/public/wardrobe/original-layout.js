@@ -91,3 +91,14 @@ export function applyOriginalLayout(skin){
  }
 
 }
+
+// SkinSelectScrollItemView.ApplyState and SkinSelectScrollView coroutines (PC IL2CPP).
+export const NATIVE_MOTION = Object.freeze({clickFrames:15,snapFrames:5,boundWidth:153.89999389648438});
+const CARD_WEIGHTS=[0,0,.3,.5,1,.5,.3,0,0];
+export function cardWeight(offset){const x=offset+4,i=Math.floor(x);if(x<0||x>=8)return 0;return CARD_WEIGHTS[i]*(1-(x-i))+CARD_WEIGHTS[i+1]*(x-i);}
+export function nativeCardFrames(state,count){
+ const first=Math.floor(state)-4,last=Math.floor(state)+5,slots=[];let total=0;
+ for(let i=first;i<=last;i++){const weight=cardWeight(i-state),width=NATIVE_MOTION.boundWidth*weight;slots.push({index:i,weight,width,centre:total+width/2});total+=width;}
+ return Array.from({length:count},(_,index)=>{const slot=slots.find(s=>s.index===index)||{weight:0,width:0,centre:0};return {...slot,index,x:slot.centre-total/2,opacity:Math.sqrt(slot.weight),detailOpacity:Math.max(0,Math.min(1,(slot.weight-.9)*10)),wash:(1-slot.weight)*.4};});
+}
+export function nativeDragState(start,dx,count){return Math.max(0,Math.min(count-1,start+Math.max(-2,Math.min(2,-3e-6*dx*Math.abs(dx)))));}
