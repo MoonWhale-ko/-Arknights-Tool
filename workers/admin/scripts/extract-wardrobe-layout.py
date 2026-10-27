@@ -82,6 +82,8 @@ for path,root in e.container.items():
     sp=t['m_Sprite'];name=(data(sp['m_PathID']).get('m_Name') if sp['m_FileID']==0 and sp['m_PathID'] in objects else external.get(sp['m_PathID']))
     if name:node['image']={'folder':'skin' if sp['m_FileID']==0 else '[pack]skinres','name':name}
     if name and sp['m_FileID'] and sp['m_PathID'] in externalSprites:node['image'].update(type=t.get('m_Type',0),border=externalSprites[sp['m_PathID']]['m_Border'])
+    spriteData=externalSprites.get(sp['m_PathID']) if sp['m_FileID'] else (data(sp['m_PathID']) if sp['m_PathID'] in objects else None)
+    if name and spriteData:node['image']['sprite']={'rect':spriteData['m_Rect'],'textureRect':spriteData['m_RD']['textureRect'],'textureRectOffset':spriteData['m_RD']['textureRectOffset']}
     node['preserveAspect']=bool(t.get('m_PreserveAspect',False))
    if 'm_Text' in t:node['text']=t.get('m_Text','');node['font']=t.get('m_FontData',{})
    if '_fontName' in t:node['fontName']=t['_fontName']

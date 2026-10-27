@@ -73,3 +73,7 @@
 /* Banner children use the native RectTransforms and typography. */
 #wardrobeDetail.native-layout .wardrobe-outfit-badge{padding:0;overflow:visible}
 #wardrobeDetail.native-layout .wardrobe-outfit-badge small,#wardrobeDetail.native-layout .wardrobe-outfit-badge b{box-sizing:border-box;text-align:center;letter-spacing:normal}
+
+/* Native btn_back includes its arrow, cut corners and shadow in the source sprite. */
+#wardrobeDetail.native-layout #wardrobeBack{background:transparent url('/wardrobe/btn-back.png') center/100% 100% no-repeat;box-shadow:none;border:0}
+#wardrobeDetail.native-layout #wardrobeBack:before{display:none}

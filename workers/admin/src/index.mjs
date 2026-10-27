@@ -36,7 +36,7 @@ export function createHandler({ fetcher } = {}) {
       // Public design preview contains only static game assets and synthetic data.
       // All APIs, account operations and other preview pages still authenticate below.
       const wardrobeAssets = new Set([
-        '/wardrobe/style.css', '/wardrobe/ui.js', '/wardrobe/sd.js',
+        '/wardrobe/style.css', '/wardrobe/ui.js', '/wardrobe/sd.js', '/wardrobe/btn-back.png',
         '/wardrobe/original-layout.js', '/wardrobe/catalog.json',
         '/wardrobe/sd-models.json', '/wardrobe/native-scene.json.gz',
         '/preview/assets/css/zoot.css',
