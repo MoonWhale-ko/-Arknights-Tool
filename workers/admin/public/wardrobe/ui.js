@@ -1,4 +1,4 @@
-import {loadOriginalLayouts,applyOriginalLayout,compareSkinOrder,NATIVE_MOTION,nativeCardFrames,nativeDragState,applyLeftMotion} from './original-layout.js?v=18';
+import {loadOriginalLayouts,applyOriginalLayout,compareSkinOrder,NATIVE_MOTION,nativeCardFrames,nativeDragState,applyLeftMotion} from './original-layout.js?v=19';
 import {showSD,clearSD,releaseSD} from './sd.js?v=10';
 const $=id=>document.getElementById(id),make=(tag,text)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=text;return el;};
 const demo=document.body.dataset.wardrobeDemo==='true';
@@ -96,7 +96,7 @@ function updateSmoothDrag(time){dragFrame=0;if(!drag)return;const dt=drag.lastTi
 let suppressSwipeClick=false;const strip=$('wardrobeGrid');
 strip.addEventListener('pointerdown',e=>{if(e.button!==0||drag)return;stopCardMotion();drag={id:e.pointerId,x:e.clientX,state:cardState,target:cardState,moved:false};});
 strip.addEventListener('click',e=>{if(suppressSwipeClick){e.preventDefault();e.stopImmediatePropagation();}},true);
-window.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;const scale=$('wardrobeDetail').getBoundingClientRect().width/1535,dx=(e.clientX-drag.x)/scale;if(Math.abs(dx)>5)drag.moved=true;if(drag.moved){drag.target=nativeDragState(drag.state,dx,strip.children.length);if(!dragFrame){drag.lastTime=undefined;dragFrame=requestAnimationFrame(updateSmoothDrag);}}});
+window.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;const scale=$('wardrobeDetail').getBoundingClientRect().width/1535,dx=(e.clientX-drag.x)/scale;if(Math.abs(dx)>5)drag.moved=true;if(drag.moved){drag.target=nativeDragState(drag.state,dx,strip.children.length,1535*.1);if(!dragFrame){drag.lastTime=undefined;dragFrame=requestAnimationFrame(updateSmoothDrag);}}});
 function endCardDrag(e,cancelled=false){if(!drag||drag.id!==e.pointerId)return;const moved=drag.moved,intended=drag.target;cancelAnimationFrame(dragFrame);dragFrame=0;drag=null;if(moved){suppressSwipeClick=true;setTimeout(()=>{suppressSwipeClick=false;},0);const target=cancelled?[...strip.children].findIndex(b=>b.dataset.skin===selectedSkin):Math.round(intended);if(strip.children[target])selectCard(strip.children[target].dataset.skin,NATIVE_MOTION.snapFrames,true);}else animateCards([...strip.children].findIndex(b=>b.dataset.skin===selectedSkin),NATIVE_MOTION.snapFrames);}
 window.addEventListener('pointerup',e=>endCardDrag(e));window.addEventListener('pointercancel',e=>endCardDrag(e,true));
 window.addEventListener('blur',()=>{if(drag)endCardDrag({pointerId:drag.id},true);});

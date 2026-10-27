@@ -17,3 +17,7 @@ test('left scene follows original Show/Hide endpoints through squared distance',
  assert.equal(channel(5,'','m_Alpha'),0);
  assert.ok(Math.abs(channel(.5,'spine_part/spine_holder','m_AnchoredPosition.x')+93)<1e-5);
 });
+
+test('web drag switches at ten percent of the viewport in both directions',()=>{
+ for(const width of [375,768,1535,1920]){const toReference=distance=>distance/width*1535;assert.equal(Math.round(nativeDragState(2,toReference(-width*.099),5,153.5)),2);assert.equal(Math.round(nativeDragState(2,toReference(-width*.101),5,153.5)),3);assert.equal(Math.round(nativeDragState(2,toReference(width*.101),5,153.5)),1);}
+});
