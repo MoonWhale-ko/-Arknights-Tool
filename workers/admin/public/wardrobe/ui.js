@@ -1,5 +1,5 @@
 import {loadOriginalLayouts,applyOriginalLayout} from './original-layout.js?v=5';
-import {showSD,clearSD} from './sd.js?v=8';
+import {showSD,clearSD} from './sd.js?v=9';
 const $=id=>document.getElementById(id),make=(tag,text)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=text;return el;};
 const demo=document.body.dataset.wardrobeDemo==='true';
 let catalog,owned=null,selectedChar=null,selectedSkin=null,characters=[];

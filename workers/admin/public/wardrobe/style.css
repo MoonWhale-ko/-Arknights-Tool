@@ -53,9 +53,9 @@
 .native-node{position:absolute;box-sizing:border-box;pointer-events:none}.native-graphic,.native-text{position:absolute;inset:0;box-sizing:border-box}.native-graphic{mask-repeat:no-repeat;mask-position:center}.native-text{display:flex;flex-direction:column;white-space:pre-wrap;overflow:hidden;font-family:Arial,'Noto Sans KR',sans-serif}
 #wardrobeDetail.native-layout .native-live-image{position:absolute;inset:0;display:block;width:100%!important;height:100%!important;max-width:none;border:0;box-shadow:none;object-fit:cover;aspect-ratio:auto}
 #wardrobeDetail.native-layout .native-live-art{position:absolute;max-width:none;max-height:none;object-fit:fill;filter:none;animation:none}
-#wardrobeDetail.native-layout #wardrobeSD{position:absolute;left:-206px;top:-334px;right:auto;bottom:auto;width:512px;height:512px;background:none;z-index:auto;isolation:auto;display:block}
+#wardrobeDetail.native-layout #wardrobeSD{position:absolute;left:-462px;top:-718px;right:auto;bottom:auto;width:1024px;height:1024px;background:none;z-index:auto;isolation:auto;display:block}
 #wardrobeDetail.native-layout #wardrobeSD:before,#wardrobeDetail.native-layout #wardrobeSD:after{display:none}
-#wardrobeDetail.native-layout #wardrobeSD canvas{position:absolute;left:0;top:0;width:512px;height:512px;max-width:none;max-height:none}
+#wardrobeDetail.native-layout #wardrobeSD canvas{position:absolute;left:0;top:0;width:1024px;height:1024px;max-width:none;max-height:none}
 #wardrobeDetail.native-layout .wardrobe-strip{overflow:visible;perspective:none}
 #wardrobeDetail.native-layout .wardrobe-card{position:absolute;left:calc(50% - var(--native-card-width)/2);width:var(--native-card-width);height:var(--native-card-height);transform:translateX(calc(var(--card-offset,0)*50%));background:#000}
 #wardrobeDetail.native-layout .wardrobe-card>img:first-child{width:100%;height:100%;object-fit:cover}
