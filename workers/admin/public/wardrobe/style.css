@@ -75,3 +75,26 @@
 #wardrobeNativeScene .native-node[data-path$="/content_scroll"]{scrollbar-width:thin;overflow-x:hidden!important}
 #wardrobeNativeScene .native-node[data-path$="/content_scroll"]>.native-node,#wardrobeNativeScene .native-content{width:100%!important;max-width:100%}
 #wardrobeDetail.native-layout .wardrobe-outfit-badge b{display:block;white-space:normal;overflow-wrap:anywhere;font-size:16px;line-height:1.15}
+/* Selection card children use skin_select_obj.prefab rectangles. */
+#wardrobeDetail.native-layout .wardrobe-card{transform:translateX(calc(var(--card-offset,0)*40%));isolation:isolate;box-shadow:none}
+#wardrobeDetail.native-layout .wardrobe-card>img{position:absolute;max-width:none;max-height:none;border:0;pointer-events:none}
+#wardrobeDetail.native-layout .native-card-portrait{object-fit:fill;z-index:0}
+#wardrobeDetail.native-layout .native-card-reflection{object-fit:fill;opacity:.698039;z-index:1}
+#wardrobeDetail.native-layout .native-card-mask{object-fit:fill;filter:brightness(0);z-index:2}
+#wardrobeDetail.native-layout .native-card-logo{object-fit:contain;filter:brightness(0) invert(1);z-index:3;transition:opacity .2s}
+#wardrobeDetail.native-layout .native-card-faction{left:68%;top:81%;width:24%;height:12%;object-fit:contain;filter:brightness(0) invert(1);z-index:3}
+#wardrobeDetail.native-layout .native-card-name{position:absolute;bottom:auto;padding:0;background:transparent;color:#fff;line-height:1.15;text-align:center;white-space:nowrap;text-overflow:clip;font-weight:600;z-index:3;transition:opacity .2s}
+#wardrobeDetail.native-layout .native-card-wash{position:absolute;inset:0;background:#fff;opacity:0;z-index:4;pointer-events:none;transition:opacity .2s}
+#wardrobeDetail.native-layout .wardrobe-card:not([aria-pressed=true]) .native-card-wash{opacity:.4}
+#wardrobeDetail.native-layout .wardrobe-card:not([aria-pressed=true]) .native-card-logo,#wardrobeDetail.native-layout .wardrobe-card:not([aria-pressed=true]) .native-card-name,#wardrobeDetail.native-layout .wardrobe-card:not([aria-pressed=true]) .native-card-faction{opacity:0}
+#wardrobeDetail.native-layout #wardrobePrev,#wardrobeDetail.native-layout #wardrobeNext{font-size:0}
+#wardrobeDetail.native-layout #wardrobePrev:before,#wardrobeDetail.native-layout #wardrobeNext:before{content:'';display:block;width:0;height:0;border-top:17px solid transparent;border-bottom:17px solid transparent;border-left:25px solid #fff}
+#wardrobeDetail.native-layout #wardrobePrev:before{transform:rotate(180deg)}
+#wardrobeDetail.native-layout .wardrobe-outfit-badge{padding:18px 4px 0;clip-path:polygon(0 0,100% 0,100% 72%,50% 100%,0 72%)}
+#wardrobeDetail.native-layout .wardrobe-outfit-badge small{font-size:7px;margin-bottom:12px;opacity:1}
+#wardrobeDetail.native-layout #wardrobeOwned{padding:0;color:white;cursor:pointer}
+#wardrobeDetail.native-layout #wardrobeOwned.is-equipped{background:#65abc5;opacity:1;cursor:default}
+#wardrobeDetail.native-layout #wardrobeOwned:disabled:not(.is-equipped){opacity:.6;cursor:default}
+#wardrobeCollection strong{color:#159cc5;font-weight:700}
+#wardrobeWearNotice{position:absolute;margin:0;text-align:center;color:#292929;font-size:13px;line-height:1.2;font-weight:600;z-index:5;pointer-events:none}
+#wardrobeNativeTopColors{position:absolute;z-index:3;pointer-events:none}

@@ -89,7 +89,7 @@ for path,root in e.container.items():
    child=data(c['m_PathID'])['m_GameObject']['m_PathID'];name=data(child)['m_Name'];walk(child,index,route+'/'+name if route else name)
  walk(root.path_id)
  layouts[path.rsplit('/',1)[1][:-7]]=nodes
-raw=json.loads(skinpath.read_text());skins={k:{'group':(v['displaySkin']['skinGroupId'] or 'default').lower(),'colors':v['displaySkin']['colorList'],'content':v['displaySkin']['content'] or '', 'model':v['displaySkin']['modelName'] or '', 'drawer':' / '.join(v['displaySkin']['drawerList'] or [])} for k,v in raw['charSkins'].items()}
+raw=json.loads(skinpath.read_text());skins={k:{'group':(v['displaySkin']['skinGroupId'] or 'default').lower(),'colors':v['displaySkin']['colorList'],'content':v['displaySkin']['content'] or '', 'model':v['displaySkin']['modelName'] or '', 'drawer':' / '.join(v['displaySkin']['drawerList'] or []),'released':v['displaySkin'].get('getTime',0),'order':v['displaySkin'].get('sortId',0)} for k,v in raw['charSkins'].items()}
 # Illustration prefab metrics available in the supplied Ling resource bundle.
 illustrations={}
 ling=bundle('char_2023_ling.ab');lo={o.path_id:o for o in ling.objects}
@@ -118,7 +118,17 @@ def pagewalk(gid,parent,route=''):
 pagewalk(pe.container['dyn/ui/pages/skin_select_page.prefab'].path_id,(0,0,1535*810/862,810))
 card=pe.container['dyn/ui/skinselect/skin_select_obj.prefab'].read_typetree()
 card_rt=next(pdat(c['component']['m_PathID']) for c in card['m_Component'] if po[c['component']['m_PathID']].type.name=='RectTransform')
-result={'cardSize':card_rt['m_SizeDelta'],'source':'User supplied PC KR skin_groups.ab, skin_select_page.ab, char_2023_ling.ab; SkinAllShow settled channels evaluated. Unity relative anchors and scales are retained.','nativeHeight':810,'layouts':layouts,'skins':skins,'illustrations':illustrations,'page':pageNodes}
+# Card child rectangles, including the flipped lower portrait and alpha mask.
+cardNodes={}
+def cardwalk(gid,parent,route=''):
+ g=pdat(gid);rt=next(pdat(c['component']['m_PathID']) for c in g['m_Component'] if po[c['component']['m_PathID']].type.name=='RectTransform')
+ px,py,pw,ph=parent;a=rt['m_AnchorMin'];b=rt['m_AnchorMax'];p=rt['m_Pivot'];pos=rt['m_AnchoredPosition'];sz=rt['m_SizeDelta'];w=pw*(b['x']-a['x'])+sz['x'];h=ph*(b['y']-a['y'])+sz['y'];x=px+pw*(a['x']+(b['x']-a['x'])*p['x'])+pos['x']-p['x']*w;y=py+ph*(a['y']+(b['y']-a['y'])*p['y'])+pos['y']-p['y']*h
+ if not route:x,y,w,h=0,0,card_rt['m_SizeDelta']['x'],card_rt['m_SizeDelta']['y']
+ cardNodes[route]={'rect':[x,card_rt['m_SizeDelta']['y']-y-h,w,h],'scale':rt['m_LocalScale']}
+ for c in rt['m_Children']:
+  child=pdat(c['m_PathID'])['m_GameObject']['m_PathID'];cardwalk(child,(x,y,w,h),route+'/'+pdat(child)['m_Name'])
+cardwalk(pe.container['dyn/ui/skinselect/skin_select_obj.prefab'].path_id,(0,0,154.4,394))
+result={'cardNodes':cardNodes,'cardSize':card_rt['m_SizeDelta'],'source':'User supplied PC KR skin_groups.ab, skin_select_page.ab, char_2023_ling.ab; SkinAllShow settled channels evaluated. Unity relative anchors and scales are retained.','nativeHeight':810,'layouts':layouts,'skins':skins,'illustrations':illustrations,'page':pageNodes}
 # Round serialized float noise, without discarding prefab-specific layouts.
 result=json.loads(json.dumps(result,ensure_ascii=False),parse_float=lambda x:round(float(x),5))
 out.write_text(json.dumps(result,ensure_ascii=False,separators=(',',':')))
