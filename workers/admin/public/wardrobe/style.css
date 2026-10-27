@@ -95,7 +95,5 @@ body.zoot-page:has(#wardrobeDetail:not([hidden])){height:100dvh;overflow:hidden}
 #wardrobe:has(#wardrobeDetail:not([hidden])){height:var(--collection-height);overflow:hidden}
 #wardrobeDetail{position:absolute;top:0;transform-origin:top left}
 
-/* Extend the selected artwork only into the unused space around the canvas. */
-#wardrobe:has(#wardrobeDetail:not([hidden])){isolation:isolate;background:var(--z-bg,#181818)}
-#wardrobe:has(#wardrobeDetail:not([hidden])):before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:var(--wardrobe-backdrop,none);background-size:contain;background-repeat:no-repeat;background-position:center;filter:blur(32px) saturate(.7);opacity:.3}
-html[data-theme=dark] #wardrobe:has(#wardrobeDetail:not([hidden])):before{opacity:.28;filter:blur(32px) saturate(.7) brightness(.65)}
+/* Align the collection to the left with the site theme in unused space. */
+#wardrobe:has(#wardrobeDetail:not([hidden])){background:var(--z-bg,#181818)}

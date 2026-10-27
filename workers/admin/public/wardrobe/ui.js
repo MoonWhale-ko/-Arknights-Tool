@@ -109,7 +109,7 @@ function fitCollection(){
  const available=Math.max(1,(window.visualViewport?.height??window.innerHeight)-barBottom);
  const scale=Math.min(wrap.clientWidth/1535,available/862);
  detail.style.setProperty('--collection-scale',String(scale));
- detail.style.left=Math.max(0,(wrap.clientWidth-1535*scale)/2)+'px';
+ detail.style.left='0px';
  wrap.style.setProperty('--collection-height',available+'px');
 }
 new ResizeObserver(fitCollection).observe($('wardrobe'));
