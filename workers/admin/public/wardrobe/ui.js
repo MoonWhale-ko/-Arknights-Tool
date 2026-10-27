@@ -89,7 +89,7 @@ function switchLeftSkin(id,target){if(selectedSkin===id)return;const skin=catalo
  for(const layer of sceneLayers.filter(l=>l.index===target&&l.el.id!=='wardrobeNativeScene')){releaseSD(layer.sd);layer.el.remove();sceneLayers=sceneLayers.filter(l=>l!==layer);}
  retainLeftScene();selectedSkin=id;show(skin);sceneLayers.push({el:$('wardrobeNativeScene'),sd:$('wardrobeSD'),index:target});
  for(const b of $('wardrobeGrid').children)b.setAttribute('aria-pressed',String(b.dataset.skin===id));updateCardArrows();paintCards();}
-function selectCard(id,frames){const buttons=[...$('wardrobeGrid').children],target=buttons.findIndex(b=>b.dataset.skin===id);if(target<0)return;switchLeftSkin(id,target);animateCards(target,frames);}
+function selectCard(id,frames){const buttons=[...$('wardrobeGrid').children],target=buttons.findIndex(b=>b.dataset.skin===id);if(target<0)return;for(let i=Math.ceil(Math.min(cardState,target));i<=Math.floor(Math.max(cardState,target));i++){if(i!==target&&buttons[i]&&!sceneLayers.some(layer=>layer.index===i))switchLeftSkin(buttons[i].dataset.skin,i);}switchLeftSkin(id,target);animateCards(target,frames);}
 for(const [id,direction]of [['wardrobePrev',-1],['wardrobeNext',1]])$(id).onclick=()=>{const buttons=[...$('wardrobeGrid').children],i=buttons.findIndex(b=>b.dataset.skin===selectedSkin);if(buttons[i+direction])selectCard(buttons[i+direction].dataset.skin,NATIVE_MOTION.clickFrames);};
 let suppressSwipeClick=false;const strip=$('wardrobeGrid');
 strip.addEventListener('pointerdown',e=>{if(e.button!==0||drag)return;stopCardMotion();drag={id:e.pointerId,x:e.clientX,state:cardState,moved:false};});
