@@ -102,8 +102,20 @@ window.addEventListener('pointerup',e=>endCardDrag(e));window.addEventListener('
 window.addEventListener('blur',()=>{if(drag)endCardDrag({pointerId:drag.id},true);});
 
 $('wardrobeZoom').onclick=()=>{const art=$('wardrobeArt');if(art.requestFullscreen)art.requestFullscreen().catch(()=>{});};
-function fitCollection(){const detail=$('wardrobeDetail'),wrap=$('wardrobe');if(detail.hidden){wrap.style.removeProperty('--collection-height');return;}const scale=wrap.clientWidth/1535;detail.style.setProperty('--collection-scale',String(scale));wrap.style.setProperty('--collection-height',`${862*scale}px`);}
-new ResizeObserver(fitCollection).observe($('wardrobe'));new MutationObserver(fitCollection).observe($('wardrobeDetail'),{attributes:true,attributeFilter:['hidden']});fitCollection();
+function fitCollection(){
+ const detail=$('wardrobeDetail'),wrap=$('wardrobe');
+ if(detail.hidden){wrap.style.removeProperty('--collection-height');detail.style.removeProperty('left');return;}
+ const barBottom=document.querySelector('.zoot-topbar')?.getBoundingClientRect().bottom||0;
+ const available=Math.max(1,(window.visualViewport?.height??window.innerHeight)-barBottom);
+ const scale=Math.min(wrap.clientWidth/1535,available/862);
+ detail.style.setProperty('--collection-scale',String(scale));
+ detail.style.left=Math.max(0,(wrap.clientWidth-1535*scale)/2)+'px';
+ wrap.style.setProperty('--collection-height',available+'px');
+}
+new ResizeObserver(fitCollection).observe($('wardrobe'));
+new MutationObserver(fitCollection).observe($('wardrobeDetail'),{attributes:true,attributeFilter:['hidden']});
+window.addEventListener('resize',fitCollection);window.visualViewport?.addEventListener('resize',fitCollection);fitCollection();
+
 
 if(demo){
  $('wardrobeLoad').hidden=true;$('wardrobeAll').checked=true;
