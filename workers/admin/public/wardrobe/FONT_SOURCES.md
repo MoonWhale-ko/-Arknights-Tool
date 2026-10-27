@@ -18,3 +18,8 @@
 The first two default Ling illustrations still use screenshot calibration because
 this supplied Ling bundle includes purchased illustrations only. Purchased
 illustrations use the native `_skinOffset` and sprite trimming metadata.
+
+- `OpenSans-Semibold`: additionally found on the native collection template text components.
+  Loaded from the official Google Fonts repository:
+  https://github.com/googlefonts/opensans/blob/main/fonts/ttf/OpenSans-SemiBold.ttf
+  This supplies the family/style; binary identity with the client build is not established.
