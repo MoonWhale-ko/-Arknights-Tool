@@ -64,3 +64,10 @@
 #wardrobeDetail.native-layout .wardrobe-strip-heading>div{display:none}
 #wardrobeDetail.native-layout #wardrobeOwned{background:#303030;box-shadow:0 3px 7px #0004;border:1px solid #ddd}
 #wardrobeDetail.native-layout #wardrobeBack:before{width:18px;height:28px;margin-left:28px}
+
+/* Native assets must honor source visibility despite legacy display rules. */
+#wardrobeDetail.native-layout [hidden]{display:none!important}
+#wardrobeNativeScene .native-content>.native-text{position:relative;inset:auto;min-height:100%;overflow:visible}
+#wardrobeNativeScene .native-text>div{min-width:0;flex-shrink:0}
+#wardrobeDetail.native-layout #wardrobeArt{object-fit:fill;filter:none}
+#wardrobeNativeScene #wardrobeArtStatus{position:absolute;left:24px;top:400px;width:700px;color:#222;z-index:100}
