@@ -33,6 +33,32 @@ export function createHandler({ fetcher } = {}) {
         // canonicalize back to /login, causing a self-redirect loop with run_worker_first.
         return secure(await env.ASSETS.fetch(request));
       }
+      // Public design preview contains only static game assets and synthetic data.
+      // All APIs, account operations and other preview pages still authenticate below.
+      const wardrobeAssets = new Set([
+        '/wardrobe/style.css', '/wardrobe/ui.js', '/wardrobe/sd.js',
+        '/wardrobe/original-layout.js', '/wardrobe/catalog.json',
+        '/wardrobe/sd-models.json', '/wardrobe/native-scene.json.gz',
+        '/preview/assets/css/zoot.css',
+      ]);
+      if (['GET', 'HEAD'].includes(request.method) && (path === '/wardrobe-demo' || wardrobeAssets.has(path))) {
+        const assetRequest = path === '/wardrobe-demo'
+          ? new Request(new URL('/preview/wardrobe', request.url), { method: 'GET' }) : request;
+        const response = await env.ASSETS.fetch(assetRequest);
+        const headers = new Headers(response.headers);
+        for (const [key, value] of Object.entries(security)) headers.set(key, value);
+        if (path === '/wardrobe-demo') {
+          headers.set('Content-Security-Policy', "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' https://raw.githubusercontent.com data: blob:; connect-src 'self' https://raw.githubusercontent.com; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'");
+          headers.set('Content-Type', 'text/html; charset=utf-8');
+          headers.delete('Content-Length'); headers.delete('Content-Encoding'); headers.delete('ETag');
+          const html = (await response.text())
+            .replace('<body class="zoot-page">', '<body class="zoot-page" data-wardrobe-demo="true">')
+            .replace('href="assets/css/zoot.css', 'href="/preview/assets/css/zoot.css')
+            .replace(/<script src="assets\/js\/zoot\.js[^"]*"><\/script>/, '');
+          return new Response(request.method === 'HEAD' ? null : html, { status: response.status, headers });
+        }
+        return new Response(request.method === 'HEAD' ? null : response.body, { status: response.status, headers });
+      }
       const identity = await authenticate(request, env);
       if (!['GET', 'HEAD', 'POST'].includes(request.method)) throw new AdminError('method-not-allowed', 405);
       if (request.method === 'POST') assertMutation(request);
