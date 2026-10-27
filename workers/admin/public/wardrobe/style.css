@@ -98,3 +98,6 @@
 #wardrobeCollection strong{color:#159cc5;font-weight:700}
 #wardrobeWearNotice{position:absolute;margin:0;text-align:center;color:#292929;font-size:13px;line-height:1.2;font-weight:600;z-index:5;pointer-events:none}
 #wardrobeNativeTopColors{position:absolute;z-index:3;pointer-events:none}
+
+/* Preserve the original banner silhouette and fixed collection color strip. */
+#wardrobeDetail.native-layout .wardrobe-outfit-badge{clip-path:none;mask-image:url('https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/dyn/ui/pages/skin_select_page/white_decro.png');mask-size:100% 100%;mask-repeat:no-repeat}

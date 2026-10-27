@@ -1,4 +1,4 @@
-import {loadOriginalLayouts,applyOriginalLayout,compareSkinOrder} from './original-layout.js?v=7';
+import {loadOriginalLayouts,applyOriginalLayout,compareSkinOrder} from './original-layout.js?v=8';
 import {showSD,clearSD} from './sd.js?v=9';
 const $=id=>document.getElementById(id),make=(tag,text)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=text;return el;};
 const demo=document.body.dataset.wardrobeDemo==='true';
@@ -30,7 +30,7 @@ function show(s){
  const brandLogo=$('wardrobeBrandLogo');brandLogo.hidden=false;brandLogo.src=asset('ui/brandimage','brand_'+(s.brandId||'illust_1').toLowerCase());brandLogo.onerror=()=>{brandLogo.hidden=true;};
  $('wardrobeBrandWord').textContent=s.brandTitle||'DEFAULT';$('wardrobeBadge').textContent=s.brand||'기본 복장';$('wardrobeCollection').replaceChildren(make('strong',s.operator),document.createTextNode('의 컬렉션'));$('wardrobeCredits').textContent=(s.model||s.operator)+(s.artist?' / '+s.artist:'');$('wardrobeDescription').textContent=s.content||'';
  const portrait=$('wardrobePortrait');portrait.hidden=false;portrait.src='https://raw.githubusercontent.com/yuanyan3060/ArknightsGameResource/main/portrait/'+encodeURIComponent(s.portrait)+'.png';portrait.onerror=()=>{portrait.hidden=true;};
- const face=$('wardrobeFace');face.hidden=false;face.src=asset('charavatars',s.avatar||s.charId);face.onerror=()=>{face.src=portrait.src;face.onerror=()=>{face.hidden=true;};};
+ const face=$('wardrobeFace');face.hidden=false;face.onerror=()=>{face.hidden=true;};face.src='https://raw.githubusercontent.com/yuanyan3060/ArknightsGameResource/main/avatar/'+encodeURIComponent(s.avatar||s.charId)+'.png';
 applyOriginalLayout(s);$('wardrobeNativeScene')?.append($('wardrobeArtStatus'));if(!$('wardrobeDetail').hidden)showSD(s);$('wardrobeArt').animate?.([{opacity:.15,transform:'translateX(14px)'},{opacity:1,transform:'translateX(0)'}],{duration:280,easing:'ease-out'});$('wardrobeBrand').textContent=s.brand;$('wardrobeOperatorName').textContent=s.operator;$('wardrobeTitle').textContent=s.name;updateWear(s);const img=$('wardrobeArt');img.hidden=false;img.alt=`${s.operator} · ${s.name}`;$('wardrobeArtStatus').textContent='';img.onerror=()=>{img.hidden=true;$('wardrobeArtStatus').textContent='일러스트를 불러오지 못했습니다.';};if(s.illustration){img.src=asset('characters/'+s.charId,s.illustration.replace(/^illust_/,''));if(img.complete&&img.naturalWidth)img.onload?.();}else{img.hidden=true;$('wardrobeArtStatus').textContent='등록된 일러스트가 없습니다.';}}
 $('wardrobeOperator').onclick=()=>{$('wardrobeDialog').showModal();$('wardrobeSearch').focus();};
 $('wardrobeClose').onclick=()=>$('wardrobeDialog').close();$('wardrobeDialog').addEventListener('click',e=>{if(e.target===$('wardrobeDialog')){const r=e.target.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)e.target.close();}});

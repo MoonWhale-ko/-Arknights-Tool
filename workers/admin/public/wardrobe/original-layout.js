@@ -37,7 +37,7 @@ export function applyOriginalLayout(skin){
   if(n.text!==undefined){const text=document.createElement('div');text.className='native-text';const f=n.font||{};text.style.fontSize=(f.m_FontSize||14)+'px';text.style.lineHeight=Math.max(1.25,Number(f.m_LineSpacing)||1);text.style.fontWeight=f.m_FontStyle===1||f.m_FontStyle===3?'700':'400';text.style.fontStyle=f.m_FontStyle===2||f.m_FontStyle===3?'italic':'normal';text.style.color=tint;const align=f.m_Alignment||0;text.style.textAlign=['left','center','right'][align%3];text.style.justifyContent=['flex-start','center','flex-end'][Math.floor(align/3)];const value=n.binding==='content'?row?.content||skin.content:n.binding==='model'?row?.model||skin.model||skin.operator:n.binding==='drawer'?row?.drawer||skin.artist:n.text;const block=document.createElement('div');fillText(block,value||'');text.append(block);el.append(text);}
   if(n.binding)bindings[n.binding]={el,node:n,w,h,x,y};
  }
- for(const kind of ['avatar','portrait'])if(bindings[kind]){const img=live[kind];bindings[kind].el.append(img);img.classList.add('native-live-image');img.removeAttribute('style');}
+ for(const kind of ['avatar','portrait'])if(bindings[kind]){const img=live[kind];bindings[kind].el.append(img);img.classList.add('native-live-image');img.removeAttribute('style');img.style.objectFit=bindings[kind].node.preserveAspect?'contain':'fill';}
  if(bindings.spine){bindings.spine.el.append(live.spine);live.spine.removeAttribute('style');}
  if(bindings.illustration){const b=bindings.illustration,img=live.illustration;b.el.append(img);img.classList.add('native-live-art');img.removeAttribute('style');const fit=()=>{if(!img.naturalWidth||!img.naturalHeight)return;const rect=illustrationRect(skin.illustration,img.naturalWidth,img.naturalHeight,{...b,scale:b.node.scale},scale);for(const [key,value]of Object.entries(rect))img.style[key]=value+'px';};img.onload=fit;}
 
@@ -51,7 +51,7 @@ export function applyOriginalLayout(skin){
  const badge=detail.querySelector('.wardrobe-outfit-badge'),banner=pageNode('back_img');if(banner)putRect(badge,banner.rect);
  const accent=skin.basic?'#fff':row?.colors?.[0]||row?.colors?.[2]||skin.accent||'#4384aa';badge.style.backgroundColor=accent;badge.style.color=skin.basic?'#222':'#fff';$('wardrobeBadge').style.fontSize=skin.basic?'24px':'16px';badge.querySelector('small').textContent=skin.basic?'DEFAULT OUTFIT':'#OUTFIT OF THE DAY';$('wardrobeBadge').textContent=skin.basic?(skin.elite>=2?'II':'I'):skin.brand;
  let notice=$('wardrobeWearNotice');if(!notice){notice=document.createElement('p');notice.id='wardrobeWearNotice';detail.append(notice);}const nr=source.page['skin_select_state/right_part/down_container/wear_state/const_text'];if(nr)putRect(notice,nr.rect);notice.textContent='선택한 복장은 이 미리보기에만 적용됩니다.';
- let bar=$('wardrobeNativeTopColors');if(!bar){bar=document.createElement('div');bar.id='wardrobeNativeTopColors';detail.append(bar);}const br=pageNode('right_cont');if(br)putRect(bar,br.rect);bar.style.background=`linear-gradient(90deg,#fff 0% 25%,${row?.colors?.[0]||'#ddd'} 25% 50%,${row?.colors?.[1]||'#555'} 50% 75%,${row?.colors?.[2]||'#4384aa'} 75%)`;
+ let bar=$('wardrobeNativeTopColors');if(!bar){bar=document.createElement('div');bar.id='wardrobeNativeTopColors';detail.append(bar);}const br=pageNode('right_cont');if(br)putRect(bar,br.rect);bar.style.background='linear-gradient(90deg,#d29677 0% 33.333%,#222f4e 33.333% 66.666%,#0c4672 66.666% 100%)';
  for(const card of $('wardrobeGrid').children){
   const data=source.skins[card.dataset.skin],template=source.layouts[data?.group]||source.layouts.illust_2,basic=card.dataset.basic==='true';
   const image=template.find(n=>n.path==='left_up_part/icon')?.image;
@@ -62,7 +62,7 @@ export function applyOriginalLayout(skin){
   const reflection=part('native-card-reflection');reflection.src=primary.src;rect(reflection,'/content/back_image_2');reflection.style.transform='scaleY(-1)';
   const mask=part('native-card-mask');mask.src='https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/dyn/ui/skinselect/skin_select_obj/skin_head_back.png';rect(mask,'/content/mask_image');
   const logo=part('native-card-logo');rect(logo,'/content/alpha_part/icon');logo.hidden=basic?card.dataset.elite!=='2':!image;if(!logo.hidden)logo.src=basic?'https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/dyn/arts/ui/brandimage/brand_illust_2.png':art(image.folder,image.name);
-  const faction=part('native-card-faction');faction.hidden=!basic;faction.src='https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/dyn/arts/camplogo/logo_rhodes.png';
+  card.querySelector('.native-card-faction')?.remove();
   const name=card.querySelector('span');name.classList.add('native-card-name');rect(name,'/content/alpha_part/const_text');name.hidden=basic;name.style.fontSize=(Math.min(22,145.5/Math.max(1,name.textContent.length)) * scale)+'px';
   part('native-card-wash','div');card.querySelector('small').hidden=true;
  }
