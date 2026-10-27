@@ -1,4 +1,4 @@
-import {loadOriginalLayouts,applyOriginalLayout,compareSkinOrder,NATIVE_MOTION,nativeCardFrames,nativeDragState,applyLeftMotion} from './original-layout.js?v=19';
+import {loadOriginalLayouts,applyOriginalLayout,compareSkinOrder,NATIVE_MOTION,nativeCardFrames,nativeDragState,applyLeftMotion,skinSeriesCategory} from './original-layout.js?v=20';
 import {showSD,clearSD,releaseSD} from './sd.js?v=10';
 const $=id=>document.getElementById(id),make=(tag,text)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=text;return el;};
 const demo=document.body.dataset.wardrobeDemo==='true';
@@ -149,7 +149,7 @@ function skinThumb(s,compact=false){
  const text=make('span');if(compact)text.append(make('small',s.operator));text.append(make('strong',s.basic?(s.elite>=2?'2정예화':'기본 복장'):s.name),make('small',isSkinOwned(s)?'보유':'미보유'));button.append(image,text);button.onclick=()=>jumpToSkin(s);return button;
 }
 function renderSeries(){
- const id=$('wardrobeSeriesSelect').value,missing=$('wardrobeSeriesMissing').checked,all=catalog.filter(s=>s.charId.startsWith('char_')&&!s.basic&&s.brandId===id).sort((a,b)=>a.operator.localeCompare(b.operator,'ko')||compareSkinOrder(a,b)),rows=all.filter(s=>!missing||!isSkinOwned(s));
+ const id=$('wardrobeSeriesSelect').value,missing=$('wardrobeSeriesMissing').checked,all=catalog.filter(s=>s.charId.startsWith('char_')&&skinSeriesCategory(s)?.id===id).sort((a,b)=>a.operator.localeCompare(b.operator,'ko')||compareSkinOrder(a,b)),rows=all.filter(s=>!missing||!isSkinOwned(s));
  $('wardrobeSeriesCount').textContent=all.length?rows.length+'종':'';const list=$('wardrobeSeriesSkins');list.replaceChildren(...rows.map(s=>skinThumb(s,true)));const empty=$('wardrobeSeriesEmpty');empty.hidden=rows.length>0;empty.textContent=!id?'시리즈를 선택해 주세요.':missing?'이 시리즈에 미보유 스킨이 없습니다.':'등록된 스킨이 없습니다.';
 }
 function renderSidebar(s){
@@ -158,8 +158,10 @@ function renderSidebar(s){
  $('wardrobeSidePrice').textContent=s.basic?'기본 제공':s.price?(s.price.amount===0?'무료 배포':s.price.currency+' '+s.price.amount):s.obtain&&!s.obtain.includes('구매센터')?'보상·교환 획득':'가격 확인 필요';
  const source=$('wardrobePriceSource');source.hidden=!s.price?.source;if(s.price?.source)source.href=s.price.source;
  $('wardrobeSideObtain').textContent=s.obtain||'획득 경로 확인 필요';$('wardrobeSideArtist').textContent=s.artist||'정보 없음';
- const selector=$('wardrobeSeriesSelect');if(!selector.options.length){selector.append(new Option('시리즈 선택',''));const brands=new Map();for(const skin of catalog)if(!skin.basic&&skin.charId.startsWith('char_'))brands.set(skin.brandId,skin.brand?.split('/')[0]||skin.brandTitle);for(const [id,name]of [...brands].sort((a,b)=>a[1].localeCompare(b[1],'ko')))selector.append(new Option(name,id));}
- selector.value=s.basic?'':s.brandId;renderSeries();
+ const selector=$('wardrobeSeriesSelect'),category=skinSeriesCategory(s);$('wardrobeSeriesSection').hidden=!category;
+ if(!category){selector.replaceChildren();$('wardrobeSeriesSkins').replaceChildren();$('wardrobeSeriesCount').textContent='';return;}
+ if(!selector.options.length){const brands=new Map();for(const skin of catalog){const c=skinSeriesCategory(skin);if(c&&skin.charId.startsWith('char_'))brands.set(c.id,c.name);}for(const [id,name]of [...brands].sort((a,b)=>a[1].localeCompare(b[1],'ko')))selector.append(new Option(name,id));}
+ selector.value=category.id;renderSeries();
 }
 $('wardrobeSideChoose').onclick=()=>{$('wardrobeDialog').showModal();$('wardrobeSearch').focus();};
 $('wardrobeSeriesSelect').onchange=renderSeries;$('wardrobeSeriesMissing').onchange=renderSeries;

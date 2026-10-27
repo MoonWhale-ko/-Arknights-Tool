@@ -7,3 +7,11 @@ test('skin details carry actual series identifiers and Korean acquisition descri
  const ling=real.find(s=>s.id==='char_2023_ling@nian#9');assert.equal(ling.groupId,'2023#nian#2');assert.equal(ling.price.amount,21);assert.equal(ling.obtain,'구매센터');assert.ok(ling.description.length>10);
  const reward=real.find(s=>s.id==='char_002_amiya@winter#1');assert.equal(reward.obtain,'임무 보상');assert.equal(reward.price,undefined);
 });
+
+import {skinSeriesCategory} from '../public/wardrobe/original-layout.js';
+test('series collection requires a real game category and group membership',()=>{
+ assert.equal(skinSeriesCategory(real.find(s=>s.id==='char_2023_ling#2')),null);
+ assert.equal(skinSeriesCategory(real.find(s=>s.id==='char_2023_ling@nian#9')).id,'nian');
+ assert.equal(skinSeriesCategory(real.find(s=>s.id==='char_2023_ling@ncg#1')).id,'crossover');
+ assert.equal(skinSeriesCategory({brandId:'nian',groupId:'unknown'}),null);
+});
