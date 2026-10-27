@@ -160,7 +160,6 @@ function renderSidebar(s){
  $('wardrobeSideObtain').textContent=s.obtain||'획득 경로 확인 필요';$('wardrobeSideArtist').textContent=s.artist||'정보 없음';
  // Original content contains in-game color tags; show the text without markup.
  const plain=text=>String(text||'').replace(/<[^>]*>/g,'');$('wardrobeSideContent').textContent=plain(s.content);$('wardrobeSideUsage').textContent=plain(s.usage);$('wardrobeSideDescription').textContent=plain(s.description);$('wardrobeSideDescription').hidden=!s.description;
- const skins=catalog.filter(v=>v.charId===s.charId).sort(compareSkinOrder);$('wardrobeSideCount').textContent=skins.filter(isSkinOwned).length+'/'+skins.length;$('wardrobeSideSkins').replaceChildren(...skins.map(v=>skinThumb(v)));
  const selector=$('wardrobeSeriesSelect');if(!selector.options.length){selector.append(new Option('시리즈 선택',''));const brands=new Map();for(const skin of catalog)if(!skin.basic&&skin.charId.startsWith('char_'))brands.set(skin.brandId,skin.brand?.split('/')[0]||skin.brandTitle);for(const [id,name]of [...brands].sort((a,b)=>a[1].localeCompare(b[1],'ko')))selector.append(new Option(name,id));}
  selector.value=s.basic?'':s.brandId;renderSeries();
 }
