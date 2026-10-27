@@ -57,7 +57,7 @@
 #wardrobeDetail.native-layout #wardrobeSD:before,#wardrobeDetail.native-layout #wardrobeSD:after{display:none}
 #wardrobeDetail.native-layout #wardrobeSD canvas{position:absolute;left:0;top:0;width:512px;height:512px;max-width:none;max-height:none}
 #wardrobeDetail.native-layout .wardrobe-strip{overflow:visible;perspective:none}
-#wardrobeDetail.native-layout .wardrobe-card{left:calc(50% - var(--native-card-width)/2);width:var(--native-card-width);height:var(--native-card-height);transform:translateX(calc(var(--card-offset,0)*50%));background:#000}
+#wardrobeDetail.native-layout .wardrobe-card{position:absolute;left:calc(50% - var(--native-card-width)/2);width:var(--native-card-width);height:var(--native-card-height);transform:translateX(calc(var(--card-offset,0)*50%));background:#000}
 #wardrobeDetail.native-layout .wardrobe-card>img:first-child{width:100%;height:100%;object-fit:cover}
 #wardrobeDetail.native-layout .native-card-logo{position:absolute;left:8%;top:52%;width:84%;height:24%;object-fit:contain;filter:brightness(0) invert(1)}
 #wardrobeDetail.native-layout #wardrobePrev,#wardrobeDetail.native-layout #wardrobeNext{position:absolute;z-index:12;border:0;background:transparent;color:white;font-size:38px;line-height:1;padding:0;margin:0;filter:drop-shadow(0 2px 2px #0008)}
