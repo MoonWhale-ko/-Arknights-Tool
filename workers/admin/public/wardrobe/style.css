@@ -71,3 +71,7 @@
 #wardrobeNativeScene .native-text>div{min-width:0;flex-shrink:0}
 #wardrobeDetail.native-layout #wardrobeArt{object-fit:fill;filter:none}
 #wardrobeNativeScene #wardrobeArtStatus{position:absolute;left:24px;top:400px;width:700px;color:#222;z-index:100}
+
+#wardrobeNativeScene .native-node[data-path$="/content_scroll"]{scrollbar-width:thin;overflow-x:hidden!important}
+#wardrobeNativeScene .native-node[data-path$="/content_scroll"]>.native-node,#wardrobeNativeScene .native-content{width:100%!important;max-width:100%}
+#wardrobeDetail.native-layout .wardrobe-outfit-badge b{display:block;white-space:normal;overflow-wrap:anywhere;font-size:16px;line-height:1.15}
