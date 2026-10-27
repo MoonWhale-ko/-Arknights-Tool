@@ -16,7 +16,9 @@ const rgba=c=>`rgba(${Math.round((c?.r??1)*255)},${Math.round((c?.g??1)*255)},${
 function fillText(el,text){const parts=String(text).split(/(<\/?color(?:\s+name=[^>]+)?>)/g);let target=el;for(const part of parts){const match=part.match(/^<color\s+name=(#[\da-f]{6,8})>$/i);if(match){const span=document.createElement('span');span.style.color=match[1];target.append(span);target=span;}else if(part==='</color>')target=el;else if(!part.startsWith('<color'))target.append(document.createTextNode(part));}}
 function putRect(el,rect){const [x,y,w,h]=rect;Object.assign(el.style,{left:x+'px',top:y+'px',width:w+'px',height:h+'px'});}
 function pageNode(name){return Object.values(source.page).find(n=>n.name===name);}
-export function compareSkinOrder(a,b){return Number(!a.basic)-Number(!b.basic)||(a.basic?(a.elite||0)-(b.elite||0):(source?.skins[a.id]?.released||0)-(source?.skins[b.id]?.released||0))||(source?.skins[a.id]?.order||0)-(source?.skins[b.id]?.order||0)||a.id.localeCompare(b.id);}
+export function compareSkinOrder(a,b,records=source?.skins||{}){const order=s=>Number.isFinite(records[s.id]?.order)?records[s.id].order:s.basic?-3+(s.elite||0):Number.MAX_SAFE_INTEGER;return order(a)-order(b)||a.id.localeCompare(b.id);}
+export function colourBands(rows,selectedId,records=source?.skins||{}){const index=rows.findIndex(s=>s.id===selectedId);const colours=list=>list.map(s=>({id:s.id,color:s.basic?'#fff':records[s.id]?.colors?.[0]||s.accent||'#fff'}));return index<0?{left:[],right:[]}:{left:colours(rows.slice(0,index)),right:colours(rows.slice(index+1))};}
+
 export function applyOriginalLayout(skin){
  if(!source)return;const row=source.skins[skin.id],group=row?.group||'illust_2',nodes=source.layouts[group]||source.layouts.illust_2;
  const detail=$('wardrobeDetail'),stage=detail.querySelector('.wardrobe-stage');detail.classList.add('native-layout');
@@ -51,7 +53,9 @@ export function applyOriginalLayout(skin){
  const badge=detail.querySelector('.wardrobe-outfit-badge'),banner=pageNode('back_img');if(banner)putRect(badge,banner.rect);
  const accent=skin.basic?'#fff':row?.colors?.[0]||row?.colors?.[2]||skin.accent||'#4384aa';badge.style.backgroundColor=accent;badge.style.color=skin.basic?'#222':'#fff';$('wardrobeBadge').style.fontSize=skin.basic?'24px':'16px';badge.querySelector('small').textContent=skin.basic?'DEFAULT OUTFIT':'#OUTFIT OF THE DAY';$('wardrobeBadge').textContent=skin.basic?(skin.elite>=2?'II':'I'):skin.brand;
  let notice=$('wardrobeWearNotice');if(!notice){notice=document.createElement('p');notice.id='wardrobeWearNotice';detail.append(notice);}const nr=source.page['skin_select_state/right_part/down_container/wear_state/const_text'];if(nr)putRect(notice,nr.rect);notice.textContent='선택한 복장은 이 미리보기에만 적용됩니다.';
- let bar=$('wardrobeNativeTopColors');if(!bar){bar=document.createElement('div');bar.id='wardrobeNativeTopColors';detail.append(bar);}const br=pageNode('right_cont');if(br)putRect(bar,br.rect);bar.style.background='linear-gradient(90deg,#d29677 0% 33.333%,#222f4e 33.333% 66.666%,#0c4672 66.666% 100%)';
+ const cards=[...$('wardrobeGrid').children].map(card=>({id:card.dataset.skin,basic:card.dataset.basic==='true'}));const bands=colourBands(cards,skin.id);
+ for(const [side,id,name]of [['left','wardrobeNativeTopColorsLeft','left_cont'],['right','wardrobeNativeTopColors','right_cont']]){let bar=$(id);if(!bar){bar=document.createElement('div');bar.id=id;detail.append(bar);}const rect=pageNode(name);if(rect)putRect(bar,rect.rect);bar.style.background='none';bar.style.display='flex';bar.style.position='absolute';bar.style.zIndex='3';bar.style.pointerEvents='none';bar.replaceChildren();for(const item of bands[side]){const part=document.createElement('div');part.dataset.skin=item.id;part.style.flex='1 1 0';part.style.minWidth='0';part.style.height='100%';part.style.backgroundColor=item.color;bar.append(part);}}
+
  for(const card of $('wardrobeGrid').children){
   const data=source.skins[card.dataset.skin],template=source.layouts[data?.group]||source.layouts.illust_2,basic=card.dataset.basic==='true';
   const image=template.find(n=>n.path==='left_up_part/icon')?.image;
