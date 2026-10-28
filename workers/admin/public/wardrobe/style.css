@@ -200,3 +200,5 @@ main:has(#wardrobeDetail:not([hidden])) #wardrobeSidebar{display:block}
 #wardrobeInlineRarities button::before{content:none}
 #wardrobeInlineRarities button:hover{background:var(--z-hover)}
 #wardrobeInlineRarities button[aria-pressed=true]{background:var(--z-selected);color:var(--z-on-selected);box-shadow:inset 0 -3px var(--z-accent);font-weight:700}
+
+@media(max-width:900px){main:has(#wardrobeDetail:not([hidden])) #wardrobeSidebar{top:var(--wardrobe-mobile-canvas-height,52%);bottom:0;height:auto;margin-top:0}#wardrobe:has(#wardrobeDetail:not([hidden])){margin-bottom:0}}

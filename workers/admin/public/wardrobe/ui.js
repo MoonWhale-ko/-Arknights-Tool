@@ -158,11 +158,11 @@ function fitCollection(){
  const detail=$('wardrobeDetail'),wrap=$('wardrobe');
  if(detail.hidden){wrap.style.removeProperty('--collection-height');detail.style.removeProperty('left');return;}
  const barBottom=document.querySelector('.zoot-topbar')?.getBoundingClientRect().bottom||0;
- const fullHeight=Math.max(1,(window.visualViewport?.height??window.innerHeight)-barBottom);const side=$('wardrobeSidebar');const available=Math.max(1,fullHeight-(window.matchMedia('(max-width:900px)').matches?side.getBoundingClientRect().height:0));
+ const fullHeight=Math.max(1,(window.visualViewport?.height??window.innerHeight)-barBottom),mobile=window.matchMedia('(max-width:900px)').matches;const available=Math.max(1,mobile?fullHeight*.52:fullHeight);
  const scale=Math.min(wrap.clientWidth/1535,available/862);
  detail.style.setProperty('--collection-scale',String(scale));
  detail.style.left='0px';
- wrap.style.setProperty('--collection-height',available+'px');
+ const canvasHeight=scale*862;wrap.style.setProperty('--collection-height',(mobile?canvasHeight:available)+'px');wrap.closest('main').style.setProperty('--wardrobe-mobile-canvas-height',canvasHeight+'px');
 }
 new ResizeObserver(fitCollection).observe($('wardrobe'));
 new MutationObserver(()=>{fitCollection();syncWardrobeBackButton();}).observe($('wardrobeDetail'),{attributes:true,attributeFilter:['hidden']});
