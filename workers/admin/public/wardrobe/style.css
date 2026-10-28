@@ -160,3 +160,11 @@ main:has(#wardrobeDetail:not([hidden])) #wardrobeSidebar{display:block}
 @media(max-width:850px){.wardrobe-roster-toolbar{flex-wrap:wrap}.wardrobe-roster-toolbar #wardrobeRosterSearch{flex-basis:calc(100% - 250px)}.wardrobe-roster-sort{margin-left:auto}}
 @media(max-width:600px){.wardrobe-roster-toolbar{grid-template-columns:repeat(3,minmax(0,1fr))}#wardrobeRosterGroup{grid-column:2/-1}.wardrobe-roster-sort{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) 42px;width:100%;margin:0}.wardrobe-roster-sort button{font-size:12px;min-width:0;padding:0 8px}}
 
+
+/* Draw the outline along the clipped corners rather than cutting a rectangular border. */
+#wardrobeRoster .class-tab,.wardrobe-roster-sort button,.wardrobe-roster-toolbar>button,.wardrobe-filter-options button,.wardrobe-filter-footer button{--button-fill:var(--z-input);--button-edge:var(--z-border);position:relative;isolation:isolate;box-sizing:border-box;border:0;border-radius:0;background:var(--button-edge);clip-path:polygon(5px 0,100% 0,100% calc(100% - 5px),calc(100% - 5px) 100%,0 100%,0 5px);box-shadow:none;line-height:1.3}
+#wardrobeRoster .class-tab::before,.wardrobe-roster-sort button::before,.wardrobe-roster-toolbar>button::before,.wardrobe-filter-options button::before,.wardrobe-filter-footer button::before{content:'';position:absolute;inset:1px;z-index:-1;background:var(--button-fill);clip-path:polygon(4px 0,100% 0,100% calc(100% - 4px),calc(100% - 4px) 100%,0 100%,0 4px);pointer-events:none}
+#wardrobeRoster .class-tab:hover,.wardrobe-roster-sort button:hover,.wardrobe-roster-toolbar>button:hover,.wardrobe-filter-options button:hover,.wardrobe-filter-footer button:hover{--button-fill:var(--z-hover)}
+#wardrobeRoster .class-tab[aria-pressed=true],.wardrobe-roster-sort [data-sort][aria-pressed=true],.wardrobe-roster-toolbar>button.is-active,.wardrobe-roster-toolbar>button[aria-pressed=true],.wardrobe-filter-options button[aria-pressed=true],#wardrobeFilterApply{--button-fill:var(--z-selected);--button-edge:var(--z-accent);background:var(--button-edge);color:var(--z-on-selected);box-shadow:none}
+#wardrobeRosterSortDirection{border:0}
+.wardrobe-roster-toolbar>button,.wardrobe-roster-sort button{height:42px;min-height:42px}
