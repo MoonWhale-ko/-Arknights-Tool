@@ -167,7 +167,7 @@ function renderSeries(){
  const id=skinSeriesCategory(catalog.find(s=>s.id===selectedSkin))?.id,all=catalog.filter(s=>s.charId.startsWith('char_')&&skinSeriesCategory(s)?.id===id).sort((a,b)=>a.operator.localeCompare(b.operator,'ko')||compareSkinOrder(a,b));seriesRows=all;
  $('wardrobeSeriesCount').textContent=all.length?seriesRows.length+'종':'';
  const current=seriesRows.findIndex(s=>s.id===selectedSkin);seriesPosition=Math.max(0,current);
- const list=$('wardrobeSeriesSkins');list.replaceChildren(...seriesRows.map((skin,i)=>{const card=skinThumb(skin,true);card.classList.add('wardrobe-series-card');const text=card.querySelector('span');text.replaceChildren(make('small',(i+1)+'/'+seriesRows.length),make('strong',skin.operator),make('small',skin.name));card.onclick=()=>{if(seriesSuppressClick)return;if(i===Math.round(seriesPosition))jumpToSkin(skin);else moveSeries(i);};return card;}));
+ const list=$('wardrobeSeriesSkins');list.replaceChildren(...seriesRows.map((skin,i)=>{const card=skinThumb(skin,true);card.classList.add('wardrobe-series-card');const text=card.querySelector('span');text.replaceChildren(make('strong',skin.operator),make('small',skin.name),make('small',(i+1)+'/'+seriesRows.length));card.onclick=()=>{if(seriesSuppressClick)return;if(i===Math.round(seriesPosition))jumpToSkin(skin);else moveSeries(i);};return card;}));
  $('wardrobeSeriesCarousel').hidden=!seriesRows.length;
  const empty=$('wardrobeSeriesEmpty');empty.hidden=seriesRows.length>0;empty.textContent='등록된 스킨이 없습니다.';paintSeries();
 }
@@ -186,7 +186,7 @@ function renderSidebar(s){
  const owned=isSkinOwned(s),status=$('wardrobeSideOwned');status.textContent=owned?'보유':'미보유';status.classList.toggle('is-owned',owned);
  const price=$('wardrobeSidePrice');price.replaceChildren();
  if(s.basic||s.price?.amount===0)price.textContent='무료';
- else if(s.price?.currency==='순오리지늄'){const icon=make('img');icon.src='https://raw.githubusercontent.com/yuanyan3060/ArknightsGameResource/main/item/DIAMOND.png';icon.alt='순오리지늄';price.append(icon,document.createTextNode(s.price.amount.toLocaleString('ko-KR')));}
+ else if(s.price?.currency==='순오리지늄'){const icon=document.createElementNS('http://www.w3.org/2000/svg','svg');icon.setAttribute('viewBox','0 0 32 32');icon.setAttribute('role','img');icon.setAttribute('aria-label','순오리지늄');icon.innerHTML='<path fill="currentColor" d="m13 2 9 4 3 15-8 9-10-5L5 11Zm1.2 3L8 12l2 11 6.4 3.2L13 16Zm2.2.3L15.5 15l7 4.4-2.3-11.6ZM16 18l2 8 4.4-5.1Z"/>';price.append(icon,document.createTextNode(s.price.amount.toLocaleString('ko-KR')));}
  else if(s.price?.currency==='KRW'&&Number.isFinite(s.price.amount))price.textContent='₩'+s.price.amount.toLocaleString('ko-KR');
  else price.textContent='—';
  $('wardrobeSideObtain').textContent=s.obtain||'획득 경로 확인 필요';

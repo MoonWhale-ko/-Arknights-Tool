@@ -130,3 +130,5 @@ main:has(#wardrobeDetail:not([hidden])) #wardrobeSidebar{display:block}
 #wardrobeSidePrice{display:flex;align-items:center;gap:6px}#wardrobeSidePrice img{width:28px;height:28px;object-fit:contain}
 #wardrobeSeriesSkins .wardrobe-series-card>img{height:100%}
 #wardrobeSeriesSkins .wardrobe-series-card>span{bottom:10px;display:flex;flex-direction:column;gap:2px}
+
+.wardrobe-side-stats{border-bottom:0;padding-bottom:8px}.wardrobe-side-meta{margin-top:4px}#wardrobeSidePrice svg{width:24px;height:24px;flex:none;color:var(--z-text)}
