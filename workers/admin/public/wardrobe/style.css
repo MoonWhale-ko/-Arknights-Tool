@@ -160,4 +160,3 @@ main:has(#wardrobeDetail:not([hidden])) #wardrobeSidebar{display:block}
 @media(max-width:850px){.wardrobe-roster-toolbar{flex-wrap:wrap}.wardrobe-roster-toolbar #wardrobeRosterSearch{flex-basis:calc(100% - 250px)}.wardrobe-roster-sort{margin-left:auto}}
 @media(max-width:600px){.wardrobe-roster-toolbar{grid-template-columns:repeat(3,minmax(0,1fr))}#wardrobeRosterGroup{grid-column:2/-1}.wardrobe-roster-sort{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) 42px;width:100%;margin:0}.wardrobe-roster-sort button{font-size:12px;min-width:0;padding:0 8px}}
 
-.wardrobe-roster-card.operator-unowned .wardrobe-roster-visual img{filter:grayscale(1);opacity:.55}.wardrobe-roster-ownership{font-size:11px;color:var(--z-accent)}.operator-unowned .wardrobe-roster-ownership{color:var(--z-muted)}
