@@ -64,7 +64,7 @@ if(!demo){window.addEventListener('arknights-account-updated',readImportedSkins)
 $('wardrobeLoad').addEventListener('click',async()=>{if(demo){location.href='/preview/wardrobe?import=1';return;}try{const {openAccountImport}=await import('/preview/assets/js/account-menu.mjs');await openAccountImport();}catch{$('wardrobeMessage').textContent='계정 가져오기를 열지 못했습니다. 새로고침 후 다시 시도해 주세요.';}});
 
 const wardrobeProfessions={PIONEER:'뱅가드',WARRIOR:'가드',TANK:'디펜더',SNIPER:'스나이퍼',CASTER:'캐스터',MEDIC:'메딕',SUPPORT:'서포터',SPECIAL:'스페셜리스트'};
-let rosterFilters={professions:new Set(),rarities:new Set(),ownership:'all'},rosterGrouped=false,rosterSort='rarity',rosterSortReverse=false;
+let rosterFilters={professions:new Set(),rarities:new Set([1,2,3,4,5,6]),ownership:'all'},rosterGrouped=false,rosterSort='rarity',rosterSortReverse=false;
 function renderRosterProfessionTabs(){
  const tabs=$('wardrobeProfessionTabs');tabs.replaceChildren();
  for(const [id,label]of [['','전체'],...Object.entries(wardrobeProfessions)]){const button=make('button');button.type='button';button.className='class-tab';button.dataset.class=id;button.title=label;button.setAttribute('aria-label',label);button.setAttribute('aria-pressed',String(id?rosterFilters.professions.has(id):!rosterFilters.professions.size));
@@ -77,7 +77,7 @@ function renderRoster(){
  const source=characters;
  const query=$('wardrobeRosterSearch').value.trim().toLocaleLowerCase('ko'),filter=rosterFilters.ownership,sort=rosterSort,order=Object.keys(wardrobeProfessions);
  const rows=source.filter(c=>c.charId.startsWith('char_')&&(!rosterMetadataLoaded||rosterMetadata[c.charId])).map(c=>{const skins=groups.get(c.charId)||[],outfits=skins.filter(s=>!s.basic),meta=rosterMetadata[c.charId]||{};return {c,skins,name:skins[0]?.operator||c.charId,rarity:meta.rarity||0,profession:meta.profession||'',owned:outfits.filter(s=>owned.has(s.id)).length,total:outfits.length};});
- const filtered=rows.filter(r=>(!query||[r.name,...r.skins.map(s=>s.name)].some(v=>v.toLocaleLowerCase('ko').includes(query)))&&(!rosterFilters.professions.size||rosterFilters.professions.has(r.profession))&&(!rosterFilters.rarities.size||rosterFilters.rarities.has(r.rarity))&&(filter!=='owned'||r.owned>0)&&(filter!=='missing'||r.owned<r.total));
+ const filtered=rows.filter(r=>(!query||[r.name,...r.skins.map(s=>s.name)].some(v=>v.toLocaleLowerCase('ko').includes(query)))&&(!rosterFilters.professions.size||rosterFilters.professions.has(r.profession))&&rosterFilters.rarities.has(r.rarity)&&(filter!=='owned'||r.owned>0)&&(filter!=='missing'||r.owned<r.total));
  const alphabetical=(a,b)=>a.name.localeCompare(b.name,'ko'),professionRank=r=>order.includes(r.profession)?order.indexOf(r.profession):99;
  const compare=(a,b)=>sort==='name'?alphabetical(a,b):sort==='owned'?b.owned-a.owned||b.rarity-a.rarity||alphabetical(a,b):b.rarity-a.rarity||professionRank(a)-professionRank(b)||alphabetical(a,b);
  filtered.sort((a,b)=>(rosterGrouped?professionRank(a)-professionRank(b):0)||(rosterSortReverse?-1:1)*compare(a,b));
@@ -108,7 +108,7 @@ function fillRosterFilterDialog(filters){for(const button of rosterFilterDialog.
 $('wardrobeRosterFilterOpen').onclick=()=>{fillRosterFilterDialog(rosterFilters);rosterFilterDialog.showModal();};
 for(const button of rosterFilterDialog.querySelectorAll('[data-rarity]'))button.onclick=()=>button.setAttribute('aria-pressed',String(button.getAttribute('aria-pressed')!=='true'));
 for(const button of rosterFilterDialog.querySelectorAll('[data-ownership]'))button.onclick=()=>{for(const other of rosterFilterDialog.querySelectorAll('[data-ownership]'))other.setAttribute('aria-pressed',String(other===button));};
-$('wardrobeFilterReset').onclick=()=>fillRosterFilterDialog({professions:new Set(),rarities:new Set(),ownership:'all'});
+$('wardrobeFilterReset').onclick=()=>fillRosterFilterDialog({professions:new Set(),rarities:new Set([1,2,3,4,5,6]),ownership:'all'});
 for(const id of ['wardrobeFilterClose','wardrobeFilterCancel'])$(id).onclick=()=>rosterFilterDialog.close();
 rosterFilterDialog.addEventListener('click',e=>{if(e.target!==rosterFilterDialog)return;const r=rosterFilterDialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)rosterFilterDialog.close();});
 $('wardrobeFilterApply').onclick=()=>{rosterFilters={professions:new Set(rosterFilters.professions),rarities:new Set([...rosterFilterDialog.querySelectorAll('[data-rarity][aria-pressed="true"]')].map(b=>Number(b.dataset.rarity))),ownership:rosterFilterDialog.querySelector('[data-ownership][aria-pressed="true"]')?.dataset.ownership||'all'};rosterFilterDialog.close();renderRoster();};
