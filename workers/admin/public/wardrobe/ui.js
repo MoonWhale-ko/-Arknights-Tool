@@ -259,17 +259,34 @@ if(!demo&&new URLSearchParams(location.search).get('import')==='1')$('wardrobeLo
 $('wardrobeSkinOwnership').onchange=e=>{rosterFilters.ownership=e.target.value;renderRoster();};
 for(const button of $('wardrobeInlineRarities').querySelectorAll('button'))button.onclick=()=>{const n=Number(button.dataset.inlineRarity);if(rosterFilters.rarities.has(n))rosterFilters.rarities.delete(n);else rosterFilters.rarities.add(n);renderRoster();};
 
-let costTimer=0,costOpener;
+let costTimer=0,costOpener,costRun=0;
 const costDialog=make('dialog');costDialog.className='wardrobe-cost-dialog';costDialog.setAttribute('aria-label','보유 스킨 재화 환산');
 costDialog.innerHTML='<button type="button" class="wardrobe-cost-close" aria-label="닫기">×</button><div class="wardrobe-cost-stage"><p class="wardrobe-cost-sentence" role="status" aria-live="polite"></p></div><p class="wardrobe-cost-basis" hidden>등록 가격 합계 · 185개당 119,000원 · 2026 최저시급 10,320원 기준<br>실제 결제액과 다를 수 있습니다.</p>';
 document.body.append(costDialog);
 costDialog.querySelector('button').onclick=()=>costDialog.close();
-costDialog.addEventListener('close',()=>{clearTimeout(costTimer);costTimer=0;costDialog.getAnimations({subtree:true}).forEach(a=>a.cancel());costOpener?.focus();});
+costDialog.addEventListener('close',()=>{costRun++;clearTimeout(costTimer);costTimer=0;costDialog.getAnimations({subtree:true}).forEach(a=>a.cancel());costOpener?.focus();});
 function showCollectionCost(){
  if(costDialog.open)return;costOpener=document.activeElement;
  const {total}=collectionOriginiteCost(catalog,owned),{won,hours}=originiteCashEquivalent(total),sentence=costDialog.querySelector('.wardrobe-cost-sentence'),basis=costDialog.querySelector('.wardrobe-cost-basis');
  const lines=['스킨에 쓴 순오리지늄 '+total.toLocaleString('ko-KR')+'개','현금으로 '+won.toLocaleString('ko-KR')+' 원',hours.toLocaleString('ko-KR',{minimumFractionDigits:1,maximumFractionDigits:1})+' 시간 동안 일한 돈'];
  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;basis.hidden=true;sentence.textContent='';costDialog.showModal();
- function reveal(index){if(!costDialog.open)return;sentence.textContent=lines[index];if(!reduce)sentence.animate([{opacity:0,transform:'translateY(12px)'},{opacity:1,transform:'translateY(0)'}],{duration:1600,easing:'ease-in-out'});if(index<lines.length-1)costTimer=setTimeout(()=>{if(!reduce)sentence.animate([{opacity:1},{opacity:0}],{duration:1200,easing:'ease-in-out',fill:'forwards'}).finished.then(()=>{if(!costDialog.open)return;sentence.getAnimations().forEach(a=>a.cancel());reveal(index+1);}).catch(()=>{});else reveal(index+1);},4600);else basis.hidden=false;}
+ const run=++costRun;
+ async function reveal(index){
+  if(!costDialog.open||run!==costRun)return;
+  sentence.getAnimations().forEach(a=>a.cancel());sentence.style.opacity='0';sentence.textContent=lines[index];basis.hidden=index!==lines.length-1;
+  if(reduce){sentence.style.opacity='1';if(index<lines.length-1)costTimer=setTimeout(()=>reveal(index+1),4600);return;}
+  try{
+   await sentence.animate([{opacity:0},{opacity:1}],{duration:1600,easing:'ease-in-out',fill:'forwards'}).finished;
+   if(!costDialog.open||run!==costRun)return;
+   costTimer=setTimeout(async()=>{
+    if(!costDialog.open||run!==costRun)return;
+    try{await sentence.animate([{opacity:1},{opacity:0}],{duration:1400,easing:'ease-in-out',fill:'forwards'}).finished;}catch{return;}
+    if(!costDialog.open||run!==costRun)return;
+    if(index<lines.length-1)costTimer=setTimeout(()=>reveal(index+1),500);
+    else costDialog.close();
+   },2400);
+  }catch{}
+ }
+
  reveal(0);
 }
