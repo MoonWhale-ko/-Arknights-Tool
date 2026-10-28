@@ -1,3 +1,4 @@
+import {collectionOriginiteCost} from './collection-cost.mjs?v=1';
 import {loadOriginalLayouts,applyOriginalLayout,compareSkinOrder,NATIVE_MOTION,nativeCardFrames,nativeDragState,applyLeftMotion,skinSeriesCategory,skinAssetCharacter} from './original-layout.js?v=21';
 import {showSD,clearSD,releaseSD} from './sd.js?v=12';
 const $=id=>document.getElementById(id),make=(tag,text)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=text;return el;};
@@ -238,7 +239,7 @@ function renderSidebar(s){
  const owned=isSkinOwned(s),status=$('wardrobeSideOwned');status.textContent=owned?'보유':'미보유';status.classList.toggle('is-owned',owned);
  const price=$('wardrobeSidePrice');price.replaceChildren();
  if(s.basic||s.price?.amount===0||s.price?.currency==='이벤트 재화')price.textContent='무료';
- else if(s.price?.currency==='순오리지늄'){const icon=make('img');icon.src='https://raw.githubusercontent.com/MoonWhale-ko/-Arknights-Tool/985c0b2f3b64ef7ef1f7394f7a75aab17817ade2/assets/icons/currency/originite-prime.png?v=2';icon.alt='순오리지늄';price.append(icon,document.createTextNode(s.price.amount.toLocaleString('ko-KR')));}
+ else if(s.price?.currency==='순오리지늄'){const icon=make('img');icon.src='https://raw.githubusercontent.com/MoonWhale-ko/-Arknights-Tool/985c0b2f3b64ef7ef1f7394f7a75aab17817ade2/assets/icons/currency/originite-prime.png?v=2';icon.alt='순오리지늄';const secret=make('button');secret.type='button';secret.className='wardrobe-cost-trigger';secret.setAttribute('aria-label','보유 스킨의 순오리지늄 합계 보기');secret.append(icon);secret.onclick=showCollectionCost;price.append(secret,document.createTextNode(s.price.amount.toLocaleString('ko-KR')));}
  else if(s.price?.currency==='KRW'&&Number.isFinite(s.price.amount))price.textContent='₩'+s.price.amount.toLocaleString('ko-KR');
  else price.textContent='—';
  const routes=acquisitionRoutes[s.id]?.routes??(s.obtain?s.obtain.split(',').map(v=>v.trim()).filter(Boolean):['획득 경로 확인 필요']);$('wardrobeSideObtain').replaceChildren(...[...new Set(routes)].map(route=>make('span',route)));
@@ -257,3 +258,21 @@ if(!demo&&new URLSearchParams(location.search).get('import')==='1')$('wardrobeLo
 
 $('wardrobeSkinOwnership').onchange=e=>{rosterFilters.ownership=e.target.value;renderRoster();};
 for(const button of $('wardrobeInlineRarities').querySelectorAll('button'))button.onclick=()=>{const n=Number(button.dataset.inlineRarity);if(rosterFilters.rarities.has(n))rosterFilters.rarities.delete(n);else rosterFilters.rarities.add(n);renderRoster();};
+
+let costFrame=0,costOpener;
+const costDialog=make('dialog');costDialog.className='wardrobe-cost-dialog';costDialog.setAttribute('aria-labelledby','wardrobeCostTitle');
+costDialog.innerHTML='<button type="button" class="wardrobe-cost-close" aria-label="닫기">×</button><p class="wardrobe-cost-eyebrow">YOUR COLLECTION</p><h2 id="wardrobeCostTitle">옷장에 담긴 순오리지늄</h2><div class="wardrobe-cost-reveal"><img alt="" aria-hidden="true"><strong>0</strong></div><p class="wardrobe-cost-count"></p><p class="wardrobe-cost-note">보유 스킨의 등록 가격 합계입니다.<br>교환권·무료 지급·과거 가격에 따라 실제 사용량과 다를 수 있습니다.</p>';
+document.body.append(costDialog);
+costDialog.querySelector('button').onclick=()=>costDialog.close();
+costDialog.addEventListener('close',()=>{cancelAnimationFrame(costFrame);costFrame=0;costDialog.getAnimations({subtree:true}).forEach(a=>a.cancel());costOpener?.focus();});
+costDialog.addEventListener('click',e=>{if(e.target!==costDialog)return;const r=costDialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)costDialog.close();});
+function showCollectionCost(){
+ if(costDialog.open)return;costOpener=document.activeElement;
+ const {total,count}=collectionOriginiteCost(catalog,owned),number=costDialog.querySelector('strong'),image=costDialog.querySelector('img');
+ image.src=$('wardrobeSidePrice').querySelector('img').src;costDialog.querySelector('.wardrobe-cost-count').textContent='보유 스킨 '+count.toLocaleString('ko-KR')+'벌 기준';
+ const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;number.textContent=reduce?total.toLocaleString('ko-KR'):'0';number.setAttribute('aria-label',total.toLocaleString('ko-KR')+' 순오리지늄');number.setAttribute('aria-live','off');costDialog.showModal();
+ if(reduce)return;
+ costDialog.animate([{opacity:0,transform:'translateY(16px) scale(.96)'},{opacity:1,transform:'translateY(0) scale(1)'}],{duration:300,easing:'ease-out'});
+ image.animate([{transform:'translateY(-18px) rotate(-12deg)',opacity:0},{transform:'translateY(0) rotate(0)',opacity:1}],{duration:650,easing:'cubic-bezier(.2,.8,.2,1)'});
+ const start=performance.now();function tick(now){if(!costDialog.open)return;const t=Math.min(1,(now-start)/1800);number.textContent=Math.round(total*(1-Math.pow(1-t,3))).toLocaleString('ko-KR');if(t<1)costFrame=requestAnimationFrame(tick);else{costFrame=0;number.animate([{transform:'scale(1)'},{transform:'scale(1.08)'},{transform:'scale(1)'}],{duration:360});}}costFrame=requestAnimationFrame(tick);
+}

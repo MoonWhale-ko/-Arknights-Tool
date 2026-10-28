@@ -6,7 +6,7 @@ export async function buildWardrobe(out){
  const source=path.join(root,'workers/admin/public/wardrobe'),dest=path.join(out,'wardrobe');
  await mkdir(dest,{recursive:true});
  for(const file of ['catalog.json','sd-models.json','native-scene.json.gz','acquisition-routes.json','roster-metadata.json','btn-back.png'])await cp(path.join(source,file),path.join(dest,file));
- for(const file of ['ui.js','sd.js','original-layout.js','style.css']){
+ for(const file of ['ui.js','collection-cost.mjs','sd.js','original-layout.js','style.css']){
   let text=await readFile(path.join(source,file),'utf8');
   text=text.replaceAll('/preview/assets/','./assets/').replaceAll('/wardrobe/',file==='style.css'?'':'./wardrobe/');
   if(file==='style.css')text=text.replaceAll("url('./assets/","url('../assets/");
