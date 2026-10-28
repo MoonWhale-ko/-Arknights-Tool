@@ -65,8 +65,13 @@ $('wardrobeLoad').addEventListener('click',async()=>{if(demo)return;try{const {o
 
 const wardrobeProfessions={PIONEER:'뱅가드',WARRIOR:'가드',TANK:'디펜더',SNIPER:'스나이퍼',CASTER:'캐스터',MEDIC:'메딕',SUPPORT:'서포터',SPECIAL:'스페셜리스트'};
 let rosterFilters={professions:new Set(),rarities:new Set(),ownership:'all'},rosterGrouped=false;
+function renderRosterProfessionTabs(){
+ const tabs=$('wardrobeProfessionTabs');tabs.replaceChildren();
+ for(const [id,label]of [['','전체'],...Object.entries(wardrobeProfessions)]){const button=make('button');button.type='button';button.className='class-tab';button.dataset.class=id;button.title=label;button.setAttribute('aria-label',label);button.setAttribute('aria-pressed',String(id?rosterFilters.professions.has(id):!rosterFilters.professions.size));
+ if(id){const glyph=make('span');glyph.className='class-glyph';glyph.setAttribute('aria-hidden','true');glyph.style.setProperty('--icon-x',String(-Object.keys(wardrobeProfessions).indexOf(id)));glyph.style.setProperty('--icon-y','0');button.append(glyph);}button.append(make('span',label));button.onclick=()=>{rosterFilters.professions=new Set(id?[id]:[]);renderRoster();};tabs.append(button);}
+}
 function renderRoster(){
- if(!catalog||!owned)return;
+ if(!catalog||!owned)return;renderRosterProfessionTabs();
  const grid=$('wardrobeRosterGrid'),groups=new Map();grid.replaceChildren();
  for(const skin of catalog){if(!groups.has(skin.charId))groups.set(skin.charId,[]);groups.get(skin.charId).push(skin);}
  const source=characters.length?characters:[...new Set(catalog.filter(s=>owned.has(s.id)).map(s=>s.charId))].map(charId=>({charId}));
@@ -76,7 +81,7 @@ function renderRoster(){
  const alphabetical=(a,b)=>a.name.localeCompare(b.name,'ko'),professionRank=r=>order.includes(r.profession)?order.indexOf(r.profession):99;
  const compare=(a,b)=>sort==='name'?alphabetical(a,b):sort==='owned'?b.owned-a.owned||b.rarity-a.rarity||alphabetical(a,b):b.rarity-a.rarity||professionRank(a)-professionRank(b)||alphabetical(a,b);
  filtered.sort((a,b)=>(rosterGrouped?professionRank(a)-professionRank(b):0)||compare(a,b));
- const labels=[...order.filter(p=>rosterFilters.professions.has(p)).map(p=>wardrobeProfessions[p]),...[...rosterFilters.rarities].sort((a,b)=>b-a).map(n=>n+'★'),...(filter==='all'?[]:[filter==='owned'?'스킨 보유':'미보유 스킨 있음'])];
+ const labels=[...[...rosterFilters.rarities].sort((a,b)=>b-a).map(n=>n+'★'),...(filter==='all'?[]:[filter==='owned'?'스킨 보유':'미보유 스킨 있음'])];
  $('wardrobeRosterFilterSummary').textContent=labels.join(' · ');$('wardrobeRosterFilterSummary').hidden=!labels.length;$('wardrobeRosterFilterOpen').textContent='필터'+(labels.length?' · '+labels.length:'');$('wardrobeRosterFilterOpen').classList.toggle('is-active',!!labels.length);
  $('wardrobeRosterSummary').textContent=filtered.length+'명 · 스킨 '+filtered.reduce((n,r)=>n+r.owned,0)+' / '+filtered.reduce((n,r)=>n+r.total,0);
  $('wardrobeRosterEmpty').hidden=filtered.length>0;
@@ -93,14 +98,14 @@ function renderRoster(){
 $('wardrobeRosterSort').onchange=renderRoster;
 $('wardrobeRosterGroup').onclick=()=>{rosterGrouped=!rosterGrouped;$('wardrobeRosterGroup').setAttribute('aria-pressed',String(rosterGrouped));renderRoster();};
 const rosterFilterDialog=$('wardrobeRosterFilters');
-function fillRosterFilterDialog(filters){for(const button of rosterFilterDialog.querySelectorAll('[data-profession]'))button.setAttribute('aria-pressed',String(filters.professions.has(button.dataset.profession)));for(const button of rosterFilterDialog.querySelectorAll('[data-rarity]'))button.setAttribute('aria-pressed',String(filters.rarities.has(Number(button.dataset.rarity))));for(const button of rosterFilterDialog.querySelectorAll('[data-ownership]'))button.setAttribute('aria-pressed',String(filters.ownership===button.dataset.ownership));}
+function fillRosterFilterDialog(filters){for(const button of rosterFilterDialog.querySelectorAll('[data-rarity]'))button.setAttribute('aria-pressed',String(filters.rarities.has(Number(button.dataset.rarity))));for(const button of rosterFilterDialog.querySelectorAll('[data-ownership]'))button.setAttribute('aria-pressed',String(filters.ownership===button.dataset.ownership));}
 $('wardrobeRosterFilterOpen').onclick=()=>{fillRosterFilterDialog(rosterFilters);rosterFilterDialog.showModal();};
-for(const button of rosterFilterDialog.querySelectorAll('[data-profession],[data-rarity]'))button.onclick=()=>button.setAttribute('aria-pressed',String(button.getAttribute('aria-pressed')!=='true'));
+for(const button of rosterFilterDialog.querySelectorAll('[data-rarity]'))button.onclick=()=>button.setAttribute('aria-pressed',String(button.getAttribute('aria-pressed')!=='true'));
 for(const button of rosterFilterDialog.querySelectorAll('[data-ownership]'))button.onclick=()=>{for(const other of rosterFilterDialog.querySelectorAll('[data-ownership]'))other.setAttribute('aria-pressed',String(other===button));};
 $('wardrobeFilterReset').onclick=()=>fillRosterFilterDialog({professions:new Set(),rarities:new Set(),ownership:'all'});
 for(const id of ['wardrobeFilterClose','wardrobeFilterCancel'])$(id).onclick=()=>rosterFilterDialog.close();
 rosterFilterDialog.addEventListener('click',e=>{if(e.target!==rosterFilterDialog)return;const r=rosterFilterDialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)rosterFilterDialog.close();});
-$('wardrobeFilterApply').onclick=()=>{rosterFilters={professions:new Set([...rosterFilterDialog.querySelectorAll('[data-profession][aria-pressed="true"]')].map(b=>b.dataset.profession)),rarities:new Set([...rosterFilterDialog.querySelectorAll('[data-rarity][aria-pressed="true"]')].map(b=>Number(b.dataset.rarity))),ownership:rosterFilterDialog.querySelector('[data-ownership][aria-pressed="true"]')?.dataset.ownership||'all'};rosterFilterDialog.close();renderRoster();};
+$('wardrobeFilterApply').onclick=()=>{rosterFilters={professions:new Set(rosterFilters.professions),rarities:new Set([...rosterFilterDialog.querySelectorAll('[data-rarity][aria-pressed="true"]')].map(b=>Number(b.dataset.rarity))),ownership:rosterFilterDialog.querySelector('[data-ownership][aria-pressed="true"]')?.dataset.ownership||'all'};rosterFilterDialog.close();renderRoster();};
 $('wardrobeBack').onclick=()=>{stopSeriesMotion();seriesDrag=null;stopCardMotion();cancelAnimationFrame(dragFrame);dragFrame=0;drag=null;clearOldScenes();clearSD();$('wardrobeRoster').hidden=false;$('wardrobeDetail').hidden=true;};$('wardrobeRosterSearch').oninput=renderRoster;
 if(!demo)try{characters=JSON.parse(localStorage.getItem('zootAdminWardrobeCharacters')||'[]');}catch{}
 
