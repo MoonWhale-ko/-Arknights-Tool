@@ -125,3 +125,8 @@ main:has(#wardrobeDetail:not([hidden])) #wardrobeSidebar{display:block}
 .wardrobe-series-caption{display:flex;flex-direction:column;align-items:center;text-align:center;padding:8px 0 0;gap:3px}.wardrobe-series-caption>span{font-size:11px;color:var(--z-muted)}.wardrobe-series-caption>p{margin:4px 0 0;color:var(--z-link);font-size:12px}.wardrobe-series-caption>strong{font-size:15px}.wardrobe-series-caption>button{margin-top:10px;font-size:12px}
 
 #wardrobeSeriesSkins .wardrobe-series-card>img.series-card-reflection{top:calc(var(--series-card-height,310px)*.799);transform:translateX(-50%) scaleY(-1);opacity:.698039}
+
+/* Compact series cards: artwork and in-card caption only. */
+#wardrobeSidePrice{display:flex;align-items:center;gap:6px}#wardrobeSidePrice img{width:28px;height:28px;object-fit:contain}
+#wardrobeSeriesSkins .wardrobe-series-card>img{height:100%}
+#wardrobeSeriesSkins .wardrobe-series-card>span{bottom:10px;display:flex;flex-direction:column;gap:2px}
