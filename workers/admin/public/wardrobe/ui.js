@@ -14,7 +14,7 @@ function stopCardMotion(){cancelAnimationFrame(motionFrame);motionVersion++;}
 
 const asset=(folder,id)=>`https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/dyn/arts/${folder}/${encodeURIComponent(id.toLowerCase())}.png`;
 export function ownedSkins(data){const skins=(data?.snapshot?.user??data?.user??data?.rewards?.user)?.skin?.characterSkins;if(!skins||typeof skins!=='object')return null;return new Set(Object.entries(skins).filter(([,value])=>Number(value)>0).map(([id])=>id));}
-async function accept(data){if(!data)return;owned=ownedSkins(data);const user=data?.snapshot?.user??data?.user??data?.rewards?.user;if(user?.troop?.chars){characters=Object.values(user.troop.chars).map(c=>({charId:c.charId,skin:c.skin??c.skinId,elite:c.evolvePhase??0}));if(!demo)try{localStorage.setItem('zootAdminWardrobeCharacters',JSON.stringify(characters));}catch{}}if(owned&&!demo){try{localStorage.setItem('zootAdminWardrobeSkins',JSON.stringify([...owned]));}catch{}}if(!owned){$('wardrobeMessage').textContent='스킨 보유 정보가 없습니다. 관리자 계정을 다시 가져와 주세요.';$('wardrobeGrid').replaceChildren();$('wardrobeCount').textContent='';return;}try{if(!catalog){const r=await fetch('/wardrobe/catalog.json');if(!r.ok)throw Error();catalog=(await r.json()).skins;}await Promise.all([loadOriginalLayouts(),loadAcquisitionRoutes(),loadRosterMetadata()]);renderRoster();render();}catch{$('wardrobeMessage').textContent='스킨 목록을 불러오지 못했습니다. 다시 적용해 주세요.';}}
+async function accept(data){if(!data)return;owned=ownedSkins(data);const user=data?.snapshot?.user??data?.user??data?.rewards?.user;characters=[];if(user?.troop?.chars){characters=Object.values(user.troop.chars).map(c=>({charId:c.charId,skin:c.skin??c.skinId,elite:c.evolvePhase??0}));if(!demo)try{localStorage.setItem('zootAdminWardrobeCharacters',JSON.stringify(characters));}catch{}}if(owned&&!demo){try{localStorage.setItem('zootAdminWardrobeSkins',JSON.stringify([...owned]));}catch{}}if(!owned){$('wardrobeMessage').textContent='스킨 보유 정보가 없습니다. 관리자 계정을 다시 가져와 주세요.';$('wardrobeGrid').replaceChildren();$('wardrobeCount').textContent='';return;}try{if(!catalog){const r=await fetch('/wardrobe/catalog.json');if(!r.ok)throw Error();catalog=(await r.json()).skins;}await Promise.all([loadOriginalLayouts(),loadAcquisitionRoutes(),loadRosterMetadata()]);renderRoster();render();}catch{$('wardrobeMessage').textContent='스킨 목록을 불러오지 못했습니다. 다시 적용해 주세요.';}}
 function render(){
  if(!catalog||!owned)return;
  const query=$('wardrobeSearch').value.trim().toLocaleLowerCase(),all=$('wardrobeAll').checked,known=new Set(catalog.map(s=>s.id));
@@ -56,7 +56,7 @@ document.querySelector('[data-tab="wardrobe"]')?.addEventListener('click',()=>wi
 
 if(!demo)window.addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==parent)return;if(e.data?.type==='preview-account')accept(e.data.account);if(e.data?.type==='preview-clear')window.dispatchEvent(new Event('mining-clear'));});if(!demo&&parent!==window)parent.postMessage({type:'preview-account-request'},location.origin);
 
-if(!demo)try{const ids=JSON.parse(localStorage.getItem('zootAdminWardrobeSkins')||'null');if(Array.isArray(ids))accept({user:{skin:{characterSkins:Object.fromEntries(ids.filter(id=>typeof id==='string').map(id=>[id,1]))}}});}catch{}
+if(!demo)try{const ids=JSON.parse(localStorage.getItem('zootAdminWardrobeSkins')||'null');if(Array.isArray(ids))accept({user:{skin:{characterSkins:Object.fromEntries(ids.filter(id=>typeof id==='string').map(id=>[id,1]))},troop:{chars:JSON.parse(localStorage.getItem('zootAdminWardrobeCharacters')||'[]').map(c=>({...c,evolvePhase:c.elite}))}}});}catch{}
 
 function readImportedSkins(){try{const data=JSON.parse(localStorage.getItem('arknightsOneTimeRewardsV1')||'null');if(ownedSkins(data))accept(data);}catch{}}
 if(!demo){window.addEventListener('arknights-account-updated',readImportedSkins);window.addEventListener('storage',e=>{if(e.key==='arknightsOneTimeRewardsV1'||e.key==='zootAdminWardrobeSkins')readImportedSkins();});readImportedSkins();}
@@ -64,7 +64,7 @@ if(!demo){window.addEventListener('arknights-account-updated',readImportedSkins)
 $('wardrobeLoad').addEventListener('click',async()=>{if(demo)return;try{const {openAccountImport}=await import('/preview/assets/js/account-menu.mjs');await openAccountImport();}catch{$('wardrobeMessage').textContent='계정 가져오기를 열지 못했습니다. 새로고침 후 다시 시도해 주세요.';}});
 
 const wardrobeProfessions={PIONEER:'뱅가드',WARRIOR:'가드',TANK:'디펜더',SNIPER:'스나이퍼',CASTER:'캐스터',MEDIC:'메딕',SUPPORT:'서포터',SPECIAL:'스페셜리스트'};
-let rosterFilters={professions:new Set(),rarities:new Set(),ownership:'all'},rosterGrouped=false,rosterSort='rarity',rosterSortReverse=false;
+let rosterFilters={professions:new Set(),rarities:new Set(),operatorOwnership:'all',ownership:'all'},rosterGrouped=false,rosterSort='rarity',rosterSortReverse=false;
 function renderRosterProfessionTabs(){
  const tabs=$('wardrobeProfessionTabs');tabs.replaceChildren();
  for(const [id,label]of [['','전체'],...Object.entries(wardrobeProfessions)]){const button=make('button');button.type='button';button.className='class-tab';button.dataset.class=id;button.title=label;button.setAttribute('aria-label',label);button.setAttribute('aria-pressed',String(id?rosterFilters.professions.has(id):!rosterFilters.professions.size));
@@ -74,14 +74,15 @@ function renderRoster(){
  if(!catalog||!owned)return;renderRosterProfessionTabs();renderRosterSort();
  const grid=$('wardrobeRosterGrid'),groups=new Map();grid.replaceChildren();
  for(const skin of catalog){if(!groups.has(skin.charId))groups.set(skin.charId,[]);groups.get(skin.charId).push(skin);}
- const source=characters.length?characters:[...new Set(catalog.filter(s=>owned.has(s.id)).map(s=>s.charId))].map(charId=>({charId}));
+ const characterMap=new Map(characters.map(c=>[c.charId,c]));
+ const source=[...groups.keys()].map(charId=>characterMap.get(charId)||{charId});
  const query=$('wardrobeRosterSearch').value.trim().toLocaleLowerCase('ko'),filter=rosterFilters.ownership,sort=rosterSort,order=Object.keys(wardrobeProfessions);
- const rows=source.filter(c=>c.charId.startsWith('char_')&&(!rosterMetadataLoaded||rosterMetadata[c.charId])).map(c=>{const skins=groups.get(c.charId)||[],outfits=skins.filter(s=>!s.basic),meta=rosterMetadata[c.charId]||{};return {c,skins,name:skins[0]?.operator||c.charId,rarity:meta.rarity||0,profession:meta.profession||'',owned:outfits.filter(s=>owned.has(s.id)).length,total:outfits.length};});
- const filtered=rows.filter(r=>(!query||[r.name,...r.skins.map(s=>s.name)].some(v=>v.toLocaleLowerCase('ko').includes(query)))&&(!rosterFilters.professions.size||rosterFilters.professions.has(r.profession))&&(!rosterFilters.rarities.size||rosterFilters.rarities.has(r.rarity))&&(filter!=='owned'||r.owned>0)&&(filter!=='missing'||r.owned<r.total));
+ const rows=source.filter(c=>c.charId.startsWith('char_')&&(!rosterMetadataLoaded||rosterMetadata[c.charId])).map(c=>{const skins=groups.get(c.charId)||[],outfits=skins.filter(s=>!s.basic),meta=rosterMetadata[c.charId]||{};return {c,skins,operatorOwned:characterMap.has(c.charId),name:skins[0]?.operator||c.charId,rarity:meta.rarity||0,profession:meta.profession||'',owned:outfits.filter(s=>owned.has(s.id)).length,total:outfits.length};});
+ const filtered=rows.filter(r=>(rosterFilters.operatorOwnership==='all'||(rosterFilters.operatorOwnership==='owned'?r.operatorOwned:!r.operatorOwned))&&(!query||[r.name,...r.skins.map(s=>s.name)].some(v=>v.toLocaleLowerCase('ko').includes(query)))&&(!rosterFilters.professions.size||rosterFilters.professions.has(r.profession))&&(!rosterFilters.rarities.size||rosterFilters.rarities.has(r.rarity))&&(filter!=='owned'||r.owned>0)&&(filter!=='missing'||r.owned<r.total));
  const alphabetical=(a,b)=>a.name.localeCompare(b.name,'ko'),professionRank=r=>order.includes(r.profession)?order.indexOf(r.profession):99;
  const compare=(a,b)=>sort==='name'?alphabetical(a,b):sort==='owned'?b.owned-a.owned||b.rarity-a.rarity||alphabetical(a,b):b.rarity-a.rarity||professionRank(a)-professionRank(b)||alphabetical(a,b);
  filtered.sort((a,b)=>(rosterGrouped?professionRank(a)-professionRank(b):0)||(rosterSortReverse?-1:1)*compare(a,b));
- const labels=[...[...rosterFilters.rarities].sort((a,b)=>b-a).map(n=>n+'★'),...(filter==='all'?[]:[filter==='owned'?'스킨 보유':'미보유 스킨 있음'])];
+ const labels=[...(rosterFilters.operatorOwnership==='all'?[]:[rosterFilters.operatorOwnership==='owned'?'오퍼레이터 보유':'오퍼레이터 미보유']),...[...rosterFilters.rarities].sort((a,b)=>b-a).map(n=>n+'★'),...(filter==='all'?[]:[filter==='owned'?'스킨 보유':'미보유 스킨 있음'])];
  $('wardrobeRosterFilterSummary').textContent=labels.join(' · ');$('wardrobeRosterFilterSummary').hidden=!labels.length;$('wardrobeRosterFilterOpen').textContent='필터'+(labels.length?' · '+labels.length:'');$('wardrobeRosterFilterOpen').classList.toggle('is-active',!!labels.length);
  $('wardrobeRosterSummary').textContent=filtered.length+'명 · 스킨 '+filtered.reduce((n,r)=>n+r.owned,0)+' / '+filtered.reduce((n,r)=>n+r.total,0);
  $('wardrobeRosterEmpty').hidden=filtered.length>0;
@@ -89,10 +90,10 @@ function renderRoster(){
  for(const r of filtered){
   if(rosterGrouped&&r.profession!==previousProfession){const heading=make('h3',wardrobeProfessions[r.profession]||'기타');heading.className='wardrobe-roster-group-heading';heading.append(make('span',filtered.filter(v=>v.profession===r.profession).length+'명'));grid.append(heading);previousProfession=r.profession;}
   const {c,skins,name}=r,current=skins.find(s=>s.id===(previewEquipped.get(c.charId)||c.skin))||skins.find(s=>s.basic&&s.elite===(c.elite>=2?2:0))||skins[0];
-  const button=make('button');button.type='button';button.className='wardrobe-roster-card';button.dataset.rarity=String(r.rarity);button.setAttribute('aria-label',name+' · 스킨 '+r.owned+' / '+r.total);button.style.setProperty('--roster-rarity',({6:'#ff9b45',5:'#e5c65a',4:'#b99bdb',3:'#72a8d0',2:'#94b36e',1:'#a8a8a8'})[r.rarity]||'var(--z-border)');
+  const button=make('button');button.type='button';button.className='wardrobe-roster-card'+(r.operatorOwned?'':' operator-unowned');button.dataset.rarity=String(r.rarity);button.setAttribute('aria-label',name+' · 스킨 '+r.owned+' / '+r.total);button.style.setProperty('--roster-rarity',({6:'#ff9b45',5:'#e5c65a',4:'#b99bdb',3:'#72a8d0',2:'#94b36e',1:'#a8a8a8'})[r.rarity]||'var(--z-border)');
   const visual=make('div');visual.className='wardrobe-roster-visual';const img=make('img');img.alt='';img.loading='lazy';img.decoding='async';if(current?.portrait)img.src='https://raw.githubusercontent.com/yuanyan3060/ArknightsGameResource/main/portrait/'+encodeURIComponent(current.portrait)+'.png';img.onerror=()=>{img.hidden=true;};visual.append(img);if(r.rarity){const tag=make('span',r.rarity+'★ · '+(wardrobeProfessions[r.profession]||''));tag.className='wardrobe-roster-tag';visual.append(tag);}
-  const info=make('div');info.className='wardrobe-roster-info';info.append(make('strong',name),make('small','스킨 '+r.owned+' / '+r.total));button.append(visual,info);
-  button.onclick=()=>{selectedChar=c.charId;selectedSkin=current?.id;$('wardrobeSearch').value='';$('wardrobeRoster').hidden=true;$('wardrobeDetail').hidden=false;render();};grid.append(button);
+  const info=make('div');info.className='wardrobe-roster-info';info.append(make('strong',name),make('small','스킨 '+r.owned+' / '+r.total),make('span',r.operatorOwned?'보유':'미보유'));info.lastChild.className='wardrobe-roster-ownership';button.append(visual,info);
+  button.onclick=()=>{$('wardrobeAll').checked=true;selectedChar=c.charId;selectedSkin=current?.id;$('wardrobeSearch').value='';$('wardrobeRoster').hidden=true;$('wardrobeDetail').hidden=false;render();};grid.append(button);
  }
 }
 function renderRosterSort(){
@@ -104,14 +105,15 @@ for(const button of $('wardrobeRosterSort').querySelectorAll('[data-sort]'))butt
 $('wardrobeRosterSortDirection').onclick=()=>{rosterSortReverse=!rosterSortReverse;renderRoster();};
 $('wardrobeRosterGroup').onclick=()=>{rosterGrouped=!rosterGrouped;$('wardrobeRosterGroup').setAttribute('aria-pressed',String(rosterGrouped));renderRoster();};
 const rosterFilterDialog=$('wardrobeRosterFilters');
-function fillRosterFilterDialog(filters){for(const button of rosterFilterDialog.querySelectorAll('[data-rarity]'))button.setAttribute('aria-pressed',String(filters.rarities.has(Number(button.dataset.rarity))));for(const button of rosterFilterDialog.querySelectorAll('[data-ownership]'))button.setAttribute('aria-pressed',String(filters.ownership===button.dataset.ownership));}
+function fillRosterFilterDialog(filters){for(const button of rosterFilterDialog.querySelectorAll('[data-operator-ownership]'))button.setAttribute('aria-pressed',String(filters.operatorOwnership===button.dataset.operatorOwnership));for(const button of rosterFilterDialog.querySelectorAll('[data-rarity]'))button.setAttribute('aria-pressed',String(filters.rarities.has(Number(button.dataset.rarity))));for(const button of rosterFilterDialog.querySelectorAll('[data-ownership]'))button.setAttribute('aria-pressed',String(filters.ownership===button.dataset.ownership));}
 $('wardrobeRosterFilterOpen').onclick=()=>{fillRosterFilterDialog(rosterFilters);rosterFilterDialog.showModal();};
 for(const button of rosterFilterDialog.querySelectorAll('[data-rarity]'))button.onclick=()=>button.setAttribute('aria-pressed',String(button.getAttribute('aria-pressed')!=='true'));
+for(const button of rosterFilterDialog.querySelectorAll('[data-operator-ownership]'))button.onclick=()=>{for(const other of rosterFilterDialog.querySelectorAll('[data-operator-ownership]'))other.setAttribute('aria-pressed',String(other===button));};
 for(const button of rosterFilterDialog.querySelectorAll('[data-ownership]'))button.onclick=()=>{for(const other of rosterFilterDialog.querySelectorAll('[data-ownership]'))other.setAttribute('aria-pressed',String(other===button));};
-$('wardrobeFilterReset').onclick=()=>fillRosterFilterDialog({professions:new Set(),rarities:new Set(),ownership:'all'});
+$('wardrobeFilterReset').onclick=()=>fillRosterFilterDialog({professions:new Set(),rarities:new Set(),operatorOwnership:'all',ownership:'all'});
 for(const id of ['wardrobeFilterClose','wardrobeFilterCancel'])$(id).onclick=()=>rosterFilterDialog.close();
 rosterFilterDialog.addEventListener('click',e=>{if(e.target!==rosterFilterDialog)return;const r=rosterFilterDialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)rosterFilterDialog.close();});
-$('wardrobeFilterApply').onclick=()=>{rosterFilters={professions:new Set(rosterFilters.professions),rarities:new Set([...rosterFilterDialog.querySelectorAll('[data-rarity][aria-pressed="true"]')].map(b=>Number(b.dataset.rarity))),ownership:rosterFilterDialog.querySelector('[data-ownership][aria-pressed="true"]')?.dataset.ownership||'all'};rosterFilterDialog.close();renderRoster();};
+$('wardrobeFilterApply').onclick=()=>{rosterFilters={professions:new Set(rosterFilters.professions),rarities:new Set([...rosterFilterDialog.querySelectorAll('[data-rarity][aria-pressed="true"]')].map(b=>Number(b.dataset.rarity))),operatorOwnership:rosterFilterDialog.querySelector('[data-operator-ownership][aria-pressed="true"]')?.dataset.operatorOwnership||'all',ownership:rosterFilterDialog.querySelector('[data-ownership][aria-pressed="true"]')?.dataset.ownership||'all'};rosterFilterDialog.close();renderRoster();};
 $('wardrobeBack').onclick=()=>{stopSeriesMotion();seriesDrag=null;stopCardMotion();cancelAnimationFrame(dragFrame);dragFrame=0;drag=null;clearOldScenes();clearSD();$('wardrobeRoster').hidden=false;$('wardrobeDetail').hidden=true;};$('wardrobeRosterSearch').oninput=renderRoster;
 if(!demo)try{characters=JSON.parse(localStorage.getItem('zootAdminWardrobeCharacters')||'[]');}catch{}
 
