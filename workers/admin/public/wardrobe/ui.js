@@ -71,7 +71,7 @@ function renderRosterProfessionTabs(){
  if(id){const glyph=make('span');glyph.className='class-glyph';glyph.setAttribute('aria-hidden','true');glyph.style.setProperty('--icon-x',String(-Object.keys(wardrobeProfessions).indexOf(id)));glyph.style.setProperty('--icon-y','0');button.append(glyph);}button.append(make('span',label));button.onclick=()=>{rosterFilters.professions=new Set(id?[id]:[]);renderRoster();};tabs.append(button);}
 }
 function renderRoster(){
- if(!catalog||!owned)return;renderRosterProfessionTabs();renderRosterSort();
+ if(!catalog||!owned)return;renderRosterProfessionTabs();renderRosterSort();$('wardrobeSkinOwnership').value=rosterFilters.ownership;for(const button of $('wardrobeInlineRarities').querySelectorAll('button'))button.setAttribute('aria-pressed',String(rosterFilters.rarities.has(Number(button.dataset.inlineRarity))));
  const grid=$('wardrobeRosterGrid'),groups=new Map();grid.replaceChildren();
  for(const skin of catalog){if(!groups.has(skin.charId))groups.set(skin.charId,[]);groups.get(skin.charId).push(skin);}
  const source=characters;
@@ -254,3 +254,6 @@ function syncWardrobeBackButton(){
 }
 
 if(!demo&&new URLSearchParams(location.search).get('import')==='1')$('wardrobeLoad').click();
+
+$('wardrobeSkinOwnership').onchange=e=>{rosterFilters.ownership=e.target.value;renderRoster();};
+for(const button of $('wardrobeInlineRarities').querySelectorAll('button'))button.onclick=()=>{const n=Number(button.dataset.inlineRarity);if(rosterFilters.rarities.has(n))rosterFilters.rarities.delete(n);else rosterFilters.rarities.add(n);renderRoster();};
