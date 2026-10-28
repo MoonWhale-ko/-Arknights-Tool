@@ -15,3 +15,12 @@ test('series collection requires a real game category and group membership',()=>
  assert.equal(skinSeriesCategory(real.find(s=>s.id==='char_2023_ling@ncg#1')).id,'crossover');
  assert.equal(skinSeriesCategory({brandId:'nian',groupId:'unknown'}),null);
 });
+
+test('historical acquisition routes retain multiple methods without duplicates or unknown skins',()=>{
+ const entries=JSON.parse(readFileSync(new URL('../public/wardrobe/acquisition-routes.json',import.meta.url))).skins;
+ const ids=new Set(real.map(s=>s.id));
+ for(const [id,entry]of Object.entries(entries)){assert.ok(ids.has(id),id);assert.ok(entry.routes.length);assert.equal(new Set(entry.routes).size,entry.routes.length);assert.match(entry.source,/^https:\/\/prts\.wiki\/w\//);}
+ assert.ok(entries['char_002_amiya@winter#1'].routes.includes('고급증명서 상점 교환'));
+ assert.ok(entries['char_211_adnach@sale#5'].routes.includes('기록 복원'));
+ assert.deepEqual(entries['char_437_mizuki@sale#7']?.routes??Object.entries(entries).filter(([id])=>id.startsWith('char_437_mizuki@')).map(([,v])=>v.routes).flat(),['통합 전략 보상']);
+});
