@@ -170,3 +170,9 @@ main:has(#wardrobeDetail:not([hidden])) #wardrobeSidebar{display:block}
 .wardrobe-roster-toolbar>button,.wardrobe-roster-sort button{height:42px;min-height:42px}
 
 #wardrobeLoad{flex:none;min-height:42px;padding:0 16px;border:1px solid var(--z-accent);background:var(--z-selected);color:var(--z-on-selected);font:inherit;font-size:13px;font-weight:700;white-space:nowrap}#wardrobeLoad:hover{filter:brightness(.94)}.panel-heading{gap:16px}
+
+/* Match the operator page account action. */
+.panel-heading .operator-actions{display:flex;gap:10px}
+#wardrobeLoad{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:44px;padding:11px 16px;background:var(--z-panel);color:var(--z-text);border:1px solid var(--z-border);font-size:13px;font-weight:400;box-shadow:inset 0 -1px var(--z-border)}
+#wardrobeLoad:hover{background:var(--z-hover);filter:none}#wardrobeLoad svg{width:20px;height:20px;flex:none}
+@media(max-width:600px){.wardrobe-wrap>.panel-heading{flex-wrap:wrap}.panel-heading .operator-actions{width:100%;gap:8px}#wardrobeLoad{flex:1;min-height:44px;padding:10px 8px;gap:7px;font-size:12px}#wardrobeLoad svg{width:18px;height:18px}}
