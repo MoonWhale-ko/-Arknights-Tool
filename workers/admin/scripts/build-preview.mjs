@@ -8,4 +8,5 @@ for(const entry of await readdir(root))if(entry.endsWith('.html'))await cp(root+
 for(const dir of ['assets','data','research'])await cp(root+dir,out+dir,{recursive:true});
 await buildRewards(out);
 await cp(new URL('../public/wardrobe/preview.html',import.meta.url),out+'wardrobe.html');
+await cp(new URL('../public/medals/preview.html',import.meta.url),out+'medals.html');
 console.log('Private preview uses the exact public site sources and reward build.');
