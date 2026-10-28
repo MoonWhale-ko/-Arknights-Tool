@@ -133,4 +133,4 @@ main:has(#wardrobeDetail:not([hidden])) #wardrobeSidebar{display:block}
 
 .wardrobe-side-stats{border-bottom:0;padding-bottom:8px}.wardrobe-side-meta{margin-top:4px}#wardrobeSidePrice svg{width:24px;height:24px;flex:none;color:var(--z-text)}
 
-:root[data-theme=dark] img[src*="/icons/currency/"]{filter:invert(1)}
+

@@ -29,4 +29,4 @@
 
 .reward-picker-panel .reward-visibility label{display:grid;grid-template-columns:minmax(0,1fr) 16px;gap:14px;width:100%}.reward-picker-panel .reward-visibility label span{grid-column:1;grid-row:1;text-align:left}.reward-picker-panel .reward-visibility input{grid-column:2;grid-row:1;flex:none;width:16px;height:16px;min-width:16px;padding:0;margin:0;justify-self:end}
 
-:root[data-theme=dark] img[src*="/icons/currency/"]{filter:invert(1)}
+

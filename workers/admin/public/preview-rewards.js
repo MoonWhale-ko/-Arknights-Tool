@@ -7,7 +7,7 @@ const $=id=>document.getElementById(id),labels={remaining:'미수령',claimed:'�
 const n=(tag,text,cls)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;};
 let account,rows=[],catalogs,operatorRarities=new Map();
 const unit=r=>r.currency==='originite'?'순오리지늄':'합성옥';
-function currencyIcon(currency){const img=n('img');img.src='https://raw.githubusercontent.com/MoonWhale-ko/-Arknights-Tool/main/assets/icons/currency/'+(currency==='originite'?'originite-prime':'orundum')+'.png';img.alt='';img.setAttribute('aria-hidden','true');img.width=28;img.height=28;img.loading='lazy';return img;}
+function currencyIcon(currency){const img=n('img');img.src='https://raw.githubusercontent.com/MoonWhale-ko/-Arknights-Tool/main/assets/icons/currency/'+(currency==='originite'?'originite-prime':'orundum')+'.png?v=2';img.alt='';img.setAttribute('aria-hidden','true');img.width=28;img.height=28;img.loading='lazy';return img;}
 function rewardRow(r,open,nested=false){
    const row=n('details',undefined,'reward-item '+r.status+(nested?' reward-mode':''));row.dataset.key='item|'+r.currency+'|'+r.id;row.open=open.has(row.dataset.key);if(r.category==='paradox'){row.dataset.rarity=String(r.rarity);row.dataset.unlocked=String(r.access==='바로 도전 가능');}
    const summary=n('summary'),identity=n('div',undefined,'reward-item-identity');

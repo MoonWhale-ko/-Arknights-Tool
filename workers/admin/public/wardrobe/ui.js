@@ -186,7 +186,7 @@ function renderSidebar(s){
  const owned=isSkinOwned(s),status=$('wardrobeSideOwned');status.textContent=owned?'보유':'미보유';status.classList.toggle('is-owned',owned);
  const price=$('wardrobeSidePrice');price.replaceChildren();
  if(s.basic||s.price?.amount===0)price.textContent='무료';
- else if(s.price?.currency==='순오리지늄'){const icon=make('img');icon.src='https://raw.githubusercontent.com/MoonWhale-ko/-Arknights-Tool/main/assets/icons/currency/originite-prime.png';icon.alt='순오리지늄';price.append(icon,document.createTextNode(s.price.amount.toLocaleString('ko-KR')));}
+ else if(s.price?.currency==='순오리지늄'){const icon=make('img');icon.src='https://raw.githubusercontent.com/MoonWhale-ko/-Arknights-Tool/main/assets/icons/currency/originite-prime.png?v=2';icon.alt='순오리지늄';price.append(icon,document.createTextNode(s.price.amount.toLocaleString('ko-KR')));}
  else if(s.price?.currency==='KRW'&&Number.isFinite(s.price.amount))price.textContent='₩'+s.price.amount.toLocaleString('ko-KR');
  else price.textContent='—';
  $('wardrobeSideObtain').textContent=s.obtain||'획득 경로 확인 필요';
