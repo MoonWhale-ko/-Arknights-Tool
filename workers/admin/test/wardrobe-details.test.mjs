@@ -23,3 +23,12 @@ test('acquisition routes are Korean-only and retain distinct verified methods',(
  assert.deepEqual(data.skins['char_293_thorns@it#1'].routes,['구매센터','교환 코드 획득']);
  assert.equal(data.skins['char_002_amiya@winter#1'],undefined);
 });
+
+import {skinAssetCharacter} from '../public/wardrobe/original-layout.js';
+test('Amiya account grouping does not change artwork owners or SD forms',()=>{
+ const models=JSON.parse(readFileSync(new URL('../public/wardrobe/sd-models.json',import.meta.url)));
+ for(const id of ['char_1037_amiya3@sale#13','char_1001_amiya2@sale#16','char_1037_amiya3#2','char_1001_amiya2#2']){
+  const skin=real.find(s=>s.id===id),owner=id.split(/[@#]/)[0];assert.equal(skin.charId,'char_002_amiya');assert.equal(skinAssetCharacter(skin),owner);assert.ok(models[id]?.length);assert.ok(models[id].every(e=>e.model.startsWith(owner+'/')&&e.atlas.startsWith(owner+'/')));
+ }
+ for(const skin of real.filter(s=>!s.id.startsWith('char_1001_amiya2')&&!s.id.startsWith('char_1037_amiya3')))assert.equal(skinAssetCharacter(skin),skin.charId,skin.id);
+});
