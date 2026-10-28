@@ -136,3 +136,7 @@ main:has(#wardrobeDetail:not([hidden])) #wardrobeSidebar{display:block}
 
 
 #wardrobeSideObtain>span{display:block;line-height:1.75}
+
+/* Ownership affects artwork only; prices and controls keep their theme colors. */
+.wardrobe-unowned-art{filter:grayscale(1)!important}
+#wardrobeGrid .wardrobe-card.unowned .native-card-content,#wardrobeSeriesSkins .wardrobe-series-card.unowned>img{filter:grayscale(1)}
