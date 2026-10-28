@@ -61,7 +61,7 @@ if(!demo)try{const ids=JSON.parse(localStorage.getItem('zootAdminWardrobeSkins')
 function readImportedSkins(){try{const data=JSON.parse(localStorage.getItem('arknightsOneTimeRewardsV1')||'null');if(ownedSkins(data))accept(data);}catch{}}
 if(!demo){window.addEventListener('arknights-account-updated',readImportedSkins);window.addEventListener('storage',e=>{if(e.key==='arknightsOneTimeRewardsV1'||e.key==='zootAdminWardrobeSkins')readImportedSkins();});readImportedSkins();}
 
-$('wardrobeLoad').addEventListener('click',async()=>{if(demo)return;try{const {openAccountImport}=await import('/preview/assets/js/account-menu.mjs');await openAccountImport();}catch{$('wardrobeMessage').textContent='계정 가져오기를 열지 못했습니다. 새로고침 후 다시 시도해 주세요.';}});
+$('wardrobeLoad').addEventListener('click',async()=>{if(demo){location.href='/preview/wardrobe?import=1';return;}try{const {openAccountImport}=await import('/preview/assets/js/account-menu.mjs');await openAccountImport();}catch{$('wardrobeMessage').textContent='계정 가져오기를 열지 못했습니다. 새로고침 후 다시 시도해 주세요.';}});
 
 const wardrobeProfessions={PIONEER:'뱅가드',WARRIOR:'가드',TANK:'디펜더',SNIPER:'스나이퍼',CASTER:'캐스터',MEDIC:'메딕',SUPPORT:'서포터',SPECIAL:'스페셜리스트'};
 let rosterFilters={professions:new Set(),rarities:new Set(),ownership:'all'},rosterGrouped=false,rosterSort='rarity',rosterSortReverse=false;
@@ -170,7 +170,7 @@ window.addEventListener('resize',fitCollection);window.visualViewport?.addEventL
 
 
 if(demo){
- $('wardrobeLoad').hidden=true;$('wardrobeAll').checked=true;
+ $('wardrobeAll').checked=true;
  (async()=>{try{
   const response=await fetch('/wardrobe/catalog.json');if(!response.ok)throw Error();catalog=(await response.json()).skins;
   const chars=Object.fromEntries([...new Set(catalog.map(s=>s.charId))].map(charId=>[charId,{charId,evolvePhase:2}]));
@@ -252,3 +252,5 @@ function syncWardrobeBackButton(){
  let back=$('wardrobeHeaderBack');if(!back){back=make('button');back.id='wardrobeHeaderBack';back.type='button';back.className='zoot-icon';back.setAttribute('aria-label','이전');back.title='오퍼레이터 목록으로';back.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg>';back.onclick=()=>{$('wardrobeBack').click();};home.before(back);}
  const detailOpen=!$('wardrobeDetail').hidden;home.hidden=detailOpen;back.hidden=!detailOpen;
 }
+
+if(!demo&&new URLSearchParams(location.search).get('import')==='1')$('wardrobeLoad').click();

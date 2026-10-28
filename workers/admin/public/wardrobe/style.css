@@ -168,3 +168,5 @@ main:has(#wardrobeDetail:not([hidden])) #wardrobeSidebar{display:block}
 #wardrobeRoster .class-tab[aria-pressed=true],.wardrobe-roster-sort [data-sort][aria-pressed=true],.wardrobe-roster-toolbar>button.is-active,.wardrobe-roster-toolbar>button[aria-pressed=true],.wardrobe-filter-options button[aria-pressed=true],#wardrobeFilterApply{--button-fill:var(--z-selected);--button-edge:var(--z-accent);background:var(--button-edge);color:var(--z-on-selected);box-shadow:none}
 #wardrobeRosterSortDirection{border:0}
 .wardrobe-roster-toolbar>button,.wardrobe-roster-sort button{height:42px;min-height:42px}
+
+#wardrobeLoad{flex:none;min-height:42px;padding:0 16px;border:1px solid var(--z-accent);background:var(--z-selected);color:var(--z-on-selected);font:inherit;font-size:13px;font-weight:700;white-space:nowrap}#wardrobeLoad:hover{filter:brightness(.94)}.panel-heading{gap:16px}
