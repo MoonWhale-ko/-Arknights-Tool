@@ -35,7 +35,8 @@ input,select{background:#10151c;color:#fff;border:1px solid #3a4556;border-radiu
 <div id="content"><div class="status">저장된 육성 데이터를 불러오는 중입니다.</div></div>
 </div>
 
-<script>
+<script type="module">
+import {moduleMissionDescription} from "./assets/js/module-mission-labels.mjs?v=1";
 const OPS_URL='data/operators.json';
 const ITEMS_URL='data/items.json';
 const ASSET='https://raw.githubusercontent.com/fexli/ArknightsResource/main/';
@@ -65,7 +66,7 @@ function renderModule(m){
  const type=m.type==='D'?'Δ':(m.type||'?');
  return '<div class="module-title"><strong>'+esc(m.name)+'</strong><span class="module-type">'+esc(type)+'</span></div>'+
  '<div class="muted">해금: E'+esc(String(m.unlockPhase).replace('PHASE_',''))+' Lv.'+esc(m.unlockLevel)+'</div>'+
- (m.missions?.length?'<details><summary>모듈 해금 임무</summary><ul>'+m.missions.map(x=>'<li>'+esc(x.description)+'</li>').join('')+'</ul></details>':'')+
+ (m.missions?.length?'<details><summary>모듈 해금 임무</summary><ul>'+m.missions.map(x=>'<li>'+esc(moduleMissionDescription(x))+'</li>').join('')+'</ul></details>':'')+
  (m.costs?.length?m.costs.map(s=>'<div class="costrow"><div class="label">Stage '+s.stage+'</div><div class="items">'+costHtml(s.cost)+'</div></div>').join(''):'<div class="muted">재료 정보 없음</div>');
 }
 function renderById(id){
@@ -122,4 +123,5 @@ Promise.all([
 <script type="module" src="assets/js/account-inventory.mjs"></script>
 </body>
 </html>
+
 

@@ -136,7 +136,7 @@ html:has(body.zoot-feature dialog[open]){overflow:hidden}
 .zoot-base .manufacture-dialog .recipe-label small{color:var(--z-muted)}
 .zoot-base .manufacture-feedback{color:var(--f-danger)}
 .zoot-base .manufacture-dialog button[aria-pressed=true]{background:var(--z-selected);color:var(--z-on-selected)}
-html[data-theme=dark] .zoot-base .base-stage::before{filter:brightness(1.8)}
+html[data-theme=dark] .zoot-base .base-stage::before{filter:none}
 
 @media(max-width:760px){
  .zoot-feature :is(.wrap,.bag,.base-page){padding:20px 14px 36px}
@@ -157,3 +157,7 @@ html[data-theme=dark] .zoot-base .base-stage::before{filter:brightness(1.8)}
  .zoot-materials .nav a{flex:1;text-align:center;font-size:13px}
 }
 @media(prefers-reduced-motion:no-preference){.zoot-feature :is(.nav a,.categories button,.toolbar button,.manufacture-dialog button,.growth-tier-tabs button){transition:background-color .16s ease}}
+
+
+/* Keep the facility map identical to its light-theme rendering. */
+html[data-theme=dark] .zoot-base .base-stage{color-scheme:light;--z-bg:#f4f4f4;--z-panel:#fff;--z-input:#f0f0f0;--z-text:#202020;--z-muted:#626262;--z-border:#d0d0d0;--z-link:#53651a;--z-selected:#eef3cf;--z-on-selected:#3d4b12;--z-icon-filter:brightness(0)}

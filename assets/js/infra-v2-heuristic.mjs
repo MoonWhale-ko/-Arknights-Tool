@@ -1,6 +1,6 @@
 // Independent implementation of a facility-greedy, seeded, local-improvement
 // search. The optional Terra adapter supplies third-party skill evaluation.
-import {Enumerator,simulate,score,compare,subsetCount,stable} from './infra-v2-core.mjs?v=5';
+import {Enumerator,simulate,score,compare,subsetCount,stable} from './infra-v2-core.mjs?v=6';
 import {snapshot} from './infra-v2-evaluator.mjs';
 
 export const HEURISTIC_VERSION='facility-seeded-search-1';

@@ -31,7 +31,7 @@ function positionStagePanel(grid){
  }
 }
 window.addEventListener('resize',()=>{const grid=document.querySelector('.reward-content-grid');if(grid)positionStagePanel(grid);});
-const mineCategory=r=>r.category==='paradox'?'paradox':r.category==='annihilation'?'annihilation':r.storyLabel?.startsWith('메인 스토리')?'main':'side';
+const mineCategory=r=>r.category==='paradox'?'paradox':r.category==='annihilation'?'annihilation':r.category==='training'?'training':r.storyLabel?.startsWith('메인 스토리')?'main':'side';
 function render(){
  const query=$('rewardsSearch').value.trim().toLowerCase(),visible=new Set([...document.querySelectorAll('[name=rewardCategory]:checked')].map(input=>input.value)),status='remaining';
  for(const [currency,id] of [['originite','rewardsOriginite'],['orundum','rewardsOrundum']])$(id).textContent=rows.filter(r=>r.status==='remaining'&&r.currency===currency&&visible.has(mineCategory(r))).reduce((sum,r)=>sum+r.amount,0).toLocaleString();
@@ -87,9 +87,9 @@ async function accept(value){
  if(!value)return;
  try{
   if(!catalogs){const loaded=await Promise.all(['/mining/catalog.json','/orundum/catalog.json','data/operators.json'].map(async url=>{const r=await fetch(url);if(!r.ok)throw Error('보상 기준 데이터를 불러오지 못했습니다.');return r.json();}));catalogs=loaded.slice(0,2);operatorRarities=new Map(loaded[2].operators.map(op=>[op.id,Number(op.rarity)]));}
-  const mine=audit(catalogs[0],value),or=calculate(catalogs[1],value);
+  const mine=audit(catalogs[0],value),or=calculate(catalogs[1],value,{includeTrainingGround:true});
   account=value;
-  rows=[...mine.included.map(r=>({...r,currency:'originite',amount:r.op,storyLabel:storyLabel(r),title:r.code+' · '+r.mode})),...or.rows.map(r=>({...r,rarity:operatorRarities.get(r.charId)||0,currency:'orundum',group:r.category==='paradox'?'패러독스 시뮬레이션':r.name,title:r.category==='paradox'?r.name:r.title}))];
+  rows=[...mine.included.map(r=>({...r,currency:'originite',amount:r.op,storyLabel:storyLabel(r),title:r.code+' · '+r.mode})),...or.rows.map(r=>({...r,rarity:operatorRarities.get(r.charId)||0,currency:'orundum',group:r.category==='paradox'?(r.access==='바로 도전 가능'?'패러독스 시뮬레이션 · 바로 도전 가능':'패러독스 시뮬레이션 · 육성 필요'):r.category==='training'?'훈련장':r.name,title:r.category==='paradox'?r.name:r.title}))];
   $('rewardsOriginite').textContent=totals(mine.included).remaining.toLocaleString();$('rewardsOrundum').textContent=or.totals.remaining.toLocaleString();
   $('rewardsMessage').hidden=true;$('rewardsResults').hidden=false;render();
  }catch(e){clear();showError('보상 기록이 포함된 계정을 다시 가져와주세요.');}
@@ -111,3 +111,4 @@ window.addEventListener('arknights-account-updated',fromStorage);window.addEvent
 window.addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==parent)return;if(e.data?.type==='preview-account')accept(e.data.account);if(e.data?.type==='preview-clear')clear();});
 fromStorage();if(parent!==window)parent.postMessage({type:'preview-account-request'},location.origin);
 setInterval(()=>{if(account)accept(account);},60000);
+

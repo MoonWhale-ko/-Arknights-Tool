@@ -9,7 +9,7 @@ export async function buildRewards(destination){
  await buildWardrobe(out);
  for(const dir of ['assets/js/rewards/mining','assets/js/rewards/orundum','assets/css','data/rewards'])await mkdir(path.join(out,dir),{recursive:true});
  for(const file of ['engine.mjs','evidence.mjs','story-labels.mjs'])await cp(path.join(source,'mining',file),path.join(out,'assets/js/rewards/mining',file));
- for(const file of ['engine.mjs','additional.mjs'])await cp(path.join(source,'orundum',file),path.join(out,'assets/js/rewards/orundum',file));
+ for(const file of ['engine.mjs','additional.mjs','training-ground.mjs'])await cp(path.join(source,'orundum',file),path.join(out,'assets/js/rewards/orundum',file));
  for(const kind of ['mining','orundum'])await cp(path.join(source,kind,'catalog.json'),path.join(out,'data/rewards',kind+'.json'));
  let ui=await readFile(path.join(source,'preview-rewards.js'),'utf8');
  ui=ui.replaceAll("from '/mining/","from './rewards/mining/").replaceAll("from '/orundum/","from './rewards/orundum/").replaceAll("from './assets/js/","from './").replaceAll("'/mining/catalog.json'","'data/rewards/mining.json'").replaceAll("'/orundum/catalog.json'","'data/rewards/orundum.json'");

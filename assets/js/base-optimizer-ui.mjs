@@ -2,7 +2,7 @@ import {resultSignature,saveResult,loadResult,forgetResult} from './base-result-
 import {orderFacilities,orderDorms} from './base-result-layout.mjs';
 import {dormAmbienceSource,resolveDormAmbience} from './base-optimizer-settings.mjs';
 import {BASE_KEY,readBase} from './base-state.mjs?v=5';
-import {DEFAULT_OPTIONS,normalizeOptions} from './base-optimizer.mjs?v=3';
+import {DEFAULT_OPTIONS,normalizeOptions} from './base-optimizer.mjs?v=4';
 const INTEGRATED_KEY=BASE_KEY+':integrated-options';
 const KEY=BASE_KEY+':optimizer-options',PROGRESS_KEY='arknightsOperatorProgressV1';
 const root=document.getElementById('baseOptimizer');
@@ -83,7 +83,7 @@ async function runCalculation(mode){
   {
    const {prepareIntegratedInput}=await import('./base-integrated-adapter.mjs?v=5');if(token!==generation)return;
    const prepared=prepareIntegratedInput(data,base,progress,products,{...config,rankingWindow:$('optimizerWindow').value,developmentMode:runMode},read(BASE_KEY+':trading-products',{}));
-   worker=new Worker(new URL('./base-integrated-worker.mjs?v=12',import.meta.url),{type:'module'});
+   worker=new Worker(new URL('./base-integrated-worker.mjs?v=13',import.meta.url),{type:'module'});
    worker.onmessage=({data:event})=>{
     if(token!==generation)return;
     if(event.type==='started'){message(`보유 ${event.owned}명 · 배치 탐색 중…`);return;}

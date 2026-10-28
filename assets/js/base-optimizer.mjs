@@ -4,7 +4,7 @@ export const DEFAULT_OPTIONS={teams:2,rotation:'first',extraActions:false,priori
 export function normalizeOptions(value={}){
  const priority=Array.isArray(value.priority)?[...new Set(value.priority)].filter(x=>DEFAULT_OPTIONS.priority.includes(x)):[];
  const missingClues=Array.isArray(value.missingClues)?[...new Set(value.missingClues)].filter(n=>Number.isInteger(n)&&n>=1&&n<=7).sort((a,b)=>a-b):[1,2,3,4,5,6,7];
- return {missingClues,teams:value.teams===3?3:2,rotation:['first','all','12h'].includes(value.rotation)?value.rotation:'first',extraActions:value.extraActions===true,priority:[...priority,...DEFAULT_OPTIONS.priority.filter(x=>!priority.includes(x))],ambience:value.ambience&&typeof value.ambience==='object'?value.ambience:{}};
+ return {missingClues,teams:value.teams===3?3:2,rotation:['first','all','12h','24h'].includes(value.rotation)?value.rotation:'first',extraActions:value.extraActions===true,priority:[...priority,...DEFAULT_OPTIONS.priority.filter(x=>!priority.includes(x))],ambience:value.ambience&&typeof value.ambience==='object'?value.ambience:{}};
 }
 export function compareScores(a,b){for(let i=0;i<Math.max(a.length,b.length);i++){const delta=(a[i]??0)-(b[i]??0);if(Math.abs(delta)>EPS)return Math.sign(delta);}return 0;}
 export function prepareModel(data,base,progress,products,rawOptions){
@@ -294,11 +294,11 @@ export function simulatePlan(model,plan,{cycles=6,record=false}={}){
    const snap=evaluateSnapshot(model,placements,morale,worked);
    if(plan.residents.some(i=>snap.rates[i]<-EPS)){residentValid=false;valid=false;reason='상주 조건이 일부 조 또는 시간대에서 유지되지 않습니다.';break;}
    const eligible=rotating.filter(i=>snap.rates[i]<-EPS||morale[i]<=EPS);
-   const shouldRotate=model.options.rotation==='12h'?stageHours>=12-EPS:model.options.rotation==='first'?eligible.some(i=>morale[i]<=EPS):eligible.length>0&&eligible.every(i=>morale[i]<=EPS);
+   const shouldRotate=['12h','24h'].includes(model.options.rotation)?stageHours>=parseInt(model.options.rotation)-EPS:model.options.rotation==='first'?eligible.some(i=>morale[i]<=EPS):eligible.length>0&&eligible.every(i=>morale[i]<=EPS);
    if(shouldRotate)break;
    const drainTimes=eligible.filter(i=>morale[i]>EPS&&snap.rates[i]<-EPS).map(i=>morale[i]/-snap.rates[i]);
-   if(model.options.rotation!=='12h'&&!eligible.length){valid=false;reason='소진에 따른 교대 시각이 없습니다. 수거가 필요한 상주 배치입니다. 12시간 교대로 비교할 수 있습니다.';break;}
-   let dt=Math.min(Math.floor(clock+EPS)+1-clock,...drainTimes,model.options.rotation==='12h'?12-stageHours:Infinity);
+   if(!['12h','24h'].includes(model.options.rotation)&&!eligible.length){valid=false;reason='소진에 따른 교대 시각이 없습니다. 수거가 필요한 상주 배치입니다. 12시간 교대로 비교할 수 있습니다.';break;}
+   let dt=Math.min(Math.floor(clock+EPS)+1-clock,...drainTimes,['12h','24h'].includes(model.options.rotation)?parseInt(model.options.rotation)-stageHours:Infinity);
    for(const p of placements)for(const o of p.ops){
     const rate=snap.rates[o.index];if(rate>EPS&&morale[o.index]<o.maxMorale-EPS)dt=Math.min(dt,(o.maxMorale-morale[o.index])/rate);
     for(const threshold of [4,8,12,16,18,20])if(Math.abs(rate)>EPS&&(threshold-morale[o.index])/rate>EPS)dt=Math.min(dt,(threshold-morale[o.index])/rate);

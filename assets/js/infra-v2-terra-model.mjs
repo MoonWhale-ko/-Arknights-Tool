@@ -1,6 +1,6 @@
 import {isSelfOnlyDormSupport,dormSupportAllowed} from './base-dorm-support.mjs?v=3';
 import * as terra from './infra-v2-terra-engine.mjs';
-import {cleanInput,buildModel,meetingTeamAllowed} from './infra-v2-core.mjs?v=5';
+import {cleanInput,buildModel,meetingTeamAllowed} from './infra-v2-core.mjs?v=6';
 import {rule} from './infra-v2-rules.mjs';
 import {terraSnapshot} from './infra-v2-terra-snapshot.mjs';
 import {improveRest} from './infra-v2-terra-rest.mjs';

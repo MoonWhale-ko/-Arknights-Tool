@@ -41,7 +41,7 @@ export function cleanInput(raw,catalog){
  const options={teams:o.teams??2,rotation:o.rotation??'12h',extraActions:o.extraActions===true,priority,missingClues:o.missingClues??[],clueExchangeActive:o.clueExchangeActive===true,development:o.development??'current',maxHours:o.maxHours??168,rankingWindow:o.rankingWindow??'24h',optimizeDormSupport:o.optimizeDormSupport!==false,ownedMin:o.ownedMin??0,ownedMax:o.ownedMax??Object.keys(catalog.characters).length,tradeModel:TRADE_MODEL,searchStrategy:o.searchStrategy??'bounded'};
  requireValue(['bounded','exhaustive'].includes(options.searchStrategy),'탐색 방식 오류');
  if(o.tradeModel!==undefined)requireValue(o.tradeModel===TRADE_MODEL,'지원하지 않는 무역소 계산 모델');
- requireValue([2,3].includes(options.teams)&&['first','all','12h'].includes(options.rotation),'교대 설정 오류');
+ requireValue([2,3].includes(options.teams)&&['first','all','12h','24h'].includes(options.rotation),'교대 설정 오류');
  requireValue(['current','all-unlock-states','all-operators'].includes(options.development),'육성 비교 모드 오류');requireValue(['24h','cycle'].includes(options.rankingWindow),'비교 기간 오류');
  requireValue(Number.isFinite(options.maxHours)&&options.maxHours>=24&&options.maxHours<=720,'사이클 검사 상한은 24~720시간입니다.');
  requireValue(Array.isArray(options.missingClues)&&new Set(options.missingClues).size===options.missingClues.length&&options.missingClues.every(n=>Number.isInteger(n)&&n>=1&&n<=7),'미보유 단서 번호 오류');options.missingClues.sort();
@@ -183,7 +183,7 @@ export function simulate(model,plan,{record=false}={}){
  while(clock<o.maxHours-EPS&&steps++<100000){
   const snap=snapshot(model,placements,morale,worked,{clock,inventory,tradeInventory});for(const f of snap.trading)if(f.approximation)tradeAssumptions.add(f.approximation);if([...residentIds].some(id=>snap.rates[id]<-EPS)){status='invalid';reason='상주자의 무소모 조건이 유지되지 않습니다.';break;}
   const rotating=placements.filter(p=>p.room.type!=='DORMITORY').flatMap(p=>p.ops).filter(op=>!residentIds.has(op.id)),depleting=rotating.filter(op=>snap.rates[op.id]<-EPS||morale[op.id]<=EPS);
-  const rotate=o.rotation==='12h'?clock-shiftStart>=12-EPS:o.rotation==='first'?depleting.some(op=>morale[op.id]<=EPS):depleting.length>0&&depleting.every(op=>morale[op.id]<=EPS);
+  const rotate=['12h','24h'].includes(o.rotation)?clock-shiftStart>=parseInt(o.rotation)-EPS:o.rotation==='first'?depleting.some(op=>morale[op.id]<=EPS):depleting.length>0&&depleting.every(op=>morale[op.id]<=EPS);
   if(rotate){
    if(clock-shiftStart<EPS){status='invalid';reason='회복 부족으로 0시간 재교대가 필요합니다.';break;}
    for(const [id,s] of Object.entries(inventory)){const recipe=rooms.find(r=>r.id===id).recipe;collected[recipe.category]+=recipe.category==='F_EXP'?s.count/recipe.count*recipe.xp:s.count;s.count=0;}
@@ -192,8 +192,8 @@ export function simulate(model,plan,{record=false}={}){
   }
   if(at24&&cycle)break;
   // If no worker can ever trigger a depletion shift, a cycle is undefined, not forced to 12h.
-  const noCycle=o.rotation!=='12h'&&!depleting.length;
-  let dt=Math.min(o.maxHours-clock,Math.floor(clock+EPS)+1-clock,at24?Infinity:24-clock,o.rotation==='12h'?12-(clock-shiftStart):Infinity);
+  const noCycle=!['12h','24h'].includes(o.rotation)&&!depleting.length;
+  let dt=Math.min(o.maxHours-clock,Math.floor(clock+EPS)+1-clock,at24?Infinity:24-clock,['12h','24h'].includes(o.rotation)?parseInt(o.rotation)-(clock-shiftStart):Infinity);
   if(snap.stepHours)dt=Math.min(dt,snap.stepHours);
   if(snap.nextChangeHours>EPS)dt=Math.min(dt,snap.nextChangeHours);
   for(const [id,thresholds] of Object.entries(snap.thresholds??{}))for(const threshold of thresholds){const rate=snap.rates[id],distance=(threshold-morale[id])/rate;if(Number.isFinite(distance)&&distance>EPS)dt=Math.min(dt,distance);}
@@ -212,7 +212,7 @@ export function simulate(model,plan,{record=false}={}){
   if(o.extraActions){const next=rest(placements);if(stable(next.map(p=>p.ops.map(x=>x.id)))!==stable(placements.map(p=>p.ops.map(x=>x.id)))){placements=next;log('dormChange',{rooms:placements.filter(p=>p.room.type==='DORMITORY').map(p=>({id:p.room.id,operators:p.ops.map(x=>x.id)}))});}exchange();}
  }
  // A shift boundary coinciding with the safety cap is a real completed event.
- if(!cycle&&clock>=o.maxHours-EPS){const s=snapshot(model,placements,morale,worked,{clock,inventory,tradeInventory}),rot=placements.filter(p=>p.room.type!=='DORMITORY').flatMap(p=>p.ops).filter(op=>!residentIds.has(op.id)&&(s.rates[op.id]<-EPS||morale[op.id]<=EPS));const boundary=o.rotation==='12h'?clock-shiftStart>=12-EPS:o.rotation==='first'?rot.some(op=>morale[op.id]<=EPS):rot.length&&rot.every(op=>morale[op.id]<=EPS);if(boundary&&completedShifts+1===o.teams){for(const [id,state] of Object.entries(inventory)){const recipe=rooms.find(r=>r.id===id).recipe;collected[recipe.category]+=recipe.category==='F_EXP'?state.count/recipe.count*recipe.xp:state.count;state.count=0;}completedShifts++;if(Math.abs(clock-24)<EPS)at24=resultPoint();cycle=resultPoint();}}
+ if(!cycle&&clock>=o.maxHours-EPS){const s=snapshot(model,placements,morale,worked,{clock,inventory,tradeInventory}),rot=placements.filter(p=>p.room.type!=='DORMITORY').flatMap(p=>p.ops).filter(op=>!residentIds.has(op.id)&&(s.rates[op.id]<-EPS||morale[op.id]<=EPS));const boundary=['12h','24h'].includes(o.rotation)?clock-shiftStart>=parseInt(o.rotation)-EPS:o.rotation==='first'?rot.some(op=>morale[op.id]<=EPS):rot.length&&rot.every(op=>morale[op.id]<=EPS);if(boundary&&completedShifts+1===o.teams){for(const [id,state] of Object.entries(inventory)){const recipe=rooms.find(r=>r.id===id).recipe;collected[recipe.category]+=recipe.category==='F_EXP'?state.count/recipe.count*recipe.xp:state.count;state.count=0;}completedShifts++;if(Math.abs(clock-24)<EPS)at24=resultPoint();cycle=resultPoint();}}
  if(cycle&&clock>=o.maxHours-EPS){collectTrade();cycle=resultPoint();if(Math.abs(clock-24)<EPS)at24=resultPoint();}
  if(!at24&&Math.abs(clock-24)<EPS)at24=resultPoint();
  if(!cycle&&!reason)reason='첫 사이클이 검사 상한 내에 완료되지 않았습니다.';

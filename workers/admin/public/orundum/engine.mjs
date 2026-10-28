@@ -1,10 +1,11 @@
+import {trainingGroundRewards} from './training-ground.mjs';
 import { additional } from './additional.mjs';
 export function gameWeek(seconds) {
   const d=new Date((seconds+5*3600)*1000),weekday=d.getUTCDay()||7;
   d.setUTCDate(d.getUTCDate()-weekday+1);return d.toISOString().slice(0,10);
 }
 export function summarize(rows) {return rows.reduce((n,r)=>{n[r.status]=(n[r.status]||0)+r.amount;return n;},{remaining:0,claimed:0,unknown:0});}
-export function calculate(catalog,data,{now=Date.now()/1000}={}) {
+export function calculate(catalog,data,{now=Date.now()/1000,includeTrainingGround=false}={}) {
   const user=data?.snapshot?.user??data?.user;
   if(!user?.troop?.chars||!user?.campaignsV2?.instances)throw Error('오퍼레이터·섬멸 정보가 포함된 계정 원본 JSON을 선택하세요.');
   const owned=new Map(Object.values(user.troop.chars).map(x=>[x.charId,x]));
@@ -33,6 +34,7 @@ export function calculate(catalog,data,{now=Date.now()/1000}={}) {
       rows.push({id:map.id+':'+reward.index,mapId:map.id,category:'annihilation',name:map.name,title:`${reward.kills}명 처치`,amount:reward.amount,status,access:ready?'달성 · 보상 수령 가능':'처치 수 달성 필요',condition:`최고 ${kills} / ${reward.kills}명`,reason:status==='claimed'?'해당 처치 수 보상 수령 기록':status==='unknown'?'수령 상태 항목 확인 필요':instance?'처치 수 보상 미수령 기록':'개별 기록 없음 · 미수령으로 판정',openKind:[...new Set(windows.map(w=>w.kind))].join(' · ')});
     }
   }
+  if(includeTrainingGround)rows.push(...trainingGroundRewards(user));
   const campaign=user.campaignsV2,imported=Date.parse(data.importedAt)/1000;
   const stale=Number.isFinite(imported)?gameWeek(imported)!==gameWeek(now):true;
   const valid=Number.isFinite(campaign.campaignCurrentFee)&&Number.isFinite(campaign.campaignTotalFee)&&campaign.campaignCurrentFee>=0&&campaign.campaignTotalFee>=0&&campaign.campaignCurrentFee<=campaign.campaignTotalFee;

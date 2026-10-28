@@ -19,7 +19,7 @@ export function validateSubmission(p){
  for(const [k,s] of Object.entries(p.progress))if(!id(k)||!keys(s,['owned','elite','level'])||s.owned!==true||!integer(s.elite,0,2)||!integer(s.level,1,90))fail();
  if(!keys(p.products,Object.keys(p.products??{})))fail();
  for(const [k,v] of Object.entries(p.products))if(!p.base.rooms[k]||!['1','2','3','4','13','14'].includes(v))fail();
- const o=p.options;if(!keys(o,['teams','rotation','extraActions','priority','ambience','missingClues'])||![2,3].includes(o.teams)||!['first','all','12h'].includes(o.rotation)||typeof o.extraActions!=='boolean'||!Array.isArray(o.priority)||o.priority.length!==3||new Set(o.priority).size!==3||o.priority.some(k=>!['F_GOLD','F_EXP','F_DIAMOND'].includes(k))||!keys(o.ambience,Object.keys(o.ambience??{})))fail();
+ const o=p.options;if(!keys(o,['teams','rotation','extraActions','priority','ambience','missingClues'])||![2,3].includes(o.teams)||!['first','all','12h','24h'].includes(o.rotation)||typeof o.extraActions!=='boolean'||!Array.isArray(o.priority)||o.priority.length!==3||new Set(o.priority).size!==3||o.priority.some(k=>!['F_GOLD','F_EXP','F_DIAMOND'].includes(k))||!keys(o.ambience,Object.keys(o.ambience??{})))fail();
  if(o.missingClues!==undefined&&(!Array.isArray(o.missingClues)||o.missingClues.length>7||new Set(o.missingClues).size!==o.missingClues.length||o.missingClues.some(n=>!integer(n,1,7))))fail();
  for(const [k,v] of Object.entries(o.ambience))if(!p.base.rooms[k]||!integer(v,0,5000))fail();
  const a=p.plan,refs=v=>Array.isArray(v)&&v.length<=600&&v.every(k=>id(k)&&Object.hasOwn(p.progress,k));

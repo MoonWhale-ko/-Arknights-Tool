@@ -1,3 +1,4 @@
+import {moduleMissionDescription} from "./module-mission-labels.mjs?v=1";
 const integer=(v,min,max)=>Math.min(max,Math.max(min,Number.isFinite(+v)?Math.trunc(+v):min));
 export function progress(operator,value={}){
  const elite=integer(value.elite,0,operator.phases.length-1);
@@ -31,7 +32,7 @@ export function calculateGrowth(operator,currentValue,targetValue,data,includeSh
  for(const m of operator.modules){
   const before=stage(current,m),after=stage(goal,m);
   for(const s of m.costs)if(s.stage>before&&s.stage<=after)add(`모듈 ${m.type==='D'?'Δ':m.type} · Stage ${s.stage}`,s.cost,false);
-  if(!before&&after){notes.push(`모듈 ${m.type==='D'?'Δ':m.type} 해금: E2 Lv.${m.unlockLevel}, 신뢰도 조건 및 해금 임무 완료 필요.`);for(const task of m.missions||[])notes.push(task.description)}
+  if(!before&&after){notes.push(`모듈 ${m.type==='D'?'Δ':m.type} 해금: E2 Lv.${m.unlockLevel}, 신뢰도 조건 및 해금 임무 완료 필요.`);for(const task of m.missions||[])notes.push(moduleMissionDescription(task))}
  }
  const token=data.potentials[operator.id],potential=Math.max(0,goal.potential-current.potential);
  const tokenCount=potential+(token?.activity&&!current.owned?1:0);

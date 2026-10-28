@@ -265,7 +265,7 @@ export function rewardAccount(user) {
   const chars=Object.fromEntries(Object.entries(user.troop?.chars||{}).map(([key,c])=>[key,{charId:c.charId,evolvePhase:c.evolvePhase,level:c.level,...(typeof c.skin==='string'?{skin:c.skin}:{})}]));
   const addon=Object.fromEntries(Object.entries(user.troop?.addon||{}).map(([id,c])=>[id,{stage:c.stage}]));
   return {user:{skin:{characterSkins:user.skin?.characterSkins},dungeon:{stages:user.dungeon?.stages,sixStar:user.dungeon?.sixStar},
-    medal:{medals:user.medal?.medals},retro:{block:user.retro?.block},
+    trainingGround:{stages:user.trainingGround?.stages?Object.fromEntries(Object.entries(user.trainingGround.stages).map(([id,s])=>[id,{stageId:s.stageId,state:s.state}])):undefined},medal:{medals:user.medal?.medals},retro:{block:user.retro?.block},
     troop:{chars,addon},campaignsV2:{instances:user.campaignsV2?.instances}}};
 }
 export function normalizeAccount(user) {
@@ -313,3 +313,4 @@ export function normalizeAccount(user) {
     building: normalizeBuilding(user.building,user.troop.chars),
   };
 }
+
