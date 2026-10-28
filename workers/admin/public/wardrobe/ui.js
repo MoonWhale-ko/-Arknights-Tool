@@ -64,23 +64,23 @@ if(!demo){window.addEventListener('arknights-account-updated',readImportedSkins)
 $('wardrobeLoad').addEventListener('click',async()=>{if(demo)return;try{const {openAccountImport}=await import('/preview/assets/js/account-menu.mjs');await openAccountImport();}catch{$('wardrobeMessage').textContent='계정 가져오기를 열지 못했습니다. 새로고침 후 다시 시도해 주세요.';}});
 
 const wardrobeProfessions={PIONEER:'뱅가드',WARRIOR:'가드',TANK:'디펜더',SNIPER:'스나이퍼',CASTER:'캐스터',MEDIC:'메딕',SUPPORT:'서포터',SPECIAL:'스페셜리스트'};
-let rosterFilters={professions:new Set(),rarities:new Set(),ownership:'all'},rosterGrouped=false;
+let rosterFilters={professions:new Set(),rarities:new Set(),ownership:'all'},rosterGrouped=false,rosterSort='rarity',rosterSortReverse=false;
 function renderRosterProfessionTabs(){
  const tabs=$('wardrobeProfessionTabs');tabs.replaceChildren();
  for(const [id,label]of [['','전체'],...Object.entries(wardrobeProfessions)]){const button=make('button');button.type='button';button.className='class-tab';button.dataset.class=id;button.title=label;button.setAttribute('aria-label',label);button.setAttribute('aria-pressed',String(id?rosterFilters.professions.has(id):!rosterFilters.professions.size));
  if(id){const glyph=make('span');glyph.className='class-glyph';glyph.setAttribute('aria-hidden','true');glyph.style.setProperty('--icon-x',String(-Object.keys(wardrobeProfessions).indexOf(id)));glyph.style.setProperty('--icon-y','0');button.append(glyph);}button.append(make('span',label));button.onclick=()=>{rosterFilters.professions=new Set(id?[id]:[]);renderRoster();};tabs.append(button);}
 }
 function renderRoster(){
- if(!catalog||!owned)return;renderRosterProfessionTabs();
+ if(!catalog||!owned)return;renderRosterProfessionTabs();renderRosterSort();
  const grid=$('wardrobeRosterGrid'),groups=new Map();grid.replaceChildren();
  for(const skin of catalog){if(!groups.has(skin.charId))groups.set(skin.charId,[]);groups.get(skin.charId).push(skin);}
  const source=characters.length?characters:[...new Set(catalog.filter(s=>owned.has(s.id)).map(s=>s.charId))].map(charId=>({charId}));
- const query=$('wardrobeRosterSearch').value.trim().toLocaleLowerCase('ko'),filter=rosterFilters.ownership,sort=$('wardrobeRosterSort').value,order=Object.keys(wardrobeProfessions);
+ const query=$('wardrobeRosterSearch').value.trim().toLocaleLowerCase('ko'),filter=rosterFilters.ownership,sort=rosterSort,order=Object.keys(wardrobeProfessions);
  const rows=source.filter(c=>c.charId.startsWith('char_')&&(!rosterMetadataLoaded||rosterMetadata[c.charId])).map(c=>{const skins=groups.get(c.charId)||[],outfits=skins.filter(s=>!s.basic),meta=rosterMetadata[c.charId]||{};return {c,skins,name:skins[0]?.operator||c.charId,rarity:meta.rarity||0,profession:meta.profession||'',owned:outfits.filter(s=>owned.has(s.id)).length,total:outfits.length};});
  const filtered=rows.filter(r=>(!query||[r.name,...r.skins.map(s=>s.name)].some(v=>v.toLocaleLowerCase('ko').includes(query)))&&(!rosterFilters.professions.size||rosterFilters.professions.has(r.profession))&&(!rosterFilters.rarities.size||rosterFilters.rarities.has(r.rarity))&&(filter!=='owned'||r.owned>0)&&(filter!=='missing'||r.owned<r.total));
  const alphabetical=(a,b)=>a.name.localeCompare(b.name,'ko'),professionRank=r=>order.includes(r.profession)?order.indexOf(r.profession):99;
  const compare=(a,b)=>sort==='name'?alphabetical(a,b):sort==='owned'?b.owned-a.owned||b.rarity-a.rarity||alphabetical(a,b):b.rarity-a.rarity||professionRank(a)-professionRank(b)||alphabetical(a,b);
- filtered.sort((a,b)=>(rosterGrouped?professionRank(a)-professionRank(b):0)||compare(a,b));
+ filtered.sort((a,b)=>(rosterGrouped?professionRank(a)-professionRank(b):0)||(rosterSortReverse?-1:1)*compare(a,b));
  const labels=[...[...rosterFilters.rarities].sort((a,b)=>b-a).map(n=>n+'★'),...(filter==='all'?[]:[filter==='owned'?'스킨 보유':'미보유 스킨 있음'])];
  $('wardrobeRosterFilterSummary').textContent=labels.join(' · ');$('wardrobeRosterFilterSummary').hidden=!labels.length;$('wardrobeRosterFilterOpen').textContent='필터'+(labels.length?' · '+labels.length:'');$('wardrobeRosterFilterOpen').classList.toggle('is-active',!!labels.length);
  $('wardrobeRosterSummary').textContent=filtered.length+'명 · 스킨 '+filtered.reduce((n,r)=>n+r.owned,0)+' / '+filtered.reduce((n,r)=>n+r.total,0);
@@ -95,7 +95,13 @@ function renderRoster(){
   button.onclick=()=>{selectedChar=c.charId;selectedSkin=current?.id;$('wardrobeSearch').value='';$('wardrobeRoster').hidden=true;$('wardrobeDetail').hidden=false;render();};grid.append(button);
  }
 }
-$('wardrobeRosterSort').onchange=renderRoster;
+function renderRosterSort(){
+ for(const button of $('wardrobeRosterSort').querySelectorAll('[data-sort]'))button.setAttribute('aria-pressed',String(button.dataset.sort===rosterSort));
+ const ascending=(rosterSort==='name')!==rosterSortReverse,direction=$('wardrobeRosterSortDirection');direction.setAttribute('aria-pressed',String(rosterSortReverse));direction.dataset.direction=ascending?'asc':'desc';direction.title=(ascending?'오름차순':'내림차순')+' · 클릭하여 반전';
+ for(const button of $('wardrobeRosterSort').querySelectorAll('[data-sort]'))button.title=(button.dataset.sort==='owned'?'보유 스킨 수 기준 · ':'')+'선택 · 다시 누르면 역순';
+}
+for(const button of $('wardrobeRosterSort').querySelectorAll('[data-sort]'))button.onclick=()=>{if(rosterSort===button.dataset.sort)rosterSortReverse=!rosterSortReverse;else{rosterSort=button.dataset.sort;rosterSortReverse=false;}renderRoster();};
+$('wardrobeRosterSortDirection').onclick=()=>{rosterSortReverse=!rosterSortReverse;renderRoster();};
 $('wardrobeRosterGroup').onclick=()=>{rosterGrouped=!rosterGrouped;$('wardrobeRosterGroup').setAttribute('aria-pressed',String(rosterGrouped));renderRoster();};
 const rosterFilterDialog=$('wardrobeRosterFilters');
 function fillRosterFilterDialog(filters){for(const button of rosterFilterDialog.querySelectorAll('[data-rarity]'))button.setAttribute('aria-pressed',String(filters.rarities.has(Number(button.dataset.rarity))));for(const button of rosterFilterDialog.querySelectorAll('[data-ownership]'))button.setAttribute('aria-pressed',String(filters.ownership===button.dataset.ownership));}
