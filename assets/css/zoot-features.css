@@ -160,4 +160,4 @@ html[data-theme=dark] .zoot-base .base-stage::before{filter:none}
 
 
 /* Keep the facility map identical to its light-theme rendering. */
-html[data-theme=dark] .zoot-base .base-stage{color-scheme:light;--z-bg:#f4f4f4;--z-panel:#fff;--z-input:#f0f0f0;--z-text:#202020;--z-muted:#626262;--z-border:#d0d0d0;--z-link:#53651a;--z-selected:#eef3cf;--z-on-selected:#3d4b12;--z-icon-filter:brightness(0)}
+html[data-theme=dark] .zoot-base .base-stage{background:#f4f4f4;color:#202020;color-scheme:light;--z-bg:#f4f4f4;--z-panel:#fff;--z-input:#f0f0f0;--z-text:#202020;--z-muted:#626262;--z-border:#d0d0d0;--z-link:#53651a;--z-selected:#eef3cf;--z-on-selected:#3d4b12;--z-icon-filter:brightness(0)}
