@@ -76,7 +76,7 @@ function renderRoster(){
  const grid=$('wardrobeRosterGrid'),groups=new Map();grid.replaceChildren();
  for(const skin of catalog){if(!groups.has(skin.charId))groups.set(skin.charId,[]);groups.get(skin.charId).push(skin);}
  const characterMap=new Map(characters.map(c=>[c.charId,c]));
- const source=rosterFilters.ownership==='missing'?[...groups.keys()].map(charId=>characterMap.get(charId)||{charId}):characters;
+ const source=rosterFilters.ownership!=='owned'?[...groups.keys()].map(charId=>characterMap.get(charId)||{charId}):characters;
  const query=$('wardrobeRosterSearch').value.trim().toLocaleLowerCase('ko'),filter=rosterFilters.ownership,sort=rosterSort,order=Object.keys(wardrobeProfessions);
  const rows=source.filter(c=>c.charId.startsWith('char_')&&(!rosterMetadataLoaded||rosterMetadata[c.charId])).map(c=>{const skins=groups.get(c.charId)||[],outfits=skins.filter(s=>!s.basic),meta=rosterMetadata[c.charId]||{};return {c,skins,name:skins[0]?.operator||c.charId,rarity:meta.rarity||0,profession:meta.profession||'',owned:outfits.filter(s=>owned.has(s.id)).length,total:outfits.length};});
  const filtered=rows.filter(r=>(!query||[r.name,...r.skins.map(s=>s.name)].some(v=>v.toLocaleLowerCase('ko').includes(query)))&&(!rosterFilters.professions.size||rosterFilters.professions.has(r.profession))&&rosterFilters.rarities.has(r.rarity)&&(filter!=='owned'||r.owned>0)&&(filter!=='missing'||r.owned<r.total));
