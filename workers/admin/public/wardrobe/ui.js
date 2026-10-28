@@ -4,7 +4,7 @@ const $=id=>document.getElementById(id),make=(tag,text)=>{const el=document.crea
 const demo=document.body.dataset.wardrobeDemo==='true';
 const previewEquipped=new Map();
 let acquisitionRoutes={},routesLoaded=false;
-async function loadAcquisitionRoutes(){if(routesLoaded)return;try{const r=await fetch('/wardrobe/acquisition-routes.json?v=1');if(r.ok){acquisitionRoutes=(await r.json()).skins??{};routesLoaded=true;}}catch{}}
+async function loadAcquisitionRoutes(){if(routesLoaded)return;try{const r=await fetch('/wardrobe/acquisition-routes.json?v=2');if(r.ok){const data=await r.json();acquisitionRoutes=data.sourceRegion==='KR'?(data.skins??{}):{};routesLoaded=true;}}catch{}}
 let catalog,owned=null,selectedChar=null,selectedSkin=null,characters=[];
 let sceneLayers=[];
 let cardState=0,motionFrame=0,motionVersion=0,drag=null;
