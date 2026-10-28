@@ -37,7 +37,7 @@ export function createHandler({ fetcher } = {}) {
       // All APIs, account operations and other preview pages still authenticate below.
       const wardrobeAssets = new Set([
         '/wardrobe/style.css', '/wardrobe/ui.js', '/wardrobe/sd.js', '/wardrobe/btn-back.png',
-        '/wardrobe/original-layout.js', '/wardrobe/catalog.json', '/wardrobe/acquisition-routes.json',
+        '/wardrobe/original-layout.js', '/wardrobe/catalog.json', '/wardrobe/acquisition-routes.json', '/wardrobe/roster-metadata.json',
         '/wardrobe/sd-models.json', '/wardrobe/native-scene.json.gz',
         '/preview/assets/css/zoot.css', '/preview/assets/js/zoot.js',
       ]);

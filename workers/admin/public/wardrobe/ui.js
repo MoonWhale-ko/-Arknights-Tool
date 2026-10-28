@@ -5,6 +5,8 @@ const demo=document.body.dataset.wardrobeDemo==='true';
 const previewEquipped=new Map();
 let acquisitionRoutes={},routesLoaded=false;
 async function loadAcquisitionRoutes(){if(routesLoaded)return;try{const r=await fetch('/wardrobe/acquisition-routes.json?v=2');if(r.ok){const data=await r.json();acquisitionRoutes=data.sourceRegion==='KR'?(data.skins??{}):{};routesLoaded=true;}}catch{}}
+let rosterMetadata={},rosterMetadataLoaded=false;
+async function loadRosterMetadata(){if(rosterMetadataLoaded)return;try{const r=await fetch('/wardrobe/roster-metadata.json?v=1');if(r.ok){rosterMetadata=await r.json();rosterMetadataLoaded=true;}}catch{}}
 let catalog,owned=null,selectedChar=null,selectedSkin=null,characters=[];
 let sceneLayers=[];
 let cardState=0,motionFrame=0,motionVersion=0,drag=null;
@@ -12,7 +14,7 @@ function stopCardMotion(){cancelAnimationFrame(motionFrame);motionVersion++;}
 
 const asset=(folder,id)=>`https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/dyn/arts/${folder}/${encodeURIComponent(id.toLowerCase())}.png`;
 export function ownedSkins(data){const skins=(data?.snapshot?.user??data?.user??data?.rewards?.user)?.skin?.characterSkins;if(!skins||typeof skins!=='object')return null;return new Set(Object.entries(skins).filter(([,value])=>Number(value)>0).map(([id])=>id));}
-async function accept(data){if(!data)return;owned=ownedSkins(data);const user=data?.snapshot?.user??data?.user??data?.rewards?.user;if(user?.troop?.chars){characters=Object.values(user.troop.chars).map(c=>({charId:c.charId,skin:c.skin??c.skinId,elite:c.evolvePhase??0}));if(!demo)try{localStorage.setItem('zootAdminWardrobeCharacters',JSON.stringify(characters));}catch{}}if(owned&&!demo){try{localStorage.setItem('zootAdminWardrobeSkins',JSON.stringify([...owned]));}catch{}}if(!owned){$('wardrobeMessage').textContent='스킨 보유 정보가 없습니다. 관리자 계정을 다시 가져와 주세요.';$('wardrobeGrid').replaceChildren();$('wardrobeCount').textContent='';return;}try{if(!catalog){const r=await fetch('/wardrobe/catalog.json');if(!r.ok)throw Error();catalog=(await r.json()).skins;}await Promise.all([loadOriginalLayouts(),loadAcquisitionRoutes()]);renderRoster();render();}catch{$('wardrobeMessage').textContent='스킨 목록을 불러오지 못했습니다. 다시 적용해 주세요.';}}
+async function accept(data){if(!data)return;owned=ownedSkins(data);const user=data?.snapshot?.user??data?.user??data?.rewards?.user;if(user?.troop?.chars){characters=Object.values(user.troop.chars).map(c=>({charId:c.charId,skin:c.skin??c.skinId,elite:c.evolvePhase??0}));if(!demo)try{localStorage.setItem('zootAdminWardrobeCharacters',JSON.stringify(characters));}catch{}}if(owned&&!demo){try{localStorage.setItem('zootAdminWardrobeSkins',JSON.stringify([...owned]));}catch{}}if(!owned){$('wardrobeMessage').textContent='스킨 보유 정보가 없습니다. 관리자 계정을 다시 가져와 주세요.';$('wardrobeGrid').replaceChildren();$('wardrobeCount').textContent='';return;}try{if(!catalog){const r=await fetch('/wardrobe/catalog.json');if(!r.ok)throw Error();catalog=(await r.json()).skins;}await Promise.all([loadOriginalLayouts(),loadAcquisitionRoutes(),loadRosterMetadata()]);renderRoster();render();}catch{$('wardrobeMessage').textContent='스킨 목록을 불러오지 못했습니다. 다시 적용해 주세요.';}}
 function render(){
  if(!catalog||!owned)return;
  const query=$('wardrobeSearch').value.trim().toLocaleLowerCase(),all=$('wardrobeAll').checked,known=new Set(catalog.map(s=>s.id));
@@ -61,7 +63,28 @@ if(!demo){window.addEventListener('arknights-account-updated',readImportedSkins)
 
 $('wardrobeLoad').addEventListener('click',async()=>{if(demo)return;try{const {openAccountImport}=await import('/preview/assets/js/account-menu.mjs');await openAccountImport();}catch{$('wardrobeMessage').textContent='계정 가져오기를 열지 못했습니다. 새로고침 후 다시 시도해 주세요.';}});
 
-function renderRoster(){if(!catalog||!owned)return;const grid=$('wardrobeRosterGrid');grid.replaceChildren();const list=characters.length?characters:[...new Set(catalog.filter(s=>owned.has(s.id)).map(s=>s.charId))].map(charId=>({charId}));const query=$('wardrobeRosterSearch').value.trim().toLowerCase();for(const c of list.filter(c=>c.charId.startsWith('char_'))){const skins=catalog.filter(s=>s.charId===c.charId),name=skins[0]?.operator||c.charId;if(!name.toLowerCase().includes(query))continue;const current=skins.find(s=>s.id===(previewEquipped.get(c.charId)||c.skin))||skins.find(s=>s.basic&&s.elite===(c.elite>=2?2:0))||skins[0];const button=make('button');button.type='button';const img=make('img');img.alt='';img.loading='lazy';if(current?.portrait)img.src='https://raw.githubusercontent.com/yuanyan3060/ArknightsGameResource/main/portrait/'+encodeURIComponent(current.portrait)+'.png';img.onerror=()=>{img.hidden=true;};button.append(img,make('strong',name),make('small',`${skins.filter(s=>owned.has(s.id)).length}종 보유`));button.onclick=()=>{selectedChar=c.charId;selectedSkin=current?.id;$('wardrobeSearch').value='';$('wardrobeRoster').hidden=true;$('wardrobeDetail').hidden=false;render();};grid.append(button);}}
+const wardrobeProfessions={PIONEER:'뱅가드',WARRIOR:'가드',TANK:'디펜더',SNIPER:'스나이퍼',CASTER:'캐스터',MEDIC:'메딕',SUPPORT:'서포터',SPECIAL:'스페셜리스트'};
+function renderRoster(){
+ if(!catalog||!owned)return;
+ const grid=$('wardrobeRosterGrid'),groups=new Map();grid.replaceChildren();
+ for(const skin of catalog){if(!groups.has(skin.charId))groups.set(skin.charId,[]);groups.get(skin.charId).push(skin);}
+ const source=characters.length?characters:[...new Set(catalog.filter(s=>owned.has(s.id)).map(s=>s.charId))].map(charId=>({charId}));
+ const query=$('wardrobeRosterSearch').value.trim().toLocaleLowerCase('ko'),profession=$('wardrobeRosterProfession').value,filter=$('wardrobeRosterFilter').value,sort=$('wardrobeRosterSort').value,order=Object.keys(wardrobeProfessions);
+ const rows=source.filter(c=>c.charId.startsWith('char_')&&(!rosterMetadataLoaded||rosterMetadata[c.charId])).map(c=>{const skins=groups.get(c.charId)||[],outfits=skins.filter(s=>!s.basic),meta=rosterMetadata[c.charId]||{};return {c,skins,name:skins[0]?.operator||c.charId,rarity:meta.rarity||0,profession:meta.profession||'',owned:outfits.filter(s=>owned.has(s.id)).length,total:outfits.length};});
+ const filtered=rows.filter(r=>(!query||[r.name,...r.skins.map(s=>s.name)].some(v=>v.toLocaleLowerCase('ko').includes(query)))&&(!profession||r.profession===profession)&&(filter!=='owned'||r.owned>0)&&(filter!=='missing'||r.owned<r.total));
+ const alphabetical=(a,b)=>a.name.localeCompare(b.name,'ko'),professionRank=r=>order.includes(r.profession)?order.indexOf(r.profession):99;
+ filtered.sort((a,b)=>sort==='name'?alphabetical(a,b):sort==='owned'?b.owned-a.owned||b.rarity-a.rarity||alphabetical(a,b):b.rarity-a.rarity||professionRank(a)-professionRank(b)||alphabetical(a,b));
+ $('wardrobeRosterSummary').textContent=filtered.length+'명 · 스킨 '+filtered.reduce((n,r)=>n+r.owned,0)+' / '+filtered.reduce((n,r)=>n+r.total,0);
+ $('wardrobeRosterEmpty').hidden=filtered.length>0;
+ for(const r of filtered){
+  const {c,skins,name}=r,current=skins.find(s=>s.id===(previewEquipped.get(c.charId)||c.skin))||skins.find(s=>s.basic&&s.elite===(c.elite>=2?2:0))||skins[0];
+  const button=make('button');button.type='button';button.className='wardrobe-roster-card';button.dataset.rarity=String(r.rarity);button.setAttribute('aria-label',name+' · 스킨 '+r.owned+' / '+r.total);button.style.setProperty('--roster-rarity',({6:'#ff9b45',5:'#e5c65a',4:'#b99bdb',3:'#72a8d0',2:'#94b36e',1:'#a8a8a8'})[r.rarity]||'var(--z-border)');
+  const visual=make('div');visual.className='wardrobe-roster-visual';const img=make('img');img.alt='';img.loading='lazy';img.decoding='async';if(current?.portrait)img.src='https://raw.githubusercontent.com/yuanyan3060/ArknightsGameResource/main/portrait/'+encodeURIComponent(current.portrait)+'.png';img.onerror=()=>{img.hidden=true;};visual.append(img);if(r.rarity){const tag=make('span',r.rarity+'★ · '+(wardrobeProfessions[r.profession]||''));tag.className='wardrobe-roster-tag';visual.append(tag);}
+  const info=make('div');info.className='wardrobe-roster-info';info.append(make('strong',name),make('small','스킨 '+r.owned+' / '+r.total));button.append(visual,info);
+  button.onclick=()=>{selectedChar=c.charId;selectedSkin=current?.id;$('wardrobeSearch').value='';$('wardrobeRoster').hidden=true;$('wardrobeDetail').hidden=false;render();};grid.append(button);
+ }
+}
+for(const id of ['wardrobeRosterProfession','wardrobeRosterFilter','wardrobeRosterSort'])$(id).onchange=renderRoster;
 $('wardrobeBack').onclick=()=>{stopSeriesMotion();seriesDrag=null;stopCardMotion();cancelAnimationFrame(dragFrame);dragFrame=0;drag=null;clearOldScenes();clearSD();$('wardrobeRoster').hidden=false;$('wardrobeDetail').hidden=true;};$('wardrobeRosterSearch').oninput=renderRoster;
 if(!demo)try{characters=JSON.parse(localStorage.getItem('zootAdminWardrobeCharacters')||'[]');}catch{}
 
