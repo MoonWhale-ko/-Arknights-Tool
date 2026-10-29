@@ -11,3 +11,6 @@
 .medal-art.is-missing img{opacity:.65}
 
 .medal-art:not(.is-missing)>img{filter:none}
+
+/* Reserve room for the enlarged tips instead of cutting them at the icon strip. */
+.medal-art{overflow:visible}#gloryAlbumArt{overflow:visible;padding-bottom:4px;height:86px}#gloryAlbumArt .medal-art{flex-shrink:1;min-width:0}
