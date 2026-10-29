@@ -7,7 +7,7 @@
 .album-summary{min-width:0}.medal-types{max-width:100%}@media(max-width:760px){.album-page{grid-template-columns:minmax(0,1fr)}}
 /* The same backing plate and original medal colors are used in both themes. */
 .medal-art{position:relative;isolation:isolate}.medal-art>img{position:absolute;inset:0;z-index:1}.medal-image-fallback{position:relative;z-index:1}
-.medal-art[data-fitted=true]:before{content:'';position:absolute;inset:0;background:#606060;clip-path:var(--medal-outline);pointer-events:none}
+.medal-art[data-fitted=true]:before{content:'';position:absolute;inset:0;background:#606060;clip-path:var(--medal-outline);scale:1.05;transform-origin:center;pointer-events:none}
 .medal-art.is-missing img{opacity:.65}
 
 .medal-art:not(.is-missing)>img{filter:none}
