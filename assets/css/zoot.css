@@ -116,3 +116,5 @@ body dialog.zoot-account-dialog #accountApply:disabled{background:var(--z-disabl
 .zoot-drawer,.zoot-drawer *{box-sizing:border-box}
 
 html[data-theme=dark] .medal-home-icon{filter:brightness(0) invert(1)}
+
+@media(min-width:761px){.zoot-home .wrap:has(a[href="medals.html"]){max-width:1440px}.zoot-home .grid:has(a[href="medals.html"]){grid-template-columns:repeat(4,minmax(0,1fr));width:90%}}
