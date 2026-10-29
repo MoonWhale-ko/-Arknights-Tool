@@ -21,3 +21,6 @@
 @font-face{font-family:GloryBenderLight;src:url('/medals/native/game-bender-light.woff2') format('woff2');font-display:swap}
 
 .native-text-body{display:block;width:100%;min-width:0}.native-progress-current{color:#f39800}
+
+/* Original sprites already carry their intended shading. */
+.native-medal-art img{filter:none}.native-medal-art img.is-missing{filter:grayscale(1);opacity:.347}
