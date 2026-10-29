@@ -1,5 +1,15 @@
 // Feature guides share the spotlight navigation and provide copy per step.
 export const GUIDES={
+ medals:{page:'medals.html',name:'훈장',scenes:{'#medalSearch':'list','#medalSort':'list','#medalTypes':'list','.medal-set-card':'sets'},steps:[
+ ['#gameImport','게임 계정 가져오기','오퍼레이터 페이지와 같은 계정 가져오기입니다. 조회 결과를 적용하면 훈장 보유 상태와 획득일도 갱신됩니다. 이미 가져온 계정 정보는 자동으로 사용합니다.'],
+ ['.stats-grid','나의 수집 기록','획득한 훈장, 가공한 훈장, 수집 중인 세트 수를 확인합니다. 계정을 가져오기 전에는 보유 수를 알 수 없어 —로 표시합니다.'],
+ ['#gloryDisplay','훈장 전시','획득한 세트를 인게임 원본 좌표로 배치합니다. 훈장을 누르면 설명, 획득 조건과 획득일을 확인할 수 있습니다.'],
+ ['#gloryEdit','전시할 세트 고르기','획득한 훈장이 있는 세트 중 전시할 세트를 고릅니다. 전시 선택은 이 브라우저에 저장되며 게임 계정은 변경하지 않습니다.'],
+ ['#medalSearch','훈장 검색','이름, 세트 이름, 획득 조건으로 검색합니다. 제목이나 조건이 공개되지 않은 훈장은 미공개 훈장으로 표시됩니다.'],
+ ['#medalSort','목록 정렬','검색란 오른쪽에서 인게임 순서, 최근 획득순, 이름순을 고릅니다. 카테고리는 유지하고 각 카테고리 안에서 정렬합니다.'],
+ ['#medalTypes','분류 바로가기','훈장 전체를 한 목록으로 보여줍니다. 오른쪽 분류를 누르면 해당 위치로 이동하며, 위 카테고리가 화면에서 사라지면 다음 분류가 강조됩니다. 왼쪽에는 현재 분류의 개수와 가공 현황이 표시됩니다.'],
+ ['.medal-set-card','세트 컬렉션','세트의 수집 진행도와 원본 배치를 확인합니다. 카드를 누르면 세트 전체 훈장이 열립니다. 획득한 훈장이 하나도 없는 세트에는 컬렉션 배경을 표시하지 않습니다.']
+ ]},
  wardrobe:{page:'wardrobe.html',name:'옷장',steps:[['#wardrobeLoad','게임 계정 가져오기','계정을 가져오면 보유 오퍼레이터와 스킨이 자동 반영됩니다. 기존에 가져온 계정 정보도 사용합니다.'],['#wardrobeRosterSearch','오퍼레이터와 스킨 검색','보유 오퍼레이터를 이름이나 스킨 이름으로 찾으세요. 오퍼레이터를 누르면 착용 스킨과 보유 스킨을 확인할 수 있습니다.'],['#wardrobeSkinOwnership','스킨 보유 여부','전체·보유·미보유 중 표시할 스킨을 고르세요. 오퍼레이터 목록은 보유한 캐릭터만 표시합니다.'],['#wardrobeInlineRarities','등급 선택','켜진 등급만 표시합니다. 버튼을 눌러 강조를 끄면 해당 등급 오퍼레이터가 숨겨집니다.'],['#wardrobeProfessionTabs','직군 선택','원하는 직군을 선택하세요. 전체를 누르면 모든 직군을 다시 표시합니다.'],['#wardrobeRosterSort','정렬과 역순','레어도·이름·보유 스킨 수로 정렬합니다. 선택한 정렬 버튼을 다시 누르거나 화살표를 눌러 순서를 뒤집을 수 있습니다.'],['#wardrobeRosterGroup','직군별 모아보기','켜면 같은 직군의 오퍼레이터를 묶어 보여줍니다. 선택한 정렬은 각 직군 안에 적용됩니다.']]},
  mining:{page:'rewards.html',name:'광산',steps:[['#rewardsImport','계정 가져오기','요스타 계정을 가져와 조회 결과를 적용하면 남은 일회성 보상이 자동으로 계산됩니다. 이미 가져온 계정 기록이 있으면 그 기록을 사용합니다.'],['.reward-totals','남은 재화','순오리지늄과 합성옥의 남은 일회성 보상을 확인합니다. 육성이나 선행 스테이지 진행이 필요한 보상도 포함합니다.'],['.reward-filters','보상 찾기','스테이지나 오퍼레이터 이름으로 검색하고, 광산 선택 버튼을 누르고 팝업의 체크박스로 표시할 광산을 고르세요. 숨긴 광산은 합계에서도 제외합니다. 목록에는 미수령 보상만 표시합니다.'],['#rewardsGroups','콘텐츠별 보상','콘텐츠 카드를 누르면 해당 줄 아래에 상세 보상 박스가 열립니다. 한 번에 하나만 열리며, 메인은 지역 번호, 사이드 스토리는 소속 분류를 제목 옆에 표시합니다.'],['.reward-stage-panel:not([hidden])','스테이지와 작전 구분','같은 번호의 기본·험지 작전은 하나로 묶습니다. 스테이지를 펼쳐 작전별 보상과 해금 조건을 확인하세요. 패러독스 시뮬레이션은 입장 가능한 오퍼레이터를 먼저, 각 그룹 안에서는 높은 등급부터 표시합니다.']]},
  recruitment:{page:'recruitment.html',name:'공개모집 계산기',steps:[["#tagSearch","태그 앞글자 검색","태그 이름의 첫 글자를 이어서 입력하면 해당 태그가 선택됩니다. 같은 글자로 시작하는 태그가 여러 개면 빨간 테두리로 표시된 후보 중 하나를 골라 주세요."],[".recruit-time","모집 시간","실제 게임에서 설정할 모집 시간을 선택하세요. 선택한 시간에 따라 등장 가능한 등급과 계산 결과가 달라집니다."],["#tagArea","태그 선택","게임에 표시된 태그를 최대 5개 선택하세요. 선택한 태그를 다시 누르면 해제되고, 태그 초기화를 누르면 모두 지워집니다."],["#settingsBtn","추가 설정","표시할 등급, 고등급 확정식만 보기, 오퍼레이터 이미지 방식을 설정할 수 있습니다. 변경한 설정은 적용을 눌러 저장하세요."],[".results-header","모집 결과","선택한 태그에서 가능한 조합과 오퍼레이터를 확인합니다. 오퍼레이터에 마우스를 올리면 해당 오퍼레이터가 가진 태그를 볼 수 있습니다."]]},
@@ -36,9 +46,10 @@ function start(){
  const url=new URL(location.href),key=url.searchParams.get('guide'),config=GUIDES[key];
  const currentPage=location.pathname.split('/').pop();
  if(!config||![config.page,config.page.replace(/\.html$/,'')].includes(currentPage))return;
+ if(key==='medals'&&!document.documentElement.classList.contains('medals-ready')){document.addEventListener('medals-ready',start,{once:true});return;}
  if(key==='mining'&&document.getElementById('rewardsResults')?.hidden&&miningReadyWait++<15){setTimeout(start,100);return;}
  url.searchParams.delete('guide');history.replaceState(history.state,'',url);
- const steps=config.steps.filter(([selector])=>{const target=document.querySelector(selector);return target&&(key!=='mining'||target.getClientRects().length>0);});
+ const steps=config.steps.filter(([selector])=>{if(key==='medals')return true;const target=document.querySelector(selector);return target&&(key!=='mining'||target.getClientRects().length>0);});
  if(!steps.length)return;
  const previousFocus=document.activeElement,scroll={x:scrollX,y:scrollY},completed=new Set();
  // A regular overlay leaves the highlighted real control interactive. Four shields
@@ -64,6 +75,7 @@ function start(){
  function show(){
   stepVersion++;detachAction();observer.disconnect();
   const step=steps[index],action=step[3],done=completed.has(index),waiting=pending();
+  if(config.scenes)document.dispatchEvent(new CustomEvent('medals-guide-view',{detail:config.scenes[step[0]]||'home'}));
   target=document.querySelector(done&&action?.resultTarget? action.resultTarget:step[0]);
   if(!target){finish();return;}
   $('#zootTourTitle').textContent=done&&action?.resultTitle?action.resultTitle:step[1];
