@@ -1,3 +1,4 @@
+import {fitMedalBacking} from './medal-backing.mjs';
 import {medalState,accountMedals,gameText} from './model.mjs';
 const $=id=>document.getElementById(id);
 const el=(tag,text,cls)=>{const node=document.createElement(tag);if(text!==undefined)node.textContent=text;if(cls)node.className=cls;return node;};
@@ -10,7 +11,7 @@ const name=m=>m.hidden&&!state(m).owned?'미공개 훈장':gameText(m.name);
 const condition=m=>m.hidden&&!state(m).owned?'획득하면 조건이 공개됩니다.':gameText(m.condition);
 const groupName=m=>gameText(catalog.groups.find(g=>g.id===m.group)?.name||catalog.types.find(t=>t.id===m.type)?.name||'');
 const savedDisplay=()=>{try{return localStorage.getItem(DISPLAY)||'';}catch{return '';}};
-function picture(m){const s=state(m),box=el('div',undefined,'medal-art'+(s.owned?'':' is-missing')),img=el('img');img.src='https://raw.githubusercontent.com/fexli/ArknightsResource/main/medal/'+encodeURIComponent(s.trimmed?m.advanced:m.id)+'.png';img.alt='';img.loading='lazy';img.decoding='async';img.width=160;img.height=160;img.onerror=()=>{img.hidden=true;box.append(el('span','이미지 준비 중','medal-image-fallback'));};box.append(img);return box;}
+function picture(m){const s=state(m),box=el('div',undefined,'medal-art'+(s.owned?'':' is-missing')),img=el('img');img.crossOrigin='anonymous';img.onload=()=>fitMedalBacking(img,box);img.src='https://raw.githubusercontent.com/fexli/ArknightsResource/main/medal/'+encodeURIComponent(s.trimmed?m.advanced:m.id)+'.png';img.alt='';img.loading='lazy';img.decoding='async';img.width=160;img.height=160;img.onerror=()=>{img.hidden=true;box.append(el('span','이미지 준비 중','medal-image-fallback'));};box.append(img);return box;}
 function badge(m){const s=state(m);return el('span',records===null?'계정 미연동':s.trimmed?'가공 완료':s.owned?'획득':'미획득','medal-status '+(s.owned?'owned':'missing'));}
 function medalCard(m){const card=el('button',undefined,'medal-row'+(state(m).owned?' is-owned':' is-missing'));card.type='button';card.append(picture(m));const copy=el('div',undefined,'medal-row-copy'),title=el('div',undefined,'medal-row-title');title.append(el('strong',name(m)),badge(m));copy.append(el('small',groupName(m),'medal-category'),title,el('p',condition(m)||gameText(m.description)));card.append(copy);card.onclick=()=>show(m.id);return card;}
 function displayBoard(id){const board=el('div',undefined,'display-board'),owned=members(id).filter(m=>state(m).owned);for(const m of owned){const button=el('button',undefined,'display-medal');button.type='button';button.setAttribute('aria-label',name(m));button.append(picture(m));button.onclick=()=>show(m.id);board.append(button);}if(!owned.length)board.append(el('p','획득한 훈장 세트를 전시해 보세요.','display-placeholder'));return board;}
