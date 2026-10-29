@@ -18,7 +18,7 @@
 @media(min-width:1000px) and (min-height:650px){
  body.medals-home .glory{height:calc(100dvh - var(--z-bar,60px));min-height:0;display:flex;flex-direction:column;padding:24px 32px}
  body.medals-home .glory-top{flex:none;margin-bottom:18px}
- body.medals-home .glory-home{flex:1;min-height:0;display:grid;grid-template-rows:72px minmax(0,1fr) 140px;gap:16px}
+ body.medals-home .glory-home{flex:1;min-height:0;display:grid;grid-template-rows:72px minmax(0,1fr);gap:16px}
  body.medals-home .stats-grid{margin:0}.stat{padding:14px 22px}
  body.medals-home .home-grid{min-height:0;gap:16px}
  body.medals-home .home-display{min-height:0}.home-display .section-heading{padding:16px 20px}
