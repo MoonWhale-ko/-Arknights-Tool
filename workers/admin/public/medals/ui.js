@@ -1,4 +1,4 @@
-import {fitMedalBacking} from './medal-backing.mjs';
+import {fitMedalBacking} from './medal-backing.mjs?v=2';
 import {medalState,accountMedals,gameText} from './model.mjs';
 const $=id=>document.getElementById(id);
 const el=(tag,text,cls)=>{const node=document.createElement(tag);if(text!==undefined)node.textContent=text;if(cls)node.className=cls;return node;};
