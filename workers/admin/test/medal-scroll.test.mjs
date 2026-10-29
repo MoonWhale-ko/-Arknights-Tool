@@ -1,0 +1,4 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {activeCategory,momentumStep} from '../public/medals/medal-scroll.mjs';
+test('category stays active until its last visible item has left the viewport',()=>{const sections=[{id:'career',bottom:101},{id:'episode',bottom:400}];assert.equal(activeCategory(sections,99),'career');assert.equal(activeCategory(sections,101),'episode');assert.equal(activeCategory([],0),'');});
+test('momentum slows progressively and is independent of frame splitting',()=>{const a=momentumStep(2,16),b=momentumStep(a.velocity,16),whole=momentumStep(2,32);assert.ok(a.velocity<2&&a.velocity>0);assert.ok(b.velocity<a.velocity);assert.ok(Math.abs(a.distance+b.distance-whole.distance)<1e-9);assert.ok(Math.abs(b.velocity-whole.velocity)<1e-9);assert.equal(momentumStep(0,16).distance,0);});
