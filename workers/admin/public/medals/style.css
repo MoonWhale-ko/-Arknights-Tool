@@ -5,7 +5,9 @@
 @media(max-width:450px){.page-tabs{gap:24px}.page-tabs button{font-size:13px}.home-entries{gap:10px}.collection-entry>span:last-of-type,.album-entry>span:last-of-type{font-size:11px;line-height:1.6}.home-entries strong{font-size:16px}.album-toolbar{gap:6px}.ownership-tabs button{padding:10px 12px}.album-toolbar .subtle-button{font-size:11px;padding:10px}.sort-label{width:100%}.sort-label select{width:100%}.medal-row{padding:16px 14px;gap:14px}.medal-row .medal-art{width:66px}.medal-row-title{flex-wrap:wrap;gap:8px}.medal-row-title strong{font-size:14px}.medal-row-copy p{font-size:11px}.medals-grid,.set-page .medals-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.medals-grid .medal-art{width:90px}.sets-grid{grid-template-columns:1fr}.set-card-icons{height:90px}.set-card-top{display:flex}.set-card-top span{margin-top:0}.stat b{font-size:24px}.set-intro h2{font-size:22px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;transform:none!important}}
 .album-summary{min-width:0}.medal-types{max-width:100%}@media(max-width:760px){.album-page{grid-template-columns:minmax(0,1fr)}}
-/* A separate backing plate preserves white medal details in the light theme. */
+/* The same backing plate and original medal colors are used in both themes. */
 .medal-art{position:relative;isolation:isolate}.medal-art>img,.medal-image-fallback{position:relative;z-index:1}
-:root:not([data-theme=dark]) .medal-art:before{content:'';position:absolute;inset:3%;background:#606060;clip-path:polygon(50% 0,93.3% 25%,93.3% 75%,50% 100%,6.7% 75%,6.7% 25%);pointer-events:none}
-:root:not([data-theme=dark]) .medal-art.is-missing img{opacity:.65}
+.medal-art:before{content:'';position:absolute;inset:3%;background:#606060;clip-path:polygon(50% 0,93.3% 25%,93.3% 75%,50% 100%,6.7% 75%,6.7% 25%);pointer-events:none}
+.medal-art.is-missing img{opacity:.65}
+
+.medal-art:not(.is-missing)>img{filter:none}
