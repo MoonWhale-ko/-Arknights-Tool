@@ -1,4 +1,4 @@
-import {activeCategory,enableMedalDrag} from './medal-scroll.mjs';
+import {activeCategory,enableMedalDrag} from './medal-scroll.mjs?v=2';
 import {fitMedalBacking} from './medal-backing.mjs?v=2';
 import {medalState,accountMedals,gameText} from './model.mjs';
 const $=id=>document.getElementById(id);
@@ -20,7 +20,7 @@ function displayBoard(id,interactive=true){
  if(!geometry){board.append(el('p','등록된 컬렉션 배치가 없습니다.','display-placeholder'));return board;}
  board.style.aspectRatio=geometry.width+' / '+geometry.height;board.dataset.ratio=geometry.width/geometry.height;
  if(owned&&background){const img=el('img',undefined,'collection-background');img.src='/medals/native/'+background.file;img.alt='';img.loading='lazy';img.draggable=false;board.append(img);}
- for(const m of list){const position=geometry.medals[m.id];if(!position)continue;if(background&&owned&&!state(m).owned)continue;const token=el(interactive?'button':'span',undefined,'collection-token');if(interactive){token.type='button';token.setAttribute('aria-label',name(m));token.onclick=()=>show(m.id);}token.style.left=position.x/geometry.width*100+'%';token.style.top=(geometry.height-position.y)/geometry.height*100+'%';token.style.width=layout.iconSizes[m.rarity]/geometry.width*100+'%';token.append(picture(m));board.append(token);}
+ for(const m of list){const position=geometry.medals[m.id];if(!position)continue;if(background&&owned&&!state(m).owned)continue;const token=el(interactive?'button':'span',undefined,'collection-token');if(interactive){token.type='button';token.setAttribute('aria-label',name(m));token.onclick=()=>show(m.id);}const size=layout.iconSizes[m.rarity];token.style.left=(position.x-size/2)/geometry.width*100+'%';token.style.top=(geometry.height-position.y-size/2)/geometry.height*100+'%';token.style.width=size/geometry.width*100+'%';token.append(picture(m));board.append(token);}
  return board;
 }
 function fitCollectionBoards(){for(const board of document.querySelectorAll('.display-stage>.collection-board')){const host=board.parentElement,r=Number(board.dataset.ratio);if(!host.clientWidth||!host.clientHeight)continue;board.style.width=Math.min(host.clientWidth-48,(host.clientHeight-24)*r)+'px';}}
