@@ -20,3 +20,10 @@ export function windowRange(scrollTop,viewportHeight,rowHeight,count,overscan=2)
  const first=Math.max(0,Math.floor(scrollTop/rowHeight)-overscan),last=Math.min(count,Math.ceil((scrollTop+viewportHeight)/rowHeight)+overscan);
  return{first,last,height:count*rowHeight};
 }
+
+// ScrollRect clamps serialized content offsets to the viewport after layout.
+export function scrollContentOffset(view,content){
+ if(!content)return{x:0,y:0};
+ const axis=(start,length,cstart,clength)=>clength<=length?start-cstart:cstart>start?start-cstart:cstart+clength<start+length?start+length-cstart-clength:0;
+ return{x:axis(view.x,view.w,content.x,content.w),y:axis(view.y,view.h,content.y,content.h)};
+}
