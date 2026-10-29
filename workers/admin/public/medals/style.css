@@ -42,3 +42,5 @@
 }
 @media(min-width:1000px) and (min-height:650px){body.medals-home .home-entries{grid-template-rows:repeat(2,minmax(0,1fr))}}
 @media(min-width:1000px) and (min-height:650px) and (max-height:800px){body.medals-home #gloryAlbumArt{display:none}body.medals-home .album-entry,body.medals-home .collection-entry{padding:16px;gap:6px}}
+
+#gameImport{display:flex;align-items:center;gap:8px;flex:none;padding:11px 16px;background:var(--z-input);color:var(--z-text);font-size:13px;font-weight:600;clip-path:polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px)}#gameImport svg{width:20px;height:20px}#gameImport:hover{background:var(--z-hover)}
