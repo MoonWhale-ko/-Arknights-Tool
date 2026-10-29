@@ -27,3 +27,6 @@
 
 /* No hand-made shadow layer over native sprite artwork. */
 .native-white-header,.native-icon-tile{box-shadow:none}
+
+/* Native MobileBlur snapshot sits behind the central detail panel only. */
+.native-blur-backdrop{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;image-rendering:auto}
