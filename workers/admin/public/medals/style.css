@@ -8,7 +8,7 @@
 
 .native-entry-mesh{pointer-events:none;object-fit:contain;opacity:.6}
 
-.native-set-row{zoom:1}.native-set-slot{position:relative;width:100%;overflow:hidden;margin-bottom:8px}.native-set-row{position:absolute;left:0;top:0;margin:0}.native-source-text{overflow-wrap:anywhere}.native-detail-dialog{position:fixed;inset:0;width:100vw;height:100dvh;max-width:none;max-height:none;background:transparent;border:0;padding:0;overflow:hidden;box-shadow:none}.native-detail-dialog::backdrop{background:#0009;backdrop-filter:none}.native-detail-frame{position:absolute;left:50%;top:50%;width:1280px;height:720px;transform-origin:center;font-family:GloryNoto,sans-serif}.native-detail-panel{position:absolute}.native-detail-back{position:absolute;left:7px;top:14px;width:157px;height:69px;border:0;background:#242424;color:white;font-size:44px;line-height:1;padding:0;font-family:GloryNoto,sans-serif}.native-detail-panel .native-source-node{pointer-events:none}.native-detail-panel .native-medal-art{pointer-events:none}
+.native-set-row{zoom:1}.native-set-slot{position:relative;width:100%;overflow:hidden;margin-bottom:8px}.native-set-row{position:absolute;left:0;top:0;margin:0}.native-source-text{overflow-wrap:anywhere}.native-detail-dialog{position:fixed;inset:0;width:100vw;height:100dvh;max-width:none;max-height:none;background:transparent;border:0;padding:0;overflow:hidden;box-shadow:none}.native-detail-dialog::backdrop{background:#0009;backdrop-filter:none}.native-detail-frame{position:absolute;left:50%;top:50%;width:1280px;height:720px;transform-origin:center;font-family:GloryNoto,sans-serif}.native-detail-panel{position:absolute}.native-detail-panel .native-source-node{pointer-events:none}.native-detail-panel .native-medal-art{pointer-events:none}
 
 .native-scroll-region{position:absolute;overflow-x:hidden;overflow-y:auto;pointer-events:auto;overscroll-behavior:contain;touch-action:pan-y;scrollbar-width:thin;scrollbar-color:#888 transparent}.native-scroll-content{position:relative}.native-scroll-region .native-source-node{pointer-events:none}
 
@@ -16,7 +16,7 @@
 
 .native-white-header{position:absolute;background:white;box-shadow:0 3px 8px #0003}.native-expiry-toggle{background:none;color:#9a9a9a;padding:0;display:flex;align-items:center;justify-content:space-between;font:700 16px GloryNoto,sans-serif;text-align:left}.native-expiry-toggle span{display:grid;place-items:center;background:#f39800;color:#fff;width:29px;height:29px;font:700 26px GloryNoto,sans-serif;flex:none;margin-left:9px}.native-expiry-toggle[aria-checked=false] span{background:#bbb}
 
-.native-detail-dialog::backdrop{background:transparent;backdrop-filter:none}.native-detail-name{position:absolute;font:700 26px GloryNoto,sans-serif;color:#333;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.native-detail-panel{overflow:visible}
+.native-detail-dialog::backdrop{background:transparent;backdrop-filter:none}.native-detail-panel{overflow:visible}
 
 @font-face{font-family:GloryBenderLight;src:url('/medals/native/game-bender-light.woff2') format('woff2');font-display:swap}
 
@@ -24,3 +24,6 @@
 
 /* Original sprites already carry their intended shading. */
 .native-medal-art img{filter:none}.native-medal-art img.is-missing{filter:grayscale(1);opacity:.347}
+
+/* No hand-made shadow layer over native sprite artwork. */
+.native-white-header,.native-icon-tile{box-shadow:none}
