@@ -38,3 +38,10 @@ test('expiry switch uses recovered sprites and bounds rather than a text check g
  for(const name of['img_select','img_unselect']){const n=nodes.find(n=>n.name===name);assert.deepEqual(n.size,{x:30,y:30});const image=n.components.find(c=>c.image).image,bytes=await readFile(new URL('../public/medals/native/'+image.file,import.meta.url));assert.equal(bytes.readUInt32BE(16),30);assert.equal(bytes.readUInt32BE(20),30);}
  const r=resolveLayout(nodes,{w:100,h:100});assert.equal(r.get(2455).rect.w,30);assert.equal(r.get(2159).rect.h,30);
 });
+
+test('scroll content is clamped before painting detail text, including disabled horizontal scrolling',async()=>{
+ const {scrollContentOffset}=await import('../public/medals/native-presentation.mjs');
+ assert.deepEqual(scrollContentOffset({x:100,y:40,w:720,h:250},{x:82,y:40,w:720,h:65}),{x:18,y:0});
+ assert.deepEqual(scrollContentOffset({x:0,y:0,w:720,h:250},{x:0,y:-100,w:720,h:600}),{x:0,y:0});
+ assert.deepEqual(scrollContentOffset({x:0,y:0,w:720,h:250},{x:0,y:-400,w:720,h:600}),{x:0,y:50});
+});
