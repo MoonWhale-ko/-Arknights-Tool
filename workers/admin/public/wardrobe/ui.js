@@ -1,7 +1,7 @@
 import {showIllustration,clearIllustration,illustrationFullscreen} from './illust.js?v=1';
 import {collectionOriginiteCost,originiteCashEquivalent} from './collection-cost.mjs?v=2';
 import {loadOriginalLayouts,applyOriginalLayout,compareSkinOrder,NATIVE_MOTION,nativeCardFrames,nativeDragState,applyLeftMotion,skinSeriesCategory,skinAssetCharacter} from './original-layout.js?v=21';
-import {showSD,clearSD,releaseSD} from './sd.js?v=12';
+import {showSD,clearSD,releaseSD} from './sd.js?v=13';
 const $=id=>document.getElementById(id),make=(tag,text)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=text;return el;};
 const demo=document.body.dataset.wardrobeDemo==='true';
 const previewEquipped=new Map();
