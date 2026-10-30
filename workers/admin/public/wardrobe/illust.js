@@ -22,8 +22,9 @@ async function start(a){
  // These transition mixes are stored in the original Skadi prefab.
  if(a.skin.id==='char_1012_skadi2#2')for(const [from,to]of [['Idle','Special'],['Idle','Interact'],['Special','Interact']])model.state.data.setMix(from,to,1);
  model.state.setAnimation(0,names.idle.name,true);model.update(0);const b=model.getLocalBounds();a.bounds={x:b.x,y:b.y,width:b.width,height:b.height};
+ box.dataset.motion=names.idle.name;
  let elapsed=0,delay=specialDelay(true,names.idle.duration),busy=false;
- const play=clips=>{if(busy||!clips.length)return;const clip=clips[Math.floor(Math.random()*clips.length)];busy=true;const track=model.state.setAnimation(0,clip.name,false);model.state.addAnimation(0,names.idle.name,true,0);track.listener={complete:()=>{busy=false;elapsed=0;delay=specialDelay(false);}};};
+ const play=clips=>{if(busy||!clips.length)return;const clip=clips[Math.floor(Math.random()*clips.length)];busy=true;box.dataset.motion=clip.name;const track=model.state.setAnimation(0,clip.name,false);model.state.addAnimation(0,names.idle.name,true,0);track.listener={complete:()=>{box.dataset.motion=names.idle.name;busy=false;elapsed=0;delay=specialDelay(false);}};};
  box.onclick=e=>{e.stopPropagation();play(names.interact);};
  app.ticker.add(()=>{const dt=Math.min(app.ticker.deltaMS,100)/1000;model.update(dt);if(!busy&&names.special.length){elapsed+=dt;if(elapsed>=delay)play(names.special);}});
  a.fit=()=>{if(a.closed)return;box.style.cssText=a.img.style.cssText;box.style.visibility='';const w=parseFloat(a.img.style.width)||1024,h=parseFloat(a.img.style.height)||1024;app.renderer.resize(w,h);const scale=Math.min(w/a.bounds.width,h/a.bounds.height);model.scale.set(scale);model.position.set(w/2-(a.bounds.x+a.bounds.width/2)*scale,h/2-(a.bounds.y+a.bounds.height/2)*scale);app.render();};
