@@ -1,6 +1,6 @@
 import {createNativeEmitter} from './illust-particles.mjs?v=3';
 import {applyBoneFollower,effectIsBehind} from './illust-effects-transform.mjs?v=2';
-import {canvasEffectMaterial} from './illust-effects-canvas.mjs?v=3';
+import {canvasEffectMaterial,anchorGpuMaterial} from './illust-effects-canvas.mjs?v=4';
 const profiles={
  'char_1012_skadi2#2':'skadi-e2',
  'char_437_mizuki@sale#7':'mizuki-sale7',
@@ -10,7 +10,7 @@ const resource=async (root,file)=>{const r=await fetch(root+file);if(!r.ok)throw
 const st=texture=>texture?[texture.scale.x,texture.scale.y,texture.offset.x,texture.offset.y]:[1,1,0,0];
 const rgba=c=>[c?.r??1,c?.g??1,c?.b??1,c?.a??1];
 /** Original rigid background meshes. Particle emitters remain a separate layer. */
-export async function createIllustrationEffects(skin,isClosed,model){
+export async function createIllustrationEffects(skin,isClosed,model,renderer){
  const profile=profiles[skin.id];if(!profile)return null;
  const root=new URL('./effects/'+profile+'/',import.meta.url).href;
  const P=window.PIXI,scene=await resource(root,'scene.json?v=6'),back=new P.Container(),front=new P.Container(),textures=[],meshes=[],canvasMaterials=[],emitters=[];
@@ -31,7 +31,11 @@ export async function createIllustrationEffects(skin,isClosed,model){
      if(!texture.baseTexture.valid)await new Promise((resolve,reject)=>{const base=texture.baseTexture,timer=setTimeout(()=>{cleanup();reject(Error('Effect texture timeout'));},12000);const cleanup=()=>{clearTimeout(timer);base.off('loaded',loaded);base.off('error',failed);};const loaded=()=>{cleanup();resolve();};const failed=()=>{cleanup();reject(Error('Effect texture failed'));};base.once('loaded',loaded);base.once('error',failed);});
     }uniforms[name]=texture;
    }
-   const material=canvasEffectMaterial(P,layer,uniforms);canvasMaterials.push(material);if(layer.emitter){const emitter=createNativeEmitter(P,layer.emitter,material.texture);(effectIsBehind(layer,scene.spineSortingOrder)?back:front).addChild(emitter.box);emitter.source=layer.emitter;emitter.bone=layer.emitter.bone?model?.skeleton.findBone(layer.emitter.bone.boneName):null;if(layer.emitter.bone){emitter.box.visible=!!emitter.bone;if(emitter.bone)applyBoneFollower(emitter.box,emitter.bone,layer.emitter.bone,model.skeleton);}emitters.push(emitter);continue;}const mesh=new P.SimpleMesh(material.texture,new Float32Array(layer.vertices.flat()),new Float32Array(layer.uv.flat()),new Uint16Array(layer.triangles.flat()));mesh.blendMode=(layer.shader.name.endsWith('/Additive')||layer.shader.name.includes('Dissolve Add'))?P.BLEND_MODES.ADD:P.BLEND_MODES.NORMAL;mesh.name=layer.name;(effectIsBehind(layer,scene.spineSortingOrder)?back:front).addChild(mesh);meshes.push({mesh,layer,uniforms,bone:layer.bone?model?.skeleton.findBone(layer.bone.boneName):null});
+   const anchored=layer.shader.name.includes('Disturb Anchor');
+   // Site presentation correction; retain the source values in scene.json.
+   if(anchored){uniforms._IntensityU*=1.25;uniforms._IntensityV*=1.25;uniforms._PresentationOpacity=1.3;}
+   const gpu=anchored&&!effectIsBehind(layer,scene.spineSortingOrder)&&renderer?.type===P.RENDERER_TYPE.WEBGL;
+   const material=gpu?anchorGpuMaterial(P,layer,uniforms):canvasEffectMaterial(P,layer,uniforms);canvasMaterials.push(material);if(layer.emitter){const emitter=createNativeEmitter(P,layer.emitter,material.texture);(effectIsBehind(layer,scene.spineSortingOrder)?back:front).addChild(emitter.box);emitter.source=layer.emitter;emitter.bone=layer.emitter.bone?model?.skeleton.findBone(layer.emitter.bone.boneName):null;if(layer.emitter.bone){emitter.box.visible=!!emitter.bone;if(emitter.bone)applyBoneFollower(emitter.box,emitter.bone,layer.emitter.bone,model.skeleton);}emitters.push(emitter);continue;}const mesh=material.mesh||new P.SimpleMesh(material.texture,new Float32Array(layer.vertices.flat()),new Float32Array(layer.uv.flat()),new Uint16Array(layer.triangles.flat()));mesh.blendMode=(layer.shader.name.endsWith('/Additive')||layer.shader.name.includes('Dissolve Add'))?P.BLEND_MODES.ADD:P.BLEND_MODES.NORMAL;mesh.name=layer.name;(effectIsBehind(layer,scene.spineSortingOrder)?back:front).addChild(mesh);meshes.push({mesh,layer,uniforms,bone:layer.bone?model?.skeleton.findBone(layer.bone.boneName):null});
   }
   if(isClosed()){destroy();return null;}
   for(const item of meshes)if(item.layer.bone){item.mesh.visible=!!item.bone;if(item.bone)applyBoneFollower(item.mesh,item.bone,item.layer.bone,model.skeleton);}

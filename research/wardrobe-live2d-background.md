@@ -86,3 +86,11 @@ The missing dependency was resolved through the PC V074 manifest: arts/maps/effe
 The ocean's contour uses the original 2048² illustration alpha as a separate reference clip, sampled in registered illustration coordinates at 1024×512 bake resolution. This is a site-side boundary correction using the original illustration, not a claim to have recovered Unity's original scene mask. Character placement stays unchanged. Explicit clamp/repeat sampling and barycentric vertex-alpha interpolation prevent wrapped edge artifacts and rectangular rainbow layers.
 
 Validation: all 127 admin tests pass and preview build succeeds. Tests cover anchor displacement order, varying vertex alpha, edge clamping, original map identity and both native meshes. Browser checks follow deployment.
+
+### Distortion performance and visibility correction (2026-10-31)
+
+The native parsed shader pass confirms SrcAlpha / OneMinusSrcAlpha color blending; legacy material SrcBlend values are not authoritative. The foreground anchored layers now use a WebGL mesh shader when the character renderer supports WebGL, with original mesh alpha, texture orientation/wrap, tiling, red-channel displacement and time. Output is premultiplied for Pixi's normal blending. Canvas backgrounds remain separate.
+
+To address the user's weak-effect report, the site multiplies displacement by 1.25 and opacity by 1.3. These are deliberate presentation adjustments, not newly recovered native values; scene.json retains original values and animation periods. Character placement and ocean contour remain unchanged.
+
+The software fallback uses 160px moving textures, computes bilinear indices once, samples only the noise red channel, avoids per-pixel anchor RGBA allocations and skips fully transparent mesh pixels. A warmed 30-update Node synthetic 256px-source benchmark measured approximately 70ms/update before and 13ms/update after on this executor. This measures texture computation, not browser FPS, device performance, loading, or full scene rendering. Actual WebGL validation requires a GPU-capable browser; software fallback remains available.
