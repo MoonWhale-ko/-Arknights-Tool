@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
-import {nativeCurve,nativeScalar,nativeGradient,createNativeEmitter} from '../public/wardrobe/illust-particles.mjs';
+import {nativeCurve,nativeScalar,nativeGradient,nativeNoise,perlinNoise,createNativeEmitter} from '../public/wardrobe/illust-particles.mjs';
 import {illustrationViewport} from '../public/wardrobe/illust-model-map.mjs';
 const scene=JSON.parse(readFileSync(new URL('../public/wardrobe/effects/mizuki-sale7/scene.json',import.meta.url)));
 test('native Hermite curve preserves tangents and randomized constant endpoints',()=>{
@@ -36,8 +36,31 @@ test('action particles stay dormant, honor native delays, stop emitting and repl
  e.setPlaying(false);e.setPlaying(true);e.update(.35);assert.equal(e.box.children.length,1);
 });
 test('all exported systems keep finite positions and bounded populations during idle, special and interact',()=>{
- assert.equal(scene.particleSource.platform,'Windows');assert.equal(scene.emitters.length,24);
+ assert.equal(scene.particleSource.platform,'Windows');assert.equal(scene.emitters.length,27);
  assert.ok(scene.emitters.some(e=>e.bone?.boneName==='Mizuki_Bubble'));
  assert.ok(scene.emitters.some(e=>e.action==='special'&&e.bone?.boneName==='BG_BulbA'));
  for(const source of scene.emitters){const e=createNativeEmitter(P,source,texture,()=>.5);if(source.action){e.update(1);assert.equal(e.box.children.length,0);e.setPlaying(true);}for(let i=0;i<300;i++)e.update(1/30);assert.ok(e.box.children.length<=source.initial.maxNumParticles);for(const p of e.box.children)assert.ok([p.scale.x,p.scale.y,p.position.x,p.position.y,p.alpha].every(Number.isFinite));}
+});
+test('curl noise is smooth, deterministic, zero at zero strength, and changes particle paths',()=>{
+ const source=scene.emitters.find(e=>e.noise?.enabled),module=structuredClone(source.noise);
+ const a=nativeNoise(module,[.3,.4,.5],0,.5),b=nativeNoise(module,[.3001,.4,.5],0,.5);
+ assert.deepEqual(a,nativeNoise(module,[.3,.4,.5],0,.5));assert.ok(Math.hypot(...a)>0);assert.ok(Math.hypot(...a.map((v,i)=>v-b[i]))<.02);
+ module.strength={minMaxState:0,scalar:0};assert.ok(nativeNoise(module,[.3,.4,.5],0,.5).every(v=>v===0));
+ assert.ok(Math.abs(perlinNoise(.1,.2,.3)-perlinNoise(.1001,.2,.3))<.01);
+ const clean=structuredClone(source);clean.noise.enabled=false;const e=createNativeEmitter(P,source,texture,()=>.5),f=createNativeEmitter(P,clean,texture,()=>.5);e.setPlaying(true);f.setPlaying(true);
+ for(let i=0;i<20;i++){e.update(1/30);f.update(1/30);}assert.ok(e.box.children.length>0);assert.notEqual(e.box.children[0].position.x,f.box.children[0].position.x);
+});
+test('noise damping retains field scale and octave/axis settings affect the field',()=>{
+ const n=structuredClone(scene.emitters.find(e=>e.noise?.enabled).noise),p=[0,0,0];
+ n.frequency=1;const a=nativeNoise(n,p,0,.5);n.frequency=2;assert.deepEqual(nativeNoise(n,p,0,.5),a);
+ n.damping=false;const b=nativeNoise(n,p,0,.5);b.forEach((v,i)=>assert.ok(Math.abs(v-a[i]*2)<1e-8));
+ n.octaves=2;assert.notDeepEqual(nativeNoise(n,p,0,.5),b);
+ n.separateAxes=true;n.strengthY={minMaxState:0,scalar:0};assert.equal(nativeNoise(n,p,0,.5)[1],0);
+});
+test('ocean quad maps independently to the original illustration reference',()=>{
+ const sea=scene.layers.find(l=>l.name==='hai_dm'),a=sea.referenceAlignment;
+ assert.ok(a.inliers>=6&&a.medianResidual<1);
+ const manifest=JSON.parse(readFileSync(new URL('../public/wardrobe/illust-models.json',import.meta.url))),f=manifest['dyn_illust_437_mizuki_sale#7'].frame;
+ sea.vertices.forEach((v,i)=>{assert.ok(Math.abs((v[0]-f.x)*2048/f.width-a.desiredCorners[i][0])<.001);assert.ok(Math.abs((v[1]-f.y)*2048/f.height-a.desiredCorners[i][1])<.001);});
+ assert.ok(sea.vertices[0][1]<sea.originalVertices[0][1]);
 });
