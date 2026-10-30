@@ -12,8 +12,8 @@ function sample(image,u,v,out){
  for(let c=0;c<4;c++)out[c]=(at(fx,fy,c)*(1-dx)+at(fx+1,fy,c)*dx)*(1-dy)+(at(fx,fy+1,c)*(1-dx)+at(fx+1,fy+1,c)*dx)*dy;
 }
 export function canvasEffectMaterial(P,layer,uniforms){
- const main=pixels(uniforms._MainTex),mask=uniforms._DissolveTex?pixels(uniforms._DissolveTex):null,canvas=document.createElement('canvas');canvas.width=Math.min(main.width,256);canvas.height=Math.min(main.height,256);const ctx=canvas.getContext('2d'),image=ctx.createImageData(canvas.width,canvas.height),texture=P.Texture.from(canvas),color=new Float32Array(4),noise=new Float32Array(4);let previous=-1;
- const update=time=>{if(previous>=0&&(!mask||time-previous<.125))return;previous=time;
+ const main=pixels(uniforms._MainTex),mask=uniforms._DissolveTex?pixels(uniforms._DissolveTex):null,canvas=document.createElement('canvas');const limit=layer.shader.name.endsWith('UVTween')||mask||Object.values(layer.uvScroll||{}).some(speed=>speed.some(v=>v!==0))?256:1024;canvas.width=Math.min(main.width,limit);canvas.height=Math.min(main.height,limit);const ctx=canvas.getContext('2d'),image=ctx.createImageData(canvas.width,canvas.height),texture=P.Texture.from(canvas),color=new Float32Array(4),noise=new Float32Array(4);let previous=-1;const moving=layer.shader.name.endsWith('UVTween')||!!mask||Object.values(layer.uvScroll||{}).some(speed=>speed.some(v=>v!==0));
+ const update=time=>{if(previous>=0&&(!moving||time-previous<.125))return;previous=time;
   const mainST=uniforms._MainTex_ST,maskST=uniforms._DissolveTex_ST,tint=uniforms._TintColor;
   for(let y=0;y<canvas.height;y++)for(let x=0;x<canvas.width;x++){
    const u=(x+.5)/canvas.width,v=(y+.5)/canvas.height;sample(main,u*mainST[0]+mainST[2],v*mainST[1]+mainST[3],color);if(mask)sample(mask,u*maskST[0]+maskST[2],v*maskST[1]+maskST[3],noise);

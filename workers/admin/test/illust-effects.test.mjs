@@ -8,3 +8,13 @@ test('original dissolve shader rejects and reveals pixels around the saved thres
  assert.equal(shadeEffectPixel([1,1,1,1],1,[.5,.5,.5,.5],.574,.386,true)[3],1);
  assert.ok(Math.abs(shadeEffectPixel([1,1,1,1],.767,[.5,.5,.5,.5],.574,.386,true)[3]-.5)<1e-12);
 });
+import {applyBoneFollower} from '../public/wardrobe/illust-effects-transform.mjs';
+const mesh=()=>({position:{set(x,y){this.x=x;this.y=y;}},scale:{set(x,y){this.x=x;this.y=y;}}});
+test('native bone follower uses animated bone position and saved rotation flags',()=>{
+ const m=mesh();applyBoneFollower(m,{matrix:{tx:30,ty:-20,a:0,b:1},scaleX:2,scaleY:3},{followBoneRotation:true,followLocalScale:false},{scaleX:1,scaleY:1});
+ assert.deepEqual([m.position.x,m.position.y,m.rotation,m.scale.x,m.scale.y],[30,-20,Math.PI/2,1,1]);
+});
+test('native bone follower handles local reflection and skeleton flip',()=>{
+ const m=mesh();applyBoneFollower(m,{matrix:{tx:0,ty:0,a:-1,b:0},scaleX:-2,scaleY:3},{followBoneRotation:true,followLocalScale:true,followSkeletonFlip:true},{scaleX:-1,scaleY:1});
+ assert.equal(m.rotation,2*Math.PI);assert.deepEqual([m.scale.x,m.scale.y],[-2,-3]);
+});
