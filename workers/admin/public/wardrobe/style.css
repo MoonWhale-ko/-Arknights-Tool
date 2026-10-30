@@ -215,3 +215,5 @@ main:has(#wardrobeDetail:not([hidden])) #wardrobeSidebar{display:block}
 #wardrobeSkinOwnership option:checked{background-color:var(--z-selected);color:var(--z-on-selected)}
 html[data-theme=dark] #wardrobeSkinOwnership{color-scheme:dark}
 html[data-theme=light] #wardrobeSkinOwnership{color-scheme:light}
+/* Illustration mode stays outside the animated collection templates. */
+#wardrobeIllustrationMode{position:absolute;left:160px;top:20px;z-index:30;min-width:116px;padding:11px 18px;background:#303030;color:#fff;border:1px solid #ffffff80;font:600 18px inherit;cursor:pointer;box-shadow:0 3px 7px #0003}#wardrobeIllustrationMode[hidden]{display:none}#wardrobeIllustrationMode[aria-pressed=true]{border-bottom:3px solid var(--accent,#f5a000)}#wardrobeIllustrationMode[data-loading=true]{opacity:.65}.wardrobe-dynamic-art{pointer-events:auto;cursor:pointer}.wardrobe-dynamic-art[hidden]{display:none!important}.wardrobe-dynamic-art canvas{display:block;width:100%;height:100%}.wardrobe-dynamic-art:fullscreen{position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;background:#555}.wardrobe-dynamic-art:fullscreen canvas{object-fit:contain}
