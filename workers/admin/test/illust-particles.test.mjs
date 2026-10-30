@@ -24,6 +24,6 @@ test('native population remains bounded through repeated lifetime and burst cycl
  assert.ok(e.box.children.length>0&&e.box.children.length<=source.initial.maxNumParticles);
 });
 test('original camera anchors the skeleton at its world position rather than the pose centre',()=>{
- const manifest=JSON.parse(readFileSync(new URL('../public/wardrobe/illust-models.json',import.meta.url))),f=manifest['dyn_illust_437_mizuki_sale#7'].frame;
+ const manifest=JSON.parse(readFileSync(new URL('../public/wardrobe/illust-models.json',import.meta.url))),f=manifest['dyn_illust_437_mizuki_sale#7'].nativeCameraFrame;
  assert.ok(Math.abs(f.y+2000)<.001);const v=illustrationViewport(2400,2400,f);assert.ok(Math.abs(v.x-1200)<.001);assert.ok(Math.abs(v.y-2000)<.001);
 });
