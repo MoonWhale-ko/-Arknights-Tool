@@ -1,3 +1,4 @@
+import {canvasEffectMaterial} from './illust-effects-canvas.mjs?v=1';
 const root='/wardrobe/effects/skadi-e2/';
 const resource=async file=>{const r=await fetch(root+file);if(!r.ok)throw Error('Effect resource: '+file);return file.endsWith('.json')?r.json():r.text();};
 const st=texture=>texture?[texture.scale.x,texture.scale.y,texture.offset.x,texture.offset.y]:[1,1,0,0];
@@ -9,11 +10,11 @@ function vertex(fragment){
  return `precision highp float;attribute vec2 aVertexPosition;attribute vec2 aTextureCoord;attribute vec4 aColor;uniform mat3 projectionMatrix;uniform mat3 translationMatrix;uniform vec4 _MainTex_ST;uniform vec4 _DissolveTex_ST;uniform vec4 _TintColor;uniform vec4 _UVTween;uniform vec4 _Time;${declarations}\nvoid main(){gl_Position=vec4((projectionMatrix*translationMatrix*vec3(aVertexPosition,1.0)).xy,0.0,1.0);${assign}}`;
 }
 /** Original rigid background meshes. Particle emitters remain a separate layer. */
-export async function createIllustrationEffects(skin,isClosed){
+export async function createIllustrationEffects(skin,isClosed,renderer){
  if(skin.id!=='char_1012_skadi2#2')return null;
- const P=window.PIXI,scene=await resource('scene.json'),back=new P.Container(),front=new P.Container(),textures=[],meshes=[];
+ const P=window.PIXI,scene=await resource('scene.json'),back=new P.Container(),front=new P.Container(),textures=[],meshes=[],canvasMaterials=[];
  let closed=false,elapsed=0;
- const destroy=()=>{if(closed)return;closed=true;back.destroy({children:true});front.destroy({children:true});for(const t of textures)t.destroy(true);};
+ const destroy=()=>{if(closed)return;closed=true;back.destroy({children:true});front.destroy({children:true});for(const m of canvasMaterials)m.destroy();for(const t of textures)t.destroy(true);};
  try{
   const textureCache=new Map(),fragments=new Map();
   for(const layer of [...scene.layers].sort((a,b)=>a.sortingOrder-b.sortingOrder||b.depth-a.depth)){
@@ -29,9 +30,9 @@ export async function createIllustrationEffects(skin,isClosed){
    }
    const geometry=new P.Geometry().addAttribute('aVertexPosition',new Float32Array(layer.vertices.flat()),2).addAttribute('aTextureCoord',new Float32Array(layer.uv.flat()),2).addAttribute('aColor',new Float32Array(layer.colors.flat()),4).addIndex(layer.triangles.flat());
    const shader=P.Shader.from(vertex(fragment),fragment,uniforms),state=P.State.for2d();state.blendMode=layer.shader.name.endsWith('/Additive')?P.BLEND_MODES.ADD:P.BLEND_MODES.NORMAL;
-   const mesh=new P.Mesh(geometry,shader,state);mesh.name=layer.name;(layer.depth>=0?back:front).addChild(mesh);meshes.push({mesh,layer,uniforms});
+   let mesh;if(renderer.type===P.RENDERER_TYPE.CANVAS){const material=canvasEffectMaterial(P,layer,uniforms);canvasMaterials.push(material);mesh=new P.SimpleMesh(material.texture,new Float32Array(layer.vertices.flat()),new Float32Array(layer.uv.flat()),new Uint16Array(layer.triangles.flat()));mesh.blendMode=state.blendMode;geometry.destroy();shader.destroy();}else mesh=new P.Mesh(geometry,shader,state);mesh.name=layer.name;(layer.depth>=0?back:front).addChild(mesh);meshes.push({mesh,layer,uniforms});
   }
   if(isClosed()){destroy();return null;}
-  return {back,front,destroy,fit(v){for(const box of [back,front]){box.scale.set(v.scale);box.position.set(v.x,v.y);}},update(dt){elapsed+=dt;for(const {uniforms,layer}of meshes){uniforms._Time=[elapsed/20,elapsed,elapsed*2,elapsed*3];for(const [name,speed]of Object.entries(layer.uvScroll)){const original=layer.textures[name];uniforms[name+'_ST']=[original.scale.x,original.scale.y,original.offset.x+speed[0]*elapsed,original.offset.y+speed[1]*elapsed];}}}};
+  return {back,front,destroy,fit(v){for(const box of [back,front]){box.scale.set(v.scale);box.position.set(v.x,v.y);}},update(dt){elapsed+=dt;for(const {uniforms,layer}of meshes){uniforms._Time=[elapsed/20,elapsed,elapsed*2,elapsed*3];for(const [name,speed]of Object.entries(layer.uvScroll)){const original=layer.textures[name];uniforms[name+'_ST']=[original.scale.x,original.scale.y,original.offset.x+speed[0]*elapsed,original.offset.y+speed[1]*elapsed];}}for(const material of canvasMaterials)material.update(elapsed);}};
  }catch(e){destroy();throw e;}
 }
