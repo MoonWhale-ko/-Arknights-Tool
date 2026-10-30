@@ -1192,7 +1192,7 @@
       "reason": "unsupported shader: Torappu/Particles-L2D/Disturb/Disturb Anchor (AlphaBlend)"
     }
   ],
-  "scope": "Supported original rigid meshes only; particles, trails and unsupported materials are excluded.",
+  "scope": "Original rigid backgrounds and supported native additive point/box particles. Other shaders and particle modules remain excluded.",
   "spineSortingOrder": 0,
   "emitters": [
     {
@@ -1200,16 +1200,16 @@
       "sourcePathId": "-12809099636902195",
       "matrix": [
         [
-          0.11532607000148372,
-          0.9693306805714411,
+          0.783686101436615,
+          3.4747896699093275e-18,
           0.0,
-          1.6006189371530188
+          -0.17900000512599934
         ],
         [
-          -0.7751540482398401,
-          0.14421533136027595,
+          -1.257368245532505e-17,
+          0.9800000190734863,
           0.0,
-          9.175742428605751
+          -0.024000000208616035
         ],
         [
           0.0,
@@ -1229,222 +1229,28 @@
         "startLifetime": {
           "minMaxState": 3,
           "scalar": 5.0,
-          "minScalar": 5.0,
-          "maxCurve": {
-            "m_Curve": [],
-            "m_PreInfinity": 2,
-            "m_PostInfinity": 2,
-            "m_RotationOrder": 4
-          },
-          "minCurve": {
-            "m_Curve": [],
-            "m_PreInfinity": 2,
-            "m_PostInfinity": 2,
-            "m_RotationOrder": 4
-          }
+          "minScalar": 5.0
         },
         "startSpeed": {
           "minMaxState": 0,
-          "scalar": 0.0,
-          "minScalar": 0.10000000149011612,
-          "maxCurve": {
-            "m_Curve": [],
-            "m_PreInfinity": 2,
-            "m_PostInfinity": 2,
-            "m_RotationOrder": 4
-          },
-          "minCurve": {
-            "m_Curve": [],
-            "m_PreInfinity": 2,
-            "m_PostInfinity": 2,
-            "m_RotationOrder": 4
-          }
+          "scalar": 0.0
         },
         "startSize": {
           "minMaxState": 0,
-          "scalar": 0.800000011920929,
-          "minScalar": 0.30000001192092896,
-          "maxCurve": {
-            "m_Curve": [],
-            "m_PreInfinity": 2,
-            "m_PostInfinity": 2,
-            "m_RotationOrder": 4
-          },
-          "minCurve": {
-            "m_Curve": [],
-            "m_PreInfinity": 2,
-            "m_PostInfinity": 2,
-            "m_RotationOrder": 4
-          }
+          "scalar": 0.800000011920929
         },
         "startRotation": {
           "minMaxState": 3,
           "scalar": 0.0,
-          "minScalar": 0.0,
-          "maxCurve": {
-            "m_Curve": [],
-            "m_PreInfinity": 2,
-            "m_PostInfinity": 2,
-            "m_RotationOrder": 4
-          },
-          "minCurve": {
-            "m_Curve": [],
-            "m_PreInfinity": 2,
-            "m_PostInfinity": 2,
-            "m_RotationOrder": 4
-          }
+          "minScalar": 0.0
         },
         "startColor": {
           "minMaxState": 0,
-          "minColor": {
-            "r": 0.4852941036224365,
-            "g": 1.0,
-            "b": 0.9787018895149231,
-            "a": 1.0
-          },
           "maxColor": {
             "r": 1.0,
             "g": 1.0,
             "b": 1.0,
             "a": 0.1568627506494522
-          },
-          "maxGradient": {
-            "key0": {
-              "r": 1.0,
-              "g": 1.0,
-              "b": 1.0,
-              "a": 1.0
-            },
-            "key1": {
-              "r": 1.0,
-              "g": 1.0,
-              "b": 1.0,
-              "a": 1.0
-            },
-            "key2": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key3": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key4": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key5": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key6": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key7": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "ctime0": 0,
-            "ctime1": 65535,
-            "ctime2": 0,
-            "ctime3": 0,
-            "ctime4": 0,
-            "ctime5": 0,
-            "ctime6": 0,
-            "ctime7": 0,
-            "atime0": 0,
-            "atime1": 65535,
-            "atime2": 0,
-            "atime3": 0,
-            "atime4": 0,
-            "atime5": 0,
-            "atime6": 0,
-            "atime7": 0,
-            "m_Mode": 0,
-            "m_NumColorKeys": 2,
-            "m_NumAlphaKeys": 2
-          },
-          "minGradient": {
-            "key0": {
-              "r": 1.0,
-              "g": 1.0,
-              "b": 1.0,
-              "a": 1.0
-            },
-            "key1": {
-              "r": 1.0,
-              "g": 1.0,
-              "b": 1.0,
-              "a": 1.0
-            },
-            "key2": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key3": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key4": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key5": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key6": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key7": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "ctime0": 0,
-            "ctime1": 65535,
-            "ctime2": 0,
-            "ctime3": 0,
-            "ctime4": 0,
-            "ctime5": 0,
-            "ctime6": 0,
-            "ctime7": 0,
-            "atime0": 0,
-            "atime1": 65535,
-            "atime2": 0,
-            "atime3": 0,
-            "atime4": 0,
-            "atime5": 0,
-            "atime6": 0,
-            "atime7": 0,
-            "m_Mode": 0,
-            "m_NumColorKeys": 2,
-            "m_NumAlphaKeys": 2
           }
         },
         "maxNumParticles": 4
@@ -1452,20 +1258,7 @@
       "emission": {
         "rateOverTime": {
           "minMaxState": 0,
-          "scalar": 2.0,
-          "minScalar": 10.0,
-          "maxCurve": {
-            "m_Curve": [],
-            "m_PreInfinity": 2,
-            "m_PostInfinity": 2,
-            "m_RotationOrder": 4
-          },
-          "minCurve": {
-            "m_Curve": [],
-            "m_PreInfinity": 2,
-            "m_PostInfinity": 2,
-            "m_RotationOrder": 4
-          }
+          "scalar": 2.0
         },
         "bursts": []
       },
@@ -1488,7 +1281,6 @@
         "curve": {
           "minMaxState": 1,
           "scalar": 1.0,
-          "minScalar": 1.0,
           "maxCurve": {
             "m_Curve": [
               {
@@ -1513,12 +1305,6 @@
             "m_PreInfinity": 2,
             "m_PostInfinity": 2,
             "m_RotationOrder": 0
-          },
-          "minCurve": {
-            "m_Curve": [],
-            "m_PreInfinity": 2,
-            "m_PostInfinity": 2,
-            "m_RotationOrder": 4
           }
         }
       },
@@ -1526,19 +1312,10 @@
         "enabled": true,
         "gradient": {
           "minMaxState": 1,
-          "minColor": {
-            "r": 1.0,
-            "g": 1.0,
-            "b": 1.0,
-            "a": 1.0
-          },
-          "maxColor": {
-            "r": 1.0,
-            "g": 1.0,
-            "b": 1.0,
-            "a": 1.0
-          },
           "maxGradient": {
+            "m_Mode": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 5,
             "key0": {
               "r": 0.9178500175476074,
               "g": 0.40441179275512695,
@@ -1569,121 +1346,24 @@
               "b": 1.0,
               "a": 0.35686275362968445
             },
-            "key5": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key6": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key7": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
             "ctime0": 0,
             "ctime1": 65342,
-            "ctime2": 65342,
-            "ctime3": 65342,
-            "ctime4": 65342,
-            "ctime5": 0,
-            "ctime6": 0,
-            "ctime7": 0,
             "atime0": 0,
             "atime1": 14842,
             "atime2": 29876,
             "atime3": 41634,
-            "atime4": 65535,
-            "atime5": 65535,
-            "atime6": 0,
-            "atime7": 0,
-            "m_Mode": 0,
-            "m_NumColorKeys": 2,
-            "m_NumAlphaKeys": 5
-          },
-          "minGradient": {
-            "key0": {
-              "r": 1.0,
-              "g": 1.0,
-              "b": 1.0,
-              "a": 1.0
-            },
-            "key1": {
-              "r": 1.0,
-              "g": 1.0,
-              "b": 1.0,
-              "a": 1.0
-            },
-            "key2": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key3": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key4": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key5": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key6": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key7": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "ctime0": 0,
-            "ctime1": 65535,
-            "ctime2": 0,
-            "ctime3": 0,
-            "ctime4": 0,
-            "ctime5": 0,
-            "ctime6": 0,
-            "ctime7": 0,
-            "atime0": 0,
-            "atime1": 65535,
-            "atime2": 0,
-            "atime3": 0,
-            "atime4": 0,
-            "atime5": 0,
-            "atime6": 0,
-            "atime7": 0,
-            "m_Mode": 0,
-            "m_NumColorKeys": 2,
-            "m_NumAlphaKeys": 2
+            "atime4": 65535
           }
         }
       },
       "duration": 5.0,
+      "looping": true,
+      "delay": 0.0,
       "prewarm": true,
       "simulationSpeed": 1.0,
       "sortingOrder": 2,
       "depth": 0.0,
-      "texture": "particle-0.png",
+      "texture": "particle-native-2.png",
       "tint": {
         "r": 0.8187626004219055,
         "g": 0.43014705181121826,
@@ -1695,7 +1375,13 @@
         1.0,
         0.0,
         0.0
-      ]
+      ],
+      "bone": {
+        "boneName": "Mizuki_Bubble",
+        "followBoneRotation": 1,
+        "followLocalScale": 0,
+        "followSkeletonFlip": 1
+      }
     },
     {
       "name": "xx2_dm",
@@ -1731,70 +1417,22 @@
         "startLifetime": {
           "minMaxState": 3,
           "scalar": 3.0,
-          "minScalar": 2.0,
-          "maxCurve": {
-            "m_Curve": [],
-            "m_PreInfinity": 2,
-            "m_PostInfinity": 2,
-            "m_RotationOrder": 4
-          },
-          "minCurve": {
-            "m_Curve": [],
-            "m_PreInfinity": 2,
-            "m_PostInfinity": 2,
-            "m_RotationOrder": 4
-          }
+          "minScalar": 2.0
         },
         "startSpeed": {
           "minMaxState": 3,
           "scalar": 0.10000000149011612,
-          "minScalar": 0.10000000149011612,
-          "maxCurve": {
-            "m_Curve": [],
-            "m_PreInfinity": 2,
-            "m_PostInfinity": 2,
-            "m_RotationOrder": 4
-          },
-          "minCurve": {
-            "m_Curve": [],
-            "m_PreInfinity": 2,
-            "m_PostInfinity": 2,
-            "m_RotationOrder": 4
-          }
+          "minScalar": 0.10000000149011612
         },
         "startSize": {
           "minMaxState": 3,
           "scalar": 0.6499999761581421,
-          "minScalar": 1.0,
-          "maxCurve": {
-            "m_Curve": [],
-            "m_PreInfinity": 2,
-            "m_PostInfinity": 2,
-            "m_RotationOrder": 4
-          },
-          "minCurve": {
-            "m_Curve": [],
-            "m_PreInfinity": 2,
-            "m_PostInfinity": 2,
-            "m_RotationOrder": 4
-          }
+          "minScalar": 1.0
         },
         "startRotation": {
           "minMaxState": 3,
           "scalar": 0.0,
-          "minScalar": 0.0,
-          "maxCurve": {
-            "m_Curve": [],
-            "m_PreInfinity": 2,
-            "m_PostInfinity": 2,
-            "m_RotationOrder": 4
-          },
-          "minCurve": {
-            "m_Curve": [],
-            "m_PreInfinity": 2,
-            "m_PostInfinity": 2,
-            "m_RotationOrder": 4
-          }
+          "minScalar": 0.0
         },
         "startColor": {
           "minMaxState": 2,
@@ -1809,144 +1447,6 @@
             "g": 1.0,
             "b": 1.0,
             "a": 1.0
-          },
-          "maxGradient": {
-            "key0": {
-              "r": 1.0,
-              "g": 1.0,
-              "b": 1.0,
-              "a": 1.0
-            },
-            "key1": {
-              "r": 1.0,
-              "g": 1.0,
-              "b": 1.0,
-              "a": 1.0
-            },
-            "key2": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key3": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key4": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key5": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key6": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key7": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "ctime0": 0,
-            "ctime1": 65535,
-            "ctime2": 0,
-            "ctime3": 0,
-            "ctime4": 0,
-            "ctime5": 0,
-            "ctime6": 0,
-            "ctime7": 0,
-            "atime0": 0,
-            "atime1": 65535,
-            "atime2": 0,
-            "atime3": 0,
-            "atime4": 0,
-            "atime5": 0,
-            "atime6": 0,
-            "atime7": 0,
-            "m_Mode": 0,
-            "m_NumColorKeys": 2,
-            "m_NumAlphaKeys": 2
-          },
-          "minGradient": {
-            "key0": {
-              "r": 1.0,
-              "g": 1.0,
-              "b": 1.0,
-              "a": 1.0
-            },
-            "key1": {
-              "r": 1.0,
-              "g": 1.0,
-              "b": 1.0,
-              "a": 1.0
-            },
-            "key2": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key3": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key4": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key5": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key6": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key7": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "ctime0": 0,
-            "ctime1": 65535,
-            "ctime2": 0,
-            "ctime3": 0,
-            "ctime4": 0,
-            "ctime5": 0,
-            "ctime6": 0,
-            "ctime7": 0,
-            "atime0": 0,
-            "atime1": 65535,
-            "atime2": 0,
-            "atime3": 0,
-            "atime4": 0,
-            "atime5": 0,
-            "atime6": 0,
-            "atime7": 0,
-            "m_Mode": 0,
-            "m_NumColorKeys": 2,
-            "m_NumAlphaKeys": 2
           }
         },
         "maxNumParticles": 9
@@ -1954,40 +1454,14 @@
       "emission": {
         "rateOverTime": {
           "minMaxState": 0,
-          "scalar": 5.0,
-          "minScalar": 10.0,
-          "maxCurve": {
-            "m_Curve": [],
-            "m_PreInfinity": 2,
-            "m_PostInfinity": 2,
-            "m_RotationOrder": 4
-          },
-          "minCurve": {
-            "m_Curve": [],
-            "m_PreInfinity": 2,
-            "m_PostInfinity": 2,
-            "m_RotationOrder": 4
-          }
+          "scalar": 5.0
         },
         "bursts": [
           {
             "time": 0.0,
             "countCurve": {
               "minMaxState": 0,
-              "scalar": 4.0,
-              "minScalar": 0.0,
-              "maxCurve": {
-                "m_Curve": [],
-                "m_PreInfinity": 2,
-                "m_PostInfinity": 2,
-                "m_RotationOrder": 4
-              },
-              "minCurve": {
-                "m_Curve": [],
-                "m_PreInfinity": 2,
-                "m_PostInfinity": 2,
-                "m_RotationOrder": 4
-              }
+              "scalar": 4.0
             },
             "cycleCount": 1,
             "repeatInterval": 0.009999999776482582,
@@ -2014,7 +1488,6 @@
         "curve": {
           "minMaxState": 1,
           "scalar": 1.0,
-          "minScalar": 1.0,
           "maxCurve": {
             "m_Curve": [
               {
@@ -2066,12 +1539,6 @@
             "m_PreInfinity": 2,
             "m_PostInfinity": 2,
             "m_RotationOrder": 0
-          },
-          "minCurve": {
-            "m_Curve": [],
-            "m_PreInfinity": 2,
-            "m_PostInfinity": 2,
-            "m_RotationOrder": 4
           }
         }
       },
@@ -2079,19 +1546,10 @@
         "enabled": false,
         "gradient": {
           "minMaxState": 1,
-          "minColor": {
-            "r": 1.0,
-            "g": 1.0,
-            "b": 1.0,
-            "a": 1.0
-          },
-          "maxColor": {
-            "r": 1.0,
-            "g": 1.0,
-            "b": 1.0,
-            "a": 1.0
-          },
           "maxGradient": {
+            "m_Mode": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 2,
             "key0": {
               "r": 1.0,
               "g": 1.0,
@@ -2104,139 +1562,21 @@
               "b": 1.0,
               "a": 1.0
             },
-            "key2": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key3": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key4": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key5": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key6": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key7": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
             "ctime0": 0,
             "ctime1": 65535,
-            "ctime2": 0,
-            "ctime3": 0,
-            "ctime4": 0,
-            "ctime5": 0,
-            "ctime6": 0,
-            "ctime7": 0,
             "atime0": 0,
-            "atime1": 65535,
-            "atime2": 0,
-            "atime3": 0,
-            "atime4": 0,
-            "atime5": 0,
-            "atime6": 0,
-            "atime7": 0,
-            "m_Mode": 0,
-            "m_NumColorKeys": 2,
-            "m_NumAlphaKeys": 2
-          },
-          "minGradient": {
-            "key0": {
-              "r": 1.0,
-              "g": 1.0,
-              "b": 1.0,
-              "a": 1.0
-            },
-            "key1": {
-              "r": 1.0,
-              "g": 1.0,
-              "b": 1.0,
-              "a": 1.0
-            },
-            "key2": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key3": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key4": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key5": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key6": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "key7": {
-              "r": 0.0,
-              "g": 0.0,
-              "b": 0.0,
-              "a": 0.0
-            },
-            "ctime0": 0,
-            "ctime1": 65535,
-            "ctime2": 0,
-            "ctime3": 0,
-            "ctime4": 0,
-            "ctime5": 0,
-            "ctime6": 0,
-            "ctime7": 0,
-            "atime0": 0,
-            "atime1": 65535,
-            "atime2": 0,
-            "atime3": 0,
-            "atime4": 0,
-            "atime5": 0,
-            "atime6": 0,
-            "atime7": 0,
-            "m_Mode": 0,
-            "m_NumColorKeys": 2,
-            "m_NumAlphaKeys": 2
+            "atime1": 65535
           }
         }
       },
       "duration": 5.0,
+      "looping": true,
+      "delay": 0.0,
       "prewarm": false,
       "simulationSpeed": 1.0,
       "sortingOrder": -1,
       "depth": -1.4199999570846558,
-      "texture": "particle-1.png",
+      "texture": "particle-native-3.png",
       "tint": {
         "r": 0.720588207244873,
         "g": 0.720588207244873,
@@ -2249,6 +1589,4661 @@
         0.0,
         0.0
       ]
+    },
+    {
+      "name": "deng_01_dm",
+      "sourcePathId": "-8955665908256999731",
+      "matrix": [
+        [
+          1.0000001192092896,
+          2.788426808068938e-17,
+          0.0,
+          0.4300000071525565
+        ],
+        [
+          -2.5484740878985685e-17,
+          1.0000001192092896,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0000001192092896,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "units": 100.00000223517424,
+      "initial": {
+        "startLifetime": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "startSpeed": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startSize": {
+          "minMaxState": 0,
+          "scalar": 1.100000023841858
+        },
+        "startRotation": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startColor": {
+          "minMaxState": 2,
+          "minColor": {
+            "r": 0.779411792755127,
+            "g": 0.0,
+            "b": 0.33864083886146545,
+            "a": 1.0
+          },
+          "maxColor": {
+            "r": 0.9632353186607361,
+            "g": 0.6801261305809021,
+            "b": 0.07082613557577133,
+            "a": 0.47200000286102295
+          }
+        },
+        "maxNumParticles": 1
+      },
+      "emission": {
+        "rateOverTime": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "bursts": [
+          {
+            "time": 0.0,
+            "countCurve": {
+              "minMaxState": 0,
+              "scalar": 1.0
+            },
+            "cycleCount": 1,
+            "repeatInterval": 0.009999999776482582,
+            "probability": 1.0
+          }
+        ]
+      },
+      "shape": {
+        "enabled": false,
+        "type": 5,
+        "m_Scale": {
+          "x": 0.5099999904632568,
+          "y": 0.38999998569488525,
+          "z": 0.0
+        },
+        "m_Position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "size": {
+        "enabled": false,
+        "curve": {
+          "minMaxState": 1,
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 3.0806310176849365,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 0.32460883259773254,
+                "value": 1.0,
+                "inSlope": 3.0806310176849365,
+                "outSlope": -1.463605523109436,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 1.0,
+                "value": 0.011493682861328125,
+                "inSlope": -1.463605523109436,
+                "outSlope": 1.0,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2,
+            "m_RotationOrder": 0
+          }
+        }
+      },
+      "color": {
+        "enabled": true,
+        "gradient": {
+          "minMaxState": 1,
+          "maxGradient": {
+            "m_Mode": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 5,
+            "key0": {
+              "r": 0.9529411792755127,
+              "g": 1.0,
+              "b": 0.14705884456634521,
+              "a": 0.0
+            },
+            "key1": {
+              "r": 0.6021806597709656,
+              "g": 0.0,
+              "b": 0.6985294222831726,
+              "a": 1.0
+            },
+            "key2": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "key3": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 1.0
+            },
+            "key4": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "atime0": 0,
+            "atime1": 14649,
+            "atime2": 33539,
+            "atime3": 51850,
+            "atime4": 65535
+          }
+        }
+      },
+      "duration": 1.0,
+      "looping": false,
+      "delay": 0.30000001192092896,
+      "prewarm": false,
+      "simulationSpeed": 1.0,
+      "sortingOrder": 1,
+      "depth": 0.0,
+      "texture": "particle-native-0.png",
+      "tint": {
+        "r": 0.7279411554336548,
+        "g": 0.7279411554336548,
+        "b": 0.7279411554336548,
+        "a": 1.0
+      },
+      "textureST": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "action": "interact",
+      "bone": {
+        "boneName": "BG_BulbD",
+        "followBoneRotation": 1,
+        "followLocalScale": 0,
+        "followSkeletonFlip": 1
+      }
+    },
+    {
+      "name": "baoci_dm",
+      "sourcePathId": "-5927280559580776755",
+      "matrix": [
+        [
+          1.5,
+          0.0,
+          0.0,
+          0.34499998576939106
+        ],
+        [
+          0.0,
+          1.5,
+          0.0,
+          8.394999504089355
+        ],
+        [
+          0.0,
+          0.0,
+          1.5,
+          -0.42000000178813934
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "units": 100.00000223517424,
+      "initial": {
+        "startLifetime": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "startSpeed": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startSize": {
+          "minMaxState": 0,
+          "scalar": 32.0
+        },
+        "startRotation": {
+          "minMaxState": 0,
+          "scalar": 1.570796251296997
+        },
+        "startColor": {
+          "minMaxState": 0,
+          "maxColor": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0,
+            "a": 1.0
+          }
+        },
+        "maxNumParticles": 1
+      },
+      "emission": {
+        "rateOverTime": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "bursts": [
+          {
+            "time": 0.0,
+            "countCurve": {
+              "minMaxState": 0,
+              "scalar": 1.0
+            },
+            "cycleCount": 1,
+            "repeatInterval": 0.009999999776482582,
+            "probability": 1.0
+          }
+        ]
+      },
+      "shape": {
+        "enabled": false,
+        "type": 4,
+        "m_Scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        },
+        "m_Position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "size": {
+        "enabled": true,
+        "curve": {
+          "minMaxState": 1,
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 2.748566150665283,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 0.14825713634490967,
+                "value": 0.40749454498291016,
+                "inSlope": 2.480226755142212,
+                "outSlope": 0.69563889503479,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.69563889503479,
+                "outSlope": 1.0,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2,
+            "m_RotationOrder": 0
+          }
+        }
+      },
+      "color": {
+        "enabled": true,
+        "gradient": {
+          "minMaxState": 1,
+          "maxGradient": {
+            "m_Mode": 0,
+            "m_NumColorKeys": 4,
+            "m_NumAlphaKeys": 5,
+            "key0": {
+              "r": 0.0,
+              "g": 1.0,
+              "b": 0.958620548248291,
+              "a": 0.0
+            },
+            "key1": {
+              "r": 0.41161078214645386,
+              "g": 0.6022236347198486,
+              "b": 0.9826907515525818,
+              "a": 0.9801587462425232
+            },
+            "key2": {
+              "r": 0.7076065540313721,
+              "g": 0.31617647409439087,
+              "b": 1.0,
+              "a": 0.784834086894989
+            },
+            "key3": {
+              "r": 0.8431038856506348,
+              "g": 0.125,
+              "b": 1.0,
+              "a": 0.45098039507865906
+            },
+            "key4": {
+              "r": 0.8431038856506348,
+              "g": 0.125,
+              "b": 1.0,
+              "a": 0.0
+            },
+            "ctime0": 0,
+            "ctime1": 37201,
+            "ctime2": 42983,
+            "ctime3": 65342,
+            "atime0": 0,
+            "atime1": 12529,
+            "atime2": 39514,
+            "atime3": 49344,
+            "atime4": 65535
+          }
+        }
+      },
+      "duration": 1.0,
+      "looping": false,
+      "delay": 0.0,
+      "prewarm": false,
+      "simulationSpeed": 1.0,
+      "sortingOrder": 0,
+      "depth": -0.42000000178813934,
+      "texture": "particle-native-1.png",
+      "tint": {
+        "r": 1.0,
+        "g": 0.720588207244873,
+        "b": 0.9576064348220825,
+        "a": 0.19699999690055847
+      },
+      "textureST": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "action": "interact"
+    },
+    {
+      "name": "deng_013_dm",
+      "sourcePathId": "-5519319553199769907",
+      "matrix": [
+        [
+          1.0000001192092896,
+          6.149855185746646e-17,
+          0.0,
+          0.4300000071525574
+        ],
+        [
+          5.576787166490102e-17,
+          1.0000001192092896,
+          0.0,
+          -4.440892098500626e-16
+        ],
+        [
+          0.0,
+          0.0,
+          1.0000001192092896,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "units": 100.00000223517424,
+      "initial": {
+        "startLifetime": {
+          "minMaxState": 0,
+          "scalar": 4.0
+        },
+        "startSpeed": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startSize": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "startRotation": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startColor": {
+          "minMaxState": 0,
+          "maxColor": {
+            "r": 0.49264705181121826,
+            "g": 0.3975152373313904,
+            "b": 0.0,
+            "a": 0.2720000147819519
+          }
+        },
+        "maxNumParticles": 2
+      },
+      "emission": {
+        "rateOverTime": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "bursts": [
+          {
+            "time": 0.0,
+            "countCurve": {
+              "minMaxState": 0,
+              "scalar": 1.0
+            },
+            "cycleCount": 1,
+            "repeatInterval": 0.009999999776482582,
+            "probability": 1.0
+          }
+        ]
+      },
+      "shape": {
+        "enabled": false,
+        "type": 5,
+        "m_Scale": {
+          "x": 0.5099999904632568,
+          "y": 0.38999998569488525,
+          "z": 0.0
+        },
+        "m_Position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "size": {
+        "enabled": false,
+        "curve": {
+          "minMaxState": 1,
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 3.0806310176849365,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 0.32460883259773254,
+                "value": 1.0,
+                "inSlope": 3.0806310176849365,
+                "outSlope": -1.463605523109436,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 1.0,
+                "value": 0.011493682861328125,
+                "inSlope": -1.463605523109436,
+                "outSlope": 1.0,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2,
+            "m_RotationOrder": 0
+          }
+        }
+      },
+      "color": {
+        "enabled": true,
+        "gradient": {
+          "minMaxState": 1,
+          "maxGradient": {
+            "m_Mode": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 4,
+            "key0": {
+              "r": 0.9529411792755127,
+              "g": 1.0,
+              "b": 0.14705884456634521,
+              "a": 0.0
+            },
+            "key1": {
+              "r": 0.6021806597709656,
+              "g": 0.0,
+              "b": 0.6985294222831726,
+              "a": 1.0
+            },
+            "key2": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 1.0
+            },
+            "key3": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "atime0": 0,
+            "atime1": 4241,
+            "atime2": 58211,
+            "atime3": 65535
+          }
+        }
+      },
+      "duration": 0.10000000149011612,
+      "looping": false,
+      "delay": 4.800000190734863,
+      "prewarm": false,
+      "simulationSpeed": 1.0,
+      "sortingOrder": 1,
+      "depth": 0.0,
+      "texture": "particle-native-0.png",
+      "tint": {
+        "r": 0.7279411554336548,
+        "g": 0.7279411554336548,
+        "b": 0.7279411554336548,
+        "a": 1.0
+      },
+      "textureST": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "action": "special",
+      "bone": {
+        "boneName": "BG_BulbA",
+        "followBoneRotation": 1,
+        "followLocalScale": 0,
+        "followSkeletonFlip": 1
+      }
+    },
+    {
+      "name": "deng_013_dm",
+      "sourcePathId": "-5412069779075631411",
+      "matrix": [
+        [
+          1.0000001192092896,
+          -5.82681428173183e-18,
+          0.0,
+          0.4300000071525574
+        ],
+        [
+          1.2388494555915206e-17,
+          1.0000001192092896,
+          0.0,
+          1.7763568394002505e-15
+        ],
+        [
+          0.0,
+          0.0,
+          1.0000001192092896,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "units": 100.00000223517424,
+      "initial": {
+        "startLifetime": {
+          "minMaxState": 0,
+          "scalar": 4.0
+        },
+        "startSpeed": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startSize": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "startRotation": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startColor": {
+          "minMaxState": 0,
+          "maxColor": {
+            "r": 0.49264705181121826,
+            "g": 0.3975152373313904,
+            "b": 0.0,
+            "a": 0.2720000147819519
+          }
+        },
+        "maxNumParticles": 2
+      },
+      "emission": {
+        "rateOverTime": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "bursts": [
+          {
+            "time": 0.0,
+            "countCurve": {
+              "minMaxState": 0,
+              "scalar": 1.0
+            },
+            "cycleCount": 1,
+            "repeatInterval": 0.009999999776482582,
+            "probability": 1.0
+          }
+        ]
+      },
+      "shape": {
+        "enabled": false,
+        "type": 5,
+        "m_Scale": {
+          "x": 0.5099999904632568,
+          "y": 0.38999998569488525,
+          "z": 0.0
+        },
+        "m_Position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "size": {
+        "enabled": false,
+        "curve": {
+          "minMaxState": 1,
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 3.0806310176849365,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 0.32460883259773254,
+                "value": 1.0,
+                "inSlope": 3.0806310176849365,
+                "outSlope": -1.463605523109436,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 1.0,
+                "value": 0.011493682861328125,
+                "inSlope": -1.463605523109436,
+                "outSlope": 1.0,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2,
+            "m_RotationOrder": 0
+          }
+        }
+      },
+      "color": {
+        "enabled": true,
+        "gradient": {
+          "minMaxState": 1,
+          "maxGradient": {
+            "m_Mode": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 4,
+            "key0": {
+              "r": 0.9529411792755127,
+              "g": 1.0,
+              "b": 0.14705884456634521,
+              "a": 0.0
+            },
+            "key1": {
+              "r": 0.6021806597709656,
+              "g": 0.0,
+              "b": 0.6985294222831726,
+              "a": 1.0
+            },
+            "key2": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 1.0
+            },
+            "key3": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "atime0": 0,
+            "atime1": 4241,
+            "atime2": 58211,
+            "atime3": 65535
+          }
+        }
+      },
+      "duration": 0.10000000149011612,
+      "looping": false,
+      "delay": 4.800000190734863,
+      "prewarm": false,
+      "simulationSpeed": 1.0,
+      "sortingOrder": 1,
+      "depth": 0.0,
+      "texture": "particle-native-0.png",
+      "tint": {
+        "r": 0.7279411554336548,
+        "g": 0.7279411554336548,
+        "b": 0.7279411554336548,
+        "a": 1.0
+      },
+      "textureST": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "action": "special",
+      "bone": {
+        "boneName": "BG_BulbI",
+        "followBoneRotation": 1,
+        "followLocalScale": 0,
+        "followSkeletonFlip": 1
+      }
+    },
+    {
+      "name": "deng_01_dm",
+      "sourcePathId": "-4548142446590495027",
+      "matrix": [
+        [
+          1.0000001192092896,
+          -5.82681428173183e-18,
+          0.0,
+          0.4300000071525574
+        ],
+        [
+          1.2388494555915206e-17,
+          1.0000001192092896,
+          0.0,
+          1.7763568394002505e-15
+        ],
+        [
+          0.0,
+          0.0,
+          1.0000001192092896,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "units": 100.00000223517424,
+      "initial": {
+        "startLifetime": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "startSpeed": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startSize": {
+          "minMaxState": 0,
+          "scalar": 1.100000023841858
+        },
+        "startRotation": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startColor": {
+          "minMaxState": 2,
+          "minColor": {
+            "r": 0.779411792755127,
+            "g": 0.0,
+            "b": 0.33864083886146545,
+            "a": 1.0
+          },
+          "maxColor": {
+            "r": 0.9632353186607361,
+            "g": 0.6801261305809021,
+            "b": 0.07082613557577133,
+            "a": 0.47200000286102295
+          }
+        },
+        "maxNumParticles": 1
+      },
+      "emission": {
+        "rateOverTime": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "bursts": [
+          {
+            "time": 0.0,
+            "countCurve": {
+              "minMaxState": 0,
+              "scalar": 1.0
+            },
+            "cycleCount": 1,
+            "repeatInterval": 0.009999999776482582,
+            "probability": 1.0
+          }
+        ]
+      },
+      "shape": {
+        "enabled": false,
+        "type": 5,
+        "m_Scale": {
+          "x": 0.5099999904632568,
+          "y": 0.38999998569488525,
+          "z": 0.0
+        },
+        "m_Position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "size": {
+        "enabled": false,
+        "curve": {
+          "minMaxState": 1,
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 3.0806310176849365,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 0.32460883259773254,
+                "value": 1.0,
+                "inSlope": 3.0806310176849365,
+                "outSlope": -1.463605523109436,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 1.0,
+                "value": 0.011493682861328125,
+                "inSlope": -1.463605523109436,
+                "outSlope": 1.0,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2,
+            "m_RotationOrder": 0
+          }
+        }
+      },
+      "color": {
+        "enabled": true,
+        "gradient": {
+          "minMaxState": 1,
+          "maxGradient": {
+            "m_Mode": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 5,
+            "key0": {
+              "r": 0.9529411792755127,
+              "g": 1.0,
+              "b": 0.14705884456634521,
+              "a": 0.0
+            },
+            "key1": {
+              "r": 0.6021806597709656,
+              "g": 0.0,
+              "b": 0.6985294222831726,
+              "a": 1.0
+            },
+            "key2": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "key3": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 1.0
+            },
+            "key4": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "atime0": 0,
+            "atime1": 14649,
+            "atime2": 33539,
+            "atime3": 51850,
+            "atime4": 65535
+          }
+        }
+      },
+      "duration": 1.0,
+      "looping": false,
+      "delay": 0.30000001192092896,
+      "prewarm": false,
+      "simulationSpeed": 1.0,
+      "sortingOrder": 1,
+      "depth": 0.0,
+      "texture": "particle-native-0.png",
+      "tint": {
+        "r": 0.7279411554336548,
+        "g": 0.7279411554336548,
+        "b": 0.7279411554336548,
+        "a": 1.0
+      },
+      "textureST": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "action": "interact",
+      "bone": {
+        "boneName": "BG_BulbI",
+        "followBoneRotation": 1,
+        "followLocalScale": 0,
+        "followSkeletonFlip": 1
+      }
+    },
+    {
+      "name": "deng_013_dm",
+      "sourcePathId": "-3826137025736083763",
+      "matrix": [
+        [
+          1.0000001192092896,
+          2.788426808068938e-17,
+          0.0,
+          0.4300000071525565
+        ],
+        [
+          -2.5484740878985685e-17,
+          1.0000001192092896,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0000001192092896,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "units": 100.00000223517424,
+      "initial": {
+        "startLifetime": {
+          "minMaxState": 0,
+          "scalar": 4.0
+        },
+        "startSpeed": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startSize": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "startRotation": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startColor": {
+          "minMaxState": 0,
+          "maxColor": {
+            "r": 0.49264705181121826,
+            "g": 0.3975152373313904,
+            "b": 0.0,
+            "a": 0.2720000147819519
+          }
+        },
+        "maxNumParticles": 2
+      },
+      "emission": {
+        "rateOverTime": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "bursts": [
+          {
+            "time": 0.0,
+            "countCurve": {
+              "minMaxState": 0,
+              "scalar": 1.0
+            },
+            "cycleCount": 1,
+            "repeatInterval": 0.009999999776482582,
+            "probability": 1.0
+          }
+        ]
+      },
+      "shape": {
+        "enabled": false,
+        "type": 5,
+        "m_Scale": {
+          "x": 0.5099999904632568,
+          "y": 0.38999998569488525,
+          "z": 0.0
+        },
+        "m_Position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "size": {
+        "enabled": false,
+        "curve": {
+          "minMaxState": 1,
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 3.0806310176849365,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 0.32460883259773254,
+                "value": 1.0,
+                "inSlope": 3.0806310176849365,
+                "outSlope": -1.463605523109436,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 1.0,
+                "value": 0.011493682861328125,
+                "inSlope": -1.463605523109436,
+                "outSlope": 1.0,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2,
+            "m_RotationOrder": 0
+          }
+        }
+      },
+      "color": {
+        "enabled": true,
+        "gradient": {
+          "minMaxState": 1,
+          "maxGradient": {
+            "m_Mode": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 4,
+            "key0": {
+              "r": 0.9529411792755127,
+              "g": 1.0,
+              "b": 0.14705884456634521,
+              "a": 0.0
+            },
+            "key1": {
+              "r": 0.6021806597709656,
+              "g": 0.0,
+              "b": 0.6985294222831726,
+              "a": 1.0
+            },
+            "key2": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 1.0
+            },
+            "key3": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "atime0": 0,
+            "atime1": 4241,
+            "atime2": 58211,
+            "atime3": 65535
+          }
+        }
+      },
+      "duration": 0.10000000149011612,
+      "looping": false,
+      "delay": 4.800000190734863,
+      "prewarm": false,
+      "simulationSpeed": 1.0,
+      "sortingOrder": 1,
+      "depth": 0.0,
+      "texture": "particle-native-0.png",
+      "tint": {
+        "r": 0.7279411554336548,
+        "g": 0.7279411554336548,
+        "b": 0.7279411554336548,
+        "a": 1.0
+      },
+      "textureST": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "action": "special",
+      "bone": {
+        "boneName": "BG_BulbD",
+        "followBoneRotation": 1,
+        "followLocalScale": 0,
+        "followSkeletonFlip": 1
+      }
+    },
+    {
+      "name": "deng_01_dm",
+      "sourcePathId": "-3405696018090821939",
+      "matrix": [
+        [
+          1.0000001192092896,
+          6.149855185746646e-17,
+          0.0,
+          0.4300000071525574
+        ],
+        [
+          5.576787166490102e-17,
+          1.0000001192092896,
+          0.0,
+          -4.440892098500626e-16
+        ],
+        [
+          0.0,
+          0.0,
+          1.0000001192092896,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "units": 100.00000223517424,
+      "initial": {
+        "startLifetime": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "startSpeed": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startSize": {
+          "minMaxState": 0,
+          "scalar": 1.100000023841858
+        },
+        "startRotation": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startColor": {
+          "minMaxState": 2,
+          "minColor": {
+            "r": 0.779411792755127,
+            "g": 0.0,
+            "b": 0.33864083886146545,
+            "a": 1.0
+          },
+          "maxColor": {
+            "r": 0.9632353186607361,
+            "g": 0.6801261305809021,
+            "b": 0.07082613557577133,
+            "a": 0.47200000286102295
+          }
+        },
+        "maxNumParticles": 1
+      },
+      "emission": {
+        "rateOverTime": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "bursts": [
+          {
+            "time": 0.0,
+            "countCurve": {
+              "minMaxState": 0,
+              "scalar": 1.0
+            },
+            "cycleCount": 1,
+            "repeatInterval": 0.009999999776482582,
+            "probability": 1.0
+          }
+        ]
+      },
+      "shape": {
+        "enabled": false,
+        "type": 5,
+        "m_Scale": {
+          "x": 0.5099999904632568,
+          "y": 0.38999998569488525,
+          "z": 0.0
+        },
+        "m_Position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "size": {
+        "enabled": false,
+        "curve": {
+          "minMaxState": 1,
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 3.0806310176849365,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 0.32460883259773254,
+                "value": 1.0,
+                "inSlope": 3.0806310176849365,
+                "outSlope": -1.463605523109436,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 1.0,
+                "value": 0.011493682861328125,
+                "inSlope": -1.463605523109436,
+                "outSlope": 1.0,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2,
+            "m_RotationOrder": 0
+          }
+        }
+      },
+      "color": {
+        "enabled": true,
+        "gradient": {
+          "minMaxState": 1,
+          "maxGradient": {
+            "m_Mode": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 5,
+            "key0": {
+              "r": 0.9529411792755127,
+              "g": 1.0,
+              "b": 0.14705884456634521,
+              "a": 0.0
+            },
+            "key1": {
+              "r": 0.6021806597709656,
+              "g": 0.0,
+              "b": 0.6985294222831726,
+              "a": 1.0
+            },
+            "key2": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "key3": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 1.0
+            },
+            "key4": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "atime0": 0,
+            "atime1": 14649,
+            "atime2": 33539,
+            "atime3": 51850,
+            "atime4": 65535
+          }
+        }
+      },
+      "duration": 1.0,
+      "looping": false,
+      "delay": 0.30000001192092896,
+      "prewarm": false,
+      "simulationSpeed": 1.0,
+      "sortingOrder": 1,
+      "depth": 0.0,
+      "texture": "particle-native-0.png",
+      "tint": {
+        "r": 0.7279411554336548,
+        "g": 0.7279411554336548,
+        "b": 0.7279411554336548,
+        "a": 1.0
+      },
+      "textureST": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "action": "interact",
+      "bone": {
+        "boneName": "BG_BulbA",
+        "followBoneRotation": 1,
+        "followLocalScale": 0,
+        "followSkeletonFlip": 1
+      }
+    },
+    {
+      "name": "deng_013_dm",
+      "sourcePathId": "-2211280363706976563",
+      "matrix": [
+        [
+          1.0000001192092893,
+          -5.70438231452946e-18,
+          0.0,
+          0.43000000715255826
+        ],
+        [
+          -2.060873342530059e-17,
+          1.0000001192092896,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0000001192092896,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "units": 100.00000223517424,
+      "initial": {
+        "startLifetime": {
+          "minMaxState": 0,
+          "scalar": 4.0
+        },
+        "startSpeed": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startSize": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "startRotation": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startColor": {
+          "minMaxState": 0,
+          "maxColor": {
+            "r": 0.49264705181121826,
+            "g": 0.3975152373313904,
+            "b": 0.0,
+            "a": 0.2720000147819519
+          }
+        },
+        "maxNumParticles": 2
+      },
+      "emission": {
+        "rateOverTime": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "bursts": [
+          {
+            "time": 0.0,
+            "countCurve": {
+              "minMaxState": 0,
+              "scalar": 1.0
+            },
+            "cycleCount": 1,
+            "repeatInterval": 0.009999999776482582,
+            "probability": 1.0
+          }
+        ]
+      },
+      "shape": {
+        "enabled": false,
+        "type": 5,
+        "m_Scale": {
+          "x": 0.5099999904632568,
+          "y": 0.38999998569488525,
+          "z": 0.0
+        },
+        "m_Position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "size": {
+        "enabled": false,
+        "curve": {
+          "minMaxState": 1,
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 3.0806310176849365,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 0.32460883259773254,
+                "value": 1.0,
+                "inSlope": 3.0806310176849365,
+                "outSlope": -1.463605523109436,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 1.0,
+                "value": 0.011493682861328125,
+                "inSlope": -1.463605523109436,
+                "outSlope": 1.0,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2,
+            "m_RotationOrder": 0
+          }
+        }
+      },
+      "color": {
+        "enabled": true,
+        "gradient": {
+          "minMaxState": 1,
+          "maxGradient": {
+            "m_Mode": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 4,
+            "key0": {
+              "r": 0.9529411792755127,
+              "g": 1.0,
+              "b": 0.14705884456634521,
+              "a": 0.0
+            },
+            "key1": {
+              "r": 0.6021806597709656,
+              "g": 0.0,
+              "b": 0.6985294222831726,
+              "a": 1.0
+            },
+            "key2": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 1.0
+            },
+            "key3": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "atime0": 0,
+            "atime1": 4241,
+            "atime2": 58211,
+            "atime3": 65535
+          }
+        }
+      },
+      "duration": 0.10000000149011612,
+      "looping": false,
+      "delay": 4.800000190734863,
+      "prewarm": false,
+      "simulationSpeed": 1.0,
+      "sortingOrder": 1,
+      "depth": 0.0,
+      "texture": "particle-native-0.png",
+      "tint": {
+        "r": 0.7279411554336548,
+        "g": 0.7279411554336548,
+        "b": 0.7279411554336548,
+        "a": 1.0
+      },
+      "textureST": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "action": "special",
+      "bone": {
+        "boneName": "BG_BulbB",
+        "followBoneRotation": 1,
+        "followLocalScale": 0,
+        "followSkeletonFlip": 1
+      }
+    },
+    {
+      "name": "deng_01_dm",
+      "sourcePathId": "-1781558362499320115",
+      "matrix": [
+        [
+          1.0000001192092896,
+          1.9109432655393566e-18,
+          0.0,
+          0.43000000715255826
+        ],
+        [
+          2.0772590776181943e-18,
+          1.0000001192092896,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0000001192092896,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "units": 100.00000223517424,
+      "initial": {
+        "startLifetime": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "startSpeed": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startSize": {
+          "minMaxState": 0,
+          "scalar": 1.100000023841858
+        },
+        "startRotation": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startColor": {
+          "minMaxState": 2,
+          "minColor": {
+            "r": 0.779411792755127,
+            "g": 0.0,
+            "b": 0.33864083886146545,
+            "a": 1.0
+          },
+          "maxColor": {
+            "r": 0.9632353186607361,
+            "g": 0.6801261305809021,
+            "b": 0.07082613557577133,
+            "a": 0.47200000286102295
+          }
+        },
+        "maxNumParticles": 1
+      },
+      "emission": {
+        "rateOverTime": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "bursts": [
+          {
+            "time": 0.0,
+            "countCurve": {
+              "minMaxState": 0,
+              "scalar": 1.0
+            },
+            "cycleCount": 1,
+            "repeatInterval": 0.009999999776482582,
+            "probability": 1.0
+          }
+        ]
+      },
+      "shape": {
+        "enabled": false,
+        "type": 5,
+        "m_Scale": {
+          "x": 0.5099999904632568,
+          "y": 0.38999998569488525,
+          "z": 0.0
+        },
+        "m_Position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "size": {
+        "enabled": false,
+        "curve": {
+          "minMaxState": 1,
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 3.0806310176849365,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 0.32460883259773254,
+                "value": 1.0,
+                "inSlope": 3.0806310176849365,
+                "outSlope": -1.463605523109436,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 1.0,
+                "value": 0.011493682861328125,
+                "inSlope": -1.463605523109436,
+                "outSlope": 1.0,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2,
+            "m_RotationOrder": 0
+          }
+        }
+      },
+      "color": {
+        "enabled": true,
+        "gradient": {
+          "minMaxState": 1,
+          "maxGradient": {
+            "m_Mode": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 5,
+            "key0": {
+              "r": 0.9529411792755127,
+              "g": 1.0,
+              "b": 0.14705884456634521,
+              "a": 0.0
+            },
+            "key1": {
+              "r": 0.6021806597709656,
+              "g": 0.0,
+              "b": 0.6985294222831726,
+              "a": 1.0
+            },
+            "key2": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "key3": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 1.0
+            },
+            "key4": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "atime0": 0,
+            "atime1": 14649,
+            "atime2": 33539,
+            "atime3": 51850,
+            "atime4": 65535
+          }
+        }
+      },
+      "duration": 1.0,
+      "looping": false,
+      "delay": 0.30000001192092896,
+      "prewarm": false,
+      "simulationSpeed": 1.0,
+      "sortingOrder": 1,
+      "depth": 0.0,
+      "texture": "particle-native-0.png",
+      "tint": {
+        "r": 0.7279411554336548,
+        "g": 0.7279411554336548,
+        "b": 0.7279411554336548,
+        "a": 1.0
+      },
+      "textureST": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "action": "interact",
+      "bone": {
+        "boneName": "BG_BulbE",
+        "followBoneRotation": 1,
+        "followLocalScale": 0,
+        "followSkeletonFlip": 1
+      }
+    },
+    {
+      "name": "shui2_dm",
+      "sourcePathId": "-117049312297617715",
+      "matrix": [
+        [
+          1.0,
+          -3.9852233917881275e-17,
+          0.0,
+          -0.09599992632865884
+        ],
+        [
+          -1.0980342258435773e-18,
+          0.9999999999999998,
+          0.0,
+          -1.4901161216052117e-07
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "units": 100.00000223517424,
+      "initial": {
+        "startLifetime": {
+          "minMaxState": 0,
+          "scalar": 4.300000190734863
+        },
+        "startSpeed": {
+          "minMaxState": 3,
+          "scalar": 0.0,
+          "minScalar": 0.0
+        },
+        "startSize": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "startRotation": {
+          "minMaxState": 3,
+          "scalar": 6.283185005187988,
+          "minScalar": 0.0
+        },
+        "startColor": {
+          "minMaxState": 0,
+          "maxColor": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0,
+            "a": 1.0
+          }
+        },
+        "maxNumParticles": 1
+      },
+      "emission": {
+        "rateOverTime": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "bursts": [
+          {
+            "time": 0.0,
+            "countCurve": {
+              "minMaxState": 0,
+              "scalar": 2.0
+            },
+            "cycleCount": 1,
+            "repeatInterval": 0.009999999776482582,
+            "probability": 1.0
+          }
+        ]
+      },
+      "shape": {
+        "enabled": false,
+        "type": 5,
+        "m_Scale": {
+          "x": 0.6299999952316284,
+          "y": 0.25,
+          "z": 0.0
+        },
+        "m_Position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "size": {
+        "enabled": false,
+        "curve": {
+          "minMaxState": 1,
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 2.0,
+                "outSlope": 2.0,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2,
+            "m_RotationOrder": 0
+          }
+        }
+      },
+      "color": {
+        "enabled": true,
+        "gradient": {
+          "minMaxState": 1,
+          "maxGradient": {
+            "m_Mode": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 5,
+            "key0": {
+              "r": 0.7669879794120789,
+              "g": 0.0,
+              "b": 0.8897058963775635,
+              "a": 0.0
+            },
+            "key1": {
+              "r": 0.8431038856506348,
+              "g": 0.125,
+              "b": 1.0,
+              "a": 0.24713680148124695
+            },
+            "key2": {
+              "r": 0.8431038856506348,
+              "g": 0.125,
+              "b": 1.0,
+              "a": 0.29019609093666077
+            },
+            "key3": {
+              "r": 0.8431038856506348,
+              "g": 0.125,
+              "b": 1.0,
+              "a": 0.2698020339012146
+            },
+            "key4": {
+              "r": 0.8431038856506348,
+              "g": 0.125,
+              "b": 1.0,
+              "a": 0.0
+            },
+            "ctime0": 0,
+            "ctime1": 65342,
+            "atime0": 0,
+            "atime1": 7325,
+            "atime2": 29876,
+            "atime3": 55898,
+            "atime4": 65535
+          }
+        }
+      },
+      "duration": 0.10000000149011612,
+      "looping": false,
+      "delay": 1.899999976158142,
+      "prewarm": false,
+      "simulationSpeed": 1.0,
+      "sortingOrder": 5,
+      "depth": 0.0,
+      "texture": "particle-native-2.png",
+      "tint": {
+        "r": 0.8187626004219055,
+        "g": 0.43014705181121826,
+        "b": 0.8602941036224365,
+        "a": 0.3659999966621399
+      },
+      "textureST": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "action": "interact",
+      "bone": {
+        "boneName": "Mizuki_Bubble2",
+        "followBoneRotation": 1,
+        "followLocalScale": 0,
+        "followSkeletonFlip": 1
+      }
+    },
+    {
+      "name": "deng_01_dm",
+      "sourcePathId": "1010194733972059853",
+      "matrix": [
+        [
+          1.0000001192092896,
+          8.473782785809306e-17,
+          0.0,
+          0.4300000071525578
+        ],
+        [
+          6.964339438443314e-18,
+          1.0000001192092896,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0000001192092896,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "units": 100.00000223517424,
+      "initial": {
+        "startLifetime": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "startSpeed": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startSize": {
+          "minMaxState": 0,
+          "scalar": 1.100000023841858
+        },
+        "startRotation": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startColor": {
+          "minMaxState": 2,
+          "minColor": {
+            "r": 0.779411792755127,
+            "g": 0.0,
+            "b": 0.33864083886146545,
+            "a": 1.0
+          },
+          "maxColor": {
+            "r": 0.9632353186607361,
+            "g": 0.6801261305809021,
+            "b": 0.07082613557577133,
+            "a": 0.47200000286102295
+          }
+        },
+        "maxNumParticles": 1
+      },
+      "emission": {
+        "rateOverTime": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "bursts": [
+          {
+            "time": 0.0,
+            "countCurve": {
+              "minMaxState": 0,
+              "scalar": 1.0
+            },
+            "cycleCount": 1,
+            "repeatInterval": 0.009999999776482582,
+            "probability": 1.0
+          }
+        ]
+      },
+      "shape": {
+        "enabled": false,
+        "type": 5,
+        "m_Scale": {
+          "x": 0.5099999904632568,
+          "y": 0.38999998569488525,
+          "z": 0.0
+        },
+        "m_Position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "size": {
+        "enabled": false,
+        "curve": {
+          "minMaxState": 1,
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 3.0806310176849365,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 0.32460883259773254,
+                "value": 1.0,
+                "inSlope": 3.0806310176849365,
+                "outSlope": -1.463605523109436,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 1.0,
+                "value": 0.011493682861328125,
+                "inSlope": -1.463605523109436,
+                "outSlope": 1.0,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2,
+            "m_RotationOrder": 0
+          }
+        }
+      },
+      "color": {
+        "enabled": true,
+        "gradient": {
+          "minMaxState": 1,
+          "maxGradient": {
+            "m_Mode": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 5,
+            "key0": {
+              "r": 0.9529411792755127,
+              "g": 1.0,
+              "b": 0.14705884456634521,
+              "a": 0.0
+            },
+            "key1": {
+              "r": 0.6021806597709656,
+              "g": 0.0,
+              "b": 0.6985294222831726,
+              "a": 1.0
+            },
+            "key2": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "key3": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 1.0
+            },
+            "key4": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "atime0": 0,
+            "atime1": 14649,
+            "atime2": 33539,
+            "atime3": 51850,
+            "atime4": 65535
+          }
+        }
+      },
+      "duration": 1.0,
+      "looping": false,
+      "delay": 0.30000001192092896,
+      "prewarm": false,
+      "simulationSpeed": 1.0,
+      "sortingOrder": 1,
+      "depth": 0.0,
+      "texture": "particle-native-0.png",
+      "tint": {
+        "r": 0.7279411554336548,
+        "g": 0.7279411554336548,
+        "b": 0.7279411554336548,
+        "a": 1.0
+      },
+      "textureST": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "action": "interact",
+      "bone": {
+        "boneName": "BG_BulbH",
+        "followBoneRotation": 1,
+        "followLocalScale": 0,
+        "followSkeletonFlip": 1
+      }
+    },
+    {
+      "name": "deng_01_dm",
+      "sourcePathId": "1396035556582160077",
+      "matrix": [
+        [
+          1.0000001192092893,
+          -5.70438231452946e-18,
+          0.0,
+          0.43000000715255826
+        ],
+        [
+          -2.060873342530059e-17,
+          1.0000001192092896,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0000001192092896,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "units": 100.00000223517424,
+      "initial": {
+        "startLifetime": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "startSpeed": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startSize": {
+          "minMaxState": 0,
+          "scalar": 1.100000023841858
+        },
+        "startRotation": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startColor": {
+          "minMaxState": 2,
+          "minColor": {
+            "r": 0.779411792755127,
+            "g": 0.0,
+            "b": 0.33864083886146545,
+            "a": 1.0
+          },
+          "maxColor": {
+            "r": 0.9632353186607361,
+            "g": 0.6801261305809021,
+            "b": 0.07082613557577133,
+            "a": 0.47200000286102295
+          }
+        },
+        "maxNumParticles": 1
+      },
+      "emission": {
+        "rateOverTime": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "bursts": [
+          {
+            "time": 0.0,
+            "countCurve": {
+              "minMaxState": 0,
+              "scalar": 1.0
+            },
+            "cycleCount": 1,
+            "repeatInterval": 0.009999999776482582,
+            "probability": 1.0
+          }
+        ]
+      },
+      "shape": {
+        "enabled": false,
+        "type": 5,
+        "m_Scale": {
+          "x": 0.5099999904632568,
+          "y": 0.38999998569488525,
+          "z": 0.0
+        },
+        "m_Position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "size": {
+        "enabled": false,
+        "curve": {
+          "minMaxState": 1,
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 3.0806310176849365,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 0.32460883259773254,
+                "value": 1.0,
+                "inSlope": 3.0806310176849365,
+                "outSlope": -1.463605523109436,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 1.0,
+                "value": 0.011493682861328125,
+                "inSlope": -1.463605523109436,
+                "outSlope": 1.0,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2,
+            "m_RotationOrder": 0
+          }
+        }
+      },
+      "color": {
+        "enabled": true,
+        "gradient": {
+          "minMaxState": 1,
+          "maxGradient": {
+            "m_Mode": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 5,
+            "key0": {
+              "r": 0.9529411792755127,
+              "g": 1.0,
+              "b": 0.14705884456634521,
+              "a": 0.0
+            },
+            "key1": {
+              "r": 0.6021806597709656,
+              "g": 0.0,
+              "b": 0.6985294222831726,
+              "a": 1.0
+            },
+            "key2": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "key3": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 1.0
+            },
+            "key4": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "atime0": 0,
+            "atime1": 14649,
+            "atime2": 33539,
+            "atime3": 51850,
+            "atime4": 65535
+          }
+        }
+      },
+      "duration": 1.0,
+      "looping": false,
+      "delay": 0.30000001192092896,
+      "prewarm": false,
+      "simulationSpeed": 1.0,
+      "sortingOrder": 1,
+      "depth": 0.0,
+      "texture": "particle-native-0.png",
+      "tint": {
+        "r": 0.7279411554336548,
+        "g": 0.7279411554336548,
+        "b": 0.7279411554336548,
+        "a": 1.0
+      },
+      "textureST": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "action": "interact",
+      "bone": {
+        "boneName": "BG_BulbB",
+        "followBoneRotation": 1,
+        "followLocalScale": 0,
+        "followSkeletonFlip": 1
+      }
+    },
+    {
+      "name": "deng_013_dm",
+      "sourcePathId": "2626144262115030733",
+      "matrix": [
+        [
+          1.0000001192092896,
+          8.473782785809306e-17,
+          0.0,
+          0.4300000071525578
+        ],
+        [
+          6.964339438443314e-18,
+          1.0000001192092896,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0000001192092896,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "units": 100.00000223517424,
+      "initial": {
+        "startLifetime": {
+          "minMaxState": 0,
+          "scalar": 4.0
+        },
+        "startSpeed": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startSize": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "startRotation": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startColor": {
+          "minMaxState": 0,
+          "maxColor": {
+            "r": 0.49264705181121826,
+            "g": 0.3975152373313904,
+            "b": 0.0,
+            "a": 0.2720000147819519
+          }
+        },
+        "maxNumParticles": 2
+      },
+      "emission": {
+        "rateOverTime": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "bursts": [
+          {
+            "time": 0.0,
+            "countCurve": {
+              "minMaxState": 0,
+              "scalar": 1.0
+            },
+            "cycleCount": 1,
+            "repeatInterval": 0.009999999776482582,
+            "probability": 1.0
+          }
+        ]
+      },
+      "shape": {
+        "enabled": false,
+        "type": 5,
+        "m_Scale": {
+          "x": 0.5099999904632568,
+          "y": 0.38999998569488525,
+          "z": 0.0
+        },
+        "m_Position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "size": {
+        "enabled": false,
+        "curve": {
+          "minMaxState": 1,
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 3.0806310176849365,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 0.32460883259773254,
+                "value": 1.0,
+                "inSlope": 3.0806310176849365,
+                "outSlope": -1.463605523109436,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 1.0,
+                "value": 0.011493682861328125,
+                "inSlope": -1.463605523109436,
+                "outSlope": 1.0,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2,
+            "m_RotationOrder": 0
+          }
+        }
+      },
+      "color": {
+        "enabled": true,
+        "gradient": {
+          "minMaxState": 1,
+          "maxGradient": {
+            "m_Mode": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 4,
+            "key0": {
+              "r": 0.9529411792755127,
+              "g": 1.0,
+              "b": 0.14705884456634521,
+              "a": 0.0
+            },
+            "key1": {
+              "r": 0.6021806597709656,
+              "g": 0.0,
+              "b": 0.6985294222831726,
+              "a": 1.0
+            },
+            "key2": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 1.0
+            },
+            "key3": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "atime0": 0,
+            "atime1": 4241,
+            "atime2": 58211,
+            "atime3": 65535
+          }
+        }
+      },
+      "duration": 0.10000000149011612,
+      "looping": false,
+      "delay": 4.800000190734863,
+      "prewarm": false,
+      "simulationSpeed": 1.0,
+      "sortingOrder": 1,
+      "depth": 0.0,
+      "texture": "particle-native-0.png",
+      "tint": {
+        "r": 0.7279411554336548,
+        "g": 0.7279411554336548,
+        "b": 0.7279411554336548,
+        "a": 1.0
+      },
+      "textureST": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "action": "special",
+      "bone": {
+        "boneName": "BG_BulbH",
+        "followBoneRotation": 1,
+        "followLocalScale": 0,
+        "followSkeletonFlip": 1
+      }
+    },
+    {
+      "name": "deng_013_dm",
+      "sourcePathId": "2820162039119279821",
+      "matrix": [
+        [
+          1.0000001192092896,
+          1.9109432655393566e-18,
+          0.0,
+          0.43000000715255826
+        ],
+        [
+          2.0772590776181943e-18,
+          1.0000001192092896,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0000001192092896,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "units": 100.00000223517424,
+      "initial": {
+        "startLifetime": {
+          "minMaxState": 0,
+          "scalar": 4.0
+        },
+        "startSpeed": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startSize": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "startRotation": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startColor": {
+          "minMaxState": 0,
+          "maxColor": {
+            "r": 0.49264705181121826,
+            "g": 0.3975152373313904,
+            "b": 0.0,
+            "a": 0.2720000147819519
+          }
+        },
+        "maxNumParticles": 2
+      },
+      "emission": {
+        "rateOverTime": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "bursts": [
+          {
+            "time": 0.0,
+            "countCurve": {
+              "minMaxState": 0,
+              "scalar": 1.0
+            },
+            "cycleCount": 1,
+            "repeatInterval": 0.009999999776482582,
+            "probability": 1.0
+          }
+        ]
+      },
+      "shape": {
+        "enabled": false,
+        "type": 5,
+        "m_Scale": {
+          "x": 0.5099999904632568,
+          "y": 0.38999998569488525,
+          "z": 0.0
+        },
+        "m_Position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "size": {
+        "enabled": false,
+        "curve": {
+          "minMaxState": 1,
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 3.0806310176849365,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 0.32460883259773254,
+                "value": 1.0,
+                "inSlope": 3.0806310176849365,
+                "outSlope": -1.463605523109436,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 1.0,
+                "value": 0.011493682861328125,
+                "inSlope": -1.463605523109436,
+                "outSlope": 1.0,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2,
+            "m_RotationOrder": 0
+          }
+        }
+      },
+      "color": {
+        "enabled": true,
+        "gradient": {
+          "minMaxState": 1,
+          "maxGradient": {
+            "m_Mode": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 4,
+            "key0": {
+              "r": 0.9529411792755127,
+              "g": 1.0,
+              "b": 0.14705884456634521,
+              "a": 0.0
+            },
+            "key1": {
+              "r": 0.6021806597709656,
+              "g": 0.0,
+              "b": 0.6985294222831726,
+              "a": 1.0
+            },
+            "key2": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 1.0
+            },
+            "key3": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "atime0": 0,
+            "atime1": 4241,
+            "atime2": 58211,
+            "atime3": 65535
+          }
+        }
+      },
+      "duration": 0.10000000149011612,
+      "looping": false,
+      "delay": 4.800000190734863,
+      "prewarm": false,
+      "simulationSpeed": 1.0,
+      "sortingOrder": 1,
+      "depth": 0.0,
+      "texture": "particle-native-0.png",
+      "tint": {
+        "r": 0.7279411554336548,
+        "g": 0.7279411554336548,
+        "b": 0.7279411554336548,
+        "a": 1.0
+      },
+      "textureST": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "action": "special",
+      "bone": {
+        "boneName": "BG_BulbE",
+        "followBoneRotation": 1,
+        "followLocalScale": 0,
+        "followSkeletonFlip": 1
+      }
+    },
+    {
+      "name": "deng_01_dm",
+      "sourcePathId": "2970050870058874573",
+      "matrix": [
+        [
+          1.0000001192092896,
+          1.170971760412087e-18,
+          0.0,
+          0.4300000071525574
+        ],
+        [
+          -3.844444734485639e-18,
+          1.0000001192092896,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0000001192092896,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "units": 100.00000223517424,
+      "initial": {
+        "startLifetime": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "startSpeed": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startSize": {
+          "minMaxState": 0,
+          "scalar": 1.100000023841858
+        },
+        "startRotation": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startColor": {
+          "minMaxState": 2,
+          "minColor": {
+            "r": 0.779411792755127,
+            "g": 0.0,
+            "b": 0.33864083886146545,
+            "a": 1.0
+          },
+          "maxColor": {
+            "r": 0.9632353186607361,
+            "g": 0.6801261305809021,
+            "b": 0.07082613557577133,
+            "a": 0.47200000286102295
+          }
+        },
+        "maxNumParticles": 1
+      },
+      "emission": {
+        "rateOverTime": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "bursts": [
+          {
+            "time": 0.0,
+            "countCurve": {
+              "minMaxState": 0,
+              "scalar": 1.0
+            },
+            "cycleCount": 1,
+            "repeatInterval": 0.009999999776482582,
+            "probability": 1.0
+          }
+        ]
+      },
+      "shape": {
+        "enabled": false,
+        "type": 5,
+        "m_Scale": {
+          "x": 0.5099999904632568,
+          "y": 0.38999998569488525,
+          "z": 0.0
+        },
+        "m_Position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "size": {
+        "enabled": false,
+        "curve": {
+          "minMaxState": 1,
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 3.0806310176849365,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 0.32460883259773254,
+                "value": 1.0,
+                "inSlope": 3.0806310176849365,
+                "outSlope": -1.463605523109436,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 1.0,
+                "value": 0.011493682861328125,
+                "inSlope": -1.463605523109436,
+                "outSlope": 1.0,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2,
+            "m_RotationOrder": 0
+          }
+        }
+      },
+      "color": {
+        "enabled": true,
+        "gradient": {
+          "minMaxState": 1,
+          "maxGradient": {
+            "m_Mode": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 5,
+            "key0": {
+              "r": 0.9529411792755127,
+              "g": 1.0,
+              "b": 0.14705884456634521,
+              "a": 0.0
+            },
+            "key1": {
+              "r": 0.6021806597709656,
+              "g": 0.0,
+              "b": 0.6985294222831726,
+              "a": 1.0
+            },
+            "key2": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "key3": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 1.0
+            },
+            "key4": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "atime0": 0,
+            "atime1": 14649,
+            "atime2": 33539,
+            "atime3": 51850,
+            "atime4": 65535
+          }
+        }
+      },
+      "duration": 1.0,
+      "looping": false,
+      "delay": 0.30000001192092896,
+      "prewarm": false,
+      "simulationSpeed": 1.0,
+      "sortingOrder": 1,
+      "depth": 0.0,
+      "texture": "particle-native-0.png",
+      "tint": {
+        "r": 0.7279411554336548,
+        "g": 0.7279411554336548,
+        "b": 0.7279411554336548,
+        "a": 1.0
+      },
+      "textureST": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "action": "interact",
+      "bone": {
+        "boneName": "BG_BulbF",
+        "followBoneRotation": 1,
+        "followLocalScale": 0,
+        "followSkeletonFlip": 1
+      }
+    },
+    {
+      "name": "deng_01_dm",
+      "sourcePathId": "3076411893381396173",
+      "matrix": [
+        [
+          1.0000001192092896,
+          1.3437448018570566e-17,
+          0.0,
+          0.4300000071525574
+        ],
+        [
+          -1.6578026336642665e-17,
+          1.0000001192092893,
+          0.0,
+          2.498001805406602e-16
+        ],
+        [
+          0.0,
+          0.0,
+          1.0000001192092896,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "units": 100.00000223517424,
+      "initial": {
+        "startLifetime": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "startSpeed": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startSize": {
+          "minMaxState": 0,
+          "scalar": 1.100000023841858
+        },
+        "startRotation": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startColor": {
+          "minMaxState": 2,
+          "minColor": {
+            "r": 0.779411792755127,
+            "g": 0.0,
+            "b": 0.33864083886146545,
+            "a": 1.0
+          },
+          "maxColor": {
+            "r": 0.9632353186607361,
+            "g": 0.6801261305809021,
+            "b": 0.07082613557577133,
+            "a": 0.47200000286102295
+          }
+        },
+        "maxNumParticles": 1
+      },
+      "emission": {
+        "rateOverTime": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "bursts": [
+          {
+            "time": 0.0,
+            "countCurve": {
+              "minMaxState": 0,
+              "scalar": 1.0
+            },
+            "cycleCount": 1,
+            "repeatInterval": 0.009999999776482582,
+            "probability": 1.0
+          }
+        ]
+      },
+      "shape": {
+        "enabled": false,
+        "type": 5,
+        "m_Scale": {
+          "x": 0.5099999904632568,
+          "y": 0.38999998569488525,
+          "z": 0.0
+        },
+        "m_Position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "size": {
+        "enabled": false,
+        "curve": {
+          "minMaxState": 1,
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 3.0806310176849365,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 0.32460883259773254,
+                "value": 1.0,
+                "inSlope": 3.0806310176849365,
+                "outSlope": -1.463605523109436,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 1.0,
+                "value": 0.011493682861328125,
+                "inSlope": -1.463605523109436,
+                "outSlope": 1.0,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2,
+            "m_RotationOrder": 0
+          }
+        }
+      },
+      "color": {
+        "enabled": true,
+        "gradient": {
+          "minMaxState": 1,
+          "maxGradient": {
+            "m_Mode": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 5,
+            "key0": {
+              "r": 0.9529411792755127,
+              "g": 1.0,
+              "b": 0.14705884456634521,
+              "a": 0.0
+            },
+            "key1": {
+              "r": 0.6021806597709656,
+              "g": 0.0,
+              "b": 0.6985294222831726,
+              "a": 1.0
+            },
+            "key2": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "key3": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 1.0
+            },
+            "key4": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "atime0": 0,
+            "atime1": 14649,
+            "atime2": 33539,
+            "atime3": 51850,
+            "atime4": 65535
+          }
+        }
+      },
+      "duration": 1.0,
+      "looping": false,
+      "delay": 0.30000001192092896,
+      "prewarm": false,
+      "simulationSpeed": 1.0,
+      "sortingOrder": 1,
+      "depth": 0.0,
+      "texture": "particle-native-0.png",
+      "tint": {
+        "r": 0.7279411554336548,
+        "g": 0.7279411554336548,
+        "b": 0.7279411554336548,
+        "a": 1.0
+      },
+      "textureST": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "action": "interact",
+      "bone": {
+        "boneName": "BG_BulbG",
+        "followBoneRotation": 1,
+        "followLocalScale": 0,
+        "followSkeletonFlip": 1
+      }
+    },
+    {
+      "name": "deng_013_dm",
+      "sourcePathId": "3261482963206665933",
+      "matrix": [
+        [
+          1.0000001192092896,
+          1.3437448018570566e-17,
+          0.0,
+          0.4300000071525574
+        ],
+        [
+          -1.6578026336642665e-17,
+          1.0000001192092893,
+          0.0,
+          2.498001805406602e-16
+        ],
+        [
+          0.0,
+          0.0,
+          1.0000001192092896,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "units": 100.00000223517424,
+      "initial": {
+        "startLifetime": {
+          "minMaxState": 0,
+          "scalar": 4.0
+        },
+        "startSpeed": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startSize": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "startRotation": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startColor": {
+          "minMaxState": 0,
+          "maxColor": {
+            "r": 0.49264705181121826,
+            "g": 0.3975152373313904,
+            "b": 0.0,
+            "a": 0.2720000147819519
+          }
+        },
+        "maxNumParticles": 2
+      },
+      "emission": {
+        "rateOverTime": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "bursts": [
+          {
+            "time": 0.0,
+            "countCurve": {
+              "minMaxState": 0,
+              "scalar": 1.0
+            },
+            "cycleCount": 1,
+            "repeatInterval": 0.009999999776482582,
+            "probability": 1.0
+          }
+        ]
+      },
+      "shape": {
+        "enabled": false,
+        "type": 5,
+        "m_Scale": {
+          "x": 0.5099999904632568,
+          "y": 0.38999998569488525,
+          "z": 0.0
+        },
+        "m_Position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "size": {
+        "enabled": false,
+        "curve": {
+          "minMaxState": 1,
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 3.0806310176849365,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 0.32460883259773254,
+                "value": 1.0,
+                "inSlope": 3.0806310176849365,
+                "outSlope": -1.463605523109436,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 1.0,
+                "value": 0.011493682861328125,
+                "inSlope": -1.463605523109436,
+                "outSlope": 1.0,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2,
+            "m_RotationOrder": 0
+          }
+        }
+      },
+      "color": {
+        "enabled": true,
+        "gradient": {
+          "minMaxState": 1,
+          "maxGradient": {
+            "m_Mode": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 4,
+            "key0": {
+              "r": 0.9529411792755127,
+              "g": 1.0,
+              "b": 0.14705884456634521,
+              "a": 0.0
+            },
+            "key1": {
+              "r": 0.6021806597709656,
+              "g": 0.0,
+              "b": 0.6985294222831726,
+              "a": 1.0
+            },
+            "key2": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 1.0
+            },
+            "key3": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "atime0": 0,
+            "atime1": 4241,
+            "atime2": 58211,
+            "atime3": 65535
+          }
+        }
+      },
+      "duration": 0.10000000149011612,
+      "looping": false,
+      "delay": 4.800000190734863,
+      "prewarm": false,
+      "simulationSpeed": 1.0,
+      "sortingOrder": 1,
+      "depth": 0.0,
+      "texture": "particle-native-0.png",
+      "tint": {
+        "r": 0.7279411554336548,
+        "g": 0.7279411554336548,
+        "b": 0.7279411554336548,
+        "a": 1.0
+      },
+      "textureST": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "action": "special",
+      "bone": {
+        "boneName": "BG_BulbG",
+        "followBoneRotation": 1,
+        "followLocalScale": 0,
+        "followSkeletonFlip": 1
+      }
+    },
+    {
+      "name": "bao_dm",
+      "sourcePathId": "4730725527813158605",
+      "matrix": [
+        [
+          1.0000000298023224,
+          0.0,
+          0.0,
+          -0.38999995589256287
+        ],
+        [
+          0.0,
+          1.0000000298023224,
+          0.0,
+          9.490000247955322
+        ],
+        [
+          0.0,
+          0.0,
+          1.0000000298023224,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "units": 100.00000223517424,
+      "initial": {
+        "startLifetime": {
+          "minMaxState": 3,
+          "scalar": 0.5,
+          "minScalar": 0.15000000596046448
+        },
+        "startSpeed": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startSize": {
+          "minMaxState": 0,
+          "scalar": 10.0
+        },
+        "startRotation": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startColor": {
+          "minMaxState": 0,
+          "maxColor": {
+            "r": 0.9338235259056091,
+            "g": 0.9338235259056091,
+            "b": 0.9338235259056091,
+            "a": 0.26600000262260437
+          }
+        },
+        "maxNumParticles": 1000
+      },
+      "emission": {
+        "rateOverTime": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "bursts": [
+          {
+            "time": 0.0,
+            "countCurve": {
+              "minMaxState": 0,
+              "scalar": 1.0
+            },
+            "cycleCount": 1,
+            "repeatInterval": 0.009999999776482582,
+            "probability": 1.0
+          }
+        ]
+      },
+      "shape": {
+        "enabled": false,
+        "type": 4,
+        "m_Scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        },
+        "m_Position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "size": {
+        "enabled": true,
+        "curve": {
+          "minMaxState": 1,
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.4317474365234375,
+                "inSlope": 0.0,
+                "outSlope": 0.8763476610183716,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 0.42662307620048523,
+                "value": 0.8056175708770752,
+                "inSlope": 0.8763476610183716,
+                "outSlope": 0.33901336789131165,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.33901336789131165,
+                "outSlope": 1.0,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2,
+            "m_RotationOrder": 0
+          }
+        }
+      },
+      "color": {
+        "enabled": true,
+        "gradient": {
+          "minMaxState": 1,
+          "maxGradient": {
+            "m_Mode": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 3,
+            "key0": {
+              "r": 1.0,
+              "g": 1.0,
+              "b": 1.0,
+              "a": 1.0
+            },
+            "key1": {
+              "r": 1.0,
+              "g": 0.3103448152542114,
+              "b": 0.0,
+              "a": 1.0
+            },
+            "key2": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "ctime0": 0,
+            "ctime1": 27178,
+            "atime0": 0,
+            "atime1": 16769,
+            "atime2": 65535
+          }
+        }
+      },
+      "duration": 1.0,
+      "looping": false,
+      "delay": 0.0,
+      "prewarm": false,
+      "simulationSpeed": 1.0,
+      "sortingOrder": 1,
+      "depth": 0.0,
+      "texture": "particle-native-4.png",
+      "tint": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "textureST": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "action": "interact"
+    },
+    {
+      "name": "deng_013_dm",
+      "sourcePathId": "5015140239383066317",
+      "matrix": [
+        [
+          1.0000001192092896,
+          1.170971760412087e-18,
+          0.0,
+          0.4300000071525574
+        ],
+        [
+          -3.844444734485639e-18,
+          1.0000001192092896,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0000001192092896,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "units": 100.00000223517424,
+      "initial": {
+        "startLifetime": {
+          "minMaxState": 0,
+          "scalar": 4.0
+        },
+        "startSpeed": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startSize": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "startRotation": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startColor": {
+          "minMaxState": 0,
+          "maxColor": {
+            "r": 0.49264705181121826,
+            "g": 0.3975152373313904,
+            "b": 0.0,
+            "a": 0.2720000147819519
+          }
+        },
+        "maxNumParticles": 2
+      },
+      "emission": {
+        "rateOverTime": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "bursts": [
+          {
+            "time": 0.0,
+            "countCurve": {
+              "minMaxState": 0,
+              "scalar": 1.0
+            },
+            "cycleCount": 1,
+            "repeatInterval": 0.009999999776482582,
+            "probability": 1.0
+          }
+        ]
+      },
+      "shape": {
+        "enabled": false,
+        "type": 5,
+        "m_Scale": {
+          "x": 0.5099999904632568,
+          "y": 0.38999998569488525,
+          "z": 0.0
+        },
+        "m_Position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "size": {
+        "enabled": false,
+        "curve": {
+          "minMaxState": 1,
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 3.0806310176849365,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 0.32460883259773254,
+                "value": 1.0,
+                "inSlope": 3.0806310176849365,
+                "outSlope": -1.463605523109436,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 1.0,
+                "value": 0.011493682861328125,
+                "inSlope": -1.463605523109436,
+                "outSlope": 1.0,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2,
+            "m_RotationOrder": 0
+          }
+        }
+      },
+      "color": {
+        "enabled": true,
+        "gradient": {
+          "minMaxState": 1,
+          "maxGradient": {
+            "m_Mode": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 4,
+            "key0": {
+              "r": 0.9529411792755127,
+              "g": 1.0,
+              "b": 0.14705884456634521,
+              "a": 0.0
+            },
+            "key1": {
+              "r": 0.6021806597709656,
+              "g": 0.0,
+              "b": 0.6985294222831726,
+              "a": 1.0
+            },
+            "key2": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 1.0
+            },
+            "key3": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "atime0": 0,
+            "atime1": 4241,
+            "atime2": 58211,
+            "atime3": 65535
+          }
+        }
+      },
+      "duration": 0.10000000149011612,
+      "looping": false,
+      "delay": 4.800000190734863,
+      "prewarm": false,
+      "simulationSpeed": 1.0,
+      "sortingOrder": 1,
+      "depth": 0.0,
+      "texture": "particle-native-0.png",
+      "tint": {
+        "r": 0.7279411554336548,
+        "g": 0.7279411554336548,
+        "b": 0.7279411554336548,
+        "a": 1.0
+      },
+      "textureST": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "action": "special",
+      "bone": {
+        "boneName": "BG_BulbF",
+        "followBoneRotation": 1,
+        "followLocalScale": 0,
+        "followSkeletonFlip": 1
+      }
+    },
+    {
+      "name": "shui2_dm (1)",
+      "sourcePathId": "5264931385509803725",
+      "matrix": [
+        [
+          0.7836902141571045,
+          -3.599834718941593e-17,
+          0.0,
+          -0.17900031661987503
+        ],
+        [
+          2.1938076958877996e-17,
+          0.9800003170967101,
+          0.0,
+          -0.023999973624962312
+        ],
+        [
+          0.0,
+          0.0,
+          0.9799999594688416,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "units": 100.00000223517424,
+      "initial": {
+        "startLifetime": {
+          "minMaxState": 3,
+          "scalar": 5.0,
+          "minScalar": 5.0
+        },
+        "startSpeed": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startSize": {
+          "minMaxState": 0,
+          "scalar": 0.800000011920929
+        },
+        "startRotation": {
+          "minMaxState": 3,
+          "scalar": 0.0,
+          "minScalar": 0.0
+        },
+        "startColor": {
+          "minMaxState": 0,
+          "maxColor": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0,
+            "a": 0.1568627506494522
+          }
+        },
+        "maxNumParticles": 4
+      },
+      "emission": {
+        "rateOverTime": {
+          "minMaxState": 0,
+          "scalar": 2.0
+        },
+        "bursts": []
+      },
+      "shape": {
+        "enabled": false,
+        "type": 5,
+        "m_Scale": {
+          "x": 0.6299999952316284,
+          "y": 0.25,
+          "z": 0.0
+        },
+        "m_Position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "size": {
+        "enabled": false,
+        "curve": {
+          "minMaxState": 1,
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.008510638028383255,
+                "value": 0.8713746070861816,
+                "inSlope": 0.5546348094940186,
+                "outSlope": 0.5546348094940186,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2,
+            "m_RotationOrder": 0
+          }
+        }
+      },
+      "color": {
+        "enabled": true,
+        "gradient": {
+          "minMaxState": 1,
+          "maxGradient": {
+            "m_Mode": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 5,
+            "key0": {
+              "r": 0.9178500175476074,
+              "g": 0.40441179275512695,
+              "b": 1.0,
+              "a": 0.35686275362968445
+            },
+            "key1": {
+              "r": 0.8431038856506348,
+              "g": 0.125,
+              "b": 1.0,
+              "a": 0.1764705926179886
+            },
+            "key2": {
+              "r": 0.8431038856506348,
+              "g": 0.125,
+              "b": 1.0,
+              "a": 1.0
+            },
+            "key3": {
+              "r": 0.8431038856506348,
+              "g": 0.125,
+              "b": 1.0,
+              "a": 0.5333333611488342
+            },
+            "key4": {
+              "r": 0.8431038856506348,
+              "g": 0.125,
+              "b": 1.0,
+              "a": 0.35686275362968445
+            },
+            "ctime0": 0,
+            "ctime1": 65342,
+            "atime0": 0,
+            "atime1": 14842,
+            "atime2": 29876,
+            "atime3": 41634,
+            "atime4": 65535
+          }
+        }
+      },
+      "duration": 5.0,
+      "looping": true,
+      "delay": 4.800000190734863,
+      "prewarm": true,
+      "simulationSpeed": 1.0,
+      "sortingOrder": 2,
+      "depth": 0.0,
+      "texture": "particle-native-2.png",
+      "tint": {
+        "r": 0.8187626004219055,
+        "g": 0.43014705181121826,
+        "b": 0.8602941036224365,
+        "a": 0.3659999966621399
+      },
+      "textureST": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "action": "special",
+      "bone": {
+        "boneName": "Mizuki_Bubble",
+        "followBoneRotation": 1,
+        "followLocalScale": 0,
+        "followSkeletonFlip": 1
+      }
+    },
+    {
+      "name": "deng_013_dm",
+      "sourcePathId": "6444422311857551053",
+      "matrix": [
+        [
+          1.0000001192092898,
+          1.5421016991047567e-17,
+          0.0,
+          0.4300000071525565
+        ],
+        [
+          -1.3721456795405015e-17,
+          1.0000001192092896,
+          0.0,
+          -2.220446049250313e-16
+        ],
+        [
+          0.0,
+          0.0,
+          1.0000001192092896,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "units": 100.00000223517424,
+      "initial": {
+        "startLifetime": {
+          "minMaxState": 0,
+          "scalar": 4.0
+        },
+        "startSpeed": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startSize": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "startRotation": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startColor": {
+          "minMaxState": 0,
+          "maxColor": {
+            "r": 0.49264705181121826,
+            "g": 0.3975152373313904,
+            "b": 0.0,
+            "a": 0.2720000147819519
+          }
+        },
+        "maxNumParticles": 2
+      },
+      "emission": {
+        "rateOverTime": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "bursts": [
+          {
+            "time": 0.0,
+            "countCurve": {
+              "minMaxState": 0,
+              "scalar": 1.0
+            },
+            "cycleCount": 1,
+            "repeatInterval": 0.009999999776482582,
+            "probability": 1.0
+          }
+        ]
+      },
+      "shape": {
+        "enabled": false,
+        "type": 5,
+        "m_Scale": {
+          "x": 0.5099999904632568,
+          "y": 0.38999998569488525,
+          "z": 0.0
+        },
+        "m_Position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "size": {
+        "enabled": false,
+        "curve": {
+          "minMaxState": 1,
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 3.0806310176849365,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 0.32460883259773254,
+                "value": 1.0,
+                "inSlope": 3.0806310176849365,
+                "outSlope": -1.463605523109436,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 1.0,
+                "value": 0.011493682861328125,
+                "inSlope": -1.463605523109436,
+                "outSlope": 1.0,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2,
+            "m_RotationOrder": 0
+          }
+        }
+      },
+      "color": {
+        "enabled": true,
+        "gradient": {
+          "minMaxState": 1,
+          "maxGradient": {
+            "m_Mode": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 4,
+            "key0": {
+              "r": 0.9529411792755127,
+              "g": 1.0,
+              "b": 0.14705884456634521,
+              "a": 0.0
+            },
+            "key1": {
+              "r": 0.6021806597709656,
+              "g": 0.0,
+              "b": 0.6985294222831726,
+              "a": 1.0
+            },
+            "key2": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 1.0
+            },
+            "key3": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "atime0": 0,
+            "atime1": 4241,
+            "atime2": 58211,
+            "atime3": 65535
+          }
+        }
+      },
+      "duration": 0.10000000149011612,
+      "looping": false,
+      "delay": 4.800000190734863,
+      "prewarm": false,
+      "simulationSpeed": 1.0,
+      "sortingOrder": 1,
+      "depth": 0.0,
+      "texture": "particle-native-0.png",
+      "tint": {
+        "r": 0.7279411554336548,
+        "g": 0.7279411554336548,
+        "b": 0.7279411554336548,
+        "a": 1.0
+      },
+      "textureST": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "action": "special",
+      "bone": {
+        "boneName": "BG_BulbC",
+        "followBoneRotation": 1,
+        "followLocalScale": 0,
+        "followSkeletonFlip": 1
+      }
+    },
+    {
+      "name": "deng_01_dm",
+      "sourcePathId": "6876907329510766285",
+      "matrix": [
+        [
+          1.0000001192092898,
+          1.5421016991047567e-17,
+          0.0,
+          0.4300000071525565
+        ],
+        [
+          -1.3721456795405015e-17,
+          1.0000001192092896,
+          0.0,
+          -2.220446049250313e-16
+        ],
+        [
+          0.0,
+          0.0,
+          1.0000001192092896,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "units": 100.00000223517424,
+      "initial": {
+        "startLifetime": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "startSpeed": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startSize": {
+          "minMaxState": 0,
+          "scalar": 1.100000023841858
+        },
+        "startRotation": {
+          "minMaxState": 0,
+          "scalar": 0.0
+        },
+        "startColor": {
+          "minMaxState": 2,
+          "minColor": {
+            "r": 0.779411792755127,
+            "g": 0.0,
+            "b": 0.33864083886146545,
+            "a": 1.0
+          },
+          "maxColor": {
+            "r": 0.9632353186607361,
+            "g": 0.6801261305809021,
+            "b": 0.07082613557577133,
+            "a": 0.47200000286102295
+          }
+        },
+        "maxNumParticles": 1
+      },
+      "emission": {
+        "rateOverTime": {
+          "minMaxState": 0,
+          "scalar": 1.0
+        },
+        "bursts": [
+          {
+            "time": 0.0,
+            "countCurve": {
+              "minMaxState": 0,
+              "scalar": 1.0
+            },
+            "cycleCount": 1,
+            "repeatInterval": 0.009999999776482582,
+            "probability": 1.0
+          }
+        ]
+      },
+      "shape": {
+        "enabled": false,
+        "type": 5,
+        "m_Scale": {
+          "x": 0.5099999904632568,
+          "y": 0.38999998569488525,
+          "z": 0.0
+        },
+        "m_Position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "size": {
+        "enabled": false,
+        "curve": {
+          "minMaxState": 1,
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 3.0806310176849365,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 0.32460883259773254,
+                "value": 1.0,
+                "inSlope": 3.0806310176849365,
+                "outSlope": -1.463605523109436,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              },
+              {
+                "time": 1.0,
+                "value": 0.011493682861328125,
+                "inSlope": -1.463605523109436,
+                "outSlope": 1.0,
+                "weightedMode": 0,
+                "inWeight": 0.3333333432674408,
+                "outWeight": 0.3333333432674408
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2,
+            "m_RotationOrder": 0
+          }
+        }
+      },
+      "color": {
+        "enabled": true,
+        "gradient": {
+          "minMaxState": 1,
+          "maxGradient": {
+            "m_Mode": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 5,
+            "key0": {
+              "r": 0.9529411792755127,
+              "g": 1.0,
+              "b": 0.14705884456634521,
+              "a": 0.0
+            },
+            "key1": {
+              "r": 0.6021806597709656,
+              "g": 0.0,
+              "b": 0.6985294222831726,
+              "a": 1.0
+            },
+            "key2": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "key3": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 1.0
+            },
+            "key4": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "atime0": 0,
+            "atime1": 14649,
+            "atime2": 33539,
+            "atime3": 51850,
+            "atime4": 65535
+          }
+        }
+      },
+      "duration": 1.0,
+      "looping": false,
+      "delay": 0.30000001192092896,
+      "prewarm": false,
+      "simulationSpeed": 1.0,
+      "sortingOrder": 1,
+      "depth": 0.0,
+      "texture": "particle-native-0.png",
+      "tint": {
+        "r": 0.7279411554336548,
+        "g": 0.7279411554336548,
+        "b": 0.7279411554336548,
+        "a": 1.0
+      },
+      "textureST": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "action": "interact",
+      "bone": {
+        "boneName": "BG_BulbC",
+        "followBoneRotation": 1,
+        "followLocalScale": 0,
+        "followSkeletonFlip": 1
+      }
     }
-  ]
+  ],
+  "particleSource": {
+    "bundle": "char_437_mizuki_sale#7.ab",
+    "md5": "8737e9a70f3761bc98ae0ba23696c134",
+    "platform": "Windows",
+    "supported": 24,
+    "skipped": [
+      {
+        "name": "gezi_dm (2)",
+        "sourcePathId": "-7112434926012664115",
+        "reason": "unresolved external texture"
+      },
+      {
+        "name": "glow01_dm",
+        "sourcePathId": "-6972301924769859891",
+        "reason": "unsupported modules: VelocityModule,ClampVelocityModule,NoiseModule"
+      },
+      {
+        "name": "yanwu233_dm",
+        "sourcePathId": "-6941530575797094707",
+        "reason": "unresolved external texture"
+      },
+      {
+        "name": "gezi_dm (1)",
+        "sourcePathId": "-6815942396625488179",
+        "reason": "unresolved external texture"
+      },
+      {
+        "name": "ci_dm",
+        "sourcePathId": "-6401914246354962739",
+        "reason": "unsupported burst"
+      },
+      {
+        "name": "yanwu23_dm",
+        "sourcePathId": "-6262621787581974835",
+        "reason": "unresolved external texture"
+      },
+      {
+        "name": "smoke_012_dm",
+        "sourcePathId": "-4925664838717344051",
+        "reason": "unsupported shader: Torappu/Particles-L2D/Disturb/Disturb (Add)"
+      },
+      {
+        "name": "xianliz_dm",
+        "sourcePathId": "-4712205388867111219",
+        "reason": "unsupported shape"
+      },
+      {
+        "name": "guangdian_dm",
+        "sourcePathId": "-4223640791659579699",
+        "reason": "unsupported modules: VelocityModule,ClampVelocityModule,NoiseModule"
+      },
+      {
+        "name": "guangyun2_dm",
+        "sourcePathId": "-3989496342500804915",
+        "reason": "unsupported shape"
+      },
+      {
+        "name": "guangban_dm",
+        "sourcePathId": "-3021823098300860723",
+        "reason": "unsupported shape"
+      },
+      {
+        "name": "shui23_dm",
+        "sourcePathId": "-2311418581743438131",
+        "reason": "unresolved external texture"
+      },
+      {
+        "name": "gezi_dm",
+        "sourcePathId": "-763920795677296947",
+        "reason": "unresolved external texture"
+      },
+      {
+        "name": "smoke_011_dm",
+        "sourcePathId": "-297115397733812531",
+        "reason": "unsupported shader: Torappu/Particles-L2D/Disturb/Disturb (Add)"
+      },
+      {
+        "name": "gezi4_dm",
+        "sourcePathId": "-258493770730047795",
+        "reason": "unresolved external texture"
+      },
+      {
+        "name": "shui23_dm",
+        "sourcePathId": "-11913991335381299",
+        "reason": "unresolved external texture"
+      },
+      {
+        "name": "yezi2_dm (1)",
+        "sourcePathId": "1389327296549484237",
+        "reason": "gravity"
+      },
+      {
+        "name": "sankai4_01_dm",
+        "sourcePathId": "1435234606727296717",
+        "reason": "unsupported shape"
+      },
+      {
+        "name": "guan1_dm",
+        "sourcePathId": "2269950320687707853",
+        "reason": "unsupported modules: ClampVelocityModule,NoiseModule"
+      },
+      {
+        "name": "sankai_012_dm",
+        "sourcePathId": "2347152110218966733",
+        "reason": "unsupported shape"
+      },
+      {
+        "name": "yezi2_dm",
+        "sourcePathId": "3071902242437723853",
+        "reason": "gravity"
+      },
+      {
+        "name": "sand_03p2_dm",
+        "sourcePathId": "4060463947783534285",
+        "reason": "unsupported emission curve"
+      },
+      {
+        "name": "guangyun_dm",
+        "sourcePathId": "4326989285902907085",
+        "reason": "unresolved external texture"
+      },
+      {
+        "name": "baocl_dm",
+        "sourcePathId": "4866574206665815757",
+        "reason": "unsupported shader: Torappu/Particles-L2D/Dissolve/Dissolve Add"
+      },
+      {
+        "name": "smoke_012_dm (2)",
+        "sourcePathId": "5211850741977118413",
+        "reason": "unsupported shader: Torappu/Particles-L2D/Disturb/Disturb (Add)"
+      },
+      {
+        "name": "xingdian_dm",
+        "sourcePathId": "6083407876960810701",
+        "reason": "unsupported burst"
+      },
+      {
+        "name": "glo3_dm",
+        "sourcePathId": "7391699657144399565",
+        "reason": "unresolved external texture"
+      },
+      {
+        "name": "huan_023_dm",
+        "sourcePathId": "7700286693646268109",
+        "reason": "unresolved external texture"
+      },
+      {
+        "name": "xingdian_02xin_dm",
+        "sourcePathId": "8415538361687275213",
+        "reason": "unsupported emission curve"
+      },
+      {
+        "name": "glowxin_dm",
+        "sourcePathId": "9072517852154427085",
+        "reason": "unresolved external texture"
+      }
+    ]
+  }
 }

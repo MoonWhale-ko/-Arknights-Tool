@@ -43,7 +43,7 @@ export function createHandler({ fetcher } = {}) {
         '/preview/data/operator-aliases.json',
         '/preview/assets/icons/wardrobe-zoot-favicon.png', '/preview/assets/icons/site-favicon.png', '/preview/assets/css/zoot.css', '/preview/assets/js/zoot.js', '/preview/assets/icons/classes/sprite.png',
       ]);
-      if (['GET', 'HEAD'].includes(request.method) && (path === '/wardrobe-demo' || wardrobeAssets.has(path) || /^\/wardrobe\/effects\/(?:skadi-e2|mizuki-sale7|rosmon-e2)\/(scene\.json|shader-\d+\.frag|(?:texture|particle)-\d+\.png)$/.test(path))) {
+      if (['GET', 'HEAD'].includes(request.method) && (path === '/wardrobe-demo' || wardrobeAssets.has(path) || /^\/wardrobe\/effects\/(?:skadi-e2|mizuki-sale7|rosmon-e2)\/(scene\.json|shader-\d+\.frag|(?:texture|particle|particle-native)-\d+\.png)$/.test(path))) {
         const assetRequest = path === '/wardrobe-demo'
           ? new Request(new URL('/preview/wardrobe', request.url), { method: 'GET' }) : request;
         const response = await env.ASSETS.fetch(assetRequest);

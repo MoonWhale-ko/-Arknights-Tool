@@ -19,24 +19,25 @@ export function nativeColor(v,t=0,r=.5){
  if(v.minMaxState===3){const a=nativeGradient(v.minGradient,t),b=nativeGradient(v.maxGradient,t);return a.map((x,i)=>x+(b[i]-x)*r);}
  return rgba(v.maxColor);
 }
-/** Restricted native point/box billboards. Exporter excludes unsupported modules. */
+/** Native point/box billboards with action gates and delayed, non-looping bursts. */
 export function createNativeEmitter(P,source,texture,random=Math.random){
  const box=new P.Container(),particles=[],initial=source.initial,m=source.matrix,units=source.units;
- let remainder=0,time=0;const rate=nativeScalar(source.emission.rateOverTime),limit=initial.maxNumParticles;
+ let remainder=0,time=0,playing=!source.action;const looping=source.looping!==false,delay=source.delay||0;const rate=nativeScalar(source.emission.rateOverTime),limit=initial.maxNumParticles;
  const spawn=()=>{if(particles.length>=limit)return;const r=random(),shape=source.shape;let x=0,y=0,z=0;if(shape.enabled){const s=shape.m_Scale,p=shape.m_Position;x=(random()-.5)*s.x+p.x;y=(random()-.5)*s.y+p.y;z=(random()-.5)*s.z+p.z;}
   const lifetime=nativeScalar(initial.startLifetime,0,r);if(lifetime<=0)return;const sprite=new P.Sprite(texture);sprite.anchor.set(.5);sprite.blendMode=P.BLEND_MODES.ADD;box.addChild(sprite);
   particles.push({sprite,age:0,lifetime,r,x,y,z,speed:nativeScalar(initial.startSpeed,0,random()),size:nativeScalar(initial.startSize,0,random()),rotation:nativeScalar(initial.startRotation,0,random()),color:nativeColor(initial.startColor,0,random())});
  };
- const burst=()=>{for(const b of source.emission.bursts||[])for(let n=0;n<nativeScalar(b.countCurve);n++)spawn();};
- burst();
- const step=dt=>{const previousCycle=Math.floor(time/source.duration);time+=dt;for(let i=particles.length-1;i>=0;i--){const p=particles[i];p.age+=dt;if(p.age>=p.lifetime){p.sprite.destroy();particles.splice(i,1);}}
-  if(Math.floor(time/source.duration)>previousCycle)burst();
-  remainder+=dt*rate;while(remainder>=1){spawn();remainder--;}
+ const bursts=(from,to)=>{if(!playing)return;for(const b of source.emission.bursts||[]){const first=delay+b.time;if(!looping){if(from<first&&to>=first)for(let n=0;n<nativeScalar(b.countCurve);n++)spawn();continue;}const start=Math.max(0,Math.floor((from-first)/source.duration)+1),end=Math.floor((to-first)/source.duration);for(let cycle=start;cycle<=end;cycle++)for(let n=0;n<nativeScalar(b.countCurve);n++)spawn();}};
+ const reset=()=>{for(const p of particles)p.sprite.destroy();particles.length=0;remainder=0;time=0;bursts(-Number.EPSILON,0);};
+ reset();
+ const step=dt=>{const previous=time;time+=dt;for(let i=particles.length-1;i>=0;i--){const p=particles[i];p.age+=dt;if(p.age>=p.lifetime){p.sprite.destroy();particles.splice(i,1);}}
+  bursts(previous,time);
+  if(playing){const emitted=Math.max(0,Math.min(time,looping?Infinity:delay+source.duration)-Math.max(previous,delay));remainder+=emitted*rate;while(remainder>=1){spawn();remainder--;}}
   for(const p of particles){const t=p.age/p.lifetime,z=p.z+p.speed*p.age;p.sprite.position.set((m[0][0]*p.x+m[0][1]*p.y+m[0][2]*z+m[0][3])*units,-(m[1][0]*p.x+m[1][1]*p.y+m[1][2]*z+m[1][3])*units);
    const size=p.size*(source.size.enabled?nativeScalar(source.size.curve,t,p.r):1)*units;p.sprite.scale.set(size/texture.orig.width,-size/texture.orig.height);p.sprite.rotation=-p.rotation;
    const color=source.color.enabled?nativeColor(source.color.gradient,t,p.r):[1,1,1,1],c=color.map((v,i)=>clamp(v*p.color[i]));p.sprite.tint=(Math.round(c[0]*255)<<16)|(Math.round(c[1]*255)<<8)|Math.round(c[2]*255);p.sprite.alpha=c[3];}
  };
  const update=delta=>{let dt=delta*source.simulationSpeed;while(dt>0){const d=Math.min(dt,1/30);step(d);dt-=d;}};
- if(source.prewarm)update(source.duration);
- return {box,update};
+ if(source.prewarm&&playing)update(source.duration);
+ return {box,update,setPlaying(value){if(value&&!playing){playing=true;reset();}else playing=value;}};
 }
