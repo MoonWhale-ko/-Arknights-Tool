@@ -16,7 +16,7 @@ async function start(a){
  if(a.loading||a.model||a.closed)return;a.loading=true;button.dataset.loading='true';
  try{await prepareSpine();if(a.closed)return;const model=await loadSpine(a.entry,root);if(a.closed){model.destroy({children:true});return;}
  const names=motionNames(model.spineData.animations);if(!names.idle)throw Error('Idle animation missing');
- const box=a.box=document.createElement('div');box.className='native-live-art wardrobe-dynamic-art';a.img.after(box);
+ const box=a.box=document.createElement('div');box.className='native-live-art wardrobe-dynamic-art';box.classList.toggle('wardrobe-unowned-art',a.img.classList.contains('wardrobe-unowned-art'));a.img.after(box);
  const app=a.app=new PIXI.Application({width:1024,height:1024,backgroundAlpha:0,antialias:true,autoStart:false,resolution:1});box.append(app.view);app.ticker.maxFPS=30;app.view.setAttribute('aria-label',a.skin.operator+' Live2D');
  a.model=model;a.names=names;model.autoUpdate=false;app.stage.addChild(model);model.state.defaultMix=.3;
  // These transition mixes are stored in the original Skadi prefab.
