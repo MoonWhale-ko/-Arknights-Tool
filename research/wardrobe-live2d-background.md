@@ -40,3 +40,9 @@ All 96 Spine resources parse; 92 match the current wardrobe catalog. Four extens
 - Added native Dissolve Add UVTween material scrolling and additive blend selection. Static background texture baking preserves up to 1024 pixels instead of the former universal 256 limit; animated material baking stays capped at 256 and 8 Hz. Native textures are retained unchanged on disk.
 - Canvas drawing surface includes rigid background mesh extents while retaining the settled character scale and anchor.
 - Remaining: distortion shader families, varying vertex colors, native Animator clips, particles, trails, skinned effects, postprocessing, and additional profiles. The previous 75/21 inventory grouping is an implementation classification, not a count of restored models.
+
+### Missing background reported on the public site
+
+The user reported a missing Mizuki background while the character rendered correctly. Public scene JSON and original PNGs returned HTTP 200; the previous browser verification used the Canvas renderer, so it did not establish WebGL behavior on the user's device. The exact device-side failure was not captured.
+
+Background meshes now render into a dedicated transparent Pixi CanvasRenderer behind the character canvas. The character retains its existing renderer; original foreground effects retain their native stage/blend placement. Background canvases share the illustration's viewport and grayscale wrapper, follow its visibility/ticker, and are destroyed on skin changes. Effect asset URLs resolve from `import.meta.url` for both the public repository subpath and private preview. This is a compatibility correction, not a claim that all native effects are restored.
