@@ -49,7 +49,7 @@ def fragment(shader_id):
  text='\n'.join(line for line in text.splitlines() if not line.lstrip().startswith('#'))
  text=re.sub(r'UNITY_LOCATION\([^)]*\)\s*','',text);text=re.sub(r'^in\s+','varying ',text,flags=re.M);text=re.sub(r'^layout\(location = 0\) out .*?;\s*','',text,flags=re.M);text=text.replace('SV_Target0','gl_FragColor').replace('texture(','texture2D(').replace('roundEven(','nativeRoundEven(')
  text=text.replace('texture2D(', 'sampleUnity(');text=text.replace('void main()', 'vec4 sampleUnity(sampler2D source,vec2 uv){return texture2D(source,vec2(uv.x,1.0-uv.y));}\nvoid main()');text=text.replace('void main()', 'float nativeRoundEven(float v){float f=floor(v),r=v-f;return r<0.5?f:r>0.5?f+1.0:mod(f,2.0)==0.0?f:f+1.0;}\nvoid main()')
- text=text.replace('    return;', '    gl_FragColor.rgb *= gl_FragColor.a;\n    return;')
+ text=text.replace('    return;', '    gl_FragColor.rgb = clamp(gl_FragColor.rgb,0.0,1.0) * gl_FragColor.a;\n    return;')
  name='shader-'+str(len(shaders))+'.frag';(out/name).write_text(text);shaders[shader_id]={'file':name,'name':t['m_ParsedForm']['m_Name']};return shaders[shader_id]
 for o in bundle.objects:
  if o.type.name!='MeshRenderer':continue

@@ -25,6 +25,6 @@ void main()
     gl_FragColor.w = u_xlat0.w;
     gl_FragColor.w = clamp(gl_FragColor.w, 0.0, 1.0);
     gl_FragColor.xyz = u_xlat0.xyz;
-    gl_FragColor.rgb *= gl_FragColor.a;
+    gl_FragColor.rgb = clamp(gl_FragColor.rgb,0.0,1.0) * gl_FragColor.a;
     return;
 }
