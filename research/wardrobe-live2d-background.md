@@ -66,3 +66,13 @@ The user-provided Windows bundle (`8737e9a70f3761bc98ae0ba23696c134`) was parsed
 Thirty other active systems are explicitly excluded in scene.json: unresolved external textures, distortion/dissolve shaders, UV sheets, noise, forces/velocity, stretched/mesh particles, or unsupported shapes. Uploaded effect.ab matches the PC manifest hash, but the Mizuki bundle does not; its external CAB dependencies cannot be assumed to match this shared bundle. Main illustration geometry and prior backgrounds are retained. This is partial playback support, not full Unity equivalence. RGBA8 material baking still clamps HDR colors.
 
 Validation: 120 admin tests pass, including action delays/replay and 10 simulated seconds for each exported system. Preview build succeeds. Browser visual checks are recorded separately after deployment.
+
+### Curl noise and independent ocean alignment
+
+Mizuki now exports 27 systems, including glow01_dm, guangdian_dm and guan1_dm with original NoiseModule settings. The web runtime computes curl from deterministic gradient Perlin potentials and reads native strength curves, frequency, damping, octaves, octave multiplier/scale, quality, scroll, remapping and position/rotation/size amounts. Supported local linear velocity curves and scalar velocity limits are included. Unity's proprietary sampling/seed and integration details are not recovered: field phase and limiter damping are an approximation, not bit-identical Unity output. Other noise-bearing systems remain excluded when their separate shader, UV, shape or dependency requirements are unsupported.
+
+The hai_dm ocean quad is registered independently to the original 2048² illustration using SIFT/RANSAC: six accepted feature matches, median fit residual 0.37 source pixels. Previously the quad center was about 58 reference pixels too low and 70 too far right, with a slight tilt. Only the ocean's four vertices change; character/frame/other layers retain their existing geometry. Calibration statistics describe matched features, not an independent full-image fidelity score. scene.json keeps both original vertices and registration data. Stable texture-ID filenames avoid old indexed texture cache collisions.
+
+Validation: 123 admin tests pass; preview build succeeds. Noise tests check deterministic/coherent sampling, zero-strength behavior, damping, octave/axis settings and actual changed particle paths.
+
+Noise behavior references: https://docs.unity.cn/kr/2023.1/Manual/PartSysNoiseModule.html and https://docs.unity3d.com/2021.3/Documentation/ScriptReference/ParticleSystem.NoiseModule.html .

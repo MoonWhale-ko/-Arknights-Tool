@@ -39,7 +39,10 @@ for i,o in objects.items():
     if bone or d['skeletonRenderer']['m_PathID']!=renderer_id or d.get('useAppliedLocalScale') or not d.get('followXYPosition'):reason='unsupported bone follower'
     bone={k:d[k] for k in ['boneName','followBoneRotation','followLocalScale','followSkeletonFlip']};anchor=a
  r=next(data(c) for c,k in components(go) if k=='ParticleSystemRenderer');mat=data(r['m_Materials'][0]['m_PathID']);props=mat['m_SavedProperties'];shader=shaders.get(mat['m_Shader']['m_PathID']);tex=dict(props['m_TexEnvs']).get('_MainTex')
- bad=[k for k in ['VelocityModule','ClampVelocityModule','ForceModule','NoiseModule','RotationModule','TrailModule','UVModule'] if ps[k]['enabled']]
+ bad=[k for k in ['ForceModule','RotationModule','TrailModule','UVModule'] if ps[k]['enabled']]
+ velocity=ps['VelocityModule'];limiter=ps['ClampVelocityModule']
+ if velocity['enabled'] and (velocity['inWorldSpace'] or any(velocity[k]['minMaxState']!=0 or velocity[k]['scalar']!=0 for k in ['orbitalX','orbitalY','orbitalZ','radial'])):reason='unsupported orbital/world velocity'
+ if limiter['enabled'] and (limiter['separateAxis'] or limiter['inWorldSpace'] or limiter['drag']['scalar']!=0):reason='unsupported velocity limit'
  if bad:reason='unsupported modules: '+','.join(bad)
  if r['m_RenderMode']!=0 or ps['InitialModule']['size3D'] or ps['InitialModule']['rotation3D']:reason='unsupported renderer/3D size'
  shape=ps['ShapeModule']
@@ -52,10 +55,10 @@ for i,o in objects.items():
  if reason:skipped.append({'name':g['m_Name'],'sourcePathId':str(i),'reason':reason});continue
  tid=tex['m_Texture']['m_PathID']
  if tid not in textures:
-  name='particle-native-'+str(len(textures))+'.png';objects[tid].read().image.save(out/name);textures[tid]=name
+  name='particle-native-'+str(abs(tid))+'.png';objects[tid].read().image.save(out/name);textures[tid]=name
  world=inverse@matrix(tr);relative=np.linalg.inv(matrix(anchor))@matrix(tr) if bone else world
  initial={k:ps['InitialModule'][k] for k in ['startLifetime','startSpeed','startSize','startRotation','startColor','maxNumParticles']}
- emitters.append({'name':g['m_Name'],'sourcePathId':str(i),'matrix':relative.tolist(),'units':units,'initial':initial,'emission':{'rateOverTime':ps['EmissionModule']['rateOverTime'],'bursts':ps['EmissionModule']['m_Bursts']},'shape':{k:shape[k] for k in ['enabled','type','m_Scale','m_Position']},'size':{k:ps['SizeModule'][k] for k in ['enabled','curve']},'color':ps['ColorModule'],'duration':ps['lengthInSec'],'looping':ps['looping'],'delay':delay,'prewarm':ps['prewarm'],'simulationSpeed':ps['simulationSpeed'],'sortingOrder':r['m_SortingOrder'],'depth':float(world[2,3]),'texture':textures[tid],'tint':dict(props['m_Colors'])['_TintColor'],'textureST':[tex['m_Scale']['x'],tex['m_Scale']['y'],tex['m_Offset']['x'],tex['m_Offset']['y']],**({'action':action} if action else {}),**({'bone':bone} if bone else {})})
+ emitters.append({'name':g['m_Name'],'sourcePathId':str(i),'matrix':relative.tolist(),'units':units,'initial':initial,'emission':{'rateOverTime':ps['EmissionModule']['rateOverTime'],'bursts':ps['EmissionModule']['m_Bursts']},'shape':{k:shape[k] for k in ['enabled','type','m_Scale','m_Position']},'size':{k:ps['SizeModule'][k] for k in ['enabled','curve']},'color':ps['ColorModule'],'noise':ps['NoiseModule'],'velocity':velocity,'velocityLimit':limiter,'duration':ps['lengthInSec'],'looping':ps['looping'],'delay':delay,'prewarm':ps['prewarm'],'simulationSpeed':ps['simulationSpeed'],'sortingOrder':r['m_SortingOrder'],'depth':float(world[2,3]),'texture':textures[tid],'tint':dict(props['m_Colors'])['_TintColor'],'textureST':[tex['m_Scale']['x'],tex['m_Scale']['y'],tex['m_Offset']['x'],tex['m_Offset']['y']],**({'action':action} if action else {}),**({'bone':bone} if bone else {})})
 # Keep the two earlier ambient systems first for stable texture/test comparisons.
 order={'-12809099636902195':0,'2005376370269288141':1};emitters.sort(key=lambda e:order.get(e['sourcePathId'],2))
 def compact(v):

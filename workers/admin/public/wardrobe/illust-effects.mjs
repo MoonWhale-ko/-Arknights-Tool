@@ -1,4 +1,4 @@
-import {createNativeEmitter} from './illust-particles.mjs?v=2';
+import {createNativeEmitter} from './illust-particles.mjs?v=3';
 import {applyBoneFollower,effectIsBehind} from './illust-effects-transform.mjs?v=2';
 import {canvasEffectMaterial} from './illust-effects-canvas.mjs?v=2';
 const profiles={
@@ -13,7 +13,7 @@ const rgba=c=>[c?.r??1,c?.g??1,c?.b??1,c?.a??1];
 export async function createIllustrationEffects(skin,isClosed,model){
  const profile=profiles[skin.id];if(!profile)return null;
  const root=new URL('./effects/'+profile+'/',import.meta.url).href;
- const P=window.PIXI,scene=await resource(root,'scene.json?v=4'),back=new P.Container(),front=new P.Container(),textures=[],meshes=[],canvasMaterials=[],emitters=[];
+ const P=window.PIXI,scene=await resource(root,'scene.json?v=5'),back=new P.Container(),front=new P.Container(),textures=[],meshes=[],canvasMaterials=[],emitters=[];
  let closed=false,elapsed=0,backgroundRenderer=null;
  const renderBackground=()=>{if(backgroundRenderer)backgroundRenderer.render(back);};
  const destroy=()=>{if(closed)return;closed=true;backgroundRenderer?.destroy(true);backgroundRenderer=null;back.destroy({children:true});front.destroy({children:true});for(const m of canvasMaterials)m.destroy();for(const t of textures)t.destroy(true);};
