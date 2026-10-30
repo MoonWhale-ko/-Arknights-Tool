@@ -1,6 +1,6 @@
 # Dynamic illustration background restoration checkpoint
 
-Date: 2026-10-30. No Unity effect renderer has been shipped.
+Date: 2026-10-30. The first rigid-mesh background pass is implemented for Skadi E2.
 
 ## Confirmed from the KR Android resource bundles
 
@@ -10,14 +10,22 @@ Date: 2026-10-30. No Unity effect renderer has been shipped.
 - `[uc]uishaders.ab` and `arts/[pack]common.ab` are also available for further dependency checks.
 - Skadi uses seven L2D shaders: AlphaBlend, Additive, Skeleton-AlphaSplit, Dissolve AB, Dissolve AB UVTween, Dissolve Add (VertexColor Major), and Dissolve Add UVTween.
 - Shader programs are compressed. GLES3 platform 9 contains GLSL source after LZ4 decompression; Vulkan platform 18 contains binary programs. UnityPy's plain ShaderLab export omits those programs and is not directly runnable.
-- The Skadi prefab has camera size 11, maximum size 2048x2048, and action-specific particles. These values have not yet been converted into a browser renderer.
+- The Skadi prefab has camera size 11, maximum size 2048x2048, and action-specific particles. Mesh transforms are now converted relative to the Spine root at 100 model units per Unity world unit. Camera size is retained in the exported scene metadata.
+
+## Implemented first pass
+
+- Exporter: `scripts/export_illust_background.py` extracts three rigid meshes (anhong, anlan, hongxian_02), their four original textures, and two GLES material fragments.
+- Preserve relative placement, rotation, scale, UV scale/offset, native tint, dissolve threshold/border and additive/alpha composition. The foreground material's UV scroll is taken from its original MonoBehaviour.
+- Use the existing Pixi renderer; background layers follow the same settled-pose framing as Spine. Mode switching pauses both, and leaving the skin releases effect resources.
+- GPU uses the ported material fragments with premultiplied output. Canvas fallback evaluates the same RGBA8 material equations, bakes static layers once, and updates dissolve at 8fps.
+- Verified the three-layer Canvas path in the deployed browser without effect errors. The browser has no WebGL context, so GPU shader/pixel verification remains pending.
+- Enabled by default for `char_1012_skadi2#2`; `?effects=0` disables the first pass for diagnostics.
 
 ## Remaining work
 
-1. Export the prefab hierarchy, particle curves, mesh transforms, material texture references and GLSL programs into a coherent scene description.
-2. Implement the required particle/material behavior alongside Spine. Preserve native draw order, alpha splitting, additive composition, dissolve and UV movement.
-3. Compare against a same-version in-game recording before claiming the background is restored. A 40–60 second recording of Skadi E2, including Idle, Special and a tap response, is needed as the visual acceptance reference.
-4. Check desktop/mobile rendering and memory. Runtime pose validation is not a GPU or mobile performance benchmark.
+1. Particle emitter simulation, noise/forces, trails and the skinned ribbon mesh are not included in the rigid-mesh pass.
+2. Exact in-game framing/composition comparison and desktop/mobile GPU performance checks are still pending. An in-game recording is optional verification input, not a prerequisite to reading native coordinates.
+3. Other operators' Unity effect scenes must be exported and checked individually before enabling them.
 
 ## Already shipped separately
 
