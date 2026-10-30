@@ -1,0 +1,14 @@
+import {prepareSpine,loadSpine,chooseIdle} from './sd.js?v=13';
+const $=id=>document.getElementById(id),stage=$('stage'),status=$('status');
+const assetRoot='https://raw.githubusercontent.com/isHarryh/Ark-Models/main/models_illust/';
+const folder='dyn_illust_1012_skadi2/',file='dyn_illust_char_1012_skadi2';
+let app,model,bounds,paused=false,animated=true,closed=false,observer;
+function run(){if(!app)return;animated&&!paused&&!document.hidden&&!closed?app.start():app.stop();}
+function fit(){if(!app||!bounds)return;const w=stage.clientWidth,h=stage.clientHeight;if(!w||!h)return;app.renderer.resize(w,h);const scale=Math.min(w/bounds.width,h/bounds.height)*.94;model.scale.set(scale);model.position.set(w/2-(bounds.x+bounds.width/2)*scale,h/2-(bounds.y+bounds.height/2)*scale);app.render();}
+function mode(value){animated=value;$('static').setAttribute('aria-pressed',String(!value));$('animated').setAttribute('aria-pressed',String(value));$('fallback').hidden=value&&!!model;if(app)app.view.hidden=!value;$('pause').disabled=!value||!model;run();}
+$('static').onclick=()=>mode(false);$('animated').onclick=()=>mode(true);
+$('pause').onclick=()=>{paused=!paused;$('pause').textContent=paused?'재생':'일시 정지';run();};
+$('motion').onchange=()=>{if(model){model.state.setAnimation(0,$('motion').value,true);model.update(0);app.render();}};
+document.addEventListener('visibilitychange',run);
+window.addEventListener('pagehide',()=>{closed=true;observer?.disconnect();app?.destroy(true,{children:true,texture:true,baseTexture:true});app=null;});
+try{await prepareSpine();if(!closed){app=new PIXI.Application({width:stage.clientWidth,height:stage.clientHeight,backgroundAlpha:0,antialias:true,resolution:Math.min(devicePixelRatio||1,2),autoDensity:true,autoStart:false});app.view.setAttribute('aria-label','보카디 동적 일러스트');stage.append(app.view);app.ticker.maxFPS=30;model=await loadSpine({atlas:folder+file+'.atlas',model:folder+file+'.skel'},assetRoot);if(closed){model.destroy({children:true});}else{app.stage.addChild(model);model.autoUpdate=false;const animations=model.spineData.animations.filter(a=>a.duration>0),idle=chooseIdle(animations);if(!idle)throw Error('no animation');for(const a of animations)$('motion').add(new Option(a.name,a.name));$('motion').value=idle.name;model.state.setAnimation(0,idle.name,true);model.update(0);const b=model.getLocalBounds();bounds={x:b.x,y:b.y,width:b.width,height:b.height};app.ticker.add(()=>model.update(Math.min(app.ticker.deltaMS,100)/1000));observer=new ResizeObserver(fit);observer.observe(stage);fit();$('motion').disabled=false;status.textContent='애니메이션 재생 중';mode(animated);}}}catch(error){console.warn('Dynamic illustration:',error);status.textContent='애니메이션을 불러오지 못했습니다. 일러스트로 표시합니다.';mode(false);$('animated').disabled=true;app?.destroy(true,{children:true});app=null;}
