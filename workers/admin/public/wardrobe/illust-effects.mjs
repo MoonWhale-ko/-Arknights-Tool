@@ -1,4 +1,4 @@
-import {applyBoneFollower} from './illust-effects-transform.mjs?v=1';
+import {applyBoneFollower,effectIsBehind} from './illust-effects-transform.mjs?v=2';
 import {canvasEffectMaterial} from './illust-effects-canvas.mjs?v=2';
 const profiles={
  'char_1012_skadi2#2':'skadi-e2',
@@ -28,7 +28,7 @@ export async function createIllustrationEffects(skin,isClosed,model){
      if(!texture.baseTexture.valid)await new Promise((resolve,reject)=>{const base=texture.baseTexture,timer=setTimeout(()=>{cleanup();reject(Error('Effect texture timeout'));},12000);const cleanup=()=>{clearTimeout(timer);base.off('loaded',loaded);base.off('error',failed);};const loaded=()=>{cleanup();resolve();};const failed=()=>{cleanup();reject(Error('Effect texture failed'));};base.once('loaded',loaded);base.once('error',failed);});
     }uniforms[name]=texture;
    }
-   const material=canvasEffectMaterial(P,layer,uniforms);canvasMaterials.push(material);const mesh=new P.SimpleMesh(material.texture,new Float32Array(layer.vertices.flat()),new Float32Array(layer.uv.flat()),new Uint16Array(layer.triangles.flat()));mesh.blendMode=(layer.shader.name.endsWith('/Additive')||layer.shader.name.includes('Dissolve Add'))?P.BLEND_MODES.ADD:P.BLEND_MODES.NORMAL;mesh.name=layer.name;(layer.depth>=0?back:front).addChild(mesh);meshes.push({mesh,layer,uniforms,bone:layer.bone?model?.skeleton.findBone(layer.bone.boneName):null});
+   const material=canvasEffectMaterial(P,layer,uniforms);canvasMaterials.push(material);const mesh=new P.SimpleMesh(material.texture,new Float32Array(layer.vertices.flat()),new Float32Array(layer.uv.flat()),new Uint16Array(layer.triangles.flat()));mesh.blendMode=(layer.shader.name.endsWith('/Additive')||layer.shader.name.includes('Dissolve Add'))?P.BLEND_MODES.ADD:P.BLEND_MODES.NORMAL;mesh.name=layer.name;(effectIsBehind(layer,scene.spineSortingOrder)?back:front).addChild(mesh);meshes.push({mesh,layer,uniforms,bone:layer.bone?model?.skeleton.findBone(layer.bone.boneName):null});
   }
   if(isClosed()){destroy();return null;}
   for(const item of meshes)if(item.layer.bone){item.mesh.visible=!!item.bone;if(item.bone)applyBoneFollower(item.mesh,item.bone,item.layer.bone,model.skeleton);}

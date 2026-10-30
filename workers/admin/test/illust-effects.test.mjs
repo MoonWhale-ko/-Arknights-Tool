@@ -18,3 +18,10 @@ test('native bone follower handles local reflection and skeleton flip',()=>{
  const m=mesh();applyBoneFollower(m,{matrix:{tx:0,ty:0,a:-1,b:0},scaleX:-2,scaleY:3},{followBoneRotation:true,followLocalScale:true,followSkeletonFlip:true},{scaleX:-1,scaleY:1});
  assert.equal(m.rotation,2*Math.PI);assert.deepEqual([m.scale.x,m.scale.y],[-2,-3]);
 });
+import {effectIsBehind} from '../public/wardrobe/illust-effects-transform.mjs';
+test('native explicit sorting order overrides depth, keeping Mizuki ocean behind the character',()=>{
+ assert.equal(effectIsBehind({sortingOrder:-2,depth:-.05},0),true);
+ assert.equal(effectIsBehind({sortingOrder:1,depth:2},0),false);
+ assert.equal(effectIsBehind({sortingOrder:0,depth:.21},0),true);
+ assert.equal(effectIsBehind({sortingOrder:0,depth:-.07},0),false);
+});

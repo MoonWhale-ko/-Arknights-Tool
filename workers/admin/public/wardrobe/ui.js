@@ -1,4 +1,4 @@
-import {showIllustration,clearIllustration,illustrationFullscreen} from './illust.js?v=9';
+import {showIllustration,clearIllustration,illustrationFullscreen} from './illust.js?v=10';
 import {collectionOriginiteCost,originiteCashEquivalent} from './collection-cost.mjs?v=2';
 import {loadOriginalLayouts,applyOriginalLayout,compareSkinOrder,NATIVE_MOTION,nativeCardFrames,nativeDragState,applyLeftMotion,skinSeriesCategory,skinAssetCharacter} from './original-layout.js?v=21';
 import {showSD,clearSD,releaseSD} from './sd.js?v=14';

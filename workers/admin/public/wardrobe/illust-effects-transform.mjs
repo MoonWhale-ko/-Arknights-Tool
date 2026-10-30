@@ -10,3 +10,8 @@ export function applyBoneFollower(mesh,bone,binding,skeleton){
  if(binding.followSkeletonFlip)sy*=Math.sign(skeleton.scaleX*skeleton.scaleY)||1;
  mesh.scale.set(sx,sy);
 }
+
+/** Unity transparent renderers sort by explicit order before camera depth. */
+export function effectIsBehind(layer,spineSortingOrder=0){
+ return layer.sortingOrder!==spineSortingOrder?layer.sortingOrder<spineSortingOrder:layer.depth>=0;
+}
