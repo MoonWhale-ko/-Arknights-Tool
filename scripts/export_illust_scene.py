@@ -26,6 +26,7 @@ def export(root,bundle,out,skin):
  primary=[(i,d) for i,d in renderers if data(d['skeletonDataAsset']['m_PathID']).get('m_Name','').startswith('dyn_illust_char_')]
  if len(primary)!=1:raise ValueError('Ambiguous main illustration skeleton')
  renderer_id,renderer=primary[0];spine=transform(renderer['m_GameObject']['m_PathID']);inverse=np.linalg.inv(matrix(spine));units=1/data(renderer['skeletonDataAsset']['m_PathID'])['scale']
+ primary_sort=next(data(c.path_id)['m_SortingOrder'] for c in components(renderer['m_GameObject']['m_PathID']) if c.type.name=='MeshRenderer')
  out.mkdir(parents=True,exist_ok=True);textures={};layers=[];skipped=[]
  def texture(ptr):
   tid=ptr['m_PathID']
@@ -77,7 +78,7 @@ def export(root,bundle,out,skin):
      scroll['_MainTex']=[d['xspeed'],d['yspeed']]
      if d.get('useSecondMap'):scroll[d['secondMapName']]=[d['secondXSpeed'],d['secondYSpeed']]
   layers.append({'name':name,'vertices':[[round(float(p[0])*units,5),round(-float(p[1])*units,5)] for p in points],'uv':[list(v[:2]) for v in mesh.m_UV0],'triangles':[list(t) for group in mesh.get_triangles() for t in group],'depth':round(depth,5),'sortingOrder':r['m_SortingOrder'],'shader':{'name':shader},'textures':tex,'floats':floats,'colorsUniform':dict(props['m_Colors']),'vertexTint':list(colors[0]) if colors else [1,1,1,1],'uvScroll':scroll,**({'bone':binding} if binding else {})})
- scene={'skin':skin,'source':'arts/dynchars/'+bundle,'spineUnitsPerWorldUnit':units,'layers':layers,'skipped':skipped,'scope':'Supported original rigid meshes only; particles, trails and unsupported materials are excluded.'}
+ scene={'skin':skin,'source':'arts/dynchars/'+bundle,'spineUnitsPerWorldUnit':units,'spineSortingOrder':primary_sort,'layers':layers,'skipped':skipped,'scope':'Supported original rigid meshes only; particles, trails and unsupported materials are excluded.'}
  (out/'scene.json').write_text(json.dumps(scene,ensure_ascii=False,indent=2)+'\n');print(skin,':',len(layers),'layers;',len(skipped),'skipped;',len(textures),'textures')
 
 if __name__=='__main__':

@@ -1192,5 +1192,6 @@
       "reason": "unsupported shader: Torappu/Particles-L2D/Disturb/Disturb Anchor (AlphaBlend)"
     }
   ],
-  "scope": "Supported original rigid meshes only; particles, trails and unsupported materials are excluded."
+  "scope": "Supported original rigid meshes only; particles, trails and unsupported materials are excluded.",
+  "spineSortingOrder": 0
 }
