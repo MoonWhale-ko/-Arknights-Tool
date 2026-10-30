@@ -39,6 +39,7 @@ export function createHandler({ fetcher } = {}) {
         '/wardrobe/collection-cost.mjs', '/wardrobe/style.css', '/wardrobe/ui.js', '/wardrobe/sd.js', '/wardrobe/btn-back.png',
         '/wardrobe/original-layout.js', '/wardrobe/catalog.json', '/wardrobe/acquisition-routes.json', '/wardrobe/roster-metadata.json',
         '/wardrobe/sd-models.json', '/wardrobe/native-scene.json.gz',
+        '/wardrobe/illust.js', '/wardrobe/illust-timing.mjs', '/wardrobe/illust-models.json',
         '/preview/assets/icons/wardrobe-zoot-favicon.png', '/preview/assets/icons/site-favicon.png', '/preview/assets/css/zoot.css', '/preview/assets/js/zoot.js', '/preview/assets/icons/classes/sprite.png',
       ]);
       if (['GET', 'HEAD'].includes(request.method) && (path === '/wardrobe-demo' || wardrobeAssets.has(path))) {
