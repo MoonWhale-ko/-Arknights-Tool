@@ -1031,7 +1031,14 @@
       "y": -1825.831,
       "width": 2006.395,
       "height": 1939.28
-    }
+    },
+    "frame": {
+      "x": -1200.0000268220908,
+      "y": -2000.0000447034847,
+      "width": 2400.0000536441817,
+      "height": 2400.0000536441817
+    },
+    "frameSource": "native cameraSize and primary skeleton world transform"
   },
   "dyn_illust_450_necras_summer#20": {
     "atlas": "dyn_illust_450_necras_summer#20/dyn_illust_char_450_necras_summer#20.atlas",

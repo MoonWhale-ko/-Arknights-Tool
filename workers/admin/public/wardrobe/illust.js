@@ -1,4 +1,4 @@
-import {createIllustrationEffects} from './illust-effects.mjs?v=6';
+import {createIllustrationEffects} from './illust-effects.mjs?v=7';
 import {illustrationEntry,illustrationViewport} from './illust-model-map.mjs?v=2';
 import {prepareSpine,loadSpine} from './sd.js?v=14';
 import {specialDelay,motionNames} from './illust-timing.mjs?v=1';
@@ -12,7 +12,7 @@ export function clearIllustration(){generation++;const a=active;if(a){a.closed=t
 export async function showIllustration(s){
  clearIllustration();const token=generation,img=document.getElementById('wardrobeArt');if(!img)return;
  const a=active={img,skin:s,closed:false};document.getElementById('wardrobeDetail').append(button);
- try{if(!manifest){const r=await fetch('/wardrobe/illust-models.json?v=2');if(!r.ok)throw Error('manifest');manifest=await r.json();}if(token!==generation)return;a.entry=entryFor(s);updateButton();if(a.entry&&preference==='dynamic')await start(a);}catch(e){if(token===generation)console.warn('Wardrobe illustration:',e);}
+ try{if(!manifest){const r=await fetch('/wardrobe/illust-models.json?v=3');if(!r.ok)throw Error('manifest');manifest=await r.json();}if(token!==generation)return;a.entry=entryFor(s);updateButton();if(a.entry&&preference==='dynamic')await start(a);}catch(e){if(token===generation)console.warn('Wardrobe illustration:',e);}
 }
 async function start(a){
  if(a.loading||a.model||a.closed)return;a.loading=true;button.dataset.loading='true';
@@ -23,7 +23,7 @@ async function start(a){
  a.model=model;a.names=names;model.autoUpdate=false;app.stage.addChild(model);model.state.defaultMix=.3;
  // These transition mixes are stored in the original Skadi prefab.
  if(a.skin.id==='char_1012_skadi2#2')for(const [from,to]of [['Idle','Special'],['Idle','Interact'],['Special','Interact']])model.state.data.setMix(from,to,1);
- model.state.setAnimation(0,names.idle.name,true);model.update(0);const b=model.getLocalBounds();a.frame={x:b.x,y:b.y,width:b.width,height:b.height};a.bounds=a.entry.bounds||a.frame;
+ model.state.setAnimation(0,names.idle.name,true);model.update(0);const b=model.getLocalBounds();a.frame=a.entry.frame||{x:b.x,y:b.y,width:b.width,height:b.height};a.bounds=a.entry.bounds||a.frame;
  box.dataset.motion=names.idle.name;
  let elapsed=0,delay=specialDelay(true,names.idle.duration),busy=false;
  const play=clips=>{if(busy||!clips.length)return;const clip=clips[Math.floor(Math.random()*clips.length)];busy=true;box.dataset.motion=clip.name;const track=model.state.setAnimation(0,clip.name,false);model.state.addAnimation(0,names.idle.name,true,0);track.listener={complete:()=>{box.dataset.motion=names.idle.name;busy=false;elapsed=0;delay=specialDelay(false);}};};
