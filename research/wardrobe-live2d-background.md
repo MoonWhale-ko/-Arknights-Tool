@@ -30,3 +30,13 @@ Date: 2026-10-30. The first rigid-mesh background pass is implemented for Skadi 
 ## Already shipped separately
 
 All 96 Spine resources parse; 92 match the current wardrobe catalog. Four extensionless JSON models and six case/name mismatches were fixed. Major motions were sampled at 30fps. Their union bounds enlarge the drawing surface without shrinking the settled pose, and do not claim exact native framing or Unity particle parity.
+
+## 2026-10-30: conservative multi-model rigid-layer application
+
+- Added native scene exporter `scripts/export_illust_scene.py`. Primary illustration is selected from its original SkeletonData, rather than from a hardcoded transform ID. Coordinates use the original skeleton scale and complete native transform hierarchy.
+- New profiles: Mizuki / Summer Feast (`char_437_mizuki@sale#7`), 2 of 7 rigid meshes; Rosmontis E2 (`char_391_rosmon#2`), 1 of 5 rigid meshes. Existing Skadi E2 retains its 3 layers. This is **3 profiles, 6 rigid meshes**, not complete background restoration for 96 models.
+- Exported `scene.json` records every omitted mesh and its reason. Inactive branches, Unity transform animation, unsupported distortion, varying vertex color, external mesh dependencies, and unsupported BoneFollower hierarchies are excluded. Kroos Sale14 and Chen2 Summer20 produced no safely supported layers and are not enabled.
+- General renderer supports a direct-child native BoneFollower position/rotation/local-scale/flip binding. New exported profiles currently have no eligible bone-bound rigid meshes; the binding math has unit coverage, but this does not claim a visually validated bone-bound scene.
+- Added native Dissolve Add UVTween material scrolling and additive blend selection. Static background texture baking preserves up to 1024 pixels instead of the former universal 256 limit; animated material baking stays capped at 256 and 8 Hz. Native textures are retained unchanged on disk.
+- Canvas drawing surface includes rigid background mesh extents while retaining the settled character scale and anchor.
+- Remaining: distortion shader families, varying vertex colors, native Animator clips, particles, trails, skinned effects, postprocessing, and additional profiles. The previous 75/21 inventory grouping is an implementation classification, not a count of restored models.

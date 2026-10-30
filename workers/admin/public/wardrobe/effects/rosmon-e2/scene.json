@@ -1,0 +1,155 @@
+{
+  "skin": "char_391_rosmon#2",
+  "source": "arts/dynchars/char_391_rosmon_2.ab",
+  "spineUnitsPerWorldUnit": 100.00000223517424,
+  "layers": [
+    {
+      "name": "BG",
+      "vertices": [
+        [
+          -962.96792,
+          -1822.96793
+        ],
+        [
+          1016.96792,
+          -1822.96793
+        ],
+        [
+          -962.96792,
+          156.96791
+        ],
+        [
+          1016.96792,
+          156.96791
+        ]
+      ],
+      "uv": [
+        [
+          0.0,
+          1.0
+        ],
+        [
+          1.0,
+          1.0
+        ],
+        [
+          0.0,
+          0.0
+        ],
+        [
+          1.0,
+          0.0
+        ]
+      ],
+      "triangles": [
+        [
+          0,
+          1,
+          2
+        ],
+        [
+          3,
+          2,
+          1
+        ]
+      ],
+      "depth": 0.0,
+      "sortingOrder": -3,
+      "shader": {
+        "name": "Torappu/Particles-L2D/AlphaBlend"
+      },
+      "textures": {
+        "_MainTex": {
+          "file": "texture-0.png",
+          "name": "391_Rosmontis_13",
+          "wrap": null,
+          "scale": {
+            "x": 1.0,
+            "y": 1.0
+          },
+          "offset": {
+            "x": 0.0,
+            "y": 0.0
+          }
+        }
+      },
+      "floats": {
+        "_Amount": 0.5,
+        "_BorderWidth": 0.10000000149011612,
+        "_BumpScale": 1.0,
+        "_CullMode": 2.0,
+        "_Cutoff": 0.5,
+        "_DetailNormalMapScale": 1.0,
+        "_DstBlend": 10.0,
+        "_GlossMapScale": 1.0,
+        "_Glossiness": 0.5,
+        "_GlossyReflections": 1.0,
+        "_IntensityU": 0.0,
+        "_IntensityV": 0.0,
+        "_MainTexChannel": 0.0,
+        "_Metallic": 0.0,
+        "_Mode": 0.0,
+        "_OcclusionStrength": 1.0,
+        "_Parallax": 0.019999999552965164,
+        "_SmoothnessTextureChannel": 0.0,
+        "_SpecularHighlights": 1.0,
+        "_SrcBlend": 5.0,
+        "_UVSec": 0.0,
+        "_ZTest": 4.0,
+        "_ZWrite": 1.0
+      },
+      "colorsUniform": {
+        "_Color": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "_EmissionColor": {
+          "r": 0.0,
+          "g": 0.0,
+          "b": 0.0,
+          "a": 1.0
+        },
+        "_MainColor": {
+          "r": 0.5,
+          "g": 0.5,
+          "b": 0.5,
+          "a": 0.8220000267028809
+        },
+        "_TintColor": {
+          "r": 0.5,
+          "g": 0.5,
+          "b": 0.5,
+          "a": 0.501960813999176
+        }
+      },
+      "vertexTint": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "uvScroll": {}
+    }
+  ],
+  "skipped": [
+    {
+      "name": "plane01",
+      "reason": "vertex color modulation"
+    },
+    {
+      "name": "plane02",
+      "reason": "vertex color modulation"
+    },
+    {
+      "name": "water01",
+      "reason": "unsupported shader: Torappu/Particles-L2D/Disturb/Disturb2 (AlphaBlend)"
+    },
+    {
+      "name": "plane03",
+      "reason": "vertex color modulation"
+    }
+  ],
+  "scope": "Supported original rigid meshes only; particles, trails and unsupported materials are excluded."
+}
