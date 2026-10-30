@@ -1,4 +1,5 @@
 // Build the public reward page from the same reviewed source as the private preview.
+import {buildMedals} from './build_medals_site.mjs';
 import {buildWardrobe} from './build_wardrobe_site.mjs';
 import {cp,readFile,writeFile,mkdir} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
@@ -7,6 +8,7 @@ const root=fileURLToPath(new URL('../',import.meta.url)),source=path.join(root,'
 export async function buildRewards(destination){
  const out=path.resolve(destination);
  await buildWardrobe(out);
+ await buildMedals(out);
  for(const dir of ['assets/js/rewards/mining','assets/js/rewards/orundum','assets/css','data/rewards'])await mkdir(path.join(out,dir),{recursive:true});
  for(const file of ['engine.mjs','evidence.mjs','story-labels.mjs'])await cp(path.join(source,'mining',file),path.join(out,'assets/js/rewards/mining',file));
  for(const file of ['engine.mjs','additional.mjs','training-ground.mjs'])await cp(path.join(source,'orundum',file),path.join(out,'assets/js/rewards/orundum',file));
