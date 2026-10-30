@@ -1,4 +1,4 @@
-import {showIllustration,clearIllustration,illustrationFullscreen} from './illust.js?v=1';
+import {showIllustration,clearIllustration,illustrationFullscreen} from './illust.js?v=2';
 import {collectionOriginiteCost,originiteCashEquivalent} from './collection-cost.mjs?v=2';
 import {loadOriginalLayouts,applyOriginalLayout,compareSkinOrder,NATIVE_MOTION,nativeCardFrames,nativeDragState,applyLeftMotion,skinSeriesCategory,skinAssetCharacter} from './original-layout.js?v=21';
 import {showSD,clearSD,releaseSD} from './sd.js?v=13';
@@ -7,6 +7,11 @@ const demo=document.body.dataset.wardrobeDemo==='true';
 const previewEquipped=new Map();
 let acquisitionRoutes={},routesLoaded=false;
 async function loadAcquisitionRoutes(){if(routesLoaded)return;try{const r=await fetch('/wardrobe/acquisition-routes.json?v=2');if(r.ok){const data=await r.json();acquisitionRoutes=data.sourceRegion==='KR'?(data.skins??{}):{};routesLoaded=true;}}catch{}}
+let operatorAliases={};
+const searchKey=value=>String(value??'').normalize('NFKC').toLocaleLowerCase('ko').replace(/\s+/g,'');
+async function loadOperatorAliases(){try{const r=await fetch('/preview/data/operator-aliases.json?v=1');if(r.ok){const data=await r.json();operatorAliases=Object.fromEntries(Object.entries(data.aliases||{}).map(([name,aliases])=>[searchKey(name),aliases]));}}catch{}}
+const aliasesFor=name=>operatorAliases[searchKey(name)]||[];
+const matchesSearch=(query,values)=>!query||values.some(value=>searchKey(value).includes(searchKey(query)));
 let rosterMetadata={},rosterMetadataLoaded=false;
 async function loadRosterMetadata(){if(rosterMetadataLoaded)return;try{const r=await fetch('/wardrobe/roster-metadata.json?v=1');if(r.ok){rosterMetadata=await r.json();rosterMetadataLoaded=true;}}catch{}}
 let catalog,owned=null,selectedChar=null,selectedSkin=null,characters=[];
@@ -16,12 +21,12 @@ function stopCardMotion(){cancelAnimationFrame(motionFrame);motionVersion++;}
 
 const asset=(folder,id)=>`https://raw.githubusercontent.com/ArknightsAssets/ArknightsAssets2/cn/assets/dyn/arts/${folder}/${encodeURIComponent(id.toLowerCase())}.png`;
 export function ownedSkins(data){const skins=(data?.snapshot?.user??data?.user??data?.rewards?.user)?.skin?.characterSkins;if(!skins||typeof skins!=='object')return null;return new Set(Object.entries(skins).filter(([,value])=>Number(value)>0).map(([id])=>id));}
-async function accept(data){if(!data)return;owned=ownedSkins(data);const user=data?.snapshot?.user??data?.user??data?.rewards?.user;characters=[];if(user?.troop?.chars){characters=Object.values(user.troop.chars).map(c=>({charId:c.charId,skin:c.skin??c.skinId,elite:c.evolvePhase??0}));if(!demo)try{localStorage.setItem('zootAdminWardrobeCharacters',JSON.stringify(characters));}catch{}}if(owned&&!demo){try{localStorage.setItem('zootAdminWardrobeSkins',JSON.stringify([...owned]));}catch{}}if(!owned){$('wardrobeMessage').textContent='스킨 보유 정보가 없습니다. 관리자 계정을 다시 가져와 주세요.';$('wardrobeGrid').replaceChildren();$('wardrobeCount').textContent='';return;}try{if(!catalog){const r=await fetch('/wardrobe/catalog.json');if(!r.ok)throw Error();catalog=(await r.json()).skins;}await Promise.all([loadOriginalLayouts(),loadAcquisitionRoutes(),loadRosterMetadata()]);renderRoster();render();}catch{$('wardrobeMessage').textContent='스킨 목록을 불러오지 못했습니다. 다시 적용해 주세요.';}}
+async function accept(data){if(!data)return;owned=ownedSkins(data);const user=data?.snapshot?.user??data?.user??data?.rewards?.user;characters=[];if(user?.troop?.chars){characters=Object.values(user.troop.chars).map(c=>({charId:c.charId,skin:c.skin??c.skinId,elite:c.evolvePhase??0}));if(!demo)try{localStorage.setItem('zootAdminWardrobeCharacters',JSON.stringify(characters));}catch{}}if(owned&&!demo){try{localStorage.setItem('zootAdminWardrobeSkins',JSON.stringify([...owned]));}catch{}}if(!owned){$('wardrobeMessage').textContent='스킨 보유 정보가 없습니다. 관리자 계정을 다시 가져와 주세요.';$('wardrobeGrid').replaceChildren();$('wardrobeCount').textContent='';return;}try{if(!catalog){const r=await fetch('/wardrobe/catalog.json');if(!r.ok)throw Error();catalog=(await r.json()).skins;}await Promise.all([loadOriginalLayouts(),loadAcquisitionRoutes(),loadRosterMetadata(),loadOperatorAliases()]);renderRoster();render();}catch{$('wardrobeMessage').textContent='스킨 목록을 불러오지 못했습니다. 다시 적용해 주세요.';}}
 function render(){
  if(!catalog||!owned)return;
  const query=$('wardrobeSearch').value.trim().toLocaleLowerCase(),all=$('wardrobeAll').checked,known=new Set(catalog.map(s=>s.id));
  const unknown=[...owned].filter(id=>!known.has(id)).map(id=>({id,charId:id.split('@')[0],operator:id.split('@')[0],name:'이름 확인 필요',brand:'게임 목록 미등록'}));
- const rows=[...catalog,...unknown].filter(s=>(rosterFilters.ownership==='all'||(rosterFilters.ownership==='owned'?isSkinOwned(s):!isSkinOwned(s)))&&(all||owned.has(s.id)||s.basic&&(characters.find(c=>c.charId===s.charId)?.elite??0)>=(s.elite??0))&&[s.operator,s.name,s.brand,s.id].join(' ').toLocaleLowerCase().includes(query)).sort((a,b)=>Number(owned.has(b.id))-Number(owned.has(a.id))||a.operator.localeCompare(b.operator,'ko')||a.name.localeCompare(b.name,'ko'));
+ const rows=[...catalog,...unknown].filter(s=>(rosterFilters.ownership==='all'||(rosterFilters.ownership==='owned'?isSkinOwned(s):!isSkinOwned(s)))&&(all||owned.has(s.id)||s.basic&&(characters.find(c=>c.charId===s.charId)?.elite??0)>=(s.elite??0))&&matchesSearch(query,[s.operator,s.name,s.brand,s.id,...aliasesFor(s.operator)])).sort((a,b)=>Number(owned.has(b.id))-Number(owned.has(a.id))||a.operator.localeCompare(b.operator,'ko')||a.name.localeCompare(b.name,'ko'));
  $('wardrobeMessage').textContent=demo?'디자인 미리보기 · 테스트 데이터로 모든 외형을 표시합니다.':`보유 스킨 ${owned.size}종 · 기본·정예화 외형 제외`;
  const chars=new Map();for(const skin of rows){if(!chars.has(skin.charId))chars.set(skin.charId,[]);chars.get(skin.charId).push(skin);}
  const list=$('wardrobeOperators');list.replaceChildren();for(const [id,skins]of chars){const button=make('button',skins[0].operator);button.type='button';button.append(make('small',`${skins.length}종`));button.onclick=()=>{selectedChar=id;selectedSkin=null;render();$('wardrobeDialog').close();};list.append(button);}
@@ -82,7 +87,7 @@ function renderRoster(){
  const source=rosterFilters.ownership!=='owned'?[...groups.keys()].map(charId=>characterMap.get(charId)||{charId}):characters;
  const query=$('wardrobeRosterSearch').value.trim().toLocaleLowerCase('ko'),filter=rosterFilters.ownership,sort=rosterSort,order=Object.keys(wardrobeProfessions);
  const rows=source.filter(c=>c.charId.startsWith('char_')&&(!rosterMetadataLoaded||rosterMetadata[c.charId])).map(c=>{const skins=groups.get(c.charId)||[],outfits=skins.filter(s=>!s.basic),meta=rosterMetadata[c.charId]||{};return {c,skins,name:skins[0]?.operator||c.charId,rarity:meta.rarity||0,profession:meta.profession||'',owned:outfits.filter(s=>owned.has(s.id)).length,total:outfits.length};});
- const filtered=rows.filter(r=>(!query||[r.name,...r.skins.map(s=>s.name)].some(v=>v.toLocaleLowerCase('ko').includes(query)))&&(!rosterFilters.professions.size||rosterFilters.professions.has(r.profession))&&rosterFilters.rarities.has(r.rarity)&&(filter!=='owned'||r.owned>0)&&(filter!=='missing'||r.skins.some(s=>!isSkinOwned(s))));
+ const filtered=rows.filter(r=>matchesSearch(query,[r.name,...r.skins.map(s=>s.name),...aliasesFor(r.name)])&&(!rosterFilters.professions.size||rosterFilters.professions.has(r.profession))&&rosterFilters.rarities.has(r.rarity)&&(filter!=='owned'||r.owned>0)&&(filter!=='missing'||r.skins.some(s=>!isSkinOwned(s))));
  const alphabetical=(a,b)=>a.name.localeCompare(b.name,'ko'),professionRank=r=>order.includes(r.profession)?order.indexOf(r.profession):99;
  const compare=(a,b)=>sort==='name'?alphabetical(a,b):sort==='owned'?b.owned-a.owned||b.rarity-a.rarity||alphabetical(a,b):b.rarity-a.rarity||professionRank(a)-professionRank(b)||alphabetical(a,b);
  filtered.sort((a,b)=>(rosterGrouped?professionRank(a)-professionRank(b):0)||(rosterSortReverse?-1:1)*compare(a,b));
