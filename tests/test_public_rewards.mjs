@@ -5,6 +5,9 @@ test('public reward bundle supports Pages subpaths and contains all calculator d
  const out=await mkdtemp(path.join(tmpdir(),'zoot-public-rewards-'));
  try{
   await buildRewards(out);
+  const medalHtml=await readFile(path.join(out,'medals.html'),'utf8'),medalUi=await readFile(path.join(out,'medals/ui.js'),'utf8');
+  assert.doesNotMatch(medalHtml,/\/preview\/|["']\/medals\//);assert.doesNotMatch(medalUi,/["']\/medals\/|demo.*complete/);
+  for(const file of ['model.mjs','medal-scroll.mjs','medal-backing.mjs','catalog.json','native-layout.json','native-backgrounds.json','native/sets/medalgroupactivity51side.webp'])await access(path.join(out,'medals',file));
   const html=await readFile(path.join(out,'rewards.html'),'utf8'),ui=await readFile(path.join(out,'assets/js/rewards.mjs'),'utf8');
   assert.match(html,/src="assets\/js\/rewards.mjs/);assert.match(html,/href="assets\/css\/rewards.css/);
   assert.doesNotMatch(ui,/from '\/(?:mining|orundum)\//);assert.doesNotMatch(html,/type="file"|\/style.css/);
