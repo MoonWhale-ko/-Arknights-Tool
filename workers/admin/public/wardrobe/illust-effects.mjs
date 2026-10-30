@@ -1,6 +1,6 @@
 import {createNativeEmitter} from './illust-particles.mjs?v=3';
 import {applyBoneFollower,effectIsBehind} from './illust-effects-transform.mjs?v=2';
-import {canvasEffectMaterial} from './illust-effects-canvas.mjs?v=2';
+import {canvasEffectMaterial} from './illust-effects-canvas.mjs?v=3';
 const profiles={
  'char_1012_skadi2#2':'skadi-e2',
  'char_437_mizuki@sale#7':'mizuki-sale7',
@@ -13,7 +13,7 @@ const rgba=c=>[c?.r??1,c?.g??1,c?.b??1,c?.a??1];
 export async function createIllustrationEffects(skin,isClosed,model){
  const profile=profiles[skin.id];if(!profile)return null;
  const root=new URL('./effects/'+profile+'/',import.meta.url).href;
- const P=window.PIXI,scene=await resource(root,'scene.json?v=5'),back=new P.Container(),front=new P.Container(),textures=[],meshes=[],canvasMaterials=[],emitters=[];
+ const P=window.PIXI,scene=await resource(root,'scene.json?v=6'),back=new P.Container(),front=new P.Container(),textures=[],meshes=[],canvasMaterials=[],emitters=[];
  let closed=false,elapsed=0,backgroundRenderer=null;
  const renderBackground=()=>{if(backgroundRenderer)backgroundRenderer.render(back);};
  const destroy=()=>{if(closed)return;closed=true;backgroundRenderer?.destroy(true);backgroundRenderer=null;back.destroy({children:true});front.destroy({children:true});for(const m of canvasMaterials)m.destroy();for(const t of textures)t.destroy(true);};
@@ -26,7 +26,7 @@ export async function createIllustrationEffects(skin,isClosed,model){
    for(const [name,color]of Object.entries(layer.colorsUniform))uniforms[name]=rgba(color);
    uniforms._TintColor=uniforms._TintColor.map((v,i)=>v*(layer.vertexTint?.[i]??1));
    for(const [name,tex]of Object.entries(layer.textures)){
-    let texture=textureCache.get(tex.file);
+    uniforms[name+'_ST']=st(tex);let texture=textureCache.get(tex.file);
     if(!texture){texture=P.Texture.from(root+tex.file,{resourceOptions:{crossorigin:'anonymous'},alphaMode:P.ALPHA_MODES.NO_PREMULTIPLIED_ALPHA});textures.push(texture);textureCache.set(tex.file,texture);texture.baseTexture.wrapMode=tex.wrap===0?P.WRAP_MODES.REPEAT:P.WRAP_MODES.CLAMP;
      if(!texture.baseTexture.valid)await new Promise((resolve,reject)=>{const base=texture.baseTexture,timer=setTimeout(()=>{cleanup();reject(Error('Effect texture timeout'));},12000);const cleanup=()=>{clearTimeout(timer);base.off('loaded',loaded);base.off('error',failed);};const loaded=()=>{cleanup();resolve();};const failed=()=>{cleanup();reject(Error('Effect texture failed'));};base.once('loaded',loaded);base.once('error',failed);});
     }uniforms[name]=texture;

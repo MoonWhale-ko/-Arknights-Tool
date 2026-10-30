@@ -1,4 +1,4 @@
-import {createIllustrationEffects} from './illust-effects.mjs?v=10';
+import {createIllustrationEffects} from './illust-effects.mjs?v=11';
 import {illustrationEntry,illustrationViewport} from './illust-model-map.mjs?v=2';
 import {prepareSpine,loadSpine} from './sd.js?v=14';
 import {specialDelay,motionNames} from './illust-timing.mjs?v=1';

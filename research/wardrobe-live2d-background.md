@@ -76,3 +76,13 @@ The hai_dm ocean quad is registered independently to the original 2048² illustr
 Validation: 123 admin tests pass; preview build succeeds. Noise tests check deterministic/coherent sampling, zero-strength behavior, damping, octave/axis settings and actual changed particle paths.
 
 Noise behavior references: https://docs.unity.cn/kr/2023.1/Manual/PartSysNoiseModule.html and https://docs.unity3d.com/2021.3/Documentation/ScriptReference/ParticleSystem.NoiseModule.html .
+
+### Mizuki upper-right distortion and ocean contour (2026-10-31)
+
+The upper-right iridescent effect is separate from ParticleSystem.NoiseModule. Two previously excluded rigid renderers, sekuai_dm and sekua3_dm, use the original Disturb Anchor (AlphaBlend) shader. Each has 35 vertices and varying vertex alpha, including fully transparent perimeter vertices. Both are now exported with original positions, triangles, tiling, MainColor, alpha control, anchors, strengths, UVTween and sorting order 20. The original GLES default-variant equations are retained as shader-90.frag provenance and ported to the Canvas material path. The distortion field scrolls at the original -0.08/-0.10 UV units per second. Canvas texture updates target 20 Hz; other rendering remains at the existing frame rate.
+
+The missing dependency was resolved through the PC V074 manifest: arts/maps/effect.ab contains CAB-d000ef0c36c1f8ec9df1698fde86d5b2, Texture2D path ID 3598337627453241146 (TX_WaterNoise). This is not arts/dynchars/effect.ab. The exact CAB and PPtr are resolved by the exporter; no procedural or substituted map is used. inspect_resource_manifest.py records the dependency-lookup method for future models. PC bundle source: 26-10-26-09-55-20_a543a9; GLES shader source: KR Android 26-10-26-10-31-28_9f22b2.
+
+The ocean's contour uses the original 2048² illustration alpha as a separate reference clip, sampled in registered illustration coordinates at 1024×512 bake resolution. This is a site-side boundary correction using the original illustration, not a claim to have recovered Unity's original scene mask. Character placement stays unchanged. Explicit clamp/repeat sampling and barycentric vertex-alpha interpolation prevent wrapped edge artifacts and rectangular rainbow layers.
+
+Validation: all 127 admin tests pass and preview build succeeds. Tests cover anchor displacement order, varying vertex alpha, edge clamping, original map identity and both native meshes. Browser checks follow deployment.
