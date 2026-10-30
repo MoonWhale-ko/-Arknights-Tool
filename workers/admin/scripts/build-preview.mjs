@@ -11,3 +11,5 @@ await cp(new URL('../public/wardrobe/preview.html',import.meta.url),out+'wardrob
 await cp(new URL('../public/medals/preview.html',import.meta.url),out+'medals.html');
 console.log('Private preview uses the exact public site sources and reward build.');
 
+
+await cp(new URL('../public/wardrobe/illust-preview.html',import.meta.url),out+'illust.html');
