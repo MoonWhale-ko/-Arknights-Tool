@@ -1,27 +1,28 @@
-import {prepareSpine,loadSpine} from './sd.js?v=13';
+import {illustrationEntry} from './illust-model-map.mjs?v=1';
+import {prepareSpine,loadSpine} from './sd.js?v=14';
 import {specialDelay,motionNames} from './illust-timing.mjs?v=1';
 const root='https://raw.githubusercontent.com/isHarryh/Ark-Models/main/models_illust/';
 let manifest,active,generation=0;
 let preference='dynamic';try{preference=localStorage.getItem('zootWardrobeIllustrationMode')||'dynamic';}catch{}
 const button=document.createElement('button');button.type='button';button.id='wardrobeIllustrationMode';button.hidden=true;
-function entryFor(s){const key='dyn_illust_'+s.illustration?.replace(/^illust_char_/,'');return manifest?.[key]||(s.basic&&s.elite===2?manifest?.[key.replace(/_2$/,'')]:null);}
+function entryFor(s){return illustrationEntry(s,manifest);}
 function updateButton(){button.hidden=!active?.entry;button.textContent=preference==='dynamic'?'Live2D':'일러스트';button.setAttribute('aria-label','표시 방식: '+button.textContent+' · 클릭하여 전환');button.setAttribute('aria-pressed',String(preference==='dynamic'));button.title='Live2D / 일러스트 전환';}
 export function clearIllustration(){generation++;const a=active;if(a){a.closed=true;a.observer?.disconnect();a.img.removeEventListener('load',a.fit);a.img.style.visibility='';a.app?.destroy(true,{children:true,texture:true,baseTexture:true});a.box?.remove();}active=null;button.hidden=true;}
 export async function showIllustration(s){
  clearIllustration();const token=generation,img=document.getElementById('wardrobeArt');if(!img)return;
  const a=active={img,skin:s,closed:false};document.getElementById('wardrobeDetail').append(button);
- try{if(!manifest){const r=await fetch('/wardrobe/illust-models.json?v=1');if(!r.ok)throw Error('manifest');manifest=await r.json();}if(token!==generation)return;a.entry=entryFor(s);updateButton();if(a.entry&&preference==='dynamic')await start(a);}catch(e){if(token===generation)console.warn('Wardrobe illustration:',e);}
+ try{if(!manifest){const r=await fetch('/wardrobe/illust-models.json?v=2');if(!r.ok)throw Error('manifest');manifest=await r.json();}if(token!==generation)return;a.entry=entryFor(s);updateButton();if(a.entry&&preference==='dynamic')await start(a);}catch(e){if(token===generation)console.warn('Wardrobe illustration:',e);}
 }
 async function start(a){
  if(a.loading||a.model||a.closed)return;a.loading=true;button.dataset.loading='true';
- try{await prepareSpine();if(a.closed)return;const model=await loadSpine(a.entry,root);if(a.closed){model.destroy({children:true});return;}
+ try{await prepareSpine();if(a.closed)return;const model=await loadSpine(a.entry,root);if(a.closed){model.destroy({children:true,texture:true,baseTexture:true});return;}
  const names=motionNames(model.spineData.animations);if(!names.idle)throw Error('Idle animation missing');
  const box=a.box=document.createElement('div');box.className='native-live-art wardrobe-dynamic-art';box.classList.toggle('wardrobe-unowned-art',a.img.classList.contains('wardrobe-unowned-art'));a.img.after(box);
  const app=a.app=new PIXI.Application({width:1024,height:1024,backgroundAlpha:0,antialias:true,autoStart:false,resolution:1});box.append(app.view);app.ticker.maxFPS=30;app.view.setAttribute('aria-label',a.skin.operator+' Live2D');
  a.model=model;a.names=names;model.autoUpdate=false;app.stage.addChild(model);model.state.defaultMix=.3;
  // These transition mixes are stored in the original Skadi prefab.
  if(a.skin.id==='char_1012_skadi2#2')for(const [from,to]of [['Idle','Special'],['Idle','Interact'],['Special','Interact']])model.state.data.setMix(from,to,1);
- model.state.setAnimation(0,names.idle.name,true);model.update(0);const b=model.getLocalBounds();a.bounds={x:b.x,y:b.y,width:b.width,height:b.height};
+ model.state.setAnimation(0,names.idle.name,true);model.update(0);const b=model.getLocalBounds();a.bounds=a.entry.bounds||{x:b.x,y:b.y,width:b.width,height:b.height};
  box.dataset.motion=names.idle.name;
  let elapsed=0,delay=specialDelay(true,names.idle.duration),busy=false;
  const play=clips=>{if(busy||!clips.length)return;const clip=clips[Math.floor(Math.random()*clips.length)];busy=true;box.dataset.motion=clip.name;const track=model.state.setAnimation(0,clip.name,false);model.state.addAnimation(0,names.idle.name,true,0);track.listener={complete:()=>{box.dataset.motion=names.idle.name;busy=false;elapsed=0;delay=specialDelay(false);}};};
