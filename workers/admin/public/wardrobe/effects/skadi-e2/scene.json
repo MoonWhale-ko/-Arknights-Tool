@@ -1,0 +1,494 @@
+{
+  "skin": "char_1012_skadi2#2",
+  "source": "arts/dynchars/char_1012_skadi2_2.ab",
+  "spineUnitsPerWorldUnit": 100,
+  "cameraSize": 11,
+  "layers": [
+    {
+      "name": "anhong",
+      "vertices": [
+        [
+          -102.94263,
+          -1726.52282
+        ],
+        [
+          897.31486,
+          -1687.88241
+        ],
+        [
+          -149.31486,
+          -526.11753
+        ],
+        [
+          850.94264,
+          -487.47712
+        ]
+      ],
+      "uv": [
+        [
+          0.0,
+          1.0
+        ],
+        [
+          1.0,
+          1.0
+        ],
+        [
+          0.0,
+          0.0
+        ],
+        [
+          1.0,
+          0.0
+        ]
+      ],
+      "colors": [
+        [
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      "triangles": [
+        [
+          0,
+          1,
+          2
+        ],
+        [
+          3,
+          2,
+          1
+        ]
+      ],
+      "depth": 0.0,
+      "sortingOrder": 1,
+      "shader": {
+        "file": "shader-0.frag",
+        "name": "Torappu/Particles-L2D/Additive"
+      },
+      "textures": {
+        "_MainTex": {
+          "file": "texture-0.png",
+          "name": "skadi_02",
+          "wrap": null,
+          "scale": {
+            "x": 1.0,
+            "y": 1.0
+          },
+          "offset": {
+            "x": 0.0,
+            "y": 0.0
+          }
+        }
+      },
+      "floats": {
+        "_Amount": 0.029999999329447746,
+        "_BorderWidth": 0.38600000739097595,
+        "_BumpScale": 1.0,
+        "_CullMode": 2.0,
+        "_Cutoff": 0.5,
+        "_DetailNormalMapScale": 1.0,
+        "_DstBlend": 10.0,
+        "_GlossMapScale": 1.0,
+        "_Glossiness": 0.5,
+        "_GlossyReflections": 1.0,
+        "_IntensityU": 0.07599999755620956,
+        "_IntensityV": 0.04899999871850014,
+        "_MainTexChannel": 0.0,
+        "_Metallic": 0.0,
+        "_Mode": 0.0,
+        "_OcclusionStrength": 1.0,
+        "_Parallax": 0.019999999552965164,
+        "_SmoothnessTextureChannel": 0.0,
+        "_SpecularHighlights": 1.0,
+        "_SrcBlend": 5.0,
+        "_UVSec": 0.0,
+        "_ZTest": 4.0,
+        "_ZWrite": 1.0
+      },
+      "colorsUniform": {
+        "_Color": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "_EmissionColor": {
+          "r": 0.0,
+          "g": 0.0,
+          "b": 0.0,
+          "a": 1.0
+        },
+        "_MainColor": {
+          "r": 0.7647058963775635,
+          "g": 0.7647058963775635,
+          "b": 0.7647058963775635,
+          "a": 0.8090000152587891
+        },
+        "_TintColor": {
+          "r": 1.0,
+          "g": 0.0,
+          "b": 0.0,
+          "a": 0.20900000631809235
+        },
+        "_UVTween": {
+          "r": -0.10000000149011612,
+          "g": 0.0,
+          "b": -0.30000001192092896,
+          "a": 0.0
+        }
+      },
+      "uvScroll": {}
+    },
+    {
+      "name": "hongxian_02",
+      "vertices": [
+        [
+          -271.49165,
+          -1123.85949
+        ],
+        [
+          563.26713,
+          -1718.58352
+        ],
+        [
+          318.73284,
+          -295.41642
+        ],
+        [
+          1153.49162,
+          -890.14045
+        ]
+      ],
+      "uv": [
+        [
+          0.0,
+          1.0
+        ],
+        [
+          1.0,
+          1.0
+        ],
+        [
+          0.0,
+          0.0
+        ],
+        [
+          1.0,
+          0.0
+        ]
+      ],
+      "colors": [
+        [
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      "triangles": [
+        [
+          0,
+          1,
+          2
+        ],
+        [
+          3,
+          2,
+          1
+        ]
+      ],
+      "depth": -0.07,
+      "sortingOrder": 1,
+      "shader": {
+        "file": "shader-1.frag",
+        "name": "Torappu/Particles-L2D/Dissolve/Dissolve AB"
+      },
+      "textures": {
+        "_DissolveTex": {
+          "file": "texture-1.png",
+          "name": "skadi_07",
+          "wrap": null,
+          "scale": {
+            "x": 1.0,
+            "y": 1.0
+          },
+          "offset": {
+            "x": 0.0,
+            "y": 0.0
+          }
+        },
+        "_MainTex": {
+          "file": "texture-2.png",
+          "name": "skadi_01",
+          "wrap": null,
+          "scale": {
+            "x": 1.0,
+            "y": 1.0
+          },
+          "offset": {
+            "x": 0.0,
+            "y": 0.0
+          }
+        }
+      },
+      "floats": {
+        "_Amount": 0.5740000009536743,
+        "_BorderWidth": 0.38600000739097595,
+        "_BumpScale": 1.0,
+        "_CullMode": 2.0,
+        "_Cutoff": 0.5,
+        "_DetailNormalMapScale": 1.0,
+        "_DstBlend": 10.0,
+        "_GlossMapScale": 1.0,
+        "_Glossiness": 0.5,
+        "_GlossyReflections": 1.0,
+        "_IntensityU": 0.07599999755620956,
+        "_IntensityV": 0.04899999871850014,
+        "_Metallic": 0.0,
+        "_Mode": 0.0,
+        "_OcclusionStrength": 1.0,
+        "_Parallax": 0.019999999552965164,
+        "_SmoothnessTextureChannel": 0.0,
+        "_SpecularHighlights": 1.0,
+        "_SrcBlend": 5.0,
+        "_UVSec": 0.0,
+        "_ZTest": 4.0,
+        "_ZWrite": 1.0
+      },
+      "colorsUniform": {
+        "_Color": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "_EmissionColor": {
+          "r": 0.0,
+          "g": 0.0,
+          "b": 0.0,
+          "a": 1.0
+        },
+        "_MainColor": {
+          "r": 0.7647058963775635,
+          "g": 0.7647058963775635,
+          "b": 0.7647058963775635,
+          "a": 0.8090000152587891
+        },
+        "_TintColor": {
+          "r": 0.5882352590560913,
+          "g": 0.5882352590560913,
+          "b": 0.5882352590560913,
+          "a": 0.546999990940094
+        },
+        "_UVTween": {
+          "r": 0.0,
+          "g": 0.0,
+          "b": 0.30000001192092896,
+          "a": -0.5
+        }
+      },
+      "uvScroll": {
+        "_DissolveTex": [
+          -0.15000000596046448,
+          0.0
+        ]
+      }
+    },
+    {
+      "name": "anlan",
+      "vertices": [
+        [
+          -491.89252,
+          -1555.08323
+        ],
+        [
+          508.36594,
+          -1516.44278
+        ],
+        [
+          -516.36594,
+          -921.55714
+        ],
+        [
+          483.89252,
+          -882.91669
+        ]
+      ],
+      "uv": [
+        [
+          0.0,
+          1.0
+        ],
+        [
+          1.0,
+          1.0
+        ],
+        [
+          0.0,
+          0.0
+        ],
+        [
+          1.0,
+          0.0
+        ]
+      ],
+      "colors": [
+        [
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      "triangles": [
+        [
+          0,
+          1,
+          2
+        ],
+        [
+          3,
+          2,
+          1
+        ]
+      ],
+      "depth": 0.0,
+      "sortingOrder": 1,
+      "shader": {
+        "file": "shader-0.frag",
+        "name": "Torappu/Particles-L2D/Additive"
+      },
+      "textures": {
+        "_MainTex": {
+          "file": "texture-3.png",
+          "name": "skadi_03",
+          "wrap": null,
+          "scale": {
+            "x": 1.0,
+            "y": 0.6000000238418579
+          },
+          "offset": {
+            "x": 0.0,
+            "y": 0.20999999344348907
+          }
+        }
+      },
+      "floats": {
+        "_Amount": 0.029999999329447746,
+        "_BorderWidth": 0.38600000739097595,
+        "_BumpScale": 1.0,
+        "_CullMode": 2.0,
+        "_Cutoff": 0.5,
+        "_DetailNormalMapScale": 1.0,
+        "_DstBlend": 10.0,
+        "_GlossMapScale": 1.0,
+        "_Glossiness": 0.5,
+        "_GlossyReflections": 1.0,
+        "_IntensityU": 0.07599999755620956,
+        "_IntensityV": 0.04899999871850014,
+        "_MainTexChannel": 0.0,
+        "_Metallic": 0.0,
+        "_Mode": 0.0,
+        "_OcclusionStrength": 1.0,
+        "_Parallax": 0.019999999552965164,
+        "_SmoothnessTextureChannel": 0.0,
+        "_SpecularHighlights": 1.0,
+        "_SrcBlend": 5.0,
+        "_UVSec": 0.0,
+        "_ZTest": 4.0,
+        "_ZWrite": 1.0
+      },
+      "colorsUniform": {
+        "_Color": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "_EmissionColor": {
+          "r": 0.0,
+          "g": 0.0,
+          "b": 0.0,
+          "a": 1.0
+        },
+        "_MainColor": {
+          "r": 0.7647058963775635,
+          "g": 0.7647058963775635,
+          "b": 0.7647058963775635,
+          "a": 0.8090000152587891
+        },
+        "_TintColor": {
+          "r": 0.0,
+          "g": 0.17241382598876953,
+          "b": 1.0,
+          "a": 0.20900000631809235
+        },
+        "_UVTween": {
+          "r": -0.10000000149011612,
+          "g": 0.0,
+          "b": -0.30000001192092896,
+          "a": 0.0
+        }
+      },
+      "uvScroll": {}
+    }
+  ],
+  "scope": "Original rigid background meshes only; particle emitters and the skinned ribbon mesh are not included."
+}
