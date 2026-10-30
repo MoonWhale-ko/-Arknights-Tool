@@ -17,8 +17,8 @@ Date: 2026-10-30. The first rigid-mesh background pass is implemented for Skadi 
 - Exporter: `scripts/export_illust_background.py` extracts three rigid meshes (anhong, anlan, hongxian_02), their four original textures, and two GLES material fragments.
 - Preserve relative placement, rotation, scale, UV scale/offset, native tint, dissolve threshold/border and additive/alpha composition. The foreground material's UV scroll is taken from its original MonoBehaviour.
 - Use the existing Pixi renderer; background layers follow the same settled-pose framing as Spine. Mode switching pauses both, and leaving the skin releases effect resources.
-- GPU uses the ported material fragments with premultiplied output. Canvas fallback evaluates the same RGBA8 material equations, bakes static layers once, and updates dissolve at 8fps.
-- Verified the three-layer Canvas path in the deployed browser without effect errors. The browser has no WebGL context, so GPU shader/pixel verification remains pending.
+- Both GPU and Canvas now use the same baked RGBA8 material path with stock mesh materials. Static layers are baked once and dissolve updates at 8fps. The unverified custom GPU fragment path was removed from runtime. Original fragments remain available as provenance.
+- Verified the three-layer Canvas path in the deployed browser without effect errors. The browser has no WebGL context; stock GPU mesh rendering and performance still require device verification.
 - Enabled by default for `char_1012_skadi2#2`; `?effects=0` disables the first pass for diagnostics.
 
 ## Remaining work
