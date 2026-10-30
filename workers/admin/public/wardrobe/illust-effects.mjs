@@ -11,10 +11,11 @@ const rgba=c=>[c?.r??1,c?.g??1,c?.b??1,c?.a??1];
 /** Original rigid background meshes. Particle emitters remain a separate layer. */
 export async function createIllustrationEffects(skin,isClosed,model){
  const profile=profiles[skin.id];if(!profile)return null;
- const root='/wardrobe/effects/'+profile+'/';
+ const root=new URL('./effects/'+profile+'/',import.meta.url).href;
  const P=window.PIXI,scene=await resource(root,'scene.json'),back=new P.Container(),front=new P.Container(),textures=[],meshes=[],canvasMaterials=[];
- let closed=false,elapsed=0;
- const destroy=()=>{if(closed)return;closed=true;back.destroy({children:true});front.destroy({children:true});for(const m of canvasMaterials)m.destroy();for(const t of textures)t.destroy(true);};
+ let closed=false,elapsed=0,backgroundRenderer=null;
+ const renderBackground=()=>{if(backgroundRenderer)backgroundRenderer.render(back);};
+ const destroy=()=>{if(closed)return;closed=true;backgroundRenderer?.destroy(true);backgroundRenderer=null;back.destroy({children:true});front.destroy({children:true});for(const m of canvasMaterials)m.destroy();for(const t of textures)t.destroy(true);};
  try{
   const textureCache=new Map();
   for(const layer of [...scene.layers].sort((a,b)=>a.sortingOrder-b.sortingOrder||b.depth-a.depth)){
@@ -34,6 +35,12 @@ export async function createIllustrationEffects(skin,isClosed,model){
   for(const item of meshes)if(item.layer.bone){item.mesh.visible=!!item.bone;if(item.bone)applyBoneFollower(item.mesh,item.bone,item.layer.bone,model.skeleton);}
   const points=scene.layers.filter(layer=>!layer.bone).flatMap(layer=>layer.vertices),xs=points.map(p=>p[0]),ys=points.map(p=>p[1]);
   const bounds=points.length?{x:Math.min(...xs),y:Math.min(...ys),width:Math.max(...xs)-Math.min(...xs),height:Math.max(...ys)-Math.min(...ys)}:null;
-  return {back,front,bounds,destroy,fit(v){for(const box of [back,front]){box.scale.set(v.scale);box.position.set(v.x,v.y);}},update(dt){elapsed+=dt;for(const {uniforms,layer,mesh,bone}of meshes){if(layer.bone){mesh.visible=!!bone;if(bone)applyBoneFollower(mesh,bone,layer.bone,model.skeleton);}uniforms._Time=[elapsed/20,elapsed,elapsed*2,elapsed*3];for(const name of Object.keys(layer.textures)){const original=layer.textures[name],speed=layer.uvScroll[name]||[0,0],tween=layer.shader.name.endsWith('UVTween')?uniforms._UVTween:[0,0,0,0],i=name==='_DissolveTex'?2:0;uniforms[name+'_ST']=[original.scale.x,original.scale.y,original.offset.x+(speed[0]+tween[i])*elapsed,original.offset.y+(speed[1]+tween[i+1])*elapsed];}}for(const material of canvasMaterials)material.update(elapsed);}};
+  return {back,front,bounds,destroy,attach(box,characterCanvas){
+   if(!back.children.length)return;
+   backgroundRenderer=new P.CanvasRenderer({width:1,height:1,backgroundAlpha:0,resolution:1,antialias:true});
+   const canvas=backgroundRenderer.view;canvas.setAttribute('aria-hidden','true');canvas.dataset.illustrationBackground=profile;
+   Object.assign(canvas.style,{position:'absolute',inset:'0',pointerEvents:'none',zIndex:'0'});
+   Object.assign(characterCanvas.style,{position:'relative',zIndex:'1'});box.prepend(canvas);
+  },fit(v){for(const box of [back,front]){box.scale.set(v.scale);box.position.set(v.x,v.y);}if(backgroundRenderer){backgroundRenderer.resize(v.width,v.height);renderBackground();}},update(dt){elapsed+=dt;for(const {uniforms,layer,mesh,bone}of meshes){if(layer.bone){mesh.visible=!!bone;if(bone)applyBoneFollower(mesh,bone,layer.bone,model.skeleton);}uniforms._Time=[elapsed/20,elapsed,elapsed*2,elapsed*3];for(const name of Object.keys(layer.textures)){const original=layer.textures[name],speed=layer.uvScroll[name]||[0,0],tween=layer.shader.name.endsWith('UVTween')?uniforms._UVTween:[0,0,0,0],i=name==='_DissolveTex'?2:0;uniforms[name+'_ST']=[original.scale.x,original.scale.y,original.offset.x+(speed[0]+tween[i])*elapsed,original.offset.y+(speed[1]+tween[i+1])*elapsed];}}for(const material of canvasMaterials)material.update(elapsed);renderBackground();}};
  }catch(e){destroy();throw e;}
 }
