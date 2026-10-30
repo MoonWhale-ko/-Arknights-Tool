@@ -46,3 +46,9 @@ test('Mizuki distortion uses both original meshes, their varying alpha and the r
  for(const name of ['sekuai_dm','sekua3_dm']){const l=scene.layers.find(l=>l.name===name);assert.ok(l);assert.equal(l.vertices.length,35);assert.ok(l.vertexAlpha.includes(0)&&l.vertexAlpha.includes(1));assert.equal(l.textures._DisturTex.name,'TX_WaterNoise');assert.equal(l.textures._DisturTex.sourcePathId,'3598337627453241146');assert.ok(l.colorsUniform._UVTween.b<0);const a=vertexAlphaGrid(l,32,32);assert.ok(a.some(v=>v>0)&&a.some(v=>v===0));}
  const sea=scene.layers.find(l=>l.name==='hai_dm');assert.ok(sea.referenceClip);assert.equal(sea.textures._ReferenceMask.file,'texture-90.png');
 });
+test('red-only noise sampling matches full sampling across repeated and clamped boundaries',()=>{
+ const image={width:3,height:2,data:Uint8ClampedArray.from({length:24},(_,i)=>(i*47)%256)};
+ for(const repeat of [true,false])for(const u of [-2.1,0,.23,.99,1,3.7])for(const v of [-1.8,0,.73,1,2.4]){
+  const red=new Float32Array(1),full=new Float32Array(4);sampleEffectImage(image,u,v,red,repeat);sampleEffectImage(image,u,v,full,repeat);assert.equal(red[0],full[0]);assert.ok(Number.isFinite(red[0]));
+ }
+});
