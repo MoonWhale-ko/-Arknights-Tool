@@ -1,4 +1,4 @@
-import {createIllustrationEffects} from './illust-effects.mjs?v=7';
+import {createIllustrationEffects} from './illust-effects.mjs?v=8';
 import {illustrationEntry,illustrationViewport} from './illust-model-map.mjs?v=2';
 import {prepareSpine,loadSpine} from './sd.js?v=14';
 import {specialDelay,motionNames} from './illust-timing.mjs?v=1';
@@ -12,7 +12,7 @@ export function clearIllustration(){generation++;const a=active;if(a){a.closed=t
 export async function showIllustration(s){
  clearIllustration();const token=generation,img=document.getElementById('wardrobeArt');if(!img)return;
  const a=active={img,skin:s,closed:false};document.getElementById('wardrobeDetail').append(button);
- try{if(!manifest){const r=await fetch('/wardrobe/illust-models.json?v=3');if(!r.ok)throw Error('manifest');manifest=await r.json();}if(token!==generation)return;a.entry=entryFor(s);updateButton();if(a.entry&&preference==='dynamic')await start(a);}catch(e){if(token===generation)console.warn('Wardrobe illustration:',e);}
+ try{if(!manifest){const r=await fetch('/wardrobe/illust-models.json?v=4');if(!r.ok)throw Error('manifest');manifest=await r.json();}if(token!==generation)return;a.entry=entryFor(s);updateButton();if(a.entry&&preference==='dynamic')await start(a);}catch(e){if(token===generation)console.warn('Wardrobe illustration:',e);}
 }
 async function start(a){
  if(a.loading||a.model||a.closed)return;a.loading=true;button.dataset.loading='true';

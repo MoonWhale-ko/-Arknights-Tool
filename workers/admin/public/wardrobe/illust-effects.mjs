@@ -6,14 +6,14 @@ const profiles={
  'char_437_mizuki@sale#7':'mizuki-sale7',
  'char_391_rosmon#2':'rosmon-e2',
 };
-const resource=async (root,file)=>{const r=await fetch(root+file);if(!r.ok)throw Error('Effect resource: '+file);return file.endsWith('.json')?r.json():r.text();};
+const resource=async (root,file)=>{const r=await fetch(root+file);if(!r.ok)throw Error('Effect resource: '+file);return file.split('?')[0].endsWith('.json')?r.json():r.text();};
 const st=texture=>texture?[texture.scale.x,texture.scale.y,texture.offset.x,texture.offset.y]:[1,1,0,0];
 const rgba=c=>[c?.r??1,c?.g??1,c?.b??1,c?.a??1];
 /** Original rigid background meshes. Particle emitters remain a separate layer. */
 export async function createIllustrationEffects(skin,isClosed,model){
  const profile=profiles[skin.id];if(!profile)return null;
  const root=new URL('./effects/'+profile+'/',import.meta.url).href;
- const P=window.PIXI,scene=await resource(root,'scene.json'),back=new P.Container(),front=new P.Container(),textures=[],meshes=[],canvasMaterials=[],emitters=[];
+ const P=window.PIXI,scene=await resource(root,'scene.json?v=3'),back=new P.Container(),front=new P.Container(),textures=[],meshes=[],canvasMaterials=[],emitters=[];
  let closed=false,elapsed=0,backgroundRenderer=null;
  const renderBackground=()=>{if(backgroundRenderer)backgroundRenderer.render(back);};
  const destroy=()=>{if(closed)return;closed=true;backgroundRenderer?.destroy(true);backgroundRenderer=null;back.destroy({children:true});front.destroy({children:true});for(const m of canvasMaterials)m.destroy();for(const t of textures)t.destroy(true);};

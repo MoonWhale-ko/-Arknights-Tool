@@ -34,6 +34,7 @@ for i in [-12809099636902195,2005376370269288141]:
  scene['emitters'].append({'name':g['m_Name'],'sourcePathId':str(i),'matrix':m.tolist(),'units':units,'initial':initial,'emission':{'rateOverTime':ps['EmissionModule']['rateOverTime'],'bursts':ps['EmissionModule']['m_Bursts']},'shape':{k:ps['ShapeModule'][k] for k in ['enabled','type','m_Scale','m_Position']},'size':{k:ps['SizeModule'][k] for k in ['enabled','curve']},'color':ps['ColorModule'],'duration':ps['lengthInSec'],'prewarm':ps['prewarm'],'simulationSpeed':ps['simulationSpeed'],'sortingOrder':r['m_SortingOrder'],'depth':float(m[2,3]),'texture':name,'tint':dict(mat['m_SavedProperties']['m_Colors'])['_TintColor'],'textureST':[tex['m_Scale']['x'],tex['m_Scale']['y'],tex['m_Offset']['x'],tex['m_Offset']['y']]})
 (out/'scene.json').write_text(json.dumps(scene,ensure_ascii=False,indent=2)+'\n')
 manifest=out.parents[1]/'illust-models.json';models=json.loads(manifest.read_text());half=controller['_cameraSize']*units
-models['dyn_illust_437_mizuki_sale#7']['frame']={'x':-half-float(world[0,3])*units,'y':-half+float(world[1,3])*units,'width':2*half,'height':2*half}
-models['dyn_illust_437_mizuki_sale#7']['frameSource']='native cameraSize and primary skeleton world transform'
+entry=models['dyn_illust_437_mizuki_sale#7'];entry['nativeCameraFrame']={'x':-half-float(world[0,3])*units,'y':-half+float(world[1,3])*units,'width':2*half,'height':2*half}
+if not entry.get('referenceAlignment'):
+ entry['frame']=entry['nativeCameraFrame'];entry['frameSource']='native cameraSize and primary skeleton world transform'
 manifest.write_text(json.dumps(models,ensure_ascii=False,indent=2)+'\n');print('Exported native frame and',len(scene['emitters']),'ambient systems')
