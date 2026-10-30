@@ -1,0 +1,1983 @@
+{
+  "date": "2026-10-30",
+  "resourceSource": "https://github.com/isHarryh/Ark-Models/tree/main/models_illust",
+  "registeredModels": 96,
+  "wardrobeMatches": 92,
+  "notInWardrobeCatalog": [
+    "dyn_illust_1015_aglna2",
+    "dyn_illust_1016_agoat2_epoque#57",
+    "dyn_illust_1044_hsgma2_whirlwind#11",
+    "dyn_illust_1046_sbell2_ambiencesynesthesia#8"
+  ],
+  "validation": {
+    "method": "pixi-spine 3.1.2 atlas/model parse; Idle/Special/Interact sampled at 30fps; finite bone transforms and attachment bounds checked",
+    "modelsPassed": 96,
+    "framesSampled": 103938,
+    "spineVersions": [
+      "3.8.99"
+    ],
+    "limits": "Does not verify PNG texture rendering, native pixel alignment, Unity particles, or shader parity."
+  },
+  "models": [
+    {
+      "key": "dyn_illust_003_kalts_boc#6",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 6.666666507720947
+        },
+        {
+          "name": "Interact",
+          "duration": 11
+        },
+        {
+          "name": "Special",
+          "duration": 7.666666507720947
+        },
+        {
+          "name": "Start",
+          "duration": 2.3333332538604736
+        }
+      ],
+      "samples": 763,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_003_kalts_sale#14",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 10
+        }
+      ],
+      "samples": 301,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1001_amiya2_sale#16",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Default",
+          "duration": 0
+        },
+        {
+          "name": "Idle",
+          "duration": 8.266666412353516
+        }
+      ],
+      "samples": 249,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1012_skadi2",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 4
+        },
+        {
+          "name": "Interact",
+          "duration": 4
+        },
+        {
+          "name": "Special",
+          "duration": 8
+        }
+      ],
+      "samples": 483,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1012_skadi2_boc#4",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 4
+        },
+        {
+          "name": "Interact",
+          "duration": 12
+        },
+        {
+          "name": "Special",
+          "duration": 12.333333015441895
+        }
+      ],
+      "samples": 853,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1012_skadi2_iteration#2",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 16
+        },
+        {
+          "name": "Interact",
+          "duration": 10.666666984558105
+        },
+        {
+          "name": "Special",
+          "duration": 16
+        },
+        {
+          "name": "Start",
+          "duration": 2.6666667461395264
+        }
+      ],
+      "samples": 1284,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1013_chen2",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 10
+        },
+        {
+          "name": "Interact",
+          "duration": 2.5
+        },
+        {
+          "name": "Special",
+          "duration": 10
+        }
+      ],
+      "samples": 678,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1013_chen2_boc#6",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 8
+        },
+        {
+          "name": "Interact",
+          "duration": 8
+        },
+        {
+          "name": "Special",
+          "duration": 15.133333206176758
+        }
+      ],
+      "samples": 937,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1013_chen2_summer#20",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 6.666666507720947
+        },
+        {
+          "name": "Interact",
+          "duration": 21.233333587646484
+        },
+        {
+          "name": "Special",
+          "duration": 18.53333282470703
+        }
+      ],
+      "samples": 1397,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1014_nearl2",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 8
+        },
+        {
+          "name": "Interact",
+          "duration": 4
+        },
+        {
+          "name": "Special",
+          "duration": 6.666666507720947
+        }
+      ],
+      "samples": 563,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1014_nearl2_epoque#17",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 18
+        },
+        {
+          "name": "Interact",
+          "duration": 5
+        },
+        {
+          "name": "Special",
+          "duration": 10
+        }
+      ],
+      "samples": 993,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1015_aglna2",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 7.333333492279053
+        },
+        {
+          "name": "Interact",
+          "duration": 22.633333206176758
+        },
+        {
+          "name": "Special",
+          "duration": 18.766666412353516
+        }
+      ],
+      "samples": 1466,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1016_agoat2",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 4
+        },
+        {
+          "name": "Interact",
+          "duration": 11.666666984558105
+        },
+        {
+          "name": "Special",
+          "duration": 12.5
+        }
+      ],
+      "samples": 849,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1016_agoat2_epoque#34",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 10
+        },
+        {
+          "name": "Interact",
+          "duration": 18.66670036315918
+        },
+        {
+          "name": "Special",
+          "duration": 9.533300399780273
+        },
+        {
+          "name": "Start",
+          "duration": 8.5
+        }
+      ],
+      "samples": 1150,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1016_agoat2_epoque#57",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 18.366666793823242
+        },
+        {
+          "name": "Interact",
+          "duration": 25.66666603088379
+        },
+        {
+          "name": "Special",
+          "duration": 23.899999618530273
+        },
+        {
+          "name": "Start",
+          "duration": 7.5333333015441895
+        }
+      ],
+      "samples": 2042,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1019_siege2_epoque#50",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 6.666666507720947
+        },
+        {
+          "name": "Interact",
+          "duration": 15.666666984558105
+        },
+        {
+          "name": "Special",
+          "duration": 7.599999904632568
+        }
+      ],
+      "samples": 902,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1020_reed2_epoque#30",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 10.666666984558105
+        },
+        {
+          "name": "Interact",
+          "duration": 12
+        },
+        {
+          "name": "Special",
+          "duration": 19
+        }
+      ],
+      "samples": 1254,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1020_reed2_summer#17",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 6.6666998863220215
+        },
+        {
+          "name": "Interact",
+          "duration": 11.33329963684082
+        },
+        {
+          "name": "Special",
+          "duration": 8
+        }
+      ],
+      "samples": 784,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1023_ghost2",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 8
+        },
+        {
+          "name": "Interact",
+          "duration": 8
+        },
+        {
+          "name": "Special",
+          "duration": 20
+        }
+      ],
+      "samples": 1083,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1023_ghost2_boc#6",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 12
+        },
+        {
+          "name": "Interact",
+          "duration": 19.66666603088379
+        },
+        {
+          "name": "Special",
+          "duration": 13
+        }
+      ],
+      "samples": 1343,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1026_gvial2",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 8
+        },
+        {
+          "name": "Interact",
+          "duration": 6
+        },
+        {
+          "name": "Special",
+          "duration": 12
+        }
+      ],
+      "samples": 783,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1026_gvial2_summer#12",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 8
+        },
+        {
+          "name": "Interact",
+          "duration": 10.466666221618652
+        },
+        {
+          "name": "Special",
+          "duration": 7.333333492279053
+        }
+      ],
+      "samples": 778,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1028_texas2",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 8
+        },
+        {
+          "name": "Interact",
+          "duration": 9
+        },
+        {
+          "name": "Special",
+          "duration": 6.666666507720947
+        }
+      ],
+      "samples": 713,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1028_texas2_epoque#36",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 3
+        },
+        {
+          "name": "Interact",
+          "duration": 10.600000381469727
+        },
+        {
+          "name": "Special",
+          "duration": 9.166666984558105
+        }
+      ],
+      "samples": 688,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1028_texas2_iteration#1",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 5
+        },
+        {
+          "name": "Interact",
+          "duration": 14
+        },
+        {
+          "name": "Special",
+          "duration": 15
+        }
+      ],
+      "samples": 1023,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1032_excu2_sale#12",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 10.666666984558105
+        },
+        {
+          "name": "Interact",
+          "duration": 28.66666603088379
+        },
+        {
+          "name": "Special",
+          "duration": 17.799999237060547
+        },
+        {
+          "name": "Start",
+          "duration": 3.299999952316284
+        }
+      ],
+      "samples": 1718,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1035_wisdel",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 8
+        },
+        {
+          "name": "Interact",
+          "duration": 11.833333015441895
+        },
+        {
+          "name": "Special",
+          "duration": 8
+        }
+      ],
+      "samples": 838,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1035_wisdel_sale#14",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 5.333333492279053
+        },
+        {
+          "name": "Interact",
+          "duration": 18.100000381469727
+        },
+        {
+          "name": "Special",
+          "duration": 14.833333015441895
+        },
+        {
+          "name": "Start",
+          "duration": 3
+        }
+      ],
+      "samples": 1153,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1037_amiya3_sale#13",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 5.333333492279053
+        },
+        {
+          "name": "Interact",
+          "duration": 18
+        },
+        {
+          "name": "Special",
+          "duration": 11.666666984558105
+        }
+      ],
+      "samples": 1055,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1038_whitw2",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 5.333333492279053
+        },
+        {
+          "name": "Interact",
+          "duration": 9.5
+        },
+        {
+          "name": "Special",
+          "duration": 7.333333492279053
+        }
+      ],
+      "samples": 670,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1038_whitw2_sale#15",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 6.666666507720947
+        },
+        {
+          "name": "Interact",
+          "duration": 41.20000076293945
+        },
+        {
+          "name": "Special",
+          "duration": 18.46666717529297
+        },
+        {
+          "name": "Start",
+          "duration": 5.333333492279053
+        }
+      ],
+      "samples": 1995,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1039_thorn2_marthe#9",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 6.666666507720947
+        },
+        {
+          "name": "Interact",
+          "duration": 31
+        },
+        {
+          "name": "Special",
+          "duration": 20.33333396911621
+        }
+      ],
+      "samples": 1744,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1041_angel2",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 9
+        },
+        {
+          "name": "Interact",
+          "duration": 17.33333396911621
+        },
+        {
+          "name": "Special",
+          "duration": 17.33333396911621
+        }
+      ],
+      "samples": 1315,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1041_angel2_iteration#6",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 21.46666717529297
+        }
+      ],
+      "samples": 646,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1044_hsgma2",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 9.333333015441895
+        },
+        {
+          "name": "Interact",
+          "duration": 13.600000381469727
+        },
+        {
+          "name": "Special",
+          "duration": 15
+        }
+      ],
+      "samples": 1142,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1044_hsgma2_whirlwind#11",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 7.333333492279053
+        },
+        {
+          "name": "Interact",
+          "duration": 23.33333396911621
+        },
+        {
+          "name": "Special",
+          "duration": 16.16666603088379
+        }
+      ],
+      "samples": 1410,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1045_svash2",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 9.333333015441895
+        },
+        {
+          "name": "Interact",
+          "duration": 10.333333015441895
+        },
+        {
+          "name": "Special",
+          "duration": 10.233333587646484
+        }
+      ],
+      "samples": 901,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1046_sbell2_ambiencesynesthesia#8",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 12
+        },
+        {
+          "name": "Interact",
+          "duration": 13.399999618530273
+        },
+        {
+          "name": "Special",
+          "duration": 14.333333015441895
+        }
+      ],
+      "samples": 1195,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_1052_kalts2",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 6
+        },
+        {
+          "name": "Interact",
+          "duration": 22.33333396911621
+        },
+        {
+          "name": "Special",
+          "duration": 16.16666603088379
+        }
+      ],
+      "samples": 1339,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_113_cqbw",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 4
+        },
+        {
+          "name": "Interact",
+          "duration": 3.3333332538604736
+        },
+        {
+          "name": "Special",
+          "duration": 12
+        }
+      ],
+      "samples": 583,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_113_cqbw_epoque#7",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 12
+        },
+        {
+          "name": "Interact",
+          "duration": 10
+        },
+        {
+          "name": "Special",
+          "duration": 8.666666984558105
+        },
+        {
+          "name": "Start",
+          "duration": 1.6666666269302368
+        }
+      ],
+      "samples": 924,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_124_kroos_sale#14",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 6.666666507720947
+        }
+      ],
+      "samples": 201,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_172_svrash_ambiencesynesthesia#4",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 14
+        },
+        {
+          "name": "Interact",
+          "duration": 16.5
+        },
+        {
+          "name": "Special",
+          "duration": 16.433332443237305
+        }
+      ],
+      "samples": 1411,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_179_cgbird_sightseer#1",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 6.666666507720947
+        },
+        {
+          "name": "Interact",
+          "duration": 19.33333396911621
+        },
+        {
+          "name": "Special",
+          "duration": 8
+        }
+      ],
+      "samples": 1024,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_2014_nian",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 8
+        },
+        {
+          "name": "Interact",
+          "duration": 8
+        },
+        {
+          "name": "Special",
+          "duration": 8
+        }
+      ],
+      "samples": 723,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_2014_nian_cfa#1",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 6.666666507720947
+        },
+        {
+          "name": "Interact",
+          "duration": 15.199999809265137
+        },
+        {
+          "name": "Special",
+          "duration": 15.800000190734863
+        }
+      ],
+      "samples": 1134,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_2014_nian_nian#4",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 6.666666507720947
+        },
+        {
+          "name": "Interact",
+          "duration": 10.333333015441895
+        },
+        {
+          "name": "Special",
+          "duration": 8
+        }
+      ],
+      "samples": 753,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_2015_dusk",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 13.333333015441895
+        },
+        {
+          "name": "Interact",
+          "duration": 6.666666507720947
+        },
+        {
+          "name": "Special",
+          "duration": 8
+        }
+      ],
+      "samples": 843,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_2015_dusk_nian#12",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 10
+        },
+        {
+          "name": "Interact",
+          "duration": 43.66666793823242
+        },
+        {
+          "name": "Special",
+          "duration": 30.66666603088379
+        }
+      ],
+      "samples": 2534,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_2015_dusk_nian#7",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 5.333333492279053
+        },
+        {
+          "name": "Interact",
+          "duration": 6.5
+        },
+        {
+          "name": "Special",
+          "duration": 7
+        }
+      ],
+      "samples": 569,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_2023_ling",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 4
+        },
+        {
+          "name": "Interact",
+          "duration": 6
+        },
+        {
+          "name": "Special",
+          "duration": 20
+        }
+      ],
+      "samples": 903,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_2023_ling_ncg#1",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 6.666666507720947
+        },
+        {
+          "name": "Interact",
+          "duration": 8
+        },
+        {
+          "name": "Special",
+          "duration": 20.433332443237305
+        }
+      ],
+      "samples": 1056,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_2023_ling_nian#12",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 10.666666984558105
+        },
+        {
+          "name": "Interact",
+          "duration": 22.066667556762695
+        },
+        {
+          "name": "Special",
+          "duration": 14.666666984558105
+        },
+        {
+          "name": "Start",
+          "duration": 5.766666889190674
+        }
+      ],
+      "samples": 1428,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_2023_ling_nian#9",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 8
+        },
+        {
+          "name": "Interact",
+          "duration": 10.666666984558105
+        },
+        {
+          "name": "Special",
+          "duration": 12.5
+        }
+      ],
+      "samples": 939,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_2024_chyue",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 8
+        },
+        {
+          "name": "Interact",
+          "duration": 10.433333396911621
+        },
+        {
+          "name": "Special",
+          "duration": 11.800000190734863
+        }
+      ],
+      "samples": 912,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_2024_chyue_cfa#1",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 14.666666984558105
+        },
+        {
+          "name": "Interact",
+          "duration": 26.700000762939453
+        },
+        {
+          "name": "Special",
+          "duration": 12.666666984558105
+        },
+        {
+          "name": "Start",
+          "duration": 4.199999809265137
+        }
+      ],
+      "samples": 1627,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_2024_chyue_nian#10",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 12.666666984558105
+        },
+        {
+          "name": "Interact",
+          "duration": 16.700000762939453
+        },
+        {
+          "name": "Special",
+          "duration": 16.66666603088379
+        }
+      ],
+      "samples": 1386,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_2025_shu",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 5.333333492279053
+        },
+        {
+          "name": "Interact",
+          "duration": 10.666666984558105
+        },
+        {
+          "name": "Special",
+          "duration": 11.333333015441895
+        }
+      ],
+      "samples": 825,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_2025_shu_nian#11",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 5.333333492279053
+        },
+        {
+          "name": "Interact",
+          "duration": 28.899999618530273
+        },
+        {
+          "name": "Special",
+          "duration": 12.133333206176758
+        }
+      ],
+      "samples": 1395,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_2026_yu",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 10
+        },
+        {
+          "name": "Interact",
+          "duration": 17.66666603088379
+        },
+        {
+          "name": "Special",
+          "duration": 16
+        }
+      ],
+      "samples": 1313,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_2026_yu_nian#12",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 8
+        },
+        {
+          "name": "Interact",
+          "duration": 16
+        },
+        {
+          "name": "Special",
+          "duration": 13.533333778381348
+        }
+      ],
+      "samples": 1130,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_2027_wang",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 12
+        },
+        {
+          "name": "Interact",
+          "duration": 15
+        },
+        {
+          "name": "Special",
+          "duration": 25
+        }
+      ],
+      "samples": 1563,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_202_demkni_ambiencesynesthesia#7",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 7.333333492279053
+        },
+        {
+          "name": "Interact",
+          "duration": 14.466666221618652
+        },
+        {
+          "name": "Special",
+          "duration": 19.133333206176758
+        }
+      ],
+      "samples": 1232,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_245_cello",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 7
+        },
+        {
+          "name": "Interact",
+          "duration": 16.799999237060547
+        },
+        {
+          "name": "Special",
+          "duration": 9.199999809265137
+        }
+      ],
+      "samples": 993,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_245_cello_sale#12",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 8
+        },
+        {
+          "name": "Interact",
+          "duration": 22.66666603088379
+        },
+        {
+          "name": "Special",
+          "duration": 15.666666984558105
+        },
+        {
+          "name": "Start",
+          "duration": 2
+        }
+      ],
+      "samples": 1394,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_249_mlyss",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 4
+        },
+        {
+          "name": "Interact",
+          "duration": 8
+        },
+        {
+          "name": "Special",
+          "duration": 12
+        }
+      ],
+      "samples": 723,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_249_mlyss_ambiencesynesthesia#6",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 4.666666507720947
+        },
+        {
+          "name": "Interact",
+          "duration": 23.33333396911621
+        },
+        {
+          "name": "Special",
+          "duration": 20.03333282470703
+        }
+      ],
+      "samples": 1445,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_249_mlyss_boc#8",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 5.333333492279053
+        },
+        {
+          "name": "Interact",
+          "duration": 11.666666984558105
+        },
+        {
+          "name": "Special",
+          "duration": 17.66666603088379
+        },
+        {
+          "name": "Start",
+          "duration": 5.333333492279053
+        }
+      ],
+      "samples": 1045,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_250_phatom_sale#4",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 12
+        },
+        {
+          "name": "Interact",
+          "duration": 9
+        },
+        {
+          "name": "Special",
+          "duration": 6
+        }
+      ],
+      "samples": 813,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_322_lmlee_witch#3",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Default",
+          "duration": 0
+        },
+        {
+          "name": "Idle",
+          "duration": 8
+        },
+        {
+          "name": "Interact",
+          "duration": 15.333333015441895
+        },
+        {
+          "name": "Special",
+          "duration": 7.166666507720947
+        }
+      ],
+      "samples": 918,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_332_archet_sale#14",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 6.666666507720947
+        },
+        {
+          "name": "Interact",
+          "duration": 18
+        },
+        {
+          "name": "Special",
+          "duration": 12.766666412353516
+        }
+      ],
+      "samples": 1126,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_350_surtr_ambiencesynesthesia#6",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 8
+        },
+        {
+          "name": "Interact",
+          "duration": 16.66666603088379
+        },
+        {
+          "name": "Special",
+          "duration": 11
+        }
+      ],
+      "samples": 1073,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_350_surtr_summer#9",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 8
+        },
+        {
+          "name": "Interact",
+          "duration": 11
+        },
+        {
+          "name": "Special",
+          "duration": 12.699999809265137
+        }
+      ],
+      "samples": 954,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_377_gdglow_summer#12",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 8
+        },
+        {
+          "name": "Interact",
+          "duration": 9
+        },
+        {
+          "name": "Special",
+          "duration": 8
+        }
+      ],
+      "samples": 753,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_391_rosmon",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 10.666666984558105
+        },
+        {
+          "name": "Interact",
+          "duration": 5.333333492279053
+        },
+        {
+          "name": "Special",
+          "duration": 10.666666984558105
+        }
+      ],
+      "samples": 806,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_391_rosmon_epoque#17",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 16
+        },
+        {
+          "name": "Interact",
+          "duration": 22
+        },
+        {
+          "name": "Special",
+          "duration": 13
+        }
+      ],
+      "samples": 1533,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_391_rosmon_sale#16",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 6.666666507720947
+        },
+        {
+          "name": "Interact",
+          "duration": 32
+        },
+        {
+          "name": "Special",
+          "duration": 15.666666984558105
+        }
+      ],
+      "samples": 1634,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_4010_etlchi_winter#5",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 3.3333332538604736
+        },
+        {
+          "name": "Interact",
+          "duration": 13.333333015441895
+        },
+        {
+          "name": "Special",
+          "duration": 13.333333015441895
+        }
+      ],
+      "samples": 903,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_4055_bgsnow_wild#7",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 4
+        },
+        {
+          "name": "Interact",
+          "duration": 8.666666984558105
+        },
+        {
+          "name": "Special",
+          "duration": 10
+        }
+      ],
+      "samples": 684,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_4058_pepe",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 8
+        },
+        {
+          "name": "Interact",
+          "duration": 8
+        },
+        {
+          "name": "Special",
+          "duration": 9
+        }
+      ],
+      "samples": 753,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_4058_pepe_sightseer#2",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 6.6666998863220215
+        },
+        {
+          "name": "Interact",
+          "duration": 16.733299255371094
+        },
+        {
+          "name": "Special",
+          "duration": 10
+        }
+      ],
+      "samples": 1006,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_4064_mlynar_epoque#28",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 20
+        },
+        {
+          "name": "Interact",
+          "duration": 15.033333778381348
+        },
+        {
+          "name": "Special",
+          "duration": 12.666666984558105
+        },
+        {
+          "name": "Start",
+          "duration": 4.333333492279053
+        }
+      ],
+      "samples": 1436,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_4080_lin_nian#10",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 5.333333492279053
+        },
+        {
+          "name": "Interact",
+          "duration": 10.333333015441895
+        },
+        {
+          "name": "Special",
+          "duration": 11.666666984558105
+        }
+      ],
+      "samples": 825,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_4080_lin_summer#19",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 6.666666507720947
+        },
+        {
+          "name": "Interact",
+          "duration": 21
+        },
+        {
+          "name": "Special",
+          "duration": 16.53333282470703
+        }
+      ],
+      "samples": 1329,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_4087_ines_ambiencesynesthesia",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 3.3333332538604736
+        },
+        {
+          "name": "Interact",
+          "duration": 15.966666221618652
+        },
+        {
+          "name": "Special",
+          "duration": 18.299999237060547
+        }
+      ],
+      "samples": 1131,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_4087_ines_boc#8",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 5.333333492279053
+        },
+        {
+          "name": "Interact",
+          "duration": 10
+        },
+        {
+          "name": "Special",
+          "duration": 8.666666984558105
+        }
+      ],
+      "samples": 725,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_4116_blkkgt_witch#5",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 4.333333492279053
+        },
+        {
+          "name": "Interact",
+          "duration": 10.666666984558105
+        },
+        {
+          "name": "Special",
+          "duration": 10
+        }
+      ],
+      "samples": 755,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_4121_zuole_nian#11",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 8
+        },
+        {
+          "name": "Interact",
+          "duration": 23.33333396911621
+        },
+        {
+          "name": "Special",
+          "duration": 22.33333396911621
+        }
+      ],
+      "samples": 1615,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_4132_ascln_iteration#4",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 4
+        },
+        {
+          "name": "Interact",
+          "duration": 23
+        },
+        {
+          "name": "Special",
+          "duration": 20.33333396911621
+        }
+      ],
+      "samples": 1424,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_4133_logos_ambiencesynesthesia#6",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 5.333333492279053
+        },
+        {
+          "name": "Interact",
+          "duration": 21.66666603088379
+        },
+        {
+          "name": "Special",
+          "duration": 22.16666603088379
+        }
+      ],
+      "samples": 1479,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_4134_cetsyr_epoque#50",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 5.333333492279053
+        },
+        {
+          "name": "Interact",
+          "duration": 24.299999237060547
+        },
+        {
+          "name": "Special",
+          "duration": 23
+        },
+        {
+          "name": "Start",
+          "duration": 5
+        }
+      ],
+      "samples": 1583,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_4179_monstr_boc#11",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 10.666666984558105
+        },
+        {
+          "name": "Interact",
+          "duration": 24
+        },
+        {
+          "name": "Special",
+          "duration": 9.833333015441895
+        }
+      ],
+      "samples": 1339,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_4202_haruka_iteration#6",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 16
+        },
+        {
+          "name": "Interact",
+          "duration": 34.66666793823242
+        },
+        {
+          "name": "Special",
+          "duration": 16.866666793823242
+        },
+        {
+          "name": "exLayer_1",
+          "duration": 16
+        }
+      ],
+      "samples": 2031,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_437_mizuki_sale#7",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 4
+        },
+        {
+          "name": "Interact",
+          "duration": 7.433333396911621
+        },
+        {
+          "name": "Special",
+          "duration": 9.766666412353516
+        }
+      ],
+      "samples": 640,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_450_necras_summer#20",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 10
+        },
+        {
+          "name": "Interact",
+          "duration": 16.600000381469727
+        },
+        {
+          "name": "Special",
+          "duration": 11.333333015441895
+        }
+      ],
+      "samples": 1142,
+      "ok": true
+    },
+    {
+      "key": "dyn_illust_472_pasngr_epoque#17",
+      "version": "3.8.99",
+      "animations": [
+        {
+          "name": "Idle",
+          "duration": 8
+        },
+        {
+          "name": "Interact",
+          "duration": 14
+        },
+        {
+          "name": "Special",
+          "duration": 12.566666603088379
+        },
+        {
+          "name": "Start",
+          "duration": 2.3333332538604736
+        }
+      ],
+      "samples": 1040,
+      "ok": true
+    }
+  ]
+}

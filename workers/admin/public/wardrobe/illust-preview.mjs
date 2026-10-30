@@ -1,4 +1,4 @@
-import {prepareSpine,loadSpine,chooseIdle} from './sd.js?v=13';
+import {prepareSpine,loadSpine,chooseIdle} from './sd.js?v=14';
 const $=id=>document.getElementById(id),stage=$('stage'),status=$('status');
 const assetRoot='https://raw.githubusercontent.com/isHarryh/Ark-Models/main/models_illust/';
 const folder='dyn_illust_1012_skadi2/',file='dyn_illust_char_1012_skadi2';
