@@ -1,4 +1,4 @@
-import {illustrationEntry} from './illust-model-map.mjs?v=1';
+import {illustrationEntry,illustrationViewport} from './illust-model-map.mjs?v=2';
 import {prepareSpine,loadSpine} from './sd.js?v=14';
 import {specialDelay,motionNames} from './illust-timing.mjs?v=1';
 const root='https://raw.githubusercontent.com/isHarryh/Ark-Models/main/models_illust/';
@@ -22,13 +22,13 @@ async function start(a){
  a.model=model;a.names=names;model.autoUpdate=false;app.stage.addChild(model);model.state.defaultMix=.3;
  // These transition mixes are stored in the original Skadi prefab.
  if(a.skin.id==='char_1012_skadi2#2')for(const [from,to]of [['Idle','Special'],['Idle','Interact'],['Special','Interact']])model.state.data.setMix(from,to,1);
- model.state.setAnimation(0,names.idle.name,true);model.update(0);const b=model.getLocalBounds();a.bounds=a.entry.bounds||{x:b.x,y:b.y,width:b.width,height:b.height};
+ model.state.setAnimation(0,names.idle.name,true);model.update(0);const b=model.getLocalBounds();a.frame={x:b.x,y:b.y,width:b.width,height:b.height};a.bounds=a.entry.bounds||a.frame;
  box.dataset.motion=names.idle.name;
  let elapsed=0,delay=specialDelay(true,names.idle.duration),busy=false;
  const play=clips=>{if(busy||!clips.length)return;const clip=clips[Math.floor(Math.random()*clips.length)];busy=true;box.dataset.motion=clip.name;const track=model.state.setAnimation(0,clip.name,false);model.state.addAnimation(0,names.idle.name,true,0);track.listener={complete:()=>{box.dataset.motion=names.idle.name;busy=false;elapsed=0;delay=specialDelay(false);}};};
  box.onclick=e=>{e.stopPropagation();play(names.interact);};
  app.ticker.add(()=>{const dt=Math.min(app.ticker.deltaMS,100)/1000;model.update(dt);if(!busy&&names.special.length){elapsed+=dt;if(elapsed>=delay)play(names.special);}});
- a.fit=()=>{if(a.closed)return;box.style.cssText=a.img.style.cssText;box.style.visibility='';const w=parseFloat(a.img.style.width)||1024,h=parseFloat(a.img.style.height)||1024;app.renderer.resize(w,h);const scale=Math.min(w/a.bounds.width,h/a.bounds.height);model.scale.set(scale);model.position.set(w/2-(a.bounds.x+a.bounds.width/2)*scale,h/2-(a.bounds.y+a.bounds.height/2)*scale);app.render();};
+ a.fit=()=>{if(a.closed)return;box.style.cssText=a.img.style.cssText;box.style.visibility='';const w=parseFloat(a.img.style.width)||1024,h=parseFloat(a.img.style.height)||1024;const v=illustrationViewport(w,h,a.frame,a.bounds);box.style.left=((parseFloat(a.img.style.left)||0)+v.left)+'px';box.style.top=((parseFloat(a.img.style.top)||0)+v.top)+'px';box.style.width=v.width+'px';box.style.height=v.height+'px';app.renderer.resize(v.width,v.height);model.scale.set(v.scale);model.position.set(v.x,v.y);app.render();};
  a.observer=new MutationObserver(a.fit);a.observer.observe(a.img,{attributes:true,attributeFilter:['style']});a.img.addEventListener('load',a.fit);a.fit();applyMode(a);
  }catch(e){if(!a.closed){console.warn('Wardrobe illustration:',a.skin.id,e);a.failed=true;a.img.style.visibility='';a.box?.remove();a.app?.destroy(true,{children:true,texture:true,baseTexture:true});a.app=null;button.textContent='일러스트 · 재시도';}}finally{a.loading=false;delete button.dataset.loading;}
 }
